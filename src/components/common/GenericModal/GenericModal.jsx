@@ -20,16 +20,20 @@ const GenericModal = ({
   primaryButtonLoading = false,
 }) => {
   useEffect(() => {
-    const originalOverflow = document.body.style.overflow || 'auto';
+    const originalBodyOverflow = document.body.style.overflow || 'auto';
+    const originalDocElementOverflow = document.documentElement.style.overflow || 'auto';
     
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = originalOverflow;
+      document.body.style.overflow = originalBodyOverflow;
+      document.documentElement.style.overflow = originalDocElementOverflow;
     }
 
     return () => {
-      document.body.style.overflow = originalOverflow;
+      document.body.style.overflow = originalBodyOverflow;
+      document.documentElement.style.overflow = originalDocElementOverflow;
     };
   }, [isOpen]);
 
