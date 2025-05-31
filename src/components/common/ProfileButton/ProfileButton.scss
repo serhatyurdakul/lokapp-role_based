@@ -1,0 +1,32 @@
+@use "../../../styles/variables" as *;
+
+.profile-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+
+  position: absolute;
+  right: $spacing-16;
+  top: 50%;
+  transform: translateY(-50%);
+
+  @media (min-width: 768px) {
+    right: $spacing-24;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .profile-initial {
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 500;
+  }
+}

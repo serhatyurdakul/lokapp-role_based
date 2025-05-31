@@ -1,0 +1,67 @@
+@use "../forms" as forms;
+@use "../../../../styles/variables" as *;
+// @use "../../../../styles/breakpoints" as *; // Breakpoints zaten forms modülünden geliyor olabilir, kontrol edilecek.
+
+.form-group-clearable { // input-wrapper'ı sarmalayan form-group için özel bir durum gerekirse
+  .input-wrapper {
+    position: relative;
+    display: flex; // Input ve butonu yan yana getirmek için (opsiyonel, input %100 genişlikteyse gerek kalmaz)
+    align-items: center; // Dikey hizalama için
+  }
+}
+
+.input-wrapper { // Genel wrapper stili, clearable olmasa bile olabilir.
+  position: relative; // İkonu konumlandırmak için her zaman relative olmalı
+}
+
+.form-input {
+  display: block;
+  width: 100%;
+  padding: $spacing-12;
+  border-radius: $border-radius-medium;
+  background-color: var(--background-secondary);
+  font-size: 1rem;
+  transition: $transition;
+  // Eğer ikon input içindeyse ve padding ile yer açmak gerekiyorsa:
+  // padding-right: $spacing-32; // İkon için yer (ikon genişliği + biraz boşluk)
+
+  // .form-group-clearable altında olduğunda ve değer olduğunda padding-right'ı artırabiliriz.
+  .form-group-clearable &:not(:placeholder-shown) { // Input doluysa ve clearable ise
+    // Alternatif olarak, :not([value=""]) gibi bir seçici de düşünülebilir ama :placeholder-shown daha dinamik.
+    // Ancak value prop'u ile kontrol edildiği için JS tarafında zaten görünürlük yönetiliyor.
+    // padding-right: $spacing-40; // İkon için daha fazla yer
+  }
+
+  &.error {
+    border-color: var(--error-color);
+    border-width: 2px;
+
+    &:focus {
+      border-color: var(--error-color);
+    }
+  }
+}
+
+.clear-button {
+  position: absolute;
+  right: $spacing-8; // Input'un sağından boşluk
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: $spacing-4; // Tıklama alanını biraz genişletmek için
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary); // İkon rengi
+
+  svg {
+    width: 16px; // İkon boyutu
+    height: 16px;
+  }
+
+  &:hover {
+    color: var(--text-primary);
+  }
+}

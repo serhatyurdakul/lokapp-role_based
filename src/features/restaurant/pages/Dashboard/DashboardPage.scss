@@ -1,0 +1,231 @@
+@use "../../../../styles/variables" as *;
+
+.dashboard-content {
+  h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: $spacing-12;
+    color: var(--text-color);
+
+    @media (min-width: 768px) {
+      font-size: 1.25rem;
+      margin-bottom: $spacing-16;
+    }
+  }
+}
+
+section {
+  margin-bottom: $spacing-32;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-24;
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  .view-all-btn {
+    padding: $spacing-8 $spacing-16;
+    border-radius: $border-radius-medium;
+    border: 1px solid var(--border-color);
+    background-color: var(--background-primary);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+
+    &:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+  }
+}
+
+// Kritik Bilgiler
+.critical-info {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-16;
+  margin-bottom: $spacing-32;
+
+  .stat-card {
+    background: var(--background-secondary);
+    border-radius: $border-radius;
+    padding: $spacing-24;
+    position: relative;
+    overflow: hidden;
+
+    &.primary {
+      background-color: var(--primary-color);
+      color: white;
+
+      h3,
+      .stat-value {
+        color: white;
+      }
+
+      .action-button {
+        margin-top: $spacing-16;
+        padding: $spacing-8 $spacing-16;
+        background: var(--overlay-light-2);
+        border-radius: $border-radius;
+        color: white;
+
+        &:hover {
+          background: var(--overlay-light-3);
+        }
+      }
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: $spacing-8;
+      color: var(--text-color);
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-bottom: $spacing-8;
+
+      &.pending {
+        color: var(--warning-color);
+      }
+    }
+
+    .stat-summary {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-4;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+  }
+}
+
+.stock-alerts {
+  margin-bottom: $spacing-24;
+
+  @media (min-width: 768px) {
+    margin-bottom: $spacing-32;
+  }
+
+  .alert-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-12;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: $spacing-16;
+    }
+  }
+
+  .alert-card {
+    background-color: var(--background-primary);
+    padding: $spacing-12;
+    border-radius: $border-radius;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+
+    @media (min-width: 768px) {
+      padding: $spacing-16;
+    }
+
+    &:hover {
+      background: var(--background-primary);
+    }
+
+    &.critical {
+      border-color: var(--error-color);
+      .stock-progress {
+        background-color: var(--error-color);
+      }
+    }
+
+    &.warning {
+      border-color: var(--warning-color);
+      .stock-progress {
+        background-color: var(--warning-color);
+      }
+    }
+
+    .alert-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h4 {
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .stock-badge {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        padding: $spacing-4 $spacing-8;
+        background: var(--background-secondary);
+        border-radius: $border-radius-small;
+      }
+    }
+  }
+
+  .no-alerts {
+    grid-column: 1 / -1;
+    background: var(--background-secondary);
+    border-radius: $border-radius;
+    padding: $spacing-24;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+}
+
+// MODAL İÇERİĞİNE ÖZEL STİLLER (DashboardPage'e özgü)
+.item-info {
+  margin-bottom: $spacing-16;
+}
+
+.stock-bar {
+  margin-top: $spacing-12;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: $border-radius-small;
+  overflow: hidden;
+
+  .stock-progress {
+    height: 100%;
+    background-color: var(--success-color);
+    &.warning {
+      background-color: var(--warning-color);
+    }
+    &.critical {
+      background-color: var(--error-color);
+    }
+  }
+}
+
+// Günlük Özet
+.daily-summary {
+  .summary-chart {
+    background: var(--background-secondary);
+    border-radius: $border-radius;
+    padding: $spacing-24;
+    min-height: 300px;
+
+    .chart-placeholder {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+  }
+}

@@ -1,0 +1,86 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/breakpoints" as *;
+
+.category {
+  margin-bottom: $spacing-16;
+  position: relative;
+
+  &__title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: $spacing-8;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    color: var(--text-color);
+
+    @include respond-to("medium") {
+      font-size: 1rem;
+      height: 1.4rem;
+    }
+  }
+
+  &__items-container {
+    position: relative;
+  }
+
+  &__items {
+    display: flex;
+    gap: $spacing-4;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    @include respond-to("medium") {
+      gap: $spacing-8;
+    }
+  }
+
+  &__nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--background-primary);
+    border: 1px solid var(--border-opacity);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 2;
+    color: var(--primary-color);
+    transition: $transition;
+
+    @include respond-to("medium") {
+      display: flex;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    @include hover;
+
+    &--prev {
+      left: -8px;
+    }
+
+    &--next {
+      right: -8px;
+    }
+  }
+
+  &__status {
+    margin-left: $spacing-8;
+    color: var(--primary-color);
+  }
+}

@@ -1,0 +1,40 @@
+@use "../../../../styles/variables" as *;
+
+// UserType Seçim Stilleri (Masaüstü için)
+.user-type-options {
+  display: grid;
+  gap: $spacing-16;
+  margin-top: $spacing-24;
+
+  .user-type-button {
+    width: 100%;
+    padding: $spacing-24;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
+    transition: $transition;
+    text-align: center;
+
+    &:hover {
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+    }
+
+    .user-type-icon {
+      font-size: 2rem;
+      margin-bottom: $spacing-12;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: $spacing-8;
+      color: var(--text-color);
+    }
+
+    p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+  }
+}

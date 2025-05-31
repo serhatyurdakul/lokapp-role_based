@@ -1,0 +1,11 @@
+@use "../../../../styles/variables" as *;
+
+.error-message {
+  color: var(--error-color);
+  font-size: 0.875rem;
+  margin-top: $spacing-8;
+  padding: $spacing-8 $spacing-12;
+  background: var(--error-background);
+  border-radius: $border-radius;
+  text-align: center;
+}

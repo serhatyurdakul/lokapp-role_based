@@ -1,0 +1,60 @@
+@use "../../../styles/variables" as *;
+
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-16; // Kullanıcının tercihi
+  background-color: var(--background-color);
+}
+
+.auth-box {
+  width: 100%;
+  max-width: 400px; 
+  padding: $spacing-16; // Kullanıcının tercihi
+  background-color: var(--background-primary);
+  border-radius: $border-radius;
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: $spacing-24;
+    text-align: center;
+    color: var(--text-color);
+
+    @media (max-width: 576px) { // "small" breakpoint değeri
+      font-size: 1.25rem;
+      margin-bottom: $spacing-16;
+    }
+  }
+}
+
+.auth-link {
+  text-align: center;
+  margin-top: $spacing-16;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+
+  a {
+    color: var(--primary-color);
+    font-weight: 500;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.error-message {
+  padding: $spacing-16 $spacing-12; // Kararlaştırılan padding
+  margin-bottom: $spacing-16;
+  border-radius: $border-radius-medium;
+  background-color: rgba(var(--error-color), 0.15);
+  color: var(--error-color);
+  font-size: 0.875rem; // Kararlaştırılan font-size
+  font-weight: 500; // Kararlaştırılan font-weight
+  border-left: 4px solid var(--error-color); // Kararlaştırılan border-left
+  text-align: left; // Kararlaştırılan text-align
+}

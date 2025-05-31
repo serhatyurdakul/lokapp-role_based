@@ -1,0 +1,59 @@
+@use "variables" as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-8;
+  border-radius: $border-radius-medium;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--text-color);
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: $transition;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:disabled,
+  &.disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: scale(1);
+  }
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+}
+
+.btn-secondary {
+  background-color: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  &:hover {
+    background-color: var(--background-color);
+  }
+}
+
+.btn-nav-back {
+  justify-content: flex-start;
+  padding: 0;
+  border-radius: 0;
+  font-size: 1rem;
+  background-color: transparent;
+  color: var(--primary-color);
+  transition: opacity 0.2s ease;
+  line-height: initial;
+  gap: $spacing-4;
+  -webkit-user-select: none;
+  user-select: none;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}

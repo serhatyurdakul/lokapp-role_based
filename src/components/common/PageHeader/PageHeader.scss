@@ -1,0 +1,25 @@
+@use "../../../styles/variables" as *;
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: $spacing-24;
+  width: 100%;
+  text-align: left;
+  height: 36px;
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-8;
+  }
+}

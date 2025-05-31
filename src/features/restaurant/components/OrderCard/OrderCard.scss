@@ -1,0 +1,101 @@
+.order-card {
+  background-color: var(--background-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  position: relative;
+
+  // Tamamlanmış siparişler için özel stiller
+  &.completed {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--order-completed-color);
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+    }
+  }
+
+  // Bekleyen siparişler için özel stiller
+  &.pending {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--order-pending-color);
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+    }
+  }
+
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+
+    > div {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .order-region {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background-color: var(--overlay-light-1);
+      color: var(--text-color);
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--text-color);
+    }
+
+    .order-time {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+  }
+
+  .order-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .order-items {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .order-status {
+      font-size: 0.85rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+
+      &.pending {
+        background: var(--overlay-pending-bg);
+        border: 1px solid var(--overlay-pending-border);
+        color: var(--order-pending-color);
+      }
+
+      &.completed {
+        background: var(--overlay-completed-bg);
+        border: 1px solid var(--overlay-completed-border);
+        color: var(--order-completed-color);
+      }
+    }
+  }
+}

@@ -1,0 +1,67 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/breakpoints" as *;
+
+// Ortak .form-group ve label stilleri
+.form-group {
+  margin-bottom: $spacing-16;
+  width: 100%;
+  position: relative;
+
+  label {
+    display: block;
+    margin-bottom: $spacing-8;
+    font-size: 0.875rem;
+    color: var(--text-color);
+    font-weight: 500;
+  }
+}
+
+// Ortak .input-error stilleri
+.input-error {
+  display: block;
+  color: var(--error-color);
+  font-size: 0.85rem;
+  margin-top: $spacing-6;
+  font-weight: 500;
+  padding-left: $spacing-8;
+  position: relative; // ::before için
+
+  // İkonlu hata mesajı
+  &::before {
+    content: "!"; // Ya da bir SVG ikonu
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-color: var(--error-color);
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 16px; // Dikey hizalama için
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 6px; // Metinle arasında boşluk
+  }
+}
+
+// Ortak .form-actions stilleri
+.form-actions {
+  display: flex;
+  gap: $spacing-12;
+  margin-top: $spacing-24;
+
+  .btn {
+    flex: 1;
+  }
+
+  @media (max-width: 576px) {
+    flex-direction: column-reverse;
+
+    & > * {
+      // Doğrudan altındaki tüm elemanlar (genellikle butonlar)
+      width: 100%;
+      &:not(:last-child) {
+        margin-bottom: $spacing-12;
+      }
+    }
+  }
+}

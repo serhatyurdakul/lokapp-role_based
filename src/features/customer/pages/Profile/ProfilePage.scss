@@ -1,0 +1,256 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/breakpoints" as *;
+
+.profile-container {
+  padding: $spacing-16;
+  max-width: 768px;
+  margin: 0 auto;
+  padding-bottom: 100px;
+}
+
+// Profil içeriği
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-24;
+}
+
+// Profil başlığı
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: $spacing-24;
+  background: var(--background-secondary);
+  border-radius: $border-radius;
+  margin-bottom: $spacing-24;
+
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: $spacing-16;
+
+    span {
+      color: var(--text-color);
+      font-size: 32px;
+      font-weight: 600;
+    }
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: $spacing-4;
+  }
+
+  .subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+}
+
+// Profil bölümleri
+.profile-section {
+  background: var(--background-secondary);
+  border-radius: $border-radius;
+  padding: $spacing-16;
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-16;
+
+    h3 {
+      margin: 0;
+    }
+
+    .view-all-button {
+      color: var(--primary-color);
+      font-size: 14px;
+      font-weight: 500;
+      background: none;
+      padding: 0;
+
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: $spacing-16;
+  }
+}
+
+// Bilgi listesi
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-12;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-12;
+  background: var(--background-primary);
+  border-radius: $border-radius-small;
+
+  .label {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .value {
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+.meal-history {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-12;
+}
+
+.meal-item {
+  padding: $spacing-12;
+  background: var(--background-primary);
+  border-radius: $border-radius-small;
+
+  .meal-date {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-8;
+
+    .date-time {
+      display: flex;
+      align-items: center;
+      gap: $spacing-8;
+
+      .date {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-color);
+      }
+
+      .time {
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+    }
+
+    .type {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 6px;
+
+      &[data-type="Lokantada"] {
+        background-color: rgba(52, 199, 89, 0.12);
+        color: rgb(52, 199, 89);
+      }
+
+      &[data-type="Sipariş"] {
+        background-color: rgba(0, 122, 255, 0.12);
+        color: rgb(0, 122, 255);
+      }
+    }
+  }
+
+  .meal-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .restaurant {
+      font-size: 14px;
+      color: var(--text-color);
+      font-weight: 500;
+    }
+
+    .items {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+  }
+}
+
+// Ayarlar listesi
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
+
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-12 $spacing-16;
+  background: none;
+  color: var(--text-color);
+  font-size: 14px;
+  border-radius: $border-radius-small;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    background: var(--background-primary);
+  }
+
+  svg {
+    color: var(--text-secondary);
+  }
+}
+
+// Çıkış yap butonu
+.logout-button {
+  margin-top: $spacing-8;
+  margin-bottom: max(env(safe-area-inset-bottom), $spacing-24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-8;
+  width: 100%;
+  padding: $spacing-12;
+  background: var(--background-secondary);
+  border-radius: $border-radius;
+  color: var(--error-color);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    transition: $transition;
+  }
+
+  &:hover {
+    background: var(--error-color);
+    color: var(--text-color);
+
+    svg {
+      transform: translateX(2px);
+    }
+  }
+}

@@ -1,0 +1,14 @@
+@use "../../../styles/variables" as *;
+
+.search-bar {
+  margin-bottom: $spacing-16;
+
+  input {
+    width: 100%;
+    padding: $spacing-8 $spacing-16;
+    border-radius: $border-radius-medium;
+    font-size: 0.875rem;
+    background: var(--background-primary);
+
+  }
+}

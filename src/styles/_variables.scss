@@ -1,0 +1,139 @@
+// Typography
+$font-family-base: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+  "Helvetica Neue", sans-serif;
+
+// Spacing
+$spacing-2: 0.125rem; // 2px
+$spacing-4: 0.25rem; // 4px
+$spacing-6: 0.375rem; // 6px
+$spacing-8: 0.5rem; // 8px
+$spacing-12: 0.75rem; // 12px
+$spacing-16: 1rem; // 16px
+$spacing-24: 1.5rem; // 24px
+$spacing-32: 2rem; // 32px
+
+// Dimensions
+$card-width: calc((100% - 0.75rem) / 4);
+
+// Border Radius
+$border-radius-small: 4px;
+$border-radius-medium: 8px;
+$border-radius: 12px;
+$border-radius-large: 16px;
+
+// Transitions
+$transition: all 0.3s ease;
+
+// Z-index
+$z-index-modal: 1000;
+
+:root {
+  // // Colors - Light Theme
+  // --primary-color: #007aff;
+  // --background-color: #f2f2f7;
+  // --background-primary: #ffffff;
+  // --background-secondary: #f9f9f9;
+  // --text-color: #000000;
+  // --text-secondary: #8e8e93;
+  // --border-color: #e5e5ea;
+  // --border-opacity: rgba(0, 0, 0, 0.08);
+  // --error-color: #ff3b30;
+
+  // Colors - Default (Dark) Theme
+  --primary-color: #0a84ff;
+  --background-color: #000000;
+  --background-primary: #1c1c1e;
+  --background-secondary: #2c2c2e;
+  --text-color: #ffffff;
+  --text-secondary: #98989d;
+  --border-color: #38383a;
+  --border-opacity: rgba(255, 255, 255, 0.08);
+  --error-color: #ff453a;
+  --warning-color: #ff9f0a;
+  --success-color: #30d158;
+
+  // Sipariş durum renkleri
+  --order-completed-color: #81c784;
+  --order-pending-color: #ffb74d;
+
+  // Overlay ve arka plan renkleri - Beyaz rengin farklı opaklık seviyeleri
+  --overlay-light-03: rgba(
+    255,
+    255,
+    255,
+    0.03
+  ); // Beyaz rengin %3 opaklıkta hali
+
+  --overlay-light-05: rgba(
+    255,
+    255,
+    255,
+    0.05
+  ); // Beyaz rengin %5 opaklıkta hali
+  --overlay-light-08: rgba(
+    255,
+    255,
+    255,
+    0.08
+  ); // Beyaz rengin %8 opaklıkta hali
+  --overlay-light-1: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ); // Beyaz rengin %10 opaklıkta hali
+  --overlay-light-2: rgba(
+    255,
+    255,
+    255,
+    0.2
+  ); // Beyaz rengin %20 opaklıkta hali
+  --overlay-light-3: rgba(
+    255,
+    255,
+    255,
+    0.3
+  ); // Beyaz rengin %30 opaklıkta hali
+
+  // Sipariş durumu overlay renkleri
+  --overlay-pending-bg: rgba(
+    255,
+    183,
+    77,
+    0.15
+  ); // --order-pending-color (#ffb74d) %15 opaklıkta
+  --overlay-pending-border: rgba(
+    255,
+    183,
+    77,
+    0.3
+  ); // --order-pending-color (#ffb74d) %30 opaklıkta
+  --overlay-completed-bg: rgba(
+    129,
+    199,
+    132,
+    0.15
+  ); // --order-completed-color (#81c784) %15 opaklıkta
+  --overlay-completed-border: rgba(
+    129,
+    199,
+    132,
+    0.3
+  ); // --order-completed-color (#81c784) %30 opaklıkta
+
+  /*
+  @media (prefers-color-scheme: dark) {
+    // Colors - Dark Theme
+    --primary-color: #0a84ff;
+    --background-color: #000000;
+    --background-primary: #1c1c1e;
+    --background-secondary: #2c2c2e;
+    --text-color: #ffffff;
+    --text-secondary: #98989d;
+    --border-color: #38383a;
+    --border-opacity: rgba(255, 255, 255, 0.08);
+    --error-color: #ff453a;
+
+  }
+  */
+}

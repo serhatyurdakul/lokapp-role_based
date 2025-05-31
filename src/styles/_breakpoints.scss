@@ -1,0 +1,44 @@
+@use "sass:map";
+@use "_variables" as *;
+
+// Breakpoints
+$breakpoints: (
+  "small": 576px,
+  "medium": 768px,
+  "large": 992px,
+  "xlarge": 1200px,
+);
+
+// Media query mixin
+@mixin respond-to($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media screen and (min-width: map.get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+      + "Available breakpoints are: #{map.keys($breakpoints)}.";
+  }
+}
+
+// Hover mixin
+@mixin hover {
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+// Safe area padding mixin
+@mixin safe-area-padding($direction) {
+  @if $direction == "horizontal" {
+    padding-left: max(env(safe-area-inset-left), $spacing-16);
+    padding-right: max(env(safe-area-inset-right), $spacing-16);
+  } @else if $direction == "vertical" {
+    padding-top: max(env(safe-area-inset-top), $spacing-16);
+    padding-bottom: max(env(safe-area-inset-bottom), $spacing-16);
+  } @else {
+    @warn "Invalid direction: #{$direction}. Use 'horizontal' or 'vertical'.";
+  }
+}

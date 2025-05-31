@@ -1,0 +1,83 @@
+@use "../../../styles/variables" as *;
+
+.navbar {
+  background-color: var(--background-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding: $spacing-12;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: $z-index-modal;
+  height: 64px;
+  padding-top: calc($spacing-12 + env(safe-area-inset-top));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+// Ana menü container'ı
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: $border-radius-medium;
+  position: relative;
+  padding: 2px;
+  width: 240px;
+  margin: 0 auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  @media (min-width: 768px) {
+    width: 280px;
+  }
+
+  // Aktif menü göstergesi
+  &::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    left: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: $border-radius-small;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: calc((100% - 4px) / var(--total-links, 2));
+    transform: translateX(calc(100% * var(--active-index, 0)));
+    opacity: 1;
+    visibility: visible;
+  }
+
+  // Active index -1 olduğunda göstergeyi gizle
+  &[style*="--active-index: -1"]::before {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+// Menü öğeleri
+.navbar-menu-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  position: relative;
+  z-index: 1;
+  padding: $spacing-4 $spacing-8;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  font-weight: 500;
+
+  &:hover {
+    color: var(--text-color);
+  }
+
+  &.active {
+    color: var(--text-color);
+  }
+}
