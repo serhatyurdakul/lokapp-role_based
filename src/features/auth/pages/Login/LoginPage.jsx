@@ -98,6 +98,8 @@ const LoginPage = () => {
           value={formData.email}
           onChange={handleChange}
           required
+          isClearable={true}
+          onClear={() => setFormData(prev => ({ ...prev, email: "" }))}
         />
         <FormInput
           label='Şifre'
@@ -107,6 +109,8 @@ const LoginPage = () => {
           value={formData.password}
           onChange={handleChange}
           required
+          isClearable={true}
+          onClear={() => setFormData(prev => ({ ...prev, password: "" }))}
         />
         <div className='form-actions'>
           <Button

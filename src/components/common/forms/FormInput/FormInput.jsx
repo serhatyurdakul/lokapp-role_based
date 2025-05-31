@@ -27,18 +27,18 @@ const FormInput = ({
     <div className={`form-group ${isClearable ? "form-group-clearable" : ""}`.trim()}>
       <label htmlFor={id}>{label}</label>
       <div className="input-wrapper">
-        <input
-          type={type}
-          id={id}
-          name={name}
-          value={value}
-          onChange={onChange}
-          required={required}
-          placeholder={placeholder}
-          min={type === "number" ? min : undefined}
-          max={type === "number" ? max : undefined}
-          className={`form-input ${error ? "error" : ""}`.trim()}
-        />
+      <input
+        type={type}
+        id={id}
+        name={name}
+        value={value}
+        onChange={onChange}
+        required={required}
+        placeholder={placeholder}
+        min={type === "number" ? min : undefined}
+        max={type === "number" ? max : undefined}
+        className={`form-input ${error ? "error" : ""}`.trim()}
+      />
         {isClearable && value && (
           <button type="button" className="clear-button" onClick={handleClear} aria-label="İçeriği temizle">
             <CloseIcon />

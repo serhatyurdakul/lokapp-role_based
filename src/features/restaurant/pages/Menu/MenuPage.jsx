@@ -362,10 +362,10 @@ const MenuPage = () => {
       } else {
         if (response && response.error && response.message && response.message.includes("Bu yemek günlük menüde bulunmaktadır")) {
           setMealExistsError(response.message);
-        } else {
+    } else {
           console.error("Yemek ekleme başarısız:", response?.message || "Bilinmeyen bir hata oluştu.");
           setMealExistsError(response?.message || "Yemek eklenirken bir hata oluştu. Lütfen tekrar deneyin.");
-        }
+    }
       }
     } catch (error) {
       console.error("Yemek ekleme API çağrısı sırasında bir hata oluştu:", error);
@@ -594,6 +594,8 @@ const MenuPage = () => {
               placeholder='Stok miktarını girin'
               min='0'
               required
+              isClearable={true}
+              onClear={() => setCurrentFoodStock("")}
             />
           </form>
         </GenericModal>
