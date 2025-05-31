@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
-import GenericModal from "@/components/common/GenericModal/GenericModal";
-import FormInput from "@/components/common/forms/FormInput/FormInput";
+import StockUpdateModal from "../../components/StockUpdateModal/StockUpdateModal";
 import "./DashboardPage.scss";
 
 const DashboardPage = () => {
@@ -57,7 +56,7 @@ const DashboardPage = () => {
     // API çağrısı yapılacak
     const updatedStock = stockAlerts.map((item) =>
       item.id === selectedItem.id
-        ? { ...item, remaining: parseInt(newStock) || 0 } // newStock boşsa 0 ata
+        ? { ...item, remaining: parseInt(newStock) || 0 }
         : item
     );
     setStockAlerts(updatedStock);
@@ -135,39 +134,18 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Modal */}
-      {selectedItem && (
-        <GenericModal
-          isOpen={showQuickAction}
-          onClose={handleQuickActionClose}
-          title='Stok Güncelle'
-          primaryButtonText='Güncelle'
-          onPrimaryAction={handleStockUpdate}
-          secondaryButtonText='İptal'
-        >
-         
-            <h4>{selectedItem.item}</h4>
-
-            <FormInput
-              label='Yeni Stok Miktarı'
-              type='number'
-              id='newStockModalInput'
-              name='newStock'
-              value={newStock}
-              onChange={(e) => setNewStock(e.target.value)}
-              min='0'
-              max={
-                selectedItem.total !== undefined
-                  ? selectedItem.total
-                  : undefined
-              }
-              required
-              isClearable={true}
-              onClear={() => setNewStock("")}
-            />
-       
-        </GenericModal>
-      )}
+      <StockUpdateModal
+        isOpen={showQuickAction}
+        onClose={handleQuickActionClose}
+        title="Stok Güncelle"
+        primaryButtonText="Güncelle"
+        onPrimaryAction={handleStockUpdate}
+        secondaryButtonText="İptal"
+        selectedItem={selectedItem}
+        newStock={newStock}
+        onNewStockChange={(e) => setNewStock(e.target.value)}
+        onClearNewStock={() => setNewStock("")}
+      />
     </div>
   );
 };
