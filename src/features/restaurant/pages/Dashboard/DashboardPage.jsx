@@ -145,27 +145,9 @@ const DashboardPage = () => {
           onPrimaryAction={handleStockUpdate}
           secondaryButtonText='İptal'
         >
-          <div className='item-info'>
+         
             <h4>{selectedItem.item}</h4>
-            <p className='current-stock'>
-              Mevcut Stok: {selectedItem.remaining} / {selectedItem.total}
-            </p>
-            <div className='stock-bar'>
-              <div
-                className={`stock-progress ${getUrgencyLevel(
-                  selectedItem.remaining,
-                  selectedItem.total
-                )}`}
-                style={{
-                  width: `${
-                    (selectedItem.remaining / selectedItem.total) * 100
-                  }%`,
-                }}
-              />
-            </div>
-          </div>
 
-          <div className='stock-input'>
             <FormInput
               label='Yeni Stok Miktarı'
               type='number'
@@ -180,8 +162,10 @@ const DashboardPage = () => {
                   : undefined
               }
               required
+              isClearable={true}
+              onClear={() => setNewStock("")}
             />
-          </div>
+       
         </GenericModal>
       )}
     </div>
