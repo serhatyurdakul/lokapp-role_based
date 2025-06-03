@@ -6,8 +6,7 @@ const RestaurantProfilePage = () => {
   return (
     <div>
       <DetailPageHeader title='Restoran Profili' backPath={-1} />
-      {/* <h1>Restoran Profil Sayfası (Test)</h1> */}
-      <p>Bu sayfa restoran çalışanının profil bilgilerini gösterecektir.</p>
+      <p> restoran profil sayfası</p>
     </div>
   );
 };

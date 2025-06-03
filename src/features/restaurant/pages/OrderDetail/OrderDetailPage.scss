@@ -10,8 +10,6 @@
     padding-bottom: 72px;
   }
 
-  // DetailPageHeader bileşeni kullanıldığı için page-header ve back-nav stilleri kaldırıldı
-
   .order-content {
     display: flex;
     flex-direction: column;
@@ -148,8 +146,7 @@
   }
 }
 
-// Specific styles for buttons within a modal on this page,
-// assuming GenericModal passes className to the Button component.
+
 .btn-primary {
   &.pending {
     background-color: var(--order-completed-color);

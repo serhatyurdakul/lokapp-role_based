@@ -24,7 +24,7 @@
   margin-top: $spacing-6;
   font-weight: 500;
   padding-left: $spacing-8;
-  position: relative; // ::before için
+  position: relative;
 
   // İkonlu hata mesajı
   &::before {

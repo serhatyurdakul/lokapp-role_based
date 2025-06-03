@@ -11,7 +11,7 @@ const PrivateRoute = ({ children }) => {
 
   // Kimlik doğrulama durumu veya kullanıcı bilgisi Redux'tan yükleniyorsa ve henüz kimlik doğrulanmamışsa
   if (authIsLoading && !isAuthenticated) {
-    // TODO: Replace with a proper loading spinner component
+    // TODO: loading spinner eklenebilir
     return <div>Yönlendirme kontrol ediliyor...</div>;
   }
 
@@ -21,8 +21,6 @@ const PrivateRoute = ({ children }) => {
     return <Navigate to='/login' state={{ from: location }} replace />;
   }
 
-  // Kullanıcı giriş yapmış ve kimliği doğrulanmışsa, istenen alt rotaları (children) render et.
-  // CustomerLayout bu children içinde zaten var.
   return children;
 };
 

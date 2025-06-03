@@ -6,7 +6,6 @@
   cursor: pointer;
   position: relative;
 
-  // Tamamlanmış siparişler için özel stiller
   &.completed {
     &::before {
       content: "";
@@ -21,7 +20,7 @@
     }
   }
 
-  // Bekleyen siparişler için özel stiller
+
   &.pending {
     &::before {
       content: "";

@@ -9,7 +9,7 @@ const ProfileButton = ({
   title = "Profil",
 }) => {
   if (!userInitial) {
-    return null; // Eğer userInitial yoksa butonu render etme
+    return null; // userInitial yoksa butonu render etme
   }
 
   return (

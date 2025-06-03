@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./Button.scss"; // Temel yapı için, başlangıçta boş olabilir veya _buttons.scss'e yönlendirebilir
+import "./Button.scss"; 
 
 const Button = ({
   children,

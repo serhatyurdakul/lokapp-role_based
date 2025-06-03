@@ -3,8 +3,8 @@ import { useEffect, useRef } from "react";
 import "./BaseNavbar.scss";
 
 const BaseNavbar = ({
-  links, // [{ to: '/', label: 'Ana Sayfa' }, ...]
-  rightAction, // Profil butonu gibi sağdaki aksiyonlar
+  links, 
+  rightAction, 
   className,
 }) => {
   const location = useLocation();

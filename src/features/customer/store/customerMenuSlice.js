@@ -1,12 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchRestaurantMeals } from "@/utils/api";
 
-// Thunk - Restoran yemeklerini API'den getirme
+// Thunk - restoran yemeklerini api'den getirme
 export const fetchMeals = createAsyncThunk(
   "menu/fetchMeals",
   async (restaurantId, { rejectWithValue }) => {
     try {
-      // API'den yemekleri getir
       const mealCategories = await fetchRestaurantMeals(restaurantId);
       return mealCategories;
     } catch (error) {
@@ -16,20 +15,18 @@ export const fetchMeals = createAsyncThunk(
 );
 
 const initialState = {
-  // Başlangıçta boş kategoriler
   categories: [],
-  // API'den yüklenen ham yemek verileri
   mealCategories: [],
   selectedItems: {},
   isLoading: false,
   error: null
 };
 
-// Resim URL'sini düzeltme fonksiyonu
+// Resim url sini düzeltme fonksiyonu
 const getValidImageUrl = (imageUrl) => {
   if (!imageUrl) return "https://placehold.co/150x150?text=Yemek";
   
-  // Eğer URL göreli ise tam URL'ye çevir
+  // Eğer url göreli ise tam url ye çevir
   if (imageUrl.startsWith("/")) {
     return `https://emreustaa.com${imageUrl}`;
   }
@@ -37,7 +34,7 @@ const getValidImageUrl = (imageUrl) => {
   return imageUrl;
 };
 
-// Yemek kategorilerini işleyen fonksiyon
+// Yemek kategorilerini işleme fonksiyonu
 const processMealCategories = (mealCategories) => {
   if (!mealCategories || !Array.isArray(mealCategories) || mealCategories.length === 0) {
     console.log("İşlenecek yemek kategorileri bulunamadı");
@@ -46,9 +43,9 @@ const processMealCategories = (mealCategories) => {
   
   console.log("İşlenecek yemek kategorileri:", mealCategories);
   
-  // Her bir kategori için ayrı kategori oluştur
+  // Her bir kategori için ayrı kategori oluşturma
   return mealCategories.map((category, index) => {
-    // Kategori bilgilerini kontrol et
+    // Kategori bilgilerini kontrol etme
     console.log(`İşlenen kategori ${index}:`, category);
     
     if (!category.meals || !Array.isArray(category.meals) || category.meals.length === 0) {
@@ -56,10 +53,10 @@ const processMealCategories = (mealCategories) => {
       return null;
     }
     
-    // Kategori adı
+    // Kategori adını alma
     const categoryName = category.categoryName || `Kategori ${index + 1}`;
     
-    // Yemekleri hazırla
+    // Yemekleri hazırlama
     const items = category.meals.map(meal => ({
       id: meal.id,
       name: meal.name,
@@ -86,11 +83,11 @@ const menuSlice = createSlice({
     selectItem(state, action) {
       const { categoryId, itemId } = action.payload;
       
-      // Eğer aynı ürün seçili ise, seçimi kaldır (toggle)
+      // Eğer aynı ürün seçili ise, seçimi kaldırma (toggle)
       if (state.selectedItems[categoryId] === itemId) {
         delete state.selectedItems[categoryId];
       } else {
-        // Değilse yeni seçimi yap
+        // Değilse yeni seçimi yapma
         state.selectedItems[categoryId] = itemId;
       }
     },
@@ -110,7 +107,7 @@ const menuSlice = createSlice({
         state.isLoading = false;
         console.log("fetchMeals.fulfilled - Payload:", action.payload);
         
-        // Gelen veri null veya boşsa, kontrolle işlem yap
+        // Gelen veri null veya boş mu kontrolü yapma
         if (!action.payload || !Array.isArray(action.payload) || action.payload.length === 0) {
           state.mealCategories = [];
           state.categories = [];
@@ -120,7 +117,7 @@ const menuSlice = createSlice({
         
         state.mealCategories = action.payload;
         
-        // Yemek kategorilerini işle
+        // Yemek kategorilerini işleme
         state.categories = processMealCategories(state.mealCategories);
         console.log("Kategoriler oluşturuldu:", state.categories);
       })

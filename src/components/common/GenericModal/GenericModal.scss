@@ -6,11 +6,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); // Standart overlay rengi
+  background-color: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; // Diğer elementlerin üzerinde olması için
+  z-index: 1000; 
 }
 
 .modal-content {
@@ -20,7 +20,7 @@
   padding: $spacing-16; 
   width: 90%;
   max-width: 500px; 
-  display: flex; // Header, body, footer'ı dikeyde sıralamak için
+  display: flex; 
   flex-direction: column;
 
   .modal-header {
@@ -31,7 +31,7 @@
 
     .modal-title {
       // h3 etiketi için stil
-      font-size: 1.25rem; // OrderDetailPage'den referans
+      font-size: 1.25rem; 
       font-weight: 500;
       color: var(--text-color);
       margin: 0; // h3'ün kendi margin'ini sıfırla
@@ -41,12 +41,12 @@
       background: none;
       border: none;
       color: var(--text-secondary);
-      padding: $spacing-8; // Tıklama alanını artırmak için
+      padding: $spacing-8;
       cursor: pointer;
-      line-height: 0; // İkonun dikeyde ortalanmasına yardımcı olmak için
+      line-height: 0; 
 
       svg {
-        width: 20px; // İkon boyutu
+        width: 20px;
         height: 20px;
         display: block;
       }
@@ -58,22 +58,20 @@
   }
 
   .modal-body {
-    // margin-bottom: $spacing-24; // gap ile sağlandığı için kaldırılabilir veya ayarlanabilir
-    // Modal body içindeki genel paragraflar için bir stil eklenebilir, OrderDetailPage'deki gibi.
 
     p {
       color: var(--text-secondary);
-      margin-bottom: $spacing-8; // Paragraflar arası boşluk
+      margin-bottom: $spacing-8;
       &:last-child {
         margin-bottom: 0;
       }
     }
 
-    // Modal içindeki labellar için ortak stil
+
     label {
       display: block;
       font-size: 0.875rem;
-      color: var(--text-secondary); // Genel label rengi
+      color: var(--text-secondary);
       font-weight: 500;
       margin: $spacing-8 0;
     }
@@ -82,7 +80,6 @@
       margin-bottom: $spacing-16;
     }
     
-    // Modal içindeki son form-group'un margin-bottom değerini sıfırla
     .form-group:last-of-type {
       margin-bottom: 0;
     }

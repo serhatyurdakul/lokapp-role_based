@@ -1,42 +1,51 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { api, setAuthHeaders, registerUser, loginUser, verifyUserToken } from "@/utils/api";
+import {
+  api,
+  setAuthHeaders,
+  registerUser,
+  loginUser,
+  verifyUserToken,
+} from "@/utils/api";
 
-// API URL
 // const API_URL = "https://emreustaa.com/public/api";
 
-// Async thunks
 export const register = createAsyncThunk(
   "auth/register",
   async (userData, { rejectWithValue }) => {
     try {
-      // registerUser fonksiyonu response.data'dır
+      // registerUser fonksiyonu response.data dır
       const response = await registerUser(userData);
 
-      if (!response.error && (response.status === 200 || response.status === 201)) {
-        // KULLANICI KAYDI (registerUser)
+      if (
+        !response.error &&
+        (response.status === 200 || response.status === 201)
+      ) {
+        // kullanıcı kaydı (registerUser)
         // Token ve uniqueId içeren user nesnesi bekleniyor.
         if (response.user && response.user.uniqueId && response.user.token) {
           const token = response.user.token;
           const user = response.user;
-          // Kayıt sonrası otomatik giriş yapılmasını istemiyoruz
-          // Bu nedenle setAuthHeaders ve localStorage işlemlerini kaldırdık
           return {
             user,
-            token
+            token,
           };
         } else {
           return rejectWithValue(
-            response.message || "Kullanıcı kayıt verisi eksik veya hatalı (uniqueId/token)"
+            response.message ||
+              "Kullanıcı kayıt verisi eksik veya hatalı (uniqueId/token)"
           );
         }
       } else {
         return rejectWithValue(
-          response.message || "Kayıt işlemi API tarafından başarısız olarak işaretlendi"
+          response.message ||
+            "Kayıt işlemi API tarafından başarısız olarak işaretlendi"
         );
       }
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || error.message || "Kayıt işlemi sırasında bir hata oluştu"
+        error.response?.data?.message ||
+          error.message ||
+          "Kayıt işlemi sırasında bir hata oluştu"
       );
     }
   }
@@ -45,7 +54,8 @@ export const register = createAsyncThunk(
 export const login = createAsyncThunk(
   "auth/login",
   async (credentials, { rejectWithValue }) => {
-    try {const response = await loginUser(credentials);
+    try {
+      const response = await loginUser(credentials);
       if (!response.error || (response.user && response.user.token)) {
         let token;
         let user;
@@ -54,7 +64,7 @@ export const login = createAsyncThunk(
           user = response.user;
         } else if (response.token) {
           token = response.token;
-          user = response.user; 
+          user = response.user;
         } else {
           return rejectWithValue("Token bulunamadı");
         }
@@ -77,7 +87,9 @@ export const login = createAsyncThunk(
       }
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || error.message || "Giriş işlemi sırasında bir hata oluştu"
+        error.response?.data?.message ||
+          error.message ||
+          "Giriş işlemi sırasında bir hata oluştu"
       );
     }
   }
@@ -92,14 +104,13 @@ export const verifyToken = createAsyncThunk(
         return rejectWithValue("Doğrulanacak token bulunamadı (state)");
       }
 
-      // verifyUserToken fonksiyonunu kullan
       const response = await verifyUserToken(token);
 
       if (!response.error && response.user) {
         if (response.user.uniqueId) {
-            localStorage.setItem("user", JSON.stringify(response.user));
+          localStorage.setItem("user", JSON.stringify(response.user));
         } else {
-            console.warn("verifyToken yanıtında user.uniqueId eksik.");
+          console.warn("verifyToken yanıtında user.uniqueId eksik.");
         }
         return {
           user: response.user,
@@ -112,15 +123,25 @@ export const verifyToken = createAsyncThunk(
       }
     } catch (error) {
       setAuthHeaders(null, null);
-      return rejectWithValue(error.response?.data?.message || "Token doğrulaması sırasında bir hata oluştu");
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "Token doğrulaması sırasında bir hata oluştu"
+      );
     }
   }
 );
 
 const initialState = {
-  user: (() => { try { return JSON.parse(localStorage.getItem("user")); } catch { return null; } })(),
+  user: (() => {
+    try {
+      return JSON.parse(localStorage.getItem("user"));
+    } catch {
+      return null;
+    }
+  })(),
   token: localStorage.getItem("token") || null,
-  isAuthenticated: !!localStorage.getItem("token") && !!localStorage.getItem("uniqueId"),
+  isAuthenticated:
+    !!localStorage.getItem("token") && !!localStorage.getItem("uniqueId"),
   isLoading: false,
   error: null,
 };
@@ -137,7 +158,7 @@ const authSlice = createSlice({
     },
     clearError(state) {
       state.error = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -148,13 +169,11 @@ const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        // Kayıt başarılı ancak kullanıcı henüz login olmadı
-        // Bu yüzden kullanıcıyı otomatik login yapmak yerine login sayfasına yönlendiriyoruz
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
-        // Sadece kayıt işlemi başarılı olduğunu gösteren bir mesaj kaydediyoruz
-        state.registrationMessage = "Kayıt işleminiz başarıyla tamamlandı. Şimdi giriş yapabilirsiniz."
+        state.registrationMessage =
+          "Kayıt işleminiz başarıyla tamamlandı. Şimdi giriş yapabilirsiniz.";
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;

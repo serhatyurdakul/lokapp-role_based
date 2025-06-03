@@ -56,44 +56,44 @@ $z-index-modal: 1000;
   --order-completed-color: #81c784;
   --order-pending-color: #ffb74d;
 
-  // Overlay ve arka plan renkleri - Beyaz rengin farklı opaklık seviyeleri
+  // Overlay ve arka plan renkleri
   --overlay-light-03: rgba(
     255,
     255,
     255,
     0.03
-  ); // Beyaz rengin %3 opaklıkta hali
+  ); 
 
   --overlay-light-05: rgba(
     255,
     255,
     255,
     0.05
-  ); // Beyaz rengin %5 opaklıkta hali
+  ); 
   --overlay-light-08: rgba(
     255,
     255,
     255,
     0.08
-  ); // Beyaz rengin %8 opaklıkta hali
+  ); 
   --overlay-light-1: rgba(
     255,
     255,
     255,
     0.1
-  ); // Beyaz rengin %10 opaklıkta hali
+  ); 
   --overlay-light-2: rgba(
     255,
     255,
     255,
     0.2
-  ); // Beyaz rengin %20 opaklıkta hali
+  ); 
   --overlay-light-3: rgba(
     255,
     255,
     255,
     0.3
-  ); // Beyaz rengin %30 opaklıkta hali
+  ); 
 
   // Sipariş durumu overlay renkleri
   --overlay-pending-bg: rgba(

@@ -5,7 +5,7 @@
 
 
 .form-select {
-  display: block; // Tutarlılık için eklendi
+  display: block;
   width: 100%;
   padding: $spacing-12;
   border: 1px solid var(--border-color);
@@ -17,7 +17,7 @@
   appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
-  background-position: right $spacing-12 center; // $spacing-12 (0.75rem) or 1rem
+  background-position: right $spacing-12 center; 
   background-size: 1em;
 
   &:focus {
@@ -31,21 +31,21 @@
     background-color: var(
       --disabled-bg-color,
       var(--background-color)
-    ); // Daha iyi bir disabled görünümü
+    );
   }
 
   &.error {
     border-color: var(--error-color);
-    border-width: 2px; // Input ile tutarlı
+    border-width: 2px; /
 
     &:focus {
-      border-color: var(--error-color); // Hata durumunda focus rengi
+      border-color: var(--error-color);
     }
   }
 
   option {
     background-color: var(--background-primary);
     color: var(--text-color);
-    padding: $spacing-8; // Tarayıcılar arasında farklılık gösterebilir
+    padding: $spacing-8; 
   }
 }

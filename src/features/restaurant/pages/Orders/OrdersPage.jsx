@@ -348,7 +348,7 @@ const Orders = () => {
   const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Siparişleri filtrele ve sırala (şirket adına göre arama ve bölge filtresi)
+  // Siparişleri filtreleme ve sıralama (şirket adına göre arama ve bölge filtresi)
   const filteredOrders = [...orders]
     .filter((order) =>
       order.company.toLowerCase().includes(searchQuery.toLowerCase())
@@ -367,7 +367,7 @@ const Orders = () => {
     (order) => order.status === "completed"
   );
 
-  // Siparişleri site (region) bazında gruplandır
+  // Siparişleri site (region) bazında gruplandırma
   const groupOrdersByRegion = (ordersList) => {
     return ordersList.reduce((acc, order) => {
       if (!acc[order.region]) acc[order.region] = [];

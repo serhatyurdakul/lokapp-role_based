@@ -1,4 +1,4 @@
-import "./FormSelect.scss"; // Güncellendi
+import "./FormSelect.scss"; 
 
 const FormSelect = ({
   label,
@@ -14,7 +14,7 @@ const FormSelect = ({
   className = "", // Ekstra CSS sınıfları için
   ...rest // Diğer select propları (örn: disabled)
 }) => {
-  const selectId = id || name; // Eğer id yoksa name'i kullan
+  const selectId = id || name;
 
   return (
     <div className={`form-group ${className}`}>

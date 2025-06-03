@@ -15,7 +15,6 @@
   .orders-layout {
     display: grid;
     grid-template-columns: 1fr;
-    // Gruplar arası dikey 2rem, yatay 1rem boşluk
     gap: $spacing-32 $spacing-16;
     height: calc(100vh - 180px);
   

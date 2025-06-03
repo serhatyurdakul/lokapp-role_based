@@ -10,7 +10,7 @@ const DashboardPage = () => {
   const [showQuickAction, setShowQuickAction] = useState(false);
   const [newStock, setNewStock] = useState("");
 
-  // Örnek veriler (Daha sonra API'den gelecek)
+  // mock veriler (Daha sonra api den gelecek)
   const [dailyStats] = useState({
     totalOrders: 140,
     pendingOrders: 32,

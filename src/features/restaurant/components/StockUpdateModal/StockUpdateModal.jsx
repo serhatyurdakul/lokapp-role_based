@@ -28,22 +28,20 @@ const StockUpdateModal = ({
     >
       <h4>{selectedItem.item}</h4>
       <FormInput
-        label="Yeni Stok Miktarı"
-        type="number"
-        id="newStockModalInput" // ID aynı kalacak
-        name="newStock" // name aynı kalacak
+        label='Yeni Stok Miktarı'
+        type='number'
+        id='newStockModalInput'
+        name='newStock'
         value={newStock}
-        onChange={onNewStockChange} // Prop üzerinden gelen handler
-        min="0" // min attribute'ü aynı kalacak
-        max={
-          selectedItem.total !== undefined ? selectedItem.total : undefined
-        } // max attribute'ü aynı kalacak
-        required // required attribute'ü aynı kalacak
-        isClearable={true} // isClearable aynı kalacak
-        onClear={onClearNewStock} // Prop üzerinden gelen handler
+        onChange={onNewStockChange}
+        min='0'
+        max={selectedItem.total !== undefined ? selectedItem.total : undefined}
+        required
+        isClearable={true}
+        onClear={onClearNewStock}
       />
     </GenericModal>
   );
 };
 
-export default StockUpdateModal; 
+export default StockUpdateModal;

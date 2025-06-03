@@ -10,11 +10,11 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Redux state\'inden isAuthenticated, isLoading ve error\'u alalım
+  // Redux stateinden isAuthenticated, isLoading ve error u alma
   const {
     isAuthenticated,
-    isLoading: authIsLoading, // Redux\'taki genel yükleme durumu
-    error: authError, // Redux\'taki genel hata durumu
+    isLoading: authIsLoading, // Redux taki genel yükleme durumu
+    error: authError, // Redux taki genel hata durumu
   } = useSelector((state) => state.auth);
 
   const [isSubmitting, setIsSubmitting] = useState(false); // Buton için lokal yükleme durumu
@@ -25,14 +25,14 @@ const LoginPage = () => {
     password: "",
   });
 
-  // --- YENİ useEffect ---
+
   // isAuthenticated true olduğunda ana sayfaya yönlendir
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/");
     }
   }, [isAuthenticated, navigate]);
-  // --- YENİ useEffect SONU ---
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,16 +46,15 @@ const LoginPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setLocalError(null);
-    // authSlice\'da clearError olup olmadığını kontrol etmeye gerek yok, varsa importta hata vermezse çağrılır.
+    // authSlice da clearError olup olmadığını kontrol etmeye gerek yok, varsa importta hata vermezse çağrılır.
     dispatch(clearError());
 
     try {
       // Redux login işlemi
       await dispatch(login(formData)).unwrap();
       // Başarılı olursa, yukarıdaki useEffect yönlendirmeyi yapacak.
-      // navigate("/") buradan kaldırıldı.
     } catch (rejectedValue) {
-      // unwrap(), thunk\'tan dönen hata mesajını fırlatır
+      // unwrap(), thunk tan dönen hata mesajını fırlatır
       console.error("Giriş hatası (LoginPage catch):", rejectedValue);
       // Gelen hatanın yapısını kontrol ederek daha iyi bir mesaj oluşturma
       let errorMessage = "Giriş işlemi sırasında bir hata oluştu.";
@@ -64,7 +63,7 @@ const LoginPage = () => {
       } else if (rejectedValue && rejectedValue.message) {
         errorMessage = rejectedValue.message;
       } else if (authError && authError.message) {
-        // Redux\'taki hatayı da kontrol et
+        // Redux taki hatayı da kontrol et
         errorMessage = authError.message;
       } else if (typeof authError === "string") {
         errorMessage = authError;
@@ -78,8 +77,8 @@ const LoginPage = () => {
   return (
     <AuthLayout>
       <h1>Giriş Yap</h1>
-      {/* Hata mesajlarını gösterirken hem localError hem de authError\'u dikkate alabiliriz */}
-      {/* Öncelik localError, sonra Redux\'tan gelen authError */}
+      {/* Hata mesajlarını gösterirken hem localError hem de authError u dikkate alabiliriz */}
+      {/* Öncelik localError, sonra Redux tan gelen authError */}
       {(localError || (authError && !isSubmitting && !localError)) && (
         <div className='error-message'>
           {localError ||

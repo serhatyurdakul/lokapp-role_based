@@ -8,7 +8,6 @@ import {
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-// Sayfa importları (Yeni adlar ve takma adlar)
 import AuthLoginPage from "./features/auth/pages/Login/LoginPage.jsx";
 import AuthRegisterPage from "./features/auth/pages/Register/RegisterPage.jsx";
 import CustomerHomePage from "./features/customer/pages/Home/HomePage.jsx";
@@ -20,24 +19,19 @@ import RestaurantMenuPage from "./features/restaurant/pages/Menu/MenuPage.jsx";
 import RestaurantOrdersPage from "./features/restaurant/pages/Orders/OrdersPage.jsx";
 import RestaurantOrderDetailPage from "./features/restaurant/pages/OrderDetail/OrderDetailPage.jsx";
 
-// Layout importları (Değişiklik yok)
 import CustomerLayout from "./features/customer/layouts/CustomerLayout.jsx";
 import RestaurantLayout from "./features/restaurant/layouts/RestaurantLayout.jsx";
 
-// Diğer importlar (Değişiklik yok)
 import PrivateRoute from "./components/common/PrivateRoute/PrivateRoute.jsx";
 import { verifyToken, logout } from "./features/auth/store/authSlice";
 
-// Rol Bazlı Layout Seçici Bileşen (Değişiklik yok)
 const RoleBasedLayout = () => {
   const { user } = useSelector((state) => state.auth);
 
   if (!user) {
-    // Kullanıcı yoksa veya yükleniyorsa (PrivateRoute zaten bunu kontrol etmeli ama ekstra güvenlik)
     return <Navigate to='/login' replace />;
   }
 
-  // Outlet, bu layout altındaki iç içe route'ları render edecek
   if (user.isRestaurantEmployee === 1) {
     return (
       <RestaurantLayout>
@@ -94,14 +88,13 @@ function App() {
   }, [dispatch, isAuthenticated, logout]);
 
   if (authIsLoading && tokenFromStore && !userFromStore) {
-    // Token varsa ve kullanıcı bilgisi bekleniyorsa yükleme göster
+    // Token varsa ve kullanıcı bilgisi bekleniyorsa yükleme gösterme
     return <div>Kimlik doğrulanıyor...</div>;
   }
 
   return (
     <Router>
       <Routes>
-        {/* Public Routes (Yeni takma adlar) */}
         <Route path='/login' element={<AuthLoginPage />} />
         <Route path='/register' element={<AuthRegisterPage />} />
 
@@ -113,7 +106,6 @@ function App() {
             </PrivateRoute>
           }
         >
-          {/* Ana Sayfa (/) (Yeni takma adlar) */}
           <Route
             path='/'
             element={
@@ -124,7 +116,6 @@ function App() {
             }
           />
 
-          {/* Profil Sayfası (/profile) (Yeni takma adlar) */}
           <Route
             path='/profile'
             element={
@@ -135,24 +126,20 @@ function App() {
             }
           />
 
-          {/* Müşteriye Özel Sayfalar (Yeni takma adlar) */}
           <Route
             path='/qr'
             element={
               <RoleRenderer
                 customerComponent={<CustomerQRPage />}
-                // Restoranın /qr sayfası yoksa null veya Navigate ile başka yere yönlendir
                 restaurantComponent={<Navigate to='/' replace />}
               />
             }
           />
 
-          {/* Restorana Özel Sayfalar (Yeni takma adlar) */}
           <Route
             path='/menu'
             element={
               <RoleRenderer
-                // Müşterinin /menu sayfası yoksa null veya Navigate
                 customerComponent={<Navigate to='/' replace />}
                 restaurantComponent={<RestaurantMenuPage />}
               />
@@ -162,7 +149,7 @@ function App() {
             path='/orders'
             element={
               <RoleRenderer
-                customerComponent={<Navigate to='/' replace />} // Müşterinin /orders sayfası yok
+                customerComponent={<Navigate to='/' replace />} 
                 restaurantComponent={<RestaurantOrdersPage />}
               />
             }
@@ -171,14 +158,13 @@ function App() {
             path='/orders/:orderId'
             element={
               <RoleRenderer
-                customerComponent={<Navigate to='/' replace />} // Müşterinin sayfası yok
+                customerComponent={<Navigate to='/' replace />} 
                 restaurantComponent={<RestaurantOrderDetailPage />}
               />
             }
           />
-          {/* Diğer sayfalar da benzer şekilde eklenebilir */}
+      
         </Route>
-
         {/* Yakalanamayan tüm yollar için ana sayfaya yönlendirme veya 404 */}
         <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>
@@ -186,7 +172,7 @@ function App() {
   );
 }
 
-// Yardımcı Bileşen: RoleRenderer (Değişiklik yok)
+// RoleRenderer 
 const RoleRenderer = ({ customerComponent, restaurantComponent }) => {
   const { user, isLoading } = useSelector((state) => state.auth);
 
@@ -195,7 +181,6 @@ const RoleRenderer = ({ customerComponent, restaurantComponent }) => {
   }
 
   if (!user) {
-    // Bu durumun PrivateRoute tarafından yakalanması gerekir ama ek kontrol
     return <Navigate to='/login' replace />;
   }
 

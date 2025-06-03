@@ -13,7 +13,6 @@ const OrderDetailPage = () => {
 
   // Örnek sipariş verisi (API entegrasyonu yapılacak)
   useEffect(() => {
-    // Simüle edilmiş sipariş verileri
     const mockOrders = [
       {
         id: 4,
@@ -53,7 +52,7 @@ const OrderDetailPage = () => {
         totalPeople: 8,
         status: "completed",
         items: [
-          // Ana Yemek - 4 çeşit seçilmiş
+          // Ana Yemekler
           {
             name: "Musakka",
             quantity: 3,
@@ -74,7 +73,7 @@ const OrderDetailPage = () => {
             quantity: 1,
             category: "Ana Yemek",
           },
-          // Çorbalar - tüm çeşitler seçilmiş
+          // Çorbalar
           {
             name: "Mercimek Çorbası",
             quantity: 2,
@@ -105,7 +104,7 @@ const OrderDetailPage = () => {
             quantity: 1,
             category: "Çorbalar",
           },
-          // Makarnalar - 3 çeşit seçilmiş
+          // Makarnalar
           {
             name: "Pirinç Pilavı",
             quantity: 3,
@@ -121,7 +120,7 @@ const OrderDetailPage = () => {
             quantity: 2,
             category: "Pilavlar ve Makarnalar",
           },
-          // Tatlılar - 5 çeşit seçilmiş
+          // Tatlılar
           {
             name: "Sütlaç",
             quantity: 2,
@@ -157,7 +156,7 @@ const OrderDetailPage = () => {
         totalPeople: 12,
         status: "pending",
         items: [
-          // Ana Yemek - tüm çeşitler seçilmiş
+          // Ana Yemek 
           {
             name: "Musakka",
             quantity: 3,
@@ -183,7 +182,7 @@ const OrderDetailPage = () => {
             quantity: 2,
             category: "Ana Yemek",
           },
-          // Çorbalar - 4 çeşit seçilmiş
+          // Çorbalar
           {
             name: "Mercimek Çorbası",
             quantity: 4,
@@ -204,7 +203,7 @@ const OrderDetailPage = () => {
             quantity: 2,
             category: "Çorbalar",
           },
-          // Makarnalar - tüm çeşitler seçilmiş
+          // Makarnalar
           {
             name: "Pirinç Pilavı",
             quantity: 3,
@@ -230,7 +229,7 @@ const OrderDetailPage = () => {
             quantity: 2,
             category: "Pilavlar ve Makarnalar",
           },
-          // Tatlılar - 3 çeşit seçilmiş
+          // Tatlılar
           {
             name: "Sütlaç",
             quantity: 4,
@@ -256,7 +255,7 @@ const OrderDetailPage = () => {
         totalPeople: 14,
         status: "completed",
         items: [
-          // Ana Yemek - 3 çeşit seçilmiş
+          // Ana Yemek
           {
             name: "Musakka",
             quantity: 5,
@@ -272,7 +271,7 @@ const OrderDetailPage = () => {
             quantity: 4,
             category: "Ana Yemek",
           },
-          // Çorbalar - 5 çeşit seçilmiş
+          // Çorbalar
           {
             name: "Mercimek Çorbası",
             quantity: 3,
@@ -298,7 +297,7 @@ const OrderDetailPage = () => {
             quantity: 2,
             category: "Çorbalar",
           },
-          // Makarnalar - 4 çeşit seçilmiş
+          // Makarnalar
           {
             name: "Pirinç Pilavı",
             quantity: 4,
@@ -319,7 +318,7 @@ const OrderDetailPage = () => {
             quantity: 3,
             category: "Pilavlar ve Makarnalar",
           },
-          // Tatlılar - tüm çeşitler seçilmiş
+          // Tatlılar
           {
             name: "Sütlaç",
             quantity: 3,
@@ -513,12 +512,12 @@ const OrderDetailPage = () => {
       },
     ];
 
-    // URL'deki ID'ye göre siparişi bul
+    // url deki ID ye göre siparişi bulma
     const selectedOrder = mockOrders.find((o) => o.id === parseInt(orderId));
     setOrder(selectedOrder || null);
   }, [orderId]);
 
-  // Siparişleri kategorilere göre gruplandır
+  // Siparişleri kategorilere göre gruplandırma
   const groupItemsByCategory = (items) => {
     const grouped = {};
     items?.forEach((item) => {
@@ -530,7 +529,7 @@ const OrderDetailPage = () => {
     return grouped;
   };
 
-  // Kategori toplamlarını hesapla
+  // Kategori toplamlarını hesaplama
   const calculateCategoryTotals = (items) => {
     const totals = {};
     items?.forEach((item) => {
@@ -544,7 +543,7 @@ const OrderDetailPage = () => {
 
   const handleStatusChange = () => {
     const newStatus = order.status === "pending" ? "completed" : "pending";
-    // API entegrasyonu yapılacak
+    // api entegrasyonu yapılacak
     setOrder({ ...order, status: newStatus });
     setShowStatusModal(false);
   };

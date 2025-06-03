@@ -8,7 +8,7 @@ const SearchBar = ({ value, onChange, placeholder = "Ara..." }) => {
         type='text'
         placeholder={placeholder}
         value={value}
-        onChange={onChange} // Doğrudan event'i dışarı aktarıyoruz
+        onChange={onChange}
       />
     </div>
   );
@@ -19,7 +19,5 @@ SearchBar.propTypes = {
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
 };
-
-// JavaScript varsayılan parametre değerleri kullanıldığı için defaultProps'a gerek yok
 
 export default SearchBar;
