@@ -16,13 +16,13 @@ import {
 } from "../../../../utils/api";
 import "./RegisterPage.scss";
 
-
-
 // Kullanıcı kayıt formu
 const UserRegistrationForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isLoading: reduxLoading, error: reduxError } = useSelector((state) => state.auth);
+  const { isLoading: reduxLoading, error: reduxError } = useSelector(
+    (state) => state.auth
+  );
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -57,9 +57,7 @@ const UserRegistrationForm = () => {
     confirmPassword: "",
   });
 
-  // Şehirleri formData.userType değiştiğinde yükle
   useEffect(() => {
-    // Eğer kullanıcı tipi seçilmişse şehirleri yükle
     if (formData.userType) {
       const loadCities = async () => {
         try {
@@ -74,7 +72,7 @@ const UserRegistrationForm = () => {
 
       loadCities();
     }
-  }, [formData.userType]); // Sadece kullanıcı tipi değiştiğinde şehirleri yükle
+  }, [formData.userType]);
 
   const handleCityChange = async (cityId) => {
     setFormData({
@@ -86,7 +84,7 @@ const UserRegistrationForm = () => {
       company: "",
     });
 
-    // Seçilen şehire göre ilçeleri yükle
+    // Seçilen şehire göre ilçeleri yükleme
     try {
       const response = await fetchDistricts(cityId);
       setDistricts(response);
@@ -106,12 +104,12 @@ const UserRegistrationForm = () => {
       company: "",
     });
 
-    // Kullanıcı tipine göre restaurant veya sanayi sitelerini yükle
+    // Kullanıcı tipine göre restaurant veya sanayi sitelerini yükleme
     if (
       formData.userType === "restaurantEmployee" ||
       formData.userType === "restaurantManager"
     ) {
-      // Restoranları yükle
+      // Restoranları yükleme
       try {
         const response = await fetchRestaurants(districtId, formData.city);
         setRestaurants(response);
@@ -124,7 +122,7 @@ const UserRegistrationForm = () => {
       formData.userType === "companyEmployee" ||
       formData.userType === "companyManager"
     ) {
-      // Sanayi sitelerini yükle
+      // Sanayi sitelerini yükleme
       try {
         const response = await fetchIndustrialSites(districtId, formData.city);
         setIndustrialSites(response);
@@ -139,7 +137,7 @@ const UserRegistrationForm = () => {
   const handleIndustrialSiteChange = async (siteId) => {
     setFormData({ ...formData, industrialSite: siteId });
 
-    // Eğer API'den firmalar çekilecekse buraya eklenebilir
+    // api firmaları çekme
     try {
       const response = await fetchLocaleCompanies(
         formData.city,
@@ -165,7 +163,7 @@ const UserRegistrationForm = () => {
       company: "",
     });
 
-    // Kullanıcı tipi değiştiğinde ilçeleri temizle
+    // Kullanıcı tipi değiştiğinde ilçeleri temizleme
     setDistricts([]);
     setRestaurants([]);
     setIndustrialSites([]);
@@ -223,29 +221,29 @@ const UserRegistrationForm = () => {
       hasError = true;
     }
 
-    // Hata varsa güncelle ve işlemi durdur
+    // Hata varsa güncelleme ve işlemi durdurma
     if (hasError) {
       setInputErrors(newInputErrors);
       setIsLoading(false);
       return;
     }
 
-    // API için verileri hazırla
+    // api için verileri hazırlama
     let determinedUserTypeId = null;
     let determinedRoleId = null;
 
     if (formData.userType === "restaurantEmployee") {
-      determinedUserTypeId = 1; // userTypes.id for "Lokanta Çalışanı"
-      determinedRoleId = 1; // roles.id for "Aşçı" (assuming Lokanta Çalışanı maps to Aşçı role)
+      determinedUserTypeId = 1; // userTypes.id  "Lokanta Çalışanı" için  userTypes.id
+      determinedRoleId = 1; // roles.id  "Aşçı" için  roles.id
     } else if (formData.userType === "restaurantManager") {
-      determinedUserTypeId = 1; // userTypes.id for "Lokanta Çalışanı"
-      determinedRoleId = 2; // roles.id for "Lokanta Sorumlusu"
+      determinedUserTypeId = 1; // "Lokanta Çalışanı" için  userTypes.id
+      determinedRoleId = 2; // "Lokanta Sorumlusu" için  roles.id
     } else if (formData.userType === "companyEmployee") {
-      determinedUserTypeId = 2; // userTypes.id for "Firma Çalışanı"
-      determinedRoleId = 4; // roles.id for "Firma Çalışanı"
+      determinedUserTypeId = 2; // "Firma Çalışanı" için userTypes.id
+      determinedRoleId = 4; // "Firma Çalışanı" için roles.id
     } else if (formData.userType === "companyManager") {
-      determinedUserTypeId = 2; // userTypes.id for "Firma Çalışanı"
-      determinedRoleId = 3; // roles.id for "Firma Sorumlusu"
+      determinedUserTypeId = 2; // "Firma Çalışanı" için userTypes.id
+      determinedRoleId = 3; // "Firma Sorumlusu" için roles.id
     }
 
     const userData = {
@@ -268,7 +266,7 @@ const UserRegistrationForm = () => {
     };
 
     try {
-      // Redux üzerinden kayıt işlemini gerçekleştir
+      // Redux üzerinden kayıt işlemini gerçekleştirme
       await dispatch(register(userData)).unwrap();
       navigate("/login");
     } catch (err) {
@@ -278,7 +276,6 @@ const UserRegistrationForm = () => {
         const newServerInputErrors = {};
         for (const key in err.fieldErrors) {
           if (inputErrors.hasOwnProperty(key)) {
-            // Gelen hata bir dizi ise ilk elemanı al, string ise doğrudan ata
             newServerInputErrors[key] = Array.isArray(err.fieldErrors[key])
               ? err.fieldErrors[key][0]
               : err.fieldErrors[key];
@@ -290,7 +287,6 @@ const UserRegistrationForm = () => {
         }));
         setError("Lütfen formdaki işaretli alanları düzeltip tekrar deneyin.");
       } else {
-        // Diğer tüm hatalar (isOperational veya genel hatalar)
         setError(err.message || "Kayıt sırasında bilinmeyen bir hata oluştu.");
       }
     }
@@ -301,7 +297,7 @@ const UserRegistrationForm = () => {
       <h1>Kullanıcı Kaydı</h1>
 
       <form onSubmit={handleSubmit}>
-        {/* Temel Bilgiler - Tüm kullanıcı tipleri için */}
+        {/* Tüm kullanıcı tipleri için temel bilgiler */}
         <FormInput
           label='Ad Soyad'
           type='text'
@@ -312,7 +308,7 @@ const UserRegistrationForm = () => {
           required
           error={inputErrors.name}
           isClearable={true}
-          onClear={() => setFormData(prev => ({ ...prev, name: "" }))}
+          onClear={() => setFormData((prev) => ({ ...prev, name: "" }))}
         />
 
         <FormInput
@@ -325,7 +321,7 @@ const UserRegistrationForm = () => {
           required
           error={inputErrors.email}
           isClearable={true}
-          onClear={() => setFormData(prev => ({ ...prev, email: "" }))}
+          onClear={() => setFormData((prev) => ({ ...prev, email: "" }))}
         />
 
         <FormSelect
@@ -402,7 +398,7 @@ const UserRegistrationForm = () => {
               required
               error={inputErrors.password}
               isClearable={true}
-              onClear={() => setFormData(prev => ({ ...prev, password: "" }))}
+              onClear={() => setFormData((prev) => ({ ...prev, password: "" }))}
             />
 
             <FormInput
@@ -415,7 +411,9 @@ const UserRegistrationForm = () => {
               required
               error={inputErrors.confirmPassword}
               isClearable={true}
-              onClear={() => setFormData(prev => ({ ...prev, confirmPassword: "" }))}
+              onClear={() =>
+                setFormData((prev) => ({ ...prev, confirmPassword: "" }))
+              }
             />
           </>
         )}
@@ -492,7 +490,7 @@ const UserRegistrationForm = () => {
               required
               error={inputErrors.password}
               isClearable={true}
-              onClear={() => setFormData(prev => ({ ...prev, password: "" }))}
+              onClear={() => setFormData((prev) => ({ ...prev, password: "" }))}
             />
 
             <FormInput
@@ -505,17 +503,25 @@ const UserRegistrationForm = () => {
               required
               error={inputErrors.confirmPassword}
               isClearable={true}
-              onClear={() => setFormData(prev => ({ ...prev, confirmPassword: "" }))}
+              onClear={() =>
+                setFormData((prev) => ({ ...prev, confirmPassword: "" }))
+              }
             />
           </>
         )}
 
         {(error || reduxError) && (
-          <div className='error-message global-form-error'>{error || reduxError}</div>
+          <div className='error-message global-form-error'>
+            {error || reduxError}
+          </div>
         )}
 
         <div className='form-actions'>
-          <Button variant='primary' type='submit' disabled={isLoading || reduxLoading}>
+          <Button
+            variant='primary'
+            type='submit'
+            disabled={isLoading || reduxLoading}
+          >
             {isLoading || reduxLoading ? "Kaydediliyor..." : "Kayıt Ol"}
           </Button>
         </div>
@@ -524,7 +530,6 @@ const UserRegistrationForm = () => {
   );
 };
 
-// Ana Register bileşeni
 const RegisterPage = () => {
   return (
     <AuthLayout>
