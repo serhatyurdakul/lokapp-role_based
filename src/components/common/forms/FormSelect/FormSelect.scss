@@ -1,8 +1,5 @@
-@use "../forms" as forms; 
+@use "../forms" as forms;
 @use "../../../../styles/variables" as *;
-
-
-
 
 .form-select {
   display: block;
@@ -17,7 +14,7 @@
   appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
-  background-position: right $spacing-12 center; 
+  background-position: right $spacing-12 center;
   background-size: 1em;
 
   &:focus {
@@ -28,15 +25,12 @@
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-    background-color: var(
-      --disabled-bg-color,
-      var(--background-color)
-    );
+    background-color: var(--disabled-bg-color, var(--background-color));
   }
 
   &.error {
     border-color: var(--error-color);
-    border-width: 2px; /
+    border-width: 2px;
 
     &:focus {
       border-color: var(--error-color);
@@ -46,6 +40,6 @@
   option {
     background-color: var(--background-primary);
     color: var(--text-color);
-    padding: $spacing-8; 
+    padding: $spacing-8;
   }
 }
