@@ -11,7 +11,7 @@ import GenericModal from "@/components/common/GenericModal/GenericModal";
 import ErrorMessage from "@/components/common/forms/ErrorMessage/ErrorMessage";
 import {
   fetchMealCategories,
-  fetchMealTemplatesByCategory as fetchMealOptionsByCategory,
+  fetchMealTemplatesByCategory,
   fetchRestaurantMenu,
   addRestaurantMeal,
 } from "@/utils/api";
@@ -67,8 +67,8 @@ const MenuPage = () => {
   const [isLoadingMenu, setIsLoadingMenu] = useState(false);
 
   // api den gelen yemek şablonları (modalda yemek adı arama için)
-  const [mealOptions, setMealOptions] = useState([]);
-  const [isLoadingMealOptions, setIsLoadingMealOptions] = useState(false);
+  const [mealTemplates, setMealTemplates] = useState([]);
+  const [isLoadingTemplates, setIsLoadingTemplates] = useState(false);
 
   // sayfada gösterilecek ana yemek listesi (düz liste)
   const [menuItems, setMenuItems] = useState([]);
@@ -77,17 +77,18 @@ const MenuPage = () => {
   const [categoriesForFilterBar, setCategoriesForFilterBar] = useState([]);
 
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [isAddMealModalOpen, setIsAddMealModalOpen] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchResults, setShowSearchResults] = useState(false);
   const searchResultsRef = useRef(null);
   const [selectedCategoryInModal, setSelectedCategoryInModal] = useState("");
   const [currentFoodStock, setCurrentFoodStock] = useState("");
   const [lastSelectedCategory, setLastSelectedCategory] = useState("");
-  const [selectedMealOption, setSelectedMealOption] =
+  const [selectedMealTemplateInfo, setSelectedMealTemplateInfo] =
     useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [filteredMealOptions, setFilteredMealOptions] = useState([]);
+  const [filteredMealTemplates, setFilteredMealTemplates] = useState([]);
   const [mealExistsError, setMealExistsError] = useState("");
 
   // Yemek kategorilerini çekme (Modal için)
@@ -155,7 +156,7 @@ const MenuPage = () => {
   // Modal açıkken ve apiCategories yüklendiğinde, eğer modalda kategori seçilmemişse ilkini seçme
   useEffect(() => {
     if (
-      isAddMealModalOpen &&
+      showAddForm &&
       !selectedCategoryInModal &&
       apiCategories.length > 0 &&
       apiCategories[0]?.id
@@ -168,7 +169,7 @@ const MenuPage = () => {
       }
     }
   }, [
-    isAddMealModalOpen,
+    showAddForm,
     apiCategories,
     selectedCategoryInModal,
     lastSelectedCategory,
@@ -180,46 +181,46 @@ const MenuPage = () => {
       selectedCategoryInModal &&
       typeof selectedCategoryInModal === "number"
     ) {
-      const loadMealOptions = async () => {
-        setIsLoadingMealOptions(true);
-        const optionsData = await fetchMealOptionsByCategory(
+      const loadMealTemplates = async () => {
+        setIsLoadingTemplates(true);
+        const templatesData = await fetchMealTemplatesByCategory(
           selectedCategoryInModal
         );
-        setMealOptions(optionsData || []);
-        setFilteredMealOptions([]);
-        setIsLoadingMealOptions(false);
+        setMealTemplates(templatesData || []);
+        setFilteredMealTemplates([]);
+        setIsLoadingTemplates(false);
       };
-      loadMealOptions();
+      loadMealTemplates();
     } else {
-      setMealOptions([]);
-      setFilteredMealOptions([]);
+      setMealTemplates([]);
+      setFilteredMealTemplates([]);
     }
   }, [selectedCategoryInModal]);
 
   // Arama işlevi (Yemek Adı - Modal)
-  const handleMealOptionSearchChange = (e) => {
+  const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
-    setSelectedMealOption(null);
+    setSelectedMealTemplateInfo(null);
 
-    if (query.length >= 1 && mealOptions.length > 0) {
-      const filtered = mealOptions.filter((option) =>
-        option.name.toLowerCase().includes(query.toLowerCase())
+    if (query.length >= 1 && mealTemplates.length > 0) {
+      const filtered = mealTemplates.filter((template) =>
+        template.name.toLowerCase().includes(query.toLowerCase())
       );
-      setFilteredMealOptions(filtered);
+      setFilteredMealTemplates(filtered);
       setShowSearchResults(filtered.length > 0);
     } else {
-      setFilteredMealOptions([]);
+      setFilteredMealTemplates([]);
       setShowSearchResults(false);
     }
   };
 
   // Arama sonuçlarından yemek seçme işlevi
-  const handleSelectMealOption = (mealOption) => {
-    setSearchQuery(mealOption.name);
-    setSelectedMealOption({
-      id: mealOption.id,
-      name: mealOption.name,
+  const handleSelectFood = (foodTemplate) => {
+    setSearchQuery(foodTemplate.name);
+    setSelectedMealTemplateInfo({
+      id: foodTemplate.id,
+      name: foodTemplate.name,
     });
     setShowSearchResults(false);
   };
@@ -242,10 +243,10 @@ const MenuPage = () => {
   }, []);
 
   //Yemek adı input unu temizleme fonksiyonu (Modal)
-  const handleClearMealOptionSearch = () => {
+  const handleClearFoodNameSearch = () => {
     setSearchQuery("");
-    setSelectedMealOption(null);
-    setFilteredMealOptions([]);
+    setSelectedMealTemplateInfo(null);
+    setFilteredMealTemplates([]);
     setShowSearchResults(false);
   };
 
@@ -288,8 +289,8 @@ const MenuPage = () => {
     setSearchQuery("");
     setCurrentFoodStock("");
     setShowSearchResults(false);
-    setSelectedMealOption(null);
-    setFilteredMealOptions([]);
+    setSelectedMealTemplateInfo(null);
+    setFilteredMealTemplates([]);
     setMealExistsError("");
   };
 
@@ -303,16 +304,17 @@ const MenuPage = () => {
     setSelectedCategoryInModal(newCategoryId);
     setLastSelectedCategory(newCategoryId);
     setSearchQuery("");
-    setMealOptions([]);
+    setMealTemplates([]);
     setShowSearchResults(false);
-    setSelectedMealOption(null);
-    setFilteredMealOptions([]);
+    setSelectedMealTemplateInfo(null);
+    setFilteredMealTemplates([]);
     setMealExistsError("");
   };
 
   const handleAddNew = () => {
     resetFormStates();
-    setIsAddMealModalOpen(true);
+    setEditingItem(null);
+    setShowAddForm(true);
 
     if (lastSelectedCategory && typeof lastSelectedCategory === "number") {
       setSelectedCategoryInModal(lastSelectedCategory);
@@ -327,13 +329,21 @@ const MenuPage = () => {
 
   const handleCloseModal = () => {
     resetFormStates();
-    setIsAddMealModalOpen(false);
+    setEditingItem(null);
+    setShowAddForm(false);
     setSelectedCategoryInModal("");
     setMealExistsError("");
   };
 
   const handleEdit = (item) => {
-    console.log("Düzenle tıklandı", item);
+    resetFormStates();
+    setEditingItem(item);
+    setShowAddForm(true);
+    setSelectedCategoryInModal(item.categoryId || "");
+    setLastSelectedCategory(item.categoryId || "");
+    setSearchQuery(item.name || "");
+    setSelectedMealTemplateInfo(null);
+    setCurrentFoodStock(item.stock?.toString() || "");
   };
 
   const handleSubmitFoodForm = async (event) => {
@@ -342,7 +352,17 @@ const MenuPage = () => {
     }
     setMealExistsError("");
 
-    if (!selectedMealOption || !selectedMealOption.id) {
+    if (editingItem) {
+      console.log("Yemek güncelleniyor (API yok):", editingItem.id, {
+        name: searchQuery,
+        category: selectedCategoryInModal,
+        stock: parseInt(currentFoodStock, 10) || 0,
+      });
+      handleCloseModal();
+      return;
+    }
+
+    if (!selectedMealTemplateInfo || !selectedMealTemplateInfo.id) {
       console.error("Lütfen bir yemek adı seçin.");
       // TODO: Kullanıcıya bildirim göster (örn: toast)
       return;
@@ -361,7 +381,7 @@ const MenuPage = () => {
     }
 
     const mealToAdd = {
-      mealMenuId: selectedMealOption.id.toString(),
+      mealMenuId: selectedMealTemplateInfo.id.toString(),
       quantity: stockValue.toString(),
       restaurantId: restaurantId.toString(),
     };
@@ -461,8 +481,11 @@ const MenuPage = () => {
     currentFoodStock.trim() === "" || isNaN(stockValue) || stockValue <= 0;
 
   let isButtonDisabledDueToFields = false;
-  isButtonDisabledDueToFields = !selectedMealOption || isStockInvalid;
-
+  if (editingItem) {
+    isButtonDisabledDueToFields = !searchQuery.trim() || isStockInvalid;
+  } else {
+    isButtonDisabledDueToFields = !selectedMealTemplateInfo || isStockInvalid;
+  }
   const finalIsPrimaryButtonDisabled =
     isSubmitting || isButtonDisabledDueToFields;
 
@@ -470,7 +493,7 @@ const MenuPage = () => {
     <>
       <PageHeader title='Menü Yönetimi'>
         <button
-          className={`add-button ${isAddMealModalOpen ? "disabled" : ""}`}
+          className={`add-button ${showAddForm ? "disabled" : ""}`}
           onClick={handleAddNew}
         >
           <AddIcon className='icon' />
@@ -571,19 +594,24 @@ const MenuPage = () => {
       )}
 
 
-      {isAddMealModalOpen && (
+      {showAddForm && (
         <GenericModal
-          title="Yeni Yemek Ekle"
-          onClose={handleCloseModal}
+          isOpen={showAddForm}
+          onClose={!isSubmitting ? handleCloseModal : () => {}}
+          title={editingItem ? "Yemek Düzenle" : "Yeni Yemek Ekle"}
           primaryButtonText={
-            isSubmitting ? "Ekleniyor..." : "Ekle"
+            editingItem
+              ? isSubmitting
+                ? "Güncelleniyor..."
+                : "Güncelle"
+              : isSubmitting
+              ? "Ekleniyor..."
+              : "Ekle"
           }
           onPrimaryAction={handleSubmitFoodForm}
+          secondaryButtonText='İptal'
           isPrimaryButtonDisabled={finalIsPrimaryButtonDisabled}
-          showSecondaryButton={true}
-          secondaryButtonText="İptal"
-          onSecondaryAction={handleCloseModal}
-          isLoading={isLoadingCategories || isLoadingMealOptions || isSubmitting}
+          primaryButtonLoading={isSubmitting}
         >
           <form className='menu-form'>
             <ErrorMessage message={mealExistsError} />
@@ -611,35 +639,35 @@ const MenuPage = () => {
                 name='name'
                 type='text'
                 value={searchQuery}
-                onChange={handleMealOptionSearchChange}
+                onChange={handleSearchChange}
                 placeholder='Yemek adını yazarak arayın'
                 autoComplete='off'
                 required
                 isClearable={true}
-                onClear={handleClearMealOptionSearch}
+                onClear={handleClearFoodNameSearch}
               />
-              {isLoadingMealOptions && (
+              {isLoadingTemplates && (
                 <div className='search-loading'>Yemekler yükleniyor...</div>
               )}
-              {!isLoadingMealOptions &&
+              {!isLoadingTemplates &&
                 showSearchResults &&
-                filteredMealOptions.length > 0 && (
+                filteredMealTemplates.length > 0 && (
                   <div className='search-results' ref={searchResultsRef}>
-                    {filteredMealOptions.map((mealOption) => (
+                    {filteredMealTemplates.map((foodTemplate) => (
                       <div
-                        key={mealOption.id || mealOption.name}
+                        key={foodTemplate.id || foodTemplate.name}
                         className='search-result-item'
-                        onClick={() => handleSelectMealOption(mealOption)}
+                        onClick={() => handleSelectFood(foodTemplate)}
                       >
-                        {mealOption.name}
+                        {foodTemplate.name}
                       </div>
                     ))}
                   </div>
                 )}
-              {!isLoadingMealOptions &&
+              {!isLoadingTemplates &&
                 showSearchResults &&
                 searchQuery.length > 0 &&
-                filteredMealOptions.length === 0 && (
+                filteredMealTemplates.length === 0 && (
                   <div className='search-no-results'>
                     "{searchQuery}" ile eşleşen yemek bulunamadı.
                   </div>
