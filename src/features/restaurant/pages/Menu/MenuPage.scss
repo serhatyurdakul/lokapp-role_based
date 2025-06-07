@@ -150,38 +150,4 @@
   }
 }
 
-// Arama sonuçları ve input container stilleri
-.search-input-container {
-  position: relative;
-  width: 100%;
 
-  .search-results {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: var(--background-primary);
-    border: 1px solid var(--border-color);
-    border-radius: $border-radius-medium;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 10;
-    margin-top: $spacing-4;
-
-    .search-result-item {
-      padding: $spacing-8 $spacing-12;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 0.875rem;
-
-      &:last-child {
-        border-bottom: none;
-      }
-
-      &:hover {
-        background-color: var(--hover-color);
-      }
-    }
-  }
-}

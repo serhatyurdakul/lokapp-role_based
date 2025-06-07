@@ -8,12 +8,12 @@ const StockUpdateModal = ({
   primaryButtonText,
   onPrimaryAction,
   secondaryButtonText,
-  selectedItem,
+  selectedMeal,
   newStock,
   onNewStockChange,
   onClearNewStock,
 }) => {
-  if (!selectedItem) {
+  if (!selectedMeal) {
     return null; // Eğer seçili ürün yoksa modalı render etme
   }
 
@@ -26,7 +26,7 @@ const StockUpdateModal = ({
       onPrimaryAction={onPrimaryAction}
       secondaryButtonText={secondaryButtonText}
     >
-      <h4>{selectedItem.item}</h4>
+      <h4>{selectedMeal.mealName}</h4>
       <FormInput
         label='Yeni Stok Miktarı'
         type='number'
@@ -35,7 +35,7 @@ const StockUpdateModal = ({
         value={newStock}
         onChange={onNewStockChange}
         min='0'
-        max={selectedItem.total !== undefined ? selectedItem.total : undefined}
+        max={selectedMeal.maxStock !== undefined ? selectedMeal.maxStock : undefined}
         required
         isClearable={true}
         onClear={onClearNewStock}

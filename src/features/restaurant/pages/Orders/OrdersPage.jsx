@@ -28,71 +28,71 @@ const Orders = () => {
       orderTime: "14:30",
       status: "completed",
       totalPeople: 8,
-      items: [
+      orderItems: [
         {
-          name: "Musakka",
+          mealName: "Musakka",
           quantity: 3,
           category: "Ana Yemek",
           image:
             "https://banafikirver.com/images/posts/2022/10/post-1664956001-703-patlican-musakka-scaled.webp",
         },
         {
-          name: "İzmir Köfte",
+          mealName: "İzmir Köfte",
           quantity: 3,
           category: "Ana Yemek",
           image:
             "https://static.daktilo.com/sites/71/uploads/2024/06/20/gercek-izmir-koftesi-bu-tarif-ile-25-dakikada-hazir.jpg",
         },
         {
-          name: "Tavuk Sote",
+          mealName: "Tavuk Sote",
           quantity: 2,
           category: "Ana Yemek",
           image:
             "https://i.kayserianadoluhaber.com.tr/c/90/1280x720/s/dosya/haber/lezzetli-tavuk-sote-tarifi-pra_1687159009_0mbWe6.jpg",
         },
         {
-          name: "Mercimek Çorbası",
+          mealName: "Mercimek Çorbası",
           quantity: 3,
           category: "Çorbalar",
           image:
             "https://cdn.karar.com/other/2022/04/15/mercimek-corbasi-kapak.jpg",
         },
         {
-          name: "Yayla Çorbası",
+          mealName: "Yayla Çorbası",
           quantity: 3,
           category: "Çorbalar",
           image:
             "https://avatars.mds.yandex.net/i?id=04592a8bacaa9ae92172dba8d7ef8aa33d6d58e452af58e4-9214559-images-thumbs&n=13",
         },
         {
-          name: "Domates Çorbası",
+          mealName: "Domates Çorbası",
           quantity: 2,
           category: "Çorbalar",
           image:
             "https://img.piri.net/mnresize/720/-/resim/upload/2022/01/19/02/21/c95ab60cdomates.jpg",
         },
         {
-          name: "Pirinç Pilavı",
+          mealName: "Pirinç Pilavı",
           quantity: 4,
           category: "Pilavlar ve Makarnalar",
           image:
             "https://iaftm.tmgrup.com.tr/206a1b/0/0/0/0/0/0?u=https://iftm.tmgrup.com.tr/2023/11/03/pirinc-pilavi-tarifi-pirinc-pilavi-nasil-yapilir-malzemeleri-ve-puf-noktalari-1698997345555.jpg&mw=700",
         },
         {
-          name: "Bulgur Pilavı",
+          mealName: "Bulgur Pilavı",
           quantity: 4,
           category: "Pilavlar ve Makarnalar",
           image: "https://www.yurtgazetesi.com.tr/d/news/218253.jpg",
         },
         {
-          name: "Sütlaç",
+          mealName: "Sütlaç",
           quantity: 4,
           category: "Tatlılar ve Salatalar",
           image:
             "https://avatars.mds.yandex.net/i?id=c0edf18311c3032631f944c57312f8cc35bb8c5a-5235721-images-thumbs&n=13",
         },
         {
-          name: "Kemalpaşa Tatlısı",
+          mealName: "Kemalpaşa Tatlısı",
           quantity: 4,
           category: "Tatlılar ve Salatalar",
           image:
@@ -107,63 +107,63 @@ const Orders = () => {
       orderTime: "14:15",
       status: "pending",
       totalPeople: 12,
-      items: [
+      orderItems: [
         {
-          name: "Kuru Fasulye",
+          mealName: "Kuru Fasulye",
           quantity: 4,
           category: "Ana Yemek",
           image:
             "https://im.haberturk.com/l/2020/10/13/ver1602592501/2834154/jpg/1200x628",
         },
         {
-          name: "Biber Dolması",
+          mealName: "Biber Dolması",
           quantity: 4,
           category: "Ana Yemek",
           image:
             "https://images.unsplash.com/photo-1673646960062-9aeb2188335f?q=80&w=3265&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         },
         {
-          name: "Rosto Köfte",
+          mealName: "Rosto Köfte",
           quantity: 4,
           category: "Ana Yemek",
           image: "https://cdn.karar.com/other/2022/09/12/basliksiz-2.jpg",
         },
         {
-          name: "Ezogelin Çorbası",
+          mealName: "Ezogelin Çorbası",
           quantity: 6,
           category: "Çorbalar",
           image:
             "https://img.cdn.haber365.com.tr/uploads/images/gallery/chVTQKW66xfNp4QnTzC91hZJTqml3k7d-body.jpg",
         },
         {
-          name: "Tavuk Suyu Çorbası",
+          mealName: "Tavuk Suyu Çorbası",
           quantity: 6,
           category: "Çorbalar",
           image:
             "https://sosyola.com/wp-content/uploads/2021/02/tavuk-suyuna-corba-tarifi.jpg",
         },
         {
-          name: "Spagetti Makarna",
+          mealName: "Spagetti Makarna",
           quantity: 6,
           category: "Pilavlar ve Makarnalar",
           image: "https://i.ytimg.com/vi/XBy9RhG6uQU/maxresdefault.jpg",
         },
         {
-          name: "Mantarlı Makarna",
+          mealName: "Mantarlı Makarna",
           quantity: 6,
           category: "Pilavlar ve Makarnalar",
           image:
             "https://www.yemekev.com/uploads/images/gallery/yemekev-mantarli-makarna-2.JPG",
         },
         {
-          name: "Puding",
+          mealName: "Puding",
           quantity: 6,
           category: "Tatlılar ve Salatalar",
           image:
             "https://i.pinimg.com/736x/66/df/6a/66df6ab6d91e1d3012612c8b9897fbde.jpg",
         },
         {
-          name: "Kazandibi",
+          mealName: "Kazandibi",
           quantity: 6,
           category: "Tatlılar ve Salatalar",
           image:
@@ -178,23 +178,23 @@ const Orders = () => {
       orderTime: "14:00",
       status: "completed",
       totalPeople: 14,
-      items: [
+      orderItems: [
         {
-          name: "Musakka",
+          mealName: "Musakka",
           quantity: 5,
           category: "Ana Yemek",
           image:
             "https://banafikirver.com/images/posts/2022/10/post-1664956001-703-patlican-musakka-scaled.webp",
         },
         {
-          name: "Tavuk Sote",
+          mealName: "Tavuk Sote",
           quantity: 5,
           category: "Ana Yemek",
           image:
             "https://i.kayserianadoluhaber.com.tr/c/90/1280x720/s/dosya/haber/lezzetli-tavuk-sote-tarifi-pra_1687159009_0mbWe6.jpg",
         },
         {
-          name: "İzmir Köfte",
+          mealName: "İzmir Köfte",
           quantity: 4,
           category: "Ana Yemek",
           image:
@@ -250,30 +250,30 @@ const Orders = () => {
       orderTime: "13:45",
       status: "pending",
       totalPeople: 1,
-      items: [
+      orderItems: [
         {
-          name: "Kuru Fasulye",
+          mealName: "Kuru Fasulye",
           quantity: 1,
           category: "Ana Yemek",
           image:
             "https://im.haberturk.com/l/2020/10/13/ver1602592501/2834154/jpg/1200x628",
         },
         {
-          name: "Mercimek Çorbası",
+          mealName: "Mercimek Çorbası",
           quantity: 1,
           category: "Çorbalar",
           image:
             "https://cdn.karar.com/other/2022/04/15/mercimek-corbasi-kapak.jpg",
         },
         {
-          name: "Pirinç Pilavı",
+          mealName: "Pirinç Pilavı",
           quantity: 1,
           category: "Pilavlar ve Makarnalar",
           image:
             "https://iaftm.tmgrup.com.tr/206a1b/0/0/0/0/0/0?u=https://iftm.tmgrup.com.tr/2023/11/03/pirinc-pilavi-tarifi-pirinc-pilavi-nasil-yapilir-malzemeleri-ve-puf-noktalari-1698997345555.jpg&mw=700",
         },
         {
-          name: "Ayran",
+          mealName: "Ayran",
           quantity: 1,
           category: "Tatlılar ve Salatalar",
           image: "https://seckinpide.com.tr/userfiles/files/sutas-300-ml.jpeg",
@@ -287,7 +287,7 @@ const Orders = () => {
       orderTime: "15:00",
       status: "pending",
       totalPeople: 4,
-      items: [],
+      orderItems: [],
     },
     {
       id: 6,
@@ -296,7 +296,7 @@ const Orders = () => {
       orderTime: "15:05",
       status: "pending",
       totalPeople: 5,
-      items: [],
+      orderItems: [],
     },
     {
       id: 7,
@@ -305,7 +305,7 @@ const Orders = () => {
       orderTime: "15:10",
       status: "pending",
       totalPeople: 7,
-      items: [],
+      orderItems: [],
     },
     {
       id: 8,
@@ -314,7 +314,7 @@ const Orders = () => {
       orderTime: "15:15",
       status: "pending",
       totalPeople: 3,
-      items: [],
+      orderItems: [],
     },
     {
       id: 9,
@@ -323,7 +323,7 @@ const Orders = () => {
       orderTime: "15:20",
       status: "pending",
       totalPeople: 4,
-      items: [],
+      orderItems: [],
     },
     {
       id: 10,
@@ -332,7 +332,7 @@ const Orders = () => {
       orderTime: "15:25",
       status: "pending",
       totalPeople: 4,
-      items: [],
+      orderItems: [],
     },
     {
       id: 11,
@@ -341,7 +341,7 @@ const Orders = () => {
       orderTime: "15:30",
       status: "pending",
       totalPeople: 10,
-      items: [],
+      orderItems: [],
     },
   ]);
 

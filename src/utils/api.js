@@ -423,7 +423,7 @@ export const fetchMealCategories = async () => {
   }
 };
 
-export const fetchMealTemplatesByCategory = async (categoryId) => {
+export const fetchMealOptionsByCategory = async (categoryId) => {
   try {
     const response = await api.get(
       `${endpoints.getMealMenu}?categoryId=${categoryId}`
@@ -440,7 +440,7 @@ export const fetchMealTemplatesByCategory = async (categoryId) => {
     return [];
   } catch (error) {
     console.error(
-      `fetchMealTemplatesByCategory API hatası (categoryId: ${categoryId}):`,
+      `fetchMealOptionsByCategory API hatası (categoryId: ${categoryId}):`,
       error.message || error
     );
     return [];

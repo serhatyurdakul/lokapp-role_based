@@ -21,24 +21,24 @@ const OrderDetailPage = () => {
         orderTime: "14:45",
         totalPeople: 1,
         status: "pending",
-        items: [
+        orderItems: [
           {
-            name: "Kuru Fasulye",
+            mealName: "Kuru Fasulye",
             quantity: 1,
             category: "Ana Yemek",
           },
           {
-            name: "Domates Çorbası",
+            mealName: "Domates Çorbası",
             quantity: 1,
             category: "Çorbalar",
           },
           {
-            name: "Mantarlı Makarna",
+            mealName: "Mantarlı Makarna",
             quantity: 1,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Kazandibi",
+            mealName: "Kazandibi",
             quantity: 1,
             category: "Tatlılar ve Salatalar",
           },
@@ -51,98 +51,98 @@ const OrderDetailPage = () => {
         orderTime: "14:30",
         totalPeople: 8,
         status: "completed",
-        items: [
+        orderItems: [
           // Ana Yemekler
           {
-            name: "Musakka",
+            mealName: "Musakka",
             quantity: 3,
             category: "Ana Yemek",
           },
           {
-            name: "Biber Dolması",
+            mealName: "Biber Dolması",
             quantity: 2,
             category: "Ana Yemek",
           },
           {
-            name: "İzmir Köfte",
+            mealName: "İzmir Köfte",
             quantity: 2,
             category: "Ana Yemek",
           },
           {
-            name: "Tavuk Sote",
+            mealName: "Tavuk Sote",
             quantity: 1,
             category: "Ana Yemek",
           },
           // Çorbalar
           {
-            name: "Mercimek Çorbası",
+            mealName: "Mercimek Çorbası",
             quantity: 2,
             category: "Çorbalar",
           },
           {
-            name: "Ezogelin Çorbası",
+            mealName: "Ezogelin Çorbası",
             quantity: 2,
             category: "Çorbalar",
           },
           {
-            name: "Yayla Çorbası",
+            mealName: "Yayla Çorbası",
             quantity: 1,
             category: "Çorbalar",
           },
           {
-            name: "Domates Çorbası",
+            mealName: "Domates Çorbası",
             quantity: 1,
             category: "Çorbalar",
           },
           {
-            name: "İşkembe Çorbası",
+            mealName: "İşkembe Çorbası",
             quantity: 1,
             category: "Çorbalar",
           },
           {
-            name: "Tavuk Suyu Çorbası",
+            mealName: "Tavuk Suyu Çorbası",
             quantity: 1,
             category: "Çorbalar",
           },
           // Makarnalar
           {
-            name: "Pirinç Pilavı",
+            mealName: "Pirinç Pilavı",
             quantity: 3,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Bulgur Pilavı",
+            mealName: "Bulgur Pilavı",
             quantity: 3,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Spagetti Makarna",
+            mealName: "Spagetti Makarna",
             quantity: 2,
             category: "Pilavlar ve Makarnalar",
           },
           // Tatlılar
           {
-            name: "Sütlaç",
+            mealName: "Sütlaç",
             quantity: 2,
             category: "Tatlılar ve Salatalar",
           },
           {
-            name: "Kemalpaşa Tatlısı",
+            mealName: "Kemalpaşa Tatlısı",
             quantity: 2,
             category: "Tatlılar ve Salatalar",
           },
           {
-            name: "Puding",
+            mealName: "Puding",
             quantity: 2,
             category: "Tatlılar ve Salatalar",
           },
           {
-            name: "Kazandibi",
+            mealName: "Kazandibi",
             quantity: 1,
             category: "Tatlılar ve Salatalar",
           },
           {
-            name: "Yoğurt",
+            mealName: "Yoğurt",
             quantity: 1,
             category: "Tatlılar ve Salatalar",
           },
@@ -155,94 +155,99 @@ const OrderDetailPage = () => {
         orderTime: "14:15",
         totalPeople: 12,
         status: "pending",
-        items: [
+        orderItems: [
           // Ana Yemek 
           {
-            name: "Musakka",
+            mealName: "Musakka",
             quantity: 3,
             category: "Ana Yemek",
           },
           {
-            name: "Biber Dolması",
+            mealName: "Biber Dolması",
             quantity: 3,
             category: "Ana Yemek",
           },
           {
-            name: "İzmir Köfte",
+            mealName: "İzmir Köfte",
             quantity: 2,
             category: "Ana Yemek",
           },
           {
-            name: "Tavuk Sote",
+            mealName: "Tavuk Sote",
             quantity: 2,
             category: "Ana Yemek",
           },
           {
-            name: "Kuru Fasulye",
+            mealName: "Kuru Fasulye",
             quantity: 2,
             category: "Ana Yemek",
           },
           // Çorbalar
           {
-            name: "Mercimek Çorbası",
+            mealName: "Mercimek Çorbası",
             quantity: 4,
             category: "Çorbalar",
           },
           {
-            name: "Ezogelin Çorbası",
+            mealName: "Ezogelin Çorbası",
             quantity: 3,
             category: "Çorbalar",
           },
           {
-            name: "Yayla Çorbası",
+            mealName: "Yayla Çorbası",
             quantity: 3,
             category: "Çorbalar",
           },
           {
-            name: "Domates Çorbası",
+            mealName: "Domates Çorbası",
             quantity: 2,
             category: "Çorbalar",
           },
           // Makarnalar
           {
-            name: "Pirinç Pilavı",
+            mealName: "Pirinç Pilavı",
             quantity: 3,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Bulgur Pilavı",
+            mealName: "Bulgur Pilavı",
             quantity: 3,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Spagetti Makarna",
+            mealName: "Spagetti Makarna",
             quantity: 2,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Mantarlı Makarna",
+            mealName: "Mantarlı Makarna",
             quantity: 2,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Kelebek Makarna",
+            mealName: "Kelebek Makarna",
             quantity: 2,
             category: "Pilavlar ve Makarnalar",
           },
           // Tatlılar
           {
-            name: "Sütlaç",
+            mealName: "Sütlaç",
             quantity: 4,
             category: "Tatlılar ve Salatalar",
           },
           {
-            name: "Kemalpaşa Tatlısı",
+            mealName: "Kemalpaşa Tatlısı",
             quantity: 4,
             category: "Tatlılar ve Salatalar",
           },
           {
-            name: "Puding",
-            quantity: 4,
+            mealName: "Puding",
+            quantity: 2,
+            category: "Tatlılar ve Salatalar",
+          },
+          {
+            mealName: "Kazandibi",
+            quantity: 2,
             category: "Tatlılar ve Salatalar",
           },
         ],
@@ -254,93 +259,93 @@ const OrderDetailPage = () => {
         orderTime: "14:00",
         totalPeople: 14,
         status: "completed",
-        items: [
+        orderItems: [
           // Ana Yemek
           {
-            name: "Musakka",
+            mealName: "Musakka",
             quantity: 5,
             category: "Ana Yemek",
           },
           {
-            name: "Biber Dolması",
+            mealName: "Biber Dolması",
             quantity: 5,
             category: "Ana Yemek",
           },
           {
-            name: "İzmir Köfte",
+            mealName: "İzmir Köfte",
             quantity: 4,
             category: "Ana Yemek",
           },
           // Çorbalar
           {
-            name: "Mercimek Çorbası",
+            mealName: "Mercimek Çorbası",
             quantity: 3,
             category: "Çorbalar",
           },
           {
-            name: "Ezogelin Çorbası",
+            mealName: "Ezogelin Çorbası",
             quantity: 3,
             category: "Çorbalar",
           },
           {
-            name: "Yayla Çorbası",
+            mealName: "Yayla Çorbası",
             quantity: 3,
             category: "Çorbalar",
           },
           {
-            name: "Domates Çorbası",
+            mealName: "Domates Çorbası",
             quantity: 3,
             category: "Çorbalar",
           },
           {
-            name: "İşkembe Çorbası",
+            mealName: "İşkembe Çorbası",
             quantity: 2,
             category: "Çorbalar",
           },
           // Makarnalar
           {
-            name: "Pirinç Pilavı",
+            mealName: "Pirinç Pilavı",
             quantity: 4,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Bulgur Pilavı",
+            mealName: "Bulgur Pilavı",
             quantity: 4,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Spagetti Makarna",
+            mealName: "Spagetti Makarna",
             quantity: 3,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Mantarlı Makarna",
+            mealName: "Mantarlı Makarna",
             quantity: 3,
             category: "Pilavlar ve Makarnalar",
           },
           // Tatlılar
           {
-            name: "Sütlaç",
+            mealName: "Sütlaç",
             quantity: 3,
             category: "Tatlılar ve Salatalar",
           },
           {
-            name: "Kemalpaşa Tatlısı",
+            mealName: "Kemalpaşa Tatlısı",
             quantity: 3,
             category: "Tatlılar ve Salatalar",
           },
           {
-            name: "Puding",
+            mealName: "Puding",
             quantity: 3,
             category: "Tatlılar ve Salatalar",
           },
           {
-            name: "Kazandibi",
+            mealName: "Kazandibi",
             quantity: 3,
             category: "Tatlılar ve Salatalar",
           },
           {
-            name: "Yoğurt",
+            mealName: "Yoğurt",
             quantity: 2,
             category: "Tatlılar ve Salatalar",
           },
@@ -353,43 +358,43 @@ const OrderDetailPage = () => {
         orderTime: "15:00",
         totalPeople: 4,
         status: "pending",
-        items: [
-          { name: "Musakka", quantity: 1, category: "Ana Yemek" },
-          { name: "Biber Dolması", quantity: 1, category: "Ana Yemek" },
-          { name: "Tavuk Sote", quantity: 1, category: "Ana Yemek" },
-          { name: "Kuru Fasulye", quantity: 1, category: "Ana Yemek" },
-          { name: "Mercimek Çorbası", quantity: 1, category: "Çorbalar" },
-          { name: "Ezogelin Çorbası", quantity: 1, category: "Çorbalar" },
-          { name: "Yayla Çorbası", quantity: 1, category: "Çorbalar" },
-          { name: "Domates Çorbası", quantity: 1, category: "Çorbalar" },
+        orderItems: [
+          { mealName: "Musakka", quantity: 1, category: "Ana Yemek" },
+          { mealName: "Biber Dolması", quantity: 1, category: "Ana Yemek" },
+          { mealName: "Tavuk Sote", quantity: 1, category: "Ana Yemek" },
+          { mealName: "Kuru Fasulye", quantity: 1, category: "Ana Yemek" },
+          { mealName: "Mercimek Çorbası", quantity: 1, category: "Çorbalar" },
+          { mealName: "Ezogelin Çorbası", quantity: 1, category: "Çorbalar" },
+          { mealName: "Yayla Çorbası", quantity: 1, category: "Çorbalar" },
+          { mealName: "Domates Çorbası", quantity: 1, category: "Çorbalar" },
           {
-            name: "Pirinç Pilavı",
+            mealName: "Pirinç Pilavı",
             quantity: 1,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Bulgur Pilavı",
+            mealName: "Bulgur Pilavı",
             quantity: 1,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Spagetti Makarna",
+            mealName: "Spagetti Makarna",
             quantity: 1,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Mantarlı Makarna",
+            mealName: "Mantarlı Makarna",
             quantity: 1,
             category: "Pilavlar ve Makarnalar",
           },
-          { name: "Sütlaç", quantity: 1, category: "Tatlılar ve Salatalar" },
+          { mealName: "Sütlaç", quantity: 1, category: "Tatlılar ve Salatalar" },
           {
-            name: "Kemalpaşa Tatlısı",
+            mealName: "Kemalpaşa Tatlısı",
             quantity: 1,
             category: "Tatlılar ve Salatalar",
           },
-          { name: "Kazandibi", quantity: 1, category: "Tatlılar ve Salatalar" },
-          { name: "Puding", quantity: 1, category: "Tatlılar ve Salatalar" },
+          { mealName: "Kazandibi", quantity: 1, category: "Tatlılar ve Salatalar" },
+          { mealName: "Puding", quantity: 1, category: "Tatlılar ve Salatalar" },
         ],
       },
       {
@@ -399,16 +404,16 @@ const OrderDetailPage = () => {
         orderTime: "15:05",
         totalPeople: 5,
         status: "pending",
-        items: [
-          { name: "İzmir Köfte", quantity: 1, category: "Ana Yemek" },
-          { name: "Domates Çorbası", quantity: 1, category: "Çorbalar" },
+        orderItems: [
+          { mealName: "İzmir Köfte", quantity: 1, category: "Ana Yemek" },
+          { mealName: "Domates Çorbası", quantity: 1, category: "Çorbalar" },
           {
-            name: "Bulgur Pilavı",
+            mealName: "Bulgur Pilavı",
             quantity: 1,
             category: "Pilavlar ve Makarnalar",
           },
-          { name: "Sütlaç", quantity: 1, category: "Tatlılar ve Salatalar" },
-          { name: "Yoğurt", quantity: 1, category: "Tatlılar ve Salatalar" },
+          { mealName: "Sütlaç", quantity: 1, category: "Tatlılar ve Salatalar" },
+          { mealName: "Yoğurt", quantity: 1, category: "Tatlılar ve Salatalar" },
         ],
       },
       {
@@ -418,20 +423,20 @@ const OrderDetailPage = () => {
         orderTime: "15:10",
         totalPeople: 7,
         status: "pending",
-        items: [
-          { name: "Tavuk Sote", quantity: 2, category: "Ana Yemek" },
-          { name: "Yayla Çorbası", quantity: 1, category: "Çorbalar" },
+        orderItems: [
+          { mealName: "Tavuk Sote", quantity: 2, category: "Ana Yemek" },
+          { mealName: "Yayla Çorbası", quantity: 1, category: "Çorbalar" },
           {
-            name: "Kelebek Makarna",
+            mealName: "Kelebek Makarna",
             quantity: 1,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Kemalpaşa Tatlısı",
+            mealName: "Kemalpaşa Tatlısı",
             quantity: 1,
             category: "Tatlılar ve Salatalar",
           },
-          { name: "Yoğurt", quantity: 2, category: "Tatlılar ve Salatalar" },
+          { mealName: "Yoğurt", quantity: 2, category: "Tatlılar ve Salatalar" },
         ],
       },
       {
@@ -441,10 +446,10 @@ const OrderDetailPage = () => {
         orderTime: "15:15",
         totalPeople: 3,
         status: "pending",
-        items: [
-          { name: "Biber Dolması", quantity: 1, category: "Ana Yemek" },
-          { name: "Puding", quantity: 1, category: "Tatlılar ve Salatalar" },
-          { name: "Domates Çorbası", quantity: 1, category: "Çorbalar" },
+        orderItems: [
+          { mealName: "Biber Dolması", quantity: 1, category: "Ana Yemek" },
+          { mealName: "Puding", quantity: 1, category: "Tatlılar ve Salatalar" },
+          { mealName: "Domates Çorbası", quantity: 1, category: "Çorbalar" },
         ],
       },
       {
@@ -454,16 +459,16 @@ const OrderDetailPage = () => {
         orderTime: "15:20",
         totalPeople: 4,
         status: "pending",
-        items: [
-          { name: "Musakka", quantity: 1, category: "Ana Yemek" },
-          { name: "Ezogelin Çorbası", quantity: 1, category: "Çorbalar" },
+        orderItems: [
+          { mealName: "Musakka", quantity: 1, category: "Ana Yemek" },
+          { mealName: "Ezogelin Çorbası", quantity: 1, category: "Çorbalar" },
           {
-            name: "Spagetti Makarna",
+            mealName: "Spagetti Makarna",
             quantity: 1,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Kemalpaşa Tatlısı",
+            mealName: "Kemalpaşa Tatlısı",
             quantity: 1,
             category: "Tatlılar ve Salatalar",
           },
@@ -476,15 +481,15 @@ const OrderDetailPage = () => {
         orderTime: "15:25",
         totalPeople: 4,
         status: "pending",
-        items: [
-          { name: "Kuru Fasulye", quantity: 1, category: "Ana Yemek" },
-          { name: "Mercimek Çorbası", quantity: 1, category: "Çorbalar" },
+        orderItems: [
+          { mealName: "Kuru Fasulye", quantity: 1, category: "Ana Yemek" },
+          { mealName: "Mercimek Çorbası", quantity: 1, category: "Çorbalar" },
           {
-            name: "Bulgur Pilavı",
+            mealName: "Bulgur Pilavı",
             quantity: 1,
             category: "Pilavlar ve Makarnalar",
           },
-          { name: "Sütlaç", quantity: 1, category: "Tatlılar ve Salatalar" },
+          { mealName: "Sütlaç", quantity: 1, category: "Tatlılar ve Salatalar" },
         ],
       },
       {
@@ -494,20 +499,20 @@ const OrderDetailPage = () => {
         orderTime: "15:30",
         totalPeople: 10,
         status: "pending",
-        items: [
-          { name: "Rosto Köfte", quantity: 3, category: "Ana Yemek" },
-          { name: "İşkembe Çorbası", quantity: 2, category: "Çorbalar" },
+        orderItems: [
+          { mealName: "Rosto Köfte", quantity: 3, category: "Ana Yemek" },
+          { mealName: "İşkembe Çorbası", quantity: 2, category: "Çorbalar" },
           {
-            name: "Kelebek Makarna",
+            mealName: "Kelebek Makarna",
             quantity: 2,
             category: "Pilavlar ve Makarnalar",
           },
           {
-            name: "Kemalpaşa Tatlısı",
+            mealName: "Kemalpaşa Tatlısı",
             quantity: 2,
             category: "Tatlılar ve Salatalar",
           },
-          { name: "Yayla Çorbası", quantity: 1, category: "Çorbalar" },
+          { mealName: "Yayla Çorbası", quantity: 1, category: "Çorbalar" },
         ],
       },
     ];
@@ -518,25 +523,25 @@ const OrderDetailPage = () => {
   }, [orderId]);
 
   // Siparişleri kategorilere göre gruplandırma
-  const groupItemsByCategory = (items) => {
+  const groupMealsByCategory = (orderItems) => {
     const grouped = {};
-    items?.forEach((item) => {
-      if (!grouped[item.category]) {
-        grouped[item.category] = [];
+    orderItems?.forEach((meal) => {
+      if (!grouped[meal.category]) {
+        grouped[meal.category] = [];
       }
-      grouped[item.category].push(item);
+      grouped[meal.category].push(meal);
     });
     return grouped;
   };
 
   // Kategori toplamlarını hesaplama
-  const calculateCategoryTotals = (items) => {
+  const calculateCategoryTotals = (orderItems) => {
     const totals = {};
-    items?.forEach((item) => {
-      if (!totals[item.category]) {
-        totals[item.category] = 0;
+    orderItems?.forEach((meal) => {
+      if (!totals[meal.category]) {
+        totals[meal.category] = 0;
       }
-      totals[item.category] += item.quantity;
+      totals[meal.category] += meal.quantity;
     });
     return totals;
   };
@@ -566,21 +571,21 @@ const OrderDetailPage = () => {
         <div className='detail-content'>
           <h3>Sipariş Detayı</h3>
           <div className='categories-list'>
-            {Object.entries(groupItemsByCategory(order.items)).map(
-              ([category, items]) => (
+            {Object.entries(groupMealsByCategory(order.orderItems)).map(
+              ([category, meals]) => (
                 <div key={category} className='category-group'>
                   <h4 className='category-title'>
                     {category}
                     <span className='category-total'>
-                      {calculateCategoryTotals(items)[category]} adet
+                      {calculateCategoryTotals(meals)[category]} adet
                     </span>
                   </h4>
                   <div className='items-list'>
-                    {items.map((item, index) => (
+                    {meals.map((meal, index) => (
                       <div key={index} className='detail-item'>
-                        <span className='item-name'>{item.name}</span>
+                        <span className='item-name'>{meal.mealName}</span>
                         <span className='item-quantity'>
-                          {item.quantity} adet
+                          {meal.quantity} adet
                         </span>
                       </div>
                     ))}

@@ -6,8 +6,8 @@ import "./DashboardPage.scss";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [showQuickAction, setShowQuickAction] = useState(false);
+  const [selectedMeal, setSelectedMeal] = useState(null);
+  const [showStockModal, setShowStockModal] = useState(false);
   const [newStock, setNewStock] = useState("");
 
   // mock veriler (Daha sonra api den gelecek)
@@ -18,49 +18,49 @@ const DashboardPage = () => {
     totalRevenue: 8400,
   });
 
-  const [stockAlerts, setStockAlerts] = useState([
-    { id: 1, item: "Patlıcan Musakka", remaining: 5, total: 100 },
-    { id: 2, item: "Mercimek Çorbası", remaining: 8, total: 250 },
-    { id: 3, item: "Kuru Fasulye", remaining: 10, total: 150 },
-    { id: 4, item: "Pilav", remaining: 25, total: 200 },
-    { id: 5, item: "İskender", remaining: 15, total: 100 },
+  const [lowStockMeals, setLowStockMeals] = useState([
+    { id: 1, mealName: "Patlıcan Musakka", currentStock: 5, maxStock: 100 },
+    { id: 2, mealName: "Mercimek Çorbası", currentStock: 8, maxStock: 250 },
+    { id: 3, mealName: "Kuru Fasulye", currentStock: 10, maxStock: 150 },
+    { id: 4, mealName: "Pilav", currentStock: 25, maxStock: 200 },
+    { id: 5, mealName: "İskender", currentStock: 15, maxStock: 100 },
   ]);
 
   // Kritik stok seviyesi kontrolü
-  const isStockCritical = (remaining, total) => {
-    const percentage = (remaining / total) * 100;
+  const isStockCritical = (currentStock, maxStock) => {
+    const percentage = (currentStock / maxStock) * 100;
     return percentage <= 35; // %35 ve altı kritik kabul edilir
   };
 
   // Stok aciliyet seviyesi
-  const getUrgencyLevel = (remaining, total) => {
-    const percentage = (remaining / total) * 100;
+  const getUrgencyLevel = (currentStock, maxStock) => {
+    const percentage = (currentStock / maxStock) * 100;
     if (percentage <= 20) return "critical"; // %20 ve altı kırmızı
     if (percentage <= 35) return "warning"; // %35 ve altı turuncu
     return "normal";
   };
 
-  const handleItemClick = (item) => {
-    setSelectedItem(item);
-    setNewStock(item.remaining.toString());
-    setShowQuickAction(true);
+  const openStockModal = (meal) => {
+    setSelectedMeal(meal);
+    setNewStock(meal.currentStock.toString());
+    setShowStockModal(true);
   };
 
-  const handleQuickActionClose = () => {
-    setShowQuickAction(false);
-    setSelectedItem(null);
+  const closeStockModal = () => {
+    setShowStockModal(false);
+    setSelectedMeal(null);
   };
 
   const handleStockUpdate = () => {
-    if (!selectedItem) return;
+    if (!selectedMeal) return;
     // API çağrısı yapılacak
-    const updatedStock = stockAlerts.map((item) =>
-      item.id === selectedItem.id
-        ? { ...item, remaining: parseInt(newStock) || 0 }
-        : item
+    const updatedStock = lowStockMeals.map((meal) =>
+      meal.id === selectedMeal.id
+        ? { ...meal, currentStock: parseInt(newStock) || 0 }
+        : meal
     );
-    setStockAlerts(updatedStock);
-    handleQuickActionClose();
+    setLowStockMeals(updatedStock);
+    closeStockModal();
   };
 
   return (
@@ -85,38 +85,38 @@ const DashboardPage = () => {
           </button>
         </div>
         <div className='alert-cards'>
-          {stockAlerts
-            .filter((alert) => isStockCritical(alert.remaining, alert.total))
-            .map((alert) => (
+          {lowStockMeals
+            .filter((meal) => isStockCritical(meal.currentStock, meal.maxStock))
+            .map((meal) => (
               <div
-                key={alert.id}
+                key={meal.id}
                 className={`alert-card ${getUrgencyLevel(
-                  alert.remaining,
-                  alert.total
+                  meal.currentStock,
+                  meal.maxStock
                 )}`}
-                onClick={() => handleItemClick(alert)}
+                onClick={() => openStockModal(meal)}
               >
                 <div className='alert-header'>
-                  <h4>{alert.item}</h4>
+                  <h4>{meal.mealName}</h4>
                   <span className='stock-badge'>
-                    {alert.remaining} / {alert.total}
+                    {meal.currentStock} / {meal.maxStock}
                   </span>
                 </div>
                 <div className='stock-bar'>
                   <div
                     className={`stock-progress ${getUrgencyLevel(
-                      alert.remaining,
-                      alert.total
+                      meal.currentStock,
+                      meal.maxStock
                     )}`}
                     style={{
-                      width: `${(alert.remaining / alert.total) * 100}%`,
+                      width: `${(meal.currentStock / meal.maxStock) * 100}%`,
                     }}
                   />
                 </div>
               </div>
             ))}
-          {stockAlerts.filter((alert) =>
-            isStockCritical(alert.remaining, alert.total)
+          {lowStockMeals.filter((meal) =>
+            isStockCritical(meal.currentStock, meal.maxStock)
           ).length === 0 && (
             <div className='no-alerts'>
               <p>Kritik stok durumu bulunmuyor</p>
@@ -135,13 +135,13 @@ const DashboardPage = () => {
       </div>
 
       <StockUpdateModal
-        isOpen={showQuickAction}
-        onClose={handleQuickActionClose}
+        isOpen={showStockModal}
+        onClose={closeStockModal}
         title="Stok Güncelle"
         primaryButtonText="Güncelle"
         onPrimaryAction={handleStockUpdate}
         secondaryButtonText="İptal"
-        selectedItem={selectedItem}
+        selectedMeal={selectedMeal}
         newStock={newStock}
         onNewStockChange={(e) => setNewStock(e.target.value)}
         onClearNewStock={() => setNewStock("")}
