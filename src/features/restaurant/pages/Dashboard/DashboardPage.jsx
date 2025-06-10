@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
-import StockUpdateModal from "../../components/StockUpdateModal/StockUpdateModal";
+import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
 import "./DashboardPage.scss";
 
 const DashboardPage = () => {
@@ -134,7 +134,7 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      <StockUpdateModal
+      <UpdateMealModal
         isOpen={showStockModal}
         onClose={closeStockModal}
         title="Stok Güncelle"

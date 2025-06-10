@@ -1,7 +1,7 @@
 import GenericModal from "@/components/common/GenericModal/GenericModal";
 import FormInput from "@/components/common/forms/FormInput/FormInput";
 
-const StockUpdateModal = ({
+const UpdateMealModal = ({
   isOpen,
   onClose,
   title,
@@ -44,4 +44,4 @@ const StockUpdateModal = ({
   );
 };
 
-export default StockUpdateModal;
+export default UpdateMealModal;
