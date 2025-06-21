@@ -496,3 +496,23 @@ export const addRestaurantMeal = async (mealData) => {
     };
   }
 };
+
+export const updateMealForRestaurant = async (mealData) => {
+  try {
+    const response = await api.post("/updateMealForRestaurant", mealData);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "updateMealForRestaurant API hatası:",
+      error.response?.data || error.message || error
+    );
+    if (error.response && error.response.data) {
+      return error.response.data;
+    }
+    return {
+      error: true,
+      message:
+        error.message || "Yemek güncellenirken bilinmeyen bir hata oluştu.",
+    };
+  }
+};

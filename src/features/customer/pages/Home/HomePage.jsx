@@ -9,45 +9,16 @@ import "./HomePage.scss"; // SCSS importu güncellendi
 const HomePage = () => {
   const dispatch = useDispatch();
   const { categories, isLoading, error, selectedItems } = useSelector((state) => state.customerMenu);
+  const { user } = useSelector((state) => state.auth);
   const [showWarning, setShowWarning] = useState(false);
 
-  // Kullanıcı girişi yapıldığında localStorage'dan user bilgisini al
-  const [restaurantId, setRestaurantId] = useState(null);
+  const restaurantId = user?.restaurantId || 1;
 
   useEffect(() => {
-    // localStorage'dan user bilgisini al
-    const userJson = localStorage.getItem("user");
-
-    if (userJson) {
-      try {
-        const user = JSON.parse(userJson);
-
-        // Eğer kullanıcı bir restoran çalışanı ise, restoran ID'sini kullan
-        if (user.restaurantId) {
-          setRestaurantId(user.restaurantId);
-
-          // Kullanıcının restoranına ait yemekleri getir
-          dispatch(fetchMeals(user.restaurantId));
-        } else {
-          // Kullanıcı restoran çalışanı değilse, test amaçlı default bir restoran ID kullan
-          const defaultRestaurantId = 1; // Test için default ID
-          setRestaurantId(defaultRestaurantId);
-
-          // Default restoran yemeklerini getir
-          dispatch(fetchMeals(defaultRestaurantId));
-        }
-      } catch (error) {
-        console.error("Kullanıcı bilgisi parse edilemedi:", error);
-      }
-    } else {
-      // Kullanıcı girişi yoksa, test amaçlı default bir restoran ID kullan
-      const defaultRestaurantId = 1; // Test için default ID
-      setRestaurantId(defaultRestaurantId);
-
-      // Default restoran yemeklerini getir
-      dispatch(fetchMeals(defaultRestaurantId));
+    if (restaurantId) {
+      dispatch(fetchMeals(restaurantId));
     }
-  }, [dispatch]);
+  }, [dispatch, restaurantId]);
 
   const handleOrder = () => {
     const missingCategories = categories
@@ -126,15 +97,13 @@ const HomePage = () => {
         <GenericModal
           isOpen={showWarning}
           onClose={() => setShowWarning(false)}
-          title="Eksik Seçimler"
-          primaryButtonText="Devam Et"
+          title='Eksik Seçimler'
+          primaryButtonText='Devam Et'
           onPrimaryAction={handleConfirmOrder}
-          secondaryButtonText="Seçimlere Dön"
-          // onSecondaryAction is implicitly handled by onClose here,
-          // or could be explicitly set to: onSecondaryAction={() => setShowWarning(false)}
+          secondaryButtonText='Seçimlere Dön'
         >
           <p>Aşağıdaki kategorilerden seçim yapmadınız:</p>
-          <ul className="modal-items-list">
+          <ul className='modal-items-list'>
             {categories
               .filter((cat) => !selectedItems[cat.id])
               .map((cat) => cat.title)

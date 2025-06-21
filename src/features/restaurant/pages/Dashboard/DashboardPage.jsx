@@ -1,14 +1,38 @@
-import { useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
+import { fetchRestaurantMenuData } from "../../store/restaurantMenuSlice";
 import "./DashboardPage.scss";
+
+// Kritik stok seviyesi kontrolü
+const isStockCritical = (currentStock, maxStock) => {
+  if (typeof maxStock !== "number" || maxStock === 0) return false; // maxStock tanımsız veya 0 ise kritik değil
+  const percentage = (currentStock / maxStock) * 100;
+  return percentage <= 35; // %35 ve altı kritik kabul edilir
+};
+
+// Stok aciliyet seviyesi
+const getUrgencyLevel = (currentStock, maxStock) => {
+  if (typeof maxStock !== "number" || maxStock === 0) return "normal"; // maxStock tanımsız veya 0 ise normal
+  const percentage = (currentStock / maxStock) * 100;
+  if (percentage <= 20) return "critical"; // %20 ve altı kırmızı
+  if (percentage <= 35) return "warning"; // %35 ve altı turuncu
+  return "normal";
+};
 
 const DashboardPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Redux state'lerini alma
+  const { user } = useSelector((state) => state.auth);
+  const { menuData, isLoading } = useSelector((state) => state.restaurantMenu);
+  const restaurantId = user?.restaurantId;
+
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [showStockModal, setShowStockModal] = useState(false);
-  const [newStock, setNewStock] = useState("");
 
   // mock veriler (Daha sonra api den gelecek)
   const [dailyStats] = useState({
@@ -18,31 +42,47 @@ const DashboardPage = () => {
     totalRevenue: 8400,
   });
 
-  const [lowStockMeals, setLowStockMeals] = useState([
-    { id: 1, mealName: "Patlıcan Musakka", currentStock: 5, maxStock: 100 },
-    { id: 2, mealName: "Mercimek Çorbası", currentStock: 8, maxStock: 250 },
-    { id: 3, mealName: "Kuru Fasulye", currentStock: 10, maxStock: 150 },
-    { id: 4, mealName: "Pilav", currentStock: 25, maxStock: 200 },
-    { id: 5, mealName: "İskender", currentStock: 15, maxStock: 100 },
-  ]);
-
-  // Kritik stok seviyesi kontrolü
-  const isStockCritical = (currentStock, maxStock) => {
-    const percentage = (currentStock / maxStock) * 100;
-    return percentage <= 35; // %35 ve altı kritik kabul edilir
+  const loadRestaurantMenu = () => {
+    if (restaurantId) {
+      dispatch(fetchRestaurantMenuData(restaurantId));
+    }
   };
 
-  // Stok aciliyet seviyesi
-  const getUrgencyLevel = (currentStock, maxStock) => {
-    const percentage = (currentStock / maxStock) * 100;
-    if (percentage <= 20) return "critical"; // %20 ve altı kırmızı
-    if (percentage <= 35) return "warning"; // %35 ve altı turuncu
-    return "normal";
-  };
+  // Dashboard sayfası her ziyaret edildiğinde güncel menü verisini çeker.
+  useEffect(() => {
+    loadRestaurantMenu();
+  }, [restaurantId]);
+
+  const lowStockMeals = useMemo(() => {
+    if (!menuData || menuData.length === 0) {
+      return [];
+    }
+
+    // 1. flatMap ile tüm yemekleri tek bir diziye indirge ve ihtiyacımız olan formata dönüştür
+    const allMeals = menuData.flatMap((categoryGroup) =>
+      (categoryGroup.meals || []).map((meal) => ({
+        ...meal, // Modal'ın ihtiyacı olan tüm orijinal veriyi koru
+        mealName: meal.name,
+        currentStock: meal.quantity || 0,
+        maxStock: meal.maxStock || 100,
+      }))
+    );
+
+    // 2. Sadece kritik stoktakileri filtrele
+    const criticalMeals = allMeals.filter((meal) =>
+      isStockCritical(meal.currentStock, meal.maxStock)
+    );
+
+    // 3. En acil olanı (stok yüzdesi en düşük) en üste gelecek şekilde sırala
+    criticalMeals.sort(
+      (a, b) => a.currentStock / a.maxStock - b.currentStock / b.maxStock
+    );
+
+    return criticalMeals;
+  }, [menuData]); // Bu hesaplama sadece menuData değiştiğinde yeniden yapılır
 
   const openStockModal = (meal) => {
     setSelectedMeal(meal);
-    setNewStock(meal.currentStock.toString());
     setShowStockModal(true);
   };
 
@@ -51,43 +91,36 @@ const DashboardPage = () => {
     setSelectedMeal(null);
   };
 
-  const handleStockUpdate = () => {
-    if (!selectedMeal) return;
-    // API çağrısı yapılacak
-    const updatedStock = lowStockMeals.map((meal) =>
-      meal.id === selectedMeal.id
-        ? { ...meal, currentStock: parseInt(newStock) || 0 }
-        : meal
-    );
-    setLowStockMeals(updatedStock);
-    closeStockModal();
+  const handleMealUpdated = () => {
+    loadRestaurantMenu();
   };
 
   return (
-    <div className='dashboard-content'>
-      <PageHeader title='Özet' />
+    <div className="dashboard-content">
+      <PageHeader title="Özet" />
 
-      <div className='critical-info'>
-        <div className='stat-card primary'>
+      <div className="critical-info">
+        <div className="stat-card primary">
           <h3>Bekleyen Siparişler</h3>
-          <p className='stat-value pending'>{dailyStats.pendingOrders}</p>
-          <button className='action-button' onClick={() => navigate("/orders")}>
+          <p className="stat-value pending">{dailyStats.pendingOrders}</p>
+          <button className="action-button" onClick={() => navigate("/orders")}>
             Siparişleri Yönet →
           </button>
         </div>
       </div>
 
-      <div className='stock-alerts'>
-        <div className='section-header'>
+      <div className="stock-alerts">
+        <div className="section-header">
           <h2>Kritik Stok Durumu</h2>
-          <button className='view-all-btn' onClick={() => navigate("/menu")}>
+          <button className="view-all-btn" onClick={() => navigate("/menu")}>
             Menü Yönetimi →
           </button>
         </div>
-        <div className='alert-cards'>
-          {lowStockMeals
-            .filter((meal) => isStockCritical(meal.currentStock, meal.maxStock))
-            .map((meal) => (
+        <div className="alert-cards">
+          {isLoading && <p>Stok durumu yükleniyor...</p>}
+          {!isLoading &&
+            lowStockMeals.length > 0 &&
+            lowStockMeals.slice(0, 5).map((meal) => (
               <div
                 key={meal.id}
                 className={`alert-card ${getUrgencyLevel(
@@ -96,13 +129,13 @@ const DashboardPage = () => {
                 )}`}
                 onClick={() => openStockModal(meal)}
               >
-                <div className='alert-header'>
+                <div className="alert-header">
                   <h4>{meal.mealName}</h4>
-                  <span className='stock-badge'>
+                  <span className="stock-badge">
                     {meal.currentStock} / {meal.maxStock}
                   </span>
                 </div>
-                <div className='stock-bar'>
+                <div className="stock-bar">
                   <div
                     className={`stock-progress ${getUrgencyLevel(
                       meal.currentStock,
@@ -115,20 +148,18 @@ const DashboardPage = () => {
                 </div>
               </div>
             ))}
-          {lowStockMeals.filter((meal) =>
-            isStockCritical(meal.currentStock, meal.maxStock)
-          ).length === 0 && (
-            <div className='no-alerts'>
+          {!isLoading && lowStockMeals.length === 0 && (
+            <div className="no-alerts">
               <p>Kritik stok durumu bulunmuyor</p>
             </div>
           )}
         </div>
       </div>
 
-      <div className='daily-summary'>
+      <div className="daily-summary">
         <h2>Günlük Özet</h2>
-        <div className='summary-chart'>
-          <div className='chart-placeholder'>
+        <div className="summary-chart">
+          <div className="chart-placeholder">
             <p>Saatlik sipariş ve gelir grafiği burada görüntülenecek</p>
           </div>
         </div>
@@ -137,14 +168,9 @@ const DashboardPage = () => {
       <UpdateMealModal
         isOpen={showStockModal}
         onClose={closeStockModal}
-        title="Stok Güncelle"
-        primaryButtonText="Güncelle"
-        onPrimaryAction={handleStockUpdate}
-        secondaryButtonText="İptal"
         selectedMeal={selectedMeal}
-        newStock={newStock}
-        onNewStockChange={(e) => setNewStock(e.target.value)}
-        onClearNewStock={() => setNewStock("")}
+        restaurantId={restaurantId}
+        onMealUpdated={handleMealUpdated}
       />
     </div>
   );

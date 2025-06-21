@@ -1,25 +1,29 @@
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import "./MenuPage.scss";
 import FilterBar from "@/components/common/FilterBar/FilterBar";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import { ReactComponent as AddIcon } from "@/assets/icons/add.svg";
 import Button from "@/components/common/Button/Button";
 import AddMealModal from "../../components/AddMealModal/AddMealModal";
+import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
 import {
-  fetchMealCategories,
-  fetchRestaurantMenu,
-} from "@/utils/api";
+  fetchRestaurantCategories,
+  fetchRestaurantMenuData,
+} from "../../store/restaurantMenuSlice";
 
 const sortMenuData = (menuDataToSort) => {
   if (!menuDataToSort || menuDataToSort.length === 0) {
     return [];
   }
 
-  // Orijinal veriyi değiştirmemek için derin kopya alma
-  // JSON.parse(JSON.stringify(obj)) basit objeler ve diziler için çalışır,
-  // ancak Date objelerini string'e çevirir. Bu yüzden sıralama içinde new Date() kullanılıyor
-  const sortedData = JSON.parse(JSON.stringify(menuDataToSort));
+  // Orijinal veriyi değiştirmemek için iki seviyeli kopya alma
+  // JSON.parse(JSON.stringify()) yerine manuel .map spread yaklaşımı: Date nesneleri bozulmaz
+  const sortedData = menuDataToSort.map((categoryGroup) => ({
+    ...categoryGroup,
+    // meal dizisinin de kopyasını alıyoruz, meal objelerini de shallow kopyalıyoruz
+    meals: (categoryGroup.meals || []).map((meal) => ({ ...meal })),
+  }));
 
   // 1. Her kategori içindeki yemekleri createdAt e göre sırala (en yeni en üstte)
   sortedData.forEach((categoryGroup) => {
@@ -48,124 +52,106 @@ const sortMenuData = (menuDataToSort) => {
   return sortedData;
 };
 
+// Bu fonksiyon bileşene bağımlı olmadığı için dışarıya taşındı.
+// Bu, her render'da yeniden oluşturulmasını engeller.
+const groupMealsByCategory = (meals) => {
+  if (!meals || meals.length === 0) return {};
+
+  const groups = {};
+
+  // Her yemeği kategorisine göre grupla
+  meals.forEach((meal) => {
+    const categoryName = meal.categoryName || "Diğer";
+
+    if (!groups[categoryName]) {
+      groups[categoryName] = [];
+    }
+
+    groups[categoryName].push(meal);
+  });
+
+  return groups;
+};
+
 const MenuPage = () => {
-  // Redux state inden kullanıcı bilgilerini alma
+  const dispatch = useDispatch();
+
+  // Redux state'lerini alma
   const { user } = useSelector((state) => state.auth);
-  const restaurantId = user?.restaurantId; // Opsiyonel zincirleme
-
-  // api den gelen kategoriler (modal için)
-  const [apiCategories, setApiCategories] = useState([]);
-  const [isLoadingCategories, setIsLoadingCategories] = useState(false);
-
-  // api den gelen restoran menü verisi (kategorilere göre gruplu)
-  const [restaurantMenuData, setRestaurantMenuData] = useState([]);
-  const [isLoadingMenu, setIsLoadingMenu] = useState(false);
-
-  // sayfada gösterilecek ana yemek listesi (düz liste)
-  const [menuMeals, setMenuMeals] = useState([]);
-
-// FilterBar için kategoriler (menuMeals dan türetilecek)
-const [categoriesForFilterBar, setCategoriesForFilterBar] = useState([]);
+  const {
+    categories: apiCategories,
+    menuData: restaurantMenuData,
+    isLoading,
+    lastAddedCategoryId,
+  } = useSelector((state) => state.restaurantMenu);
+  const restaurantId = user?.restaurantId;
 
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [showAddMealModal, setShowAddMealModal] = useState(false);
   const [lastSelectedCategory, setLastSelectedCategory] = useState("");
 
-  // Yemek kategorilerini çekme (Modal için)
-  useEffect(() => {
-    const loadMealCategories = async () => {
-      setIsLoadingCategories(true);
-      const categoriesData = await fetchMealCategories();
-      setApiCategories(categoriesData || []);
-      setIsLoadingCategories(false);
-    };
-    loadMealCategories();
-  }, []);
+  // UpdateMeal Modal state
+  const [selectedMeal, setSelectedMeal] = useState(null);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
 
-  // Restoran menüsünü çekip sıralama
   useEffect(() => {
+    // Kategorileri çek
+    dispatch(fetchRestaurantCategories());
+  }, [dispatch]);
+
+  useEffect(() => {
+    // Restoran menüsünü çek
     if (restaurantId) {
-      loadRestaurantMenu();
+      dispatch(fetchRestaurantMenuData(restaurantId));
     }
-  }, [restaurantId]);
+  }, [dispatch, restaurantId]);
 
-  const loadRestaurantMenu = async () => {
-    setIsLoadingMenu(true);
-    const rawMenuData = await fetchRestaurantMenu(restaurantId);
-    const sortedMenuData = sortMenuData(rawMenuData);
-    setRestaurantMenuData(sortedMenuData || []);
-    setIsLoadingMenu(false);
-  };
-
-  // restaurantMenuData değiştiğinde menuMeals ve FilterBar kategorilerini güncelleme
-  useEffect(() => {
-    if (restaurantMenuData && restaurantMenuData.length > 0) {
-      const allMeals = restaurantMenuData.reduce((acc, categoryGroup) => {
-        const mealsWithCategory = categoryGroup.meals.map((meal) => ({
-          ...meal,
-          currentStock: meal.quantity,
-          maxStock: meal.maxStock || 100,
-          mealName: meal.name,
-          imageUrl: meal.imageUrl,
-        }));
-        return acc.concat(mealsWithCategory);
-      }, []);
-      setMenuMeals(allMeals);
-
-      const uniqueCategoriesForFilter = restaurantMenuData.map(
-        (categoryGroup) => ({
-          id: categoryGroup.categoryId,
-          name: categoryGroup.categoryName,
-        })
-      );
-      const uniqueIds = new Set();
-      const finalCategoriesForFilter = uniqueCategoriesForFilter.filter(
-        (cat) => {
-          if (!uniqueIds.has(cat.id)) {
-            uniqueIds.add(cat.id);
-            return true;
-          }
-          return false;
-        }
-      );
-      setCategoriesForFilterBar(finalCategoriesForFilter);
-    } else {
-      setMenuMeals([]);
-      setCategoriesForFilterBar([]);
+  const { menuMeals, categoriesForFilterBar } = useMemo(() => {
+    if (!restaurantMenuData || restaurantMenuData.length === 0) {
+      return { menuMeals: [], categoriesForFilterBar: [] };
     }
+
+    // Orijinal veriyi sırala. sortMenuData zaten verinin kopyasını alıyor.
+    const sortedMenuData = sortMenuData(restaurantMenuData);
+
+    // Tüm yemekleri, ek bilgilerle birlikte düz bir diziye çevir.
+    const allMeals = sortedMenuData.flatMap((categoryGroup) =>
+      (categoryGroup.meals || []).map((meal) => ({
+        ...meal,
+        currentStock: meal.quantity,
+        maxStock: meal.maxStock || 100,
+        mealName: meal.name,
+        imageUrl: meal.photoUrl,
+      }))
+    );
+
+    // FilterBar için benzersiz kategorileri oluştur.
+    const uniqueCategories = [
+      ...new Map(
+        sortedMenuData.map((item) => [
+          item.categoryId,
+          { id: item.categoryId, name: item.categoryName },
+        ])
+      ).values(),
+    ];
+
+    return { menuMeals: allMeals, categoriesForFilterBar: uniqueCategories };
   }, [restaurantMenuData]);
 
   // Kategori değişimi (FilterBar için)
   const handleCategoryChange = (categoryValue) => {
-    // Gelen değeri ve tipini loglama
-    console.log(
-      "FilterBar onCategoryChange. typeof categoryValue:",
-      typeof categoryValue,
-      "Value:",
-      categoryValue
-    );
-
     let newSelectedCategory = categoryValue;
     if (categoryValue !== "all" && typeof categoryValue === "string") {
       const parsedId = parseInt(categoryValue, 10);
       if (!isNaN(parsedId)) {
         newSelectedCategory = parsedId;
       } else {
-        // Eğer parse edilemezse veya NaN dönerse, bir hata durumu oluşmuş demektir.
-        // Bu durumda belki de 'all' kategorisine geri dönmek daha güvenli olabilir.
         console.error(
           `FilterBar'dan geçersiz kategori ID'si geldi: ${categoryValue}. 'all' kategorisine dönülüyor.`
         );
         newSelectedCategory = "all";
       }
     }
-    // selectedCategory state ine atanacak son değeri loglama
-    console.log(
-      "Setting selectedCategory to. typeof newSelectedCategory:",
-      typeof newSelectedCategory,
-      "Value:",
-      newSelectedCategory
-    );
     setSelectedCategory(newSelectedCategory);
   };
 
@@ -177,68 +163,68 @@ const [categoriesForFilterBar, setCategoriesForFilterBar] = useState([]);
     setShowAddMealModal(false);
   };
 
-  const handleMealAdded = async () => {
-    await loadRestaurantMenu();
-    window.scrollTo(0, 0); // Sayfanın en üstüne scroll et
+  const handleMealAdded = () => {
+    // Başarı veya hata durumunda veriyi yeniden çekerek UI'ı güncel tut.
+    loadRestaurantMenu();
+  };
+
+  // UpdateMeal Modal actions
+  const openUpdateModal = (meal) => {
+    setSelectedMeal(meal);
+    setShowUpdateModal(true);
+  };
+
+  const closeUpdateModal = () => {
+    setShowUpdateModal(false);
+    setSelectedMeal(null);
+  };
+
+  const handleMealUpdated = () => {
+    // Başarı veya hata durumunda veriyi yeniden çekerek UI'ı güncel tut.
+    loadRestaurantMenu();
   };
 
   const handleEdit = (meal) => {
-    console.log("Düzenle tıklandı", meal);
+    openUpdateModal(meal);
   };
 
-  const filteredMeals =
-    selectedCategory === "all"
-      ? menuMeals
-      : menuMeals.filter((meal) => meal.categoryId === selectedCategory);
+  const filteredMeals = useMemo(
+    () =>
+      selectedCategory === "all"
+        ? menuMeals
+        : menuMeals.filter((meal) => meal.categoryId === selectedCategory),
+    [menuMeals, selectedCategory]
+  );
 
-  // Kategori bazlı gruplama fonksiyonu -  filteredMeals ve apiCategories/categoriesForFilterBar kullanılarak
-  const groupMealsByCategoryForDisplay = (mealsToGroup) => {
-    if (!mealsToGroup || mealsToGroup.length === 0) return {};
-
-    // Kategori isimlerini ID lere mapleyen bir obje oluşturma 
-    const categoryIdToNameMap = (
-      apiCategories.length > 0 ? apiCategories : categoriesForFilterBar
-    ).reduce((map, cat) => {
-      map[cat.id] = cat.name;
-      return map;
-    }, {});
-
-    return mealsToGroup.reduce((groups, meal) => {
-      // meal.categoryId sayısal olmalı, meal.categoryName de api den geliyor olabilir
+  //Ekranda gösterilecek son veriyi (gruplanmış) hesaplayan useMemo.
+  const mealsForDisplay = useMemo(() => {
+    if (selectedCategory === "all") {
+      // Tüm kategoriler seçiliyse, yemekleri kategorilere göre grupla.
+      return groupMealsByCategory(filteredMeals);
+    } else {
+      // Tek bir kategori seçiliyse, sadece o kategorinin yemeklerini göster.
       const categoryName =
-        meal.categoryName || categoryIdToNameMap[meal.categoryId] || "Diğer";
-      (groups[categoryName] = groups[categoryName] || []).push(meal);
-      return groups;
-    }, {});
+        apiCategories.find((cat) => cat.id === selectedCategory)?.name ||
+        "Seçili Kategori";
+      return { [categoryName]: filteredMeals };
+    }
+  }, [filteredMeals, selectedCategory, apiCategories]);
+
+  // Refresh için helper function
+  const loadRestaurantMenu = () => {
+    if (restaurantId) {
+      dispatch(fetchRestaurantMenuData(restaurantId));
+    }
   };
-
-  // Gösterim için gruplanmış meal'lar
-  // Eğer belirli bir kategori seçiliyse, sadece o kategorinin yemekleri zaten filteredMeals'da olacak.
-  // Bu durumda gruplamaya gerek kalmayabilir veya grup başlığı için selectedCategory'nin adı bulunabilir.
-  // Eğer "all" seçiliyse, filteredMeals (yani tüm menuMeals) gruplanır.
-  let mealsForDisplay;
-  let singleCategoryNameForDisplay = null;
-
-  if (selectedCategory === "all") {
-    mealsForDisplay = groupMealsByCategoryForDisplay(menuMeals); // Tüm menüyü grupla
-  } else {
-    // Sadece seçili kategorinin yemekleri (filteredMeals içinde) ve bu kategorinin adını alalım.
-    const categoryName =
-      categoriesForFilterBar.find((cat) => cat.id === selectedCategory)?.name ||
-      apiCategories.find((cat) => cat.id === selectedCategory)?.name ||
-      "Seçili Kategori";
-    singleCategoryNameForDisplay = categoryName;
-    mealsForDisplay = { [categoryName]: filteredMeals };
-  }
 
   return (
     <>
-      <PageHeader title='Menü Yönetimi'>
+      <PageHeader title="Menü Yönetimi">
         <button
           className={`add-button ${showAddMealModal ? "disabled" : ""}`}
           onClick={openAddMealModal}
         >
-          <AddIcon className='icon' />
+          <AddIcon className="icon" />
           <span>Yeni Yemek</span>
         </button>
       </PageHeader>
@@ -249,42 +235,44 @@ const [categoriesForFilterBar, setCategoriesForFilterBar] = useState([]);
         onCategoryChange={handleCategoryChange}
       />
 
-      {isLoadingMenu && <p>Menü yükleniyor...</p>}
-      {!isLoadingMenu &&
+      {isLoading && <p>Menü yükleniyor...</p>}
+      {!isLoading &&
         Object.keys(mealsForDisplay).length === 0 &&
         menuMeals.length === 0 && (
           // Hiç ürün yoksa (api den hiç gelmediyse)
-          <div className='empty-menu-message'>
+          <div className="empty-menu-message">
             <p>Menüde henüz hiç yemek bulunmuyor. Hemen ekleyin!</p>
           </div>
         )}
-      {!isLoadingMenu &&
+      {!isLoading &&
         Object.keys(mealsForDisplay).length === 0 &&
         menuMeals.length > 0 &&
         selectedCategory !== "all" && (
           // Belirli bir kategori seçili ama o kategoride ürün yoksa
-          <div className='empty-menu-message'>
+          <div className="empty-menu-message">
             <p>Bu kategoride henüz yemek bulunmuyor.</p>
           </div>
         )}
 
-      {!isLoadingMenu && Object.keys(mealsForDisplay).length > 0 && (
-        <div className='menupage-items-by-category'>
+      {!isLoading && Object.keys(mealsForDisplay).length > 0 && (
+        <div className="menupage-items-by-category">
           {Object.entries(mealsForDisplay).map(([categoryName, meals]) => (
-            <div key={categoryName} className='menupage-category-section'>
-              <h3 className='menupage-category-title'>{categoryName}</h3>
-              <div className='menupage-category-grid'>
+            <div key={categoryName} className="menupage-category-section">
+              <h3 className="menupage-category-title">{categoryName}</h3>
+              <div className="menupage-category-grid">
                 {meals.map((meal) => (
-                  <div key={meal.id} className='menupage-food-card'>
-                    <div className='menupage-food-card-image'>
+                  <div key={meal.id} className="menupage-food-card">
+                    <div className="menupage-food-card-image">
                       <img
                         src={meal.imageUrl || "https://via.placeholder.com/150"}
                         alt={meal.mealName}
                       />
                     </div>
-                    <div className='menupage-food-card-content'>
-                      <h3 className='menupage-food-card-name'>{meal.mealName}</h3>
-                      <span className='menupage-food-card-category-tag'>
+                    <div className="menupage-food-card-content">
+                      <h3 className="menupage-food-card-name">
+                        {meal.mealName}
+                      </h3>
+                      <span className="menupage-food-card-category-tag">
                         {/* meal.categoryName api den geliyor olmalı, yoksa map'ten bulunur */}
                         {meal.categoryName ||
                           apiCategories.find(
@@ -292,8 +280,8 @@ const [categoriesForFilterBar, setCategoriesForFilterBar] = useState([]);
                           )?.name ||
                           "Bilinmiyor"}
                       </span>
-                      <div className='menupage-food-card-stock-info'>
-                        <div className='menupage-food-card-stock-details'>
+                      <div className="menupage-food-card-stock-info">
+                        <div className="menupage-food-card-stock-details">
                           <span
                             className={`menupage-food-card-stock-badge ${
                               meal.currentStock <= (meal.maxStock || 100) * 0.2
@@ -301,22 +289,24 @@ const [categoriesForFilterBar, setCategoriesForFilterBar] = useState([]);
                                 : ""
                             }`}
                           >
-                            {meal.currentStock} / {meal.maxStock || 100} porsiyon
+                            {meal.currentStock} / {meal.maxStock || 100}{" "}
+                            porsiyon
                           </span>
                         </div>
                         <Button
-                          variant='secondary'
+                          variant="secondary"
                           onClick={() => handleEdit(meal)}
                           disabled={false}
                         >
                           Düzenle
                         </Button>
-                        <div className='menupage-food-card-stock-bar'>
+                        <div className="menupage-food-card-stock-bar">
                           <div
-                            className='menupage-food-card-stock-progress'
+                            className="menupage-food-card-stock-progress"
                             style={{
                               width: `${
-                                (meal.currentStock / (meal.maxStock || 100)) * 100
+                                (meal.currentStock / (meal.maxStock || 100)) *
+                                100
                               }%`,
                               backgroundColor:
                                 meal.currentStock > 25
@@ -340,9 +330,17 @@ const [categoriesForFilterBar, setCategoriesForFilterBar] = useState([]);
         onClose={closeAddMealModal}
         categories={apiCategories}
         restaurantId={restaurantId}
-        initialCategoryId={lastSelectedCategory}
+        initialCategoryId={lastAddedCategoryId}
         onMealAdded={handleMealAdded}
-        isLoadingCategories={isLoadingCategories}
+        isLoadingCategories={isLoading}
+      />
+
+      <UpdateMealModal
+        isOpen={showUpdateModal}
+        onClose={closeUpdateModal}
+        selectedMeal={selectedMeal}
+        restaurantId={restaurantId}
+        onMealUpdated={handleMealUpdated}
       />
     </>
   );
