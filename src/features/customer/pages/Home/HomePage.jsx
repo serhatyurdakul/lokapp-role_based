@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMeals, clearSelection } from '../../store/customerMenuSlice'; 
+import {
+  fetchMeals,
+  createOrder,
+  clearOrderStatus,
+} from "../../store/customerMenuSlice";
 import CategoryRow from "../../components/CategoryRow/CategoryRow.jsx";
 import GenericModal from "@/components/common/GenericModal/GenericModal.jsx";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
@@ -8,11 +12,24 @@ import "./HomePage.scss"; // SCSS importu güncellendi
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const { categories, isLoading, error, selectedItems } = useSelector((state) => state.customerMenu);
+  const {
+    categories,
+    isLoading,
+    error,
+    selectedItems,
+    isOrderLoading,
+    orderError,
+    orderSuccessMessage,
+  } = useSelector((state) => state.customerMenu);
   const { user } = useSelector((state) => state.auth);
-  const [showWarning, setShowWarning] = useState(false);
 
-  const restaurantId = user?.restaurantId || 1;
+  const [showWarningModal, setShowWarningModal] = useState(false);
+
+  const restaurantId = user
+    ? user.isCompanyEmployee === 1
+      ? user.contractedRestaurantId
+      : user.restaurantId
+    : null;
 
   useEffect(() => {
     if (restaurantId) {
@@ -21,21 +38,31 @@ const HomePage = () => {
   }, [dispatch, restaurantId]);
 
   const handleOrder = () => {
+    // Hiçbir ürün seçilmemişse uyarı ver
+    if (Object.keys(selectedItems).length === 0) {
+      // TODO: Daha şık bir bildirim sistemi eklenebilir (örn: toast)
+      alert("Lütfen sipariş vermek için en az bir ürün seçin.");
+      return;
+    }
+
     const missingCategories = categories
       .filter((cat) => !selectedItems[cat.id])
       .map((cat) => cat.title);
 
     if (missingCategories.length > 0) {
-      setShowWarning(true);
+      setShowWarningModal(true);
     } else {
-      // Siparişi tamamla
-      console.log("Sipariş tamamlandı:", selectedItems);
+      dispatch(createOrder());
     }
   };
 
   const handleConfirmOrder = () => {
-    console.log("Sipariş tamamlandı:", selectedItems);
-    setShowWarning(false);
+    setShowWarningModal(false);
+    dispatch(createOrder());
+  };
+
+  const closeStatusModal = () => {
+    dispatch(clearOrderStatus());
   };
 
   // Yükleme durumunu göster
@@ -55,7 +82,10 @@ const HomePage = () => {
         <div className='error-message'>
           <h2>Hata!</h2>
           <p>{error}</p>
-          <button onClick={() => dispatch(fetchMeals(restaurantId))}>
+          <button
+            onClick={() => restaurantId && dispatch(fetchMeals(restaurantId))}
+            disabled={!restaurantId}
+          >
             Tekrar Dene
           </button>
         </div>
@@ -73,7 +103,10 @@ const HomePage = () => {
             Bu restoran için henüz yemek menüsü oluşturulmamış veya API'den veri
             getirirken bir sorun oluştu.
           </p>
-          <button onClick={() => dispatch(fetchMeals(restaurantId))}>
+          <button
+            onClick={() => restaurantId && dispatch(fetchMeals(restaurantId))}
+            disabled={!restaurantId}
+          >
             Tekrar Dene
           </button>
         </div>
@@ -93,10 +126,10 @@ const HomePage = () => {
         />
       ))}
 
-      {showWarning && (
+      {showWarningModal && (
         <GenericModal
-          isOpen={showWarning}
-          onClose={() => setShowWarning(false)}
+          isOpen={showWarningModal}
+          onClose={() => setShowWarningModal(false)}
           title='Eksik Seçimler'
           primaryButtonText='Devam Et'
           onPrimaryAction={handleConfirmOrder}
@@ -115,8 +148,44 @@ const HomePage = () => {
         </GenericModal>
       )}
 
-      <button className='order-button' onClick={handleOrder}>
-        Siparişi Onayla
+      {orderSuccessMessage && (
+        <GenericModal
+          isOpen={true}
+          onClose={closeStatusModal}
+          title='Başarılı!'
+          primaryButtonText='Tamam'
+          onPrimaryAction={closeStatusModal}
+        >
+          <p>{orderSuccessMessage}</p>
+        </GenericModal>
+      )}
+
+      {orderError && (
+        <GenericModal
+          isOpen={true}
+          onClose={closeStatusModal}
+          title='Hata!'
+          primaryButtonText='Tamam'
+          onPrimaryAction={closeStatusModal}
+          isError={true}
+        >
+          <p>
+            Siparişiniz oluşturulurken bir hata oluştu: <br />
+            <strong>{orderError}</strong>
+          </p>
+        </GenericModal>
+      )}
+
+      <button
+        className='order-button'
+        onClick={handleOrder}
+        disabled={isOrderLoading}
+      >
+        {isOrderLoading ? (
+          <div className='loading-spinner-inline'></div>
+        ) : (
+          "Siparişi Onayla"
+        )}
       </button>
     </div>
   );

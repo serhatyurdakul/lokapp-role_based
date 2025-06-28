@@ -149,21 +149,20 @@ function App() {
             path='/orders'
             element={
               <RoleRenderer
-                customerComponent={<Navigate to='/' replace />} 
+                customerComponent={<Navigate to='/' replace />}
                 restaurantComponent={<RestaurantOrdersPage />}
               />
             }
           />
           <Route
-            path='/orders/:orderId'
+            path='/orders/:companyId'
             element={
               <RoleRenderer
-                customerComponent={<Navigate to='/' replace />} 
+                customerComponent={<Navigate to='/' replace />}
                 restaurantComponent={<RestaurantOrderDetailPage />}
               />
             }
           />
-      
         </Route>
         {/* Yakalanamayan tüm yollar için ana sayfaya yönlendirme veya 404 */}
         <Route path='*' element={<Navigate to='/' replace />} />
@@ -172,7 +171,7 @@ function App() {
   );
 }
 
-// RoleRenderer 
+// RoleRenderer
 const RoleRenderer = ({ customerComponent, restaurantComponent }) => {
   const { user, isLoading } = useSelector((state) => state.auth);
 

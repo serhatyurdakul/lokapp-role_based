@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchRestaurantMeals } from "@/utils/api";
+import {
+  fetchRestaurantMeals,
+  createOrder as createOrderApi,
+} from "@/utils/api";
 
 // Thunk - restoran yemeklerini api'den getirme
 export const fetchMeals = createAsyncThunk(
@@ -14,12 +17,66 @@ export const fetchMeals = createAsyncThunk(
   }
 );
 
+export const createOrder = createAsyncThunk(
+  "menu/createOrder",
+  async (_, { getState, rejectWithValue }) => {
+    const state = getState();
+    const { user } = state.auth;
+    const { selectedItems } = state.customerMenu;
+
+    if (!user) {
+      return rejectWithValue("Kullanıcı bilgileri bulunamadı.");
+    }
+
+    // Firma çalışanları için sipariş verilecek restoran ID'si 'contractedRestaurantId'dir.
+    // Bu, kullanıcı rolüne göre doğru restoran ID'sini seçmemizi sağlar.
+    const orderRestaurantId =
+      user.isCompanyEmployee === 1
+        ? user.contractedRestaurantId
+        : user.restaurantId;
+
+    if (!orderRestaurantId || !user.companyId) {
+      return rejectWithValue(
+        "Sipariş için gerekli restoran veya firma bilgileri eksik."
+      );
+    }
+
+    const meals = Object.entries(selectedItems).map(([categoryId, mealId]) => ({
+      mealId: String(mealId),
+      categoryId: String(categoryId),
+      quantity: "1",
+    }));
+
+    if (meals.length === 0) {
+      return rejectWithValue(
+        "Sipariş vermek için en az bir ürün seçmelisiniz."
+      );
+    }
+
+    const orderData = {
+      restaurantId: String(orderRestaurantId),
+      companyId: String(user.companyId),
+      meals,
+    };
+
+    try {
+      const response = await createOrderApi(orderData);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.message || "Sipariş oluşturulamadı.");
+    }
+  }
+);
+
 const initialState = {
   categories: [],
   mealCategories: [],
   selectedItems: {},
   isLoading: false,
   error: null,
+  isOrderLoading: false,
+  orderError: null,
+  orderSuccessMessage: null,
 };
 
 // Yemek kategorilerini işleme fonksiyonu
@@ -95,6 +152,10 @@ const menuSlice = createSlice({
     clearSelection(state) {
       state.selectedItems = {};
     },
+    clearOrderStatus(state) {
+      state.orderError = null;
+      state.orderSuccessMessage = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -129,9 +190,28 @@ const menuSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
         console.error("Yemekler yüklenemedi:", action.payload);
+      })
+      // Sipariş oluşturma durumu
+      .addCase(createOrder.pending, (state) => {
+        state.isOrderLoading = true;
+        state.orderError = null;
+        state.orderSuccessMessage = null;
+      })
+      .addCase(createOrder.fulfilled, (state, action) => {
+        state.isOrderLoading = false;
+        state.orderSuccessMessage =
+          action.payload.message || "Siparişiniz başarıyla oluşturuldu.";
+        state.selectedItems = {}; // Sipariş başarılı olunca seçimleri temizle
+        state.orderError = null;
+      })
+      .addCase(createOrder.rejected, (state, action) => {
+        state.isOrderLoading = false;
+        state.orderError = action.payload;
+        state.orderSuccessMessage = null;
       });
   },
 });
 
-export const { selectItem, clearSelection } = menuSlice.actions;
+export const { selectItem, clearSelection, clearOrderStatus } =
+  menuSlice.actions;
 export default menuSlice.reducer;

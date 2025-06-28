@@ -1,0 +1,187 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  getRestaurantsOrderList,
+  getRestaurantOrderDetails,
+  setOrderStatus,
+} from "@/utils/api";
+
+// API'den gelen sipariş verisini ön yüzün kullanacağı formata dönüştüren yardımcı fonksiyon
+const mapOrderData = (apiOrderData) => {
+  if (!apiOrderData || !Array.isArray(apiOrderData.orderList)) {
+    return [];
+  }
+
+  const allOrders = [];
+
+  apiOrderData.orderList.forEach((industrialSite) => {
+    if (
+      industrialSite.statusGroups &&
+      Array.isArray(industrialSite.statusGroups)
+    ) {
+      industrialSite.statusGroups.forEach((group) => {
+        if (group.orders && Array.isArray(group.orders)) {
+          group.orders.forEach((order) => {
+            const mappedOrder = {
+              id: order.id,
+              orderCode: order.orderCode,
+              company: order.companyName,
+              companyId: order.companyId,
+              region: order.industrialSiteName,
+              totalPeople: order.companyTotalOrders,
+              status:
+                order.statusText === "Yeni Sipariş" ? "pending" : "completed",
+              // API'den gelen "2025-06-28 12:19:50" formatındaki createdAt'i "12:19" formatına dönüştür
+              orderTime: order.createdAt
+                ? order.createdAt.substring(11, 16)
+                : "",
+              // Detay sayfasında gerekebilecek diğer ham veriler
+              _raw: order,
+            };
+            allOrders.push(mappedOrder);
+          });
+        }
+      });
+    }
+  });
+
+  return allOrders;
+};
+
+// Detay API'sinden gelen veriyi ön yüz formatına dönüştüren yardımcı fonksiyon
+const mapOrderDetailsData = (apiDetailsData) => {
+  if (!apiDetailsData || !apiDetailsData.orderDetails) {
+    return null;
+  }
+  const { summary, groupedByCategory } = apiDetailsData.orderDetails;
+
+  return {
+    summary: {
+      id: summary.companyId,
+      company: summary.companyName,
+      region: summary.industrialSiteName,
+      // Detay sayfasının tepesindeki kart için "kişi" sayısı "totalOrders" alanından geliyor.
+      totalPeople: summary.totalOrders,
+      status: summary.statusText === "Yeni Sipariş" ? "pending" : "completed",
+      orderTime: summary.createdAt ? summary.createdAt.substring(11, 16) : "",
+    },
+    // Backend zaten kategorilere göre gruplanmış veriyi verdiği için doğrudan kullanıyoruz.
+    groupedItems: groupedByCategory || [],
+  };
+};
+
+export const fetchRestaurantOrders = createAsyncThunk(
+  "restaurantOrders/fetchOrders",
+  async (restaurantId, { rejectWithValue }) => {
+    try {
+      const data = await getRestaurantsOrderList(restaurantId);
+      if (data && data.error === false) {
+        // Gelen veriyi ön yüz formatına dönüştür
+        return mapOrderData(data);
+      } else {
+        return rejectWithValue(data.message || "Sipariş listesi alınamadı.");
+      }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchOrderDetails = createAsyncThunk(
+  "restaurantOrders/fetchDetails",
+  async ({ restaurantId, companyId }, { rejectWithValue }) => {
+    try {
+      const data = await getRestaurantOrderDetails(restaurantId, companyId);
+      if (data && data.error === false) {
+        return mapOrderDetailsData(data);
+      } else {
+        return rejectWithValue(data.message || "Sipariş detayları alınamadı.");
+      }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updateOrderStatus = createAsyncThunk(
+  "restaurantOrders/updateStatus",
+  async (statusUpdateData, { dispatch, rejectWithValue }) => {
+    try {
+      const data = await setOrderStatus(statusUpdateData);
+      if (data && data.error === false) {
+        // Durum başarıyla güncellendiğinde, sipariş listesini yeniden çekerek
+        // verinin tutarlılığını sağlıyoruz.
+        dispatch(fetchRestaurantOrders(statusUpdateData.restaurantId));
+        return data; // Başarılı yanıtı döndür
+      } else {
+        return rejectWithValue(data.message || "Durum güncellenemedi.");
+      }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+const initialState = {
+  orders: [],
+  isLoading: false,
+  error: null,
+  // Detay sayfası için state'ler
+  selectedOrderDetails: null,
+  isDetailsLoading: false,
+  detailsError: null,
+  // Durum güncelleme için state'ler
+  isStatusUpdating: false,
+  statusUpdateError: null,
+};
+
+const restaurantOrdersSlice = createSlice({
+  name: "restaurantOrders",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchRestaurantOrders.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchRestaurantOrders.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.orders = action.payload;
+      })
+      .addCase(fetchRestaurantOrders.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+        state.orders = [];
+      })
+      // Order Details Reducers
+      .addCase(fetchOrderDetails.pending, (state) => {
+        state.isDetailsLoading = true;
+        state.detailsError = null;
+        state.selectedOrderDetails = null;
+      })
+      .addCase(fetchOrderDetails.fulfilled, (state, action) => {
+        state.isDetailsLoading = false;
+        state.selectedOrderDetails = action.payload;
+      })
+      .addCase(fetchOrderDetails.rejected, (state, action) => {
+        state.isDetailsLoading = false;
+        state.detailsError = action.payload;
+      })
+      // Order Status Update Reducers
+      .addCase(updateOrderStatus.pending, (state) => {
+        state.isStatusUpdating = true;
+        state.statusUpdateError = null;
+      })
+      .addCase(updateOrderStatus.fulfilled, (state) => {
+        state.isStatusUpdating = false;
+        // Detay sayfasındaki veriyi temizleyebiliriz, çünkü kullanıcı listeye yönlendirilecek.
+        state.selectedOrderDetails = null;
+      })
+      .addCase(updateOrderStatus.rejected, (state, action) => {
+        state.isStatusUpdating = false;
+        state.statusUpdateError = action.payload;
+      });
+  },
+});
+
+export default restaurantOrdersSlice.reducer;

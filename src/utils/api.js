@@ -69,6 +69,10 @@ export const endpoints = {
   getMealsWithRestaurantId: "/getMealsWithRestaurantId",
   getCategories: "/getCategories",
   getMealMenu: "/getMealMenu",
+  createOrder: "/createOrder",
+  getRestaurantsOrderList: "/getRestaurantsOrderList",
+  getRestaurantOrderDetails: "/getRestaurantOrderDetails",
+  setOrderStatus: "/setOrderStatus",
 };
 
 // Auth helpers
@@ -514,5 +518,110 @@ export const updateMealForRestaurant = async (mealData) => {
       message:
         error.message || "Yemek güncellenirken bilinmeyen bir hata oluştu.",
     };
+  }
+};
+
+export const createOrder = async (orderData) => {
+  try {
+    const response = await api.post(endpoints.createOrder, orderData);
+
+    // API'den dönen yanıtın içindeki .data'yı kontrol ediyoruz.
+    const responseData = response.data;
+
+    // API'nin kendi içindeki `error: true` bayrağını kontrol et
+    if (responseData.error || responseData.status >= 400) {
+      // API'den anlamlı bir hata mesajı geliyorsa onu kullan
+      const message =
+        responseData.message || "Sipariş oluşturulurken bir hata oluştu.";
+      const apiError = new Error(message);
+
+      // Token hatası gibi özel durumları ayırt etmek için
+      if (responseData.tokenError) {
+        apiError.tokenError = true;
+      }
+      throw apiError;
+    }
+
+    // Başarılı durumda, sipariş bilgisini içeren tüm yanıtı döndür
+    return responseData;
+  } catch (error) {
+    // Yukarıda bizim fırlattığımız `apiError` ise tekrar fırlat
+    if (error.isOperational || error.tokenError) {
+      throw error;
+    }
+
+    // Axios veya ağ hatası ise, daha genel bir hata mesajı oluştur
+    if (error.response) {
+      // Sunucudan bir yanıt geldi ama status kodu 2xx değil
+      console.error(
+        "createOrder - API Hata Yanıtı (Detaylı):",
+        JSON.stringify(error.response.data, null, 2)
+      );
+      const message =
+        error.response.data.message ||
+        "Sipariş oluşturma sırasında sunucuda bir hata oluştu.";
+      throw new Error(message);
+    } else if (error.request) {
+      // İstek yapıldı ama yanıt alınamadı
+      console.error("createOrder - Yanıt Alınamadı:", error.request);
+      throw new Error(
+        "Sipariş oluşturulamadı, lütfen daha sonra tekrar deneyin."
+      );
+    } else {
+      // İsteği hazırlarken bir hata oluştu
+      console.error("createOrder - İstek Kurulum Hatası:", error.message);
+      throw new Error("Sipariş isteği oluşturulurken bir hata oluştu.");
+    }
+  }
+};
+
+export const getRestaurantsOrderList = async (restaurantId, tabId = 0) => {
+  try {
+    const response = await api.get(endpoints.getRestaurantsOrderList, {
+      params: { restaurantId, tabId },
+    });
+    // Doğrudan tüm yanıtı döndür, hata kontrolü ve veri işleme thunk içinde yapılacak
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Restoran sipariş listesi API hatası:",
+      error.response?.data || error.message
+    );
+    // Hata durumunda, hatayı fırlatarak thunk'ın reject case'ine düşmesini sağla
+    throw new Error(
+      error.response?.data?.message || "Sipariş listesi alınamadı."
+    );
+  }
+};
+
+export const getRestaurantOrderDetails = async (restaurantId, companyId) => {
+  try {
+    const response = await api.get(endpoints.getRestaurantOrderDetails, {
+      params: { restaurantId, companyId },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Restoran sipariş detayı API hatası:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || "Sipariş detayları alınamadı."
+    );
+  }
+};
+
+export const setOrderStatus = async (statusData) => {
+  try {
+    const response = await api.post(endpoints.setOrderStatus, statusData);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Sipariş durumu güncelleme API hatası:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || "Sipariş durumu güncellenemedi."
+    );
   }
 };
