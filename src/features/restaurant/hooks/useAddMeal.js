@@ -115,7 +115,9 @@ const useAddMeal = (
 
     if (query.length >= 1 && mealOptions.length > 0) {
       const filtered = mealOptions.filter((option) =>
-        option.name.toLowerCase().includes(query.toLowerCase())
+        option.name
+          .toLocaleLowerCase("tr-TR")
+          .includes(query.toLocaleLowerCase("tr-TR"))
       );
       setFilteredMealOptions(filtered);
       setShowSearchResults(filtered.length > 0);

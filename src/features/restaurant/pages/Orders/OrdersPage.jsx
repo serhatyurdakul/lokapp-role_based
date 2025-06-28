@@ -41,7 +41,9 @@ const Orders = () => {
   // Siparişleri filtreleme ve sıralama (şirket adına göre arama ve bölge filtresi)
   const filteredOrders = [...orders]
     .filter((order) =>
-      order.company.toLowerCase().includes(searchQuery.toLowerCase())
+      order.company
+        .toLocaleLowerCase("tr-TR")
+        .includes(searchQuery.toLocaleLowerCase("tr-TR"))
     )
     .filter((order) => filterType === "all" || order.region === filterType)
     .sort((a, b) => {
