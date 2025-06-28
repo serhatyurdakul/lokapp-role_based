@@ -52,7 +52,50 @@ const mapOrderDetailsData = (apiDetailsData) => {
   if (!apiDetailsData || !apiDetailsData.orderDetails) {
     return null;
   }
-  const { summary, groupedByCategory } = apiDetailsData.orderDetails;
+  // API'den gelen ham verileri alıyoruz: sipariş özeti ve sipariş kalemleri listesi.
+  const { summary, items } = apiDetailsData.orderDetails;
+
+  // Sipariş kalemlerini (items) önce kategoriye, sonra yemeğe göre gruplayıp adetleri toplayalım.
+  const groupedItems = Object.values(
+    (items || []).reduce((acc, item) => {
+      // Her bir sipariş kaleminin kategorisini ve yemek adını alıyoruz.
+      const { categoryId, categoryName, mealId, mealName, quantity } = item;
+
+      // Eğer bu kategori daha önce oluşturulmamışsa, accumulator'de (acc) oluşturalım.
+      if (!acc[categoryId]) {
+        acc[categoryId] = {
+          categoryId,
+          categoryName,
+          items: {}, // Yemekleri de kendi içinde gruplamak için bir obje.
+          totalQuantity: 0,
+        };
+      }
+
+      // Eğer o kategoride bu yemek daha önce eklenmemişse, onu da oluşturalım.
+      if (!acc[categoryId].items[mealId]) {
+        acc[categoryId].items[mealId] = {
+          // React'in 'key' prop'u için stabil bir ID'ye ihtiyacımız var.
+          // Gruplanmış bir satırın temsili ID'si olarak mealId'yi kullanabiliriz.
+          id: mealId,
+          mealName,
+          quantity: 0,
+        };
+      }
+
+      // API'den gelen adet string olduğu için, sayıya çevirip ekliyoruz.
+      const itemQuantity = parseInt(quantity, 10) || 0;
+
+      // Yemeğin ve kategorinin toplam adetini güncelleyelim.
+      acc[categoryId].items[mealId].quantity += itemQuantity;
+      acc[categoryId].totalQuantity += itemQuantity;
+
+      return acc;
+    }, {})
+  ).map((category) => ({
+    // Son olarak, her bir kategori içindeki yemekler objesini de bir diziye çevirelim.
+    ...category,
+    items: Object.values(category.items),
+  }));
 
   return {
     summary: {
@@ -64,8 +107,8 @@ const mapOrderDetailsData = (apiDetailsData) => {
       status: summary.statusText === "Yeni Sipariş" ? "pending" : "completed",
       orderTime: summary.createdAt ? summary.createdAt.substring(11, 16) : "",
     },
-    // Backend zaten kategorilere göre gruplanmış veriyi verdiği için doğrudan kullanıyoruz.
-    groupedItems: groupedByCategory || [],
+    // Yeni oluşturduğumuz, tamamen gruplanmış ve toplanmış veri yapısını atayalım.
+    groupedItems: groupedItems,
   };
 };
 
