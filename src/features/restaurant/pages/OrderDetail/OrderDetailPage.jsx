@@ -48,13 +48,10 @@ const OrderDetailPage = () => {
     // Mevcut duruma göre yeni durum ID'sini belirle
     const newStatusId = order.summary.status === "pending" ? 4 : 1; // 4 = Tamamlandı, 1 = Yeni Sipariş
 
-    // 1. Benzersiz orderCode'ları topla
-    const uniqueOrderCodes = new Set();
-    order.groupedItems.forEach((category) => {
-      category.items.forEach((item) => {
-        uniqueOrderCodes.add(item.orderCode);
-      });
-    });
+    // 1. Benzersiz orderCode'ları topla - ARTIK DOĞRU YERDEN OKUNUYOR
+    const uniqueOrderCodes = new Set(
+      (order.rawItems || []).map((item) => item.orderCode)
+    );
 
     const statusUpdateData = {
       orderCodes: Array.from(uniqueOrderCodes),

@@ -109,6 +109,9 @@ const mapOrderDetailsData = (apiDetailsData) => {
     },
     // Yeni oluşturduğumuz, tamamen gruplanmış ve toplanmış veri yapısını atayalım.
     groupedItems: groupedItems,
+    // DURUM GÜNCELLEME İÇİN GEREKLİ: API'den gelen orijinal sipariş kalemlerini
+    // (orderCode'ları içeren) burada saklıyoruz.
+    rawItems: items,
   };
 };
 
@@ -153,7 +156,7 @@ export const updateOrderStatus = createAsyncThunk(
       if (data && data.error === false) {
         // Durum başarıyla güncellendiğinde, sipariş listesini yeniden çekerek
         // verinin tutarlılığını sağlıyoruz.
-        dispatch(fetchRestaurantOrders(statusUpdateData.restaurantId));
+        await dispatch(fetchRestaurantOrders(statusUpdateData.restaurantId));
         return data; // Başarılı yanıtı döndür
       } else {
         return rejectWithValue(data.message || "Durum güncellenemedi.");
