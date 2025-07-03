@@ -219,12 +219,12 @@ const MenuPage = () => {
 
   return (
     <>
-      <PageHeader title="Menü Yönetimi">
+      <PageHeader title='Menü Yönetimi'>
         <button
           className={`add-button ${showAddMealModal ? "disabled" : ""}`}
           onClick={openAddMealModal}
         >
-          <AddIcon className="icon" />
+          <AddIcon className='icon' />
           <span>Yeni Yemek</span>
         </button>
       </PageHeader>
@@ -240,7 +240,7 @@ const MenuPage = () => {
         Object.keys(mealsForDisplay).length === 0 &&
         menuMeals.length === 0 && (
           // Hiç ürün yoksa (api den hiç gelmediyse)
-          <div className="empty-menu-message">
+          <div className='empty-menu-message'>
             <p>Menüde henüz hiç yemek bulunmuyor. Hemen ekleyin!</p>
           </div>
         )}
@@ -249,30 +249,30 @@ const MenuPage = () => {
         menuMeals.length > 0 &&
         selectedCategory !== "all" && (
           // Belirli bir kategori seçili ama o kategoride ürün yoksa
-          <div className="empty-menu-message">
+          <div className='empty-menu-message'>
             <p>Bu kategoride henüz yemek bulunmuyor.</p>
           </div>
         )}
 
       {!isLoading && Object.keys(mealsForDisplay).length > 0 && (
-        <div className="menupage-items-by-category">
+        <div className='menupage-items-by-category'>
           {Object.entries(mealsForDisplay).map(([categoryName, meals]) => (
-            <div key={categoryName} className="menupage-category-section">
-              <h3 className="menupage-category-title">{categoryName}</h3>
-              <div className="menupage-category-grid">
+            <div key={categoryName} className='menupage-category-section'>
+              <h3 className='menupage-category-title'>{categoryName}</h3>
+              <div className='menupage-category-grid'>
                 {meals.map((meal) => (
-                  <div key={meal.id} className="menupage-food-card">
-                    <div className="menupage-food-card-image">
+                  <div key={meal.id} className='menupage-food-card'>
+                    <div className='menupage-food-card-image'>
                       <img
                         src={meal.imageUrl || "https://via.placeholder.com/150"}
                         alt={meal.mealName}
                       />
                     </div>
-                    <div className="menupage-food-card-content">
-                      <h3 className="menupage-food-card-name">
+                    <div className='menupage-food-card-content'>
+                      <h3 className='menupage-food-card-name'>
                         {meal.mealName}
                       </h3>
-                      <span className="menupage-food-card-category-tag">
+                      <span className='menupage-food-card-category-tag'>
                         {/* meal.categoryName api den geliyor olmalı, yoksa map'ten bulunur */}
                         {meal.categoryName ||
                           apiCategories.find(
@@ -280,8 +280,8 @@ const MenuPage = () => {
                           )?.name ||
                           "Bilinmiyor"}
                       </span>
-                      <div className="menupage-food-card-stock-info">
-                        <div className="menupage-food-card-stock-details">
+                      <div className='menupage-food-card-stock-info'>
+                        <div className='menupage-food-card-stock-details'>
                           <span
                             className={`menupage-food-card-stock-badge ${
                               meal.currentStock <= (meal.maxStock || 100) * 0.2
@@ -294,15 +294,15 @@ const MenuPage = () => {
                           </span>
                         </div>
                         <Button
-                          variant="secondary"
+                          variant='secondary'
                           onClick={() => handleEdit(meal)}
                           disabled={false}
                         >
                           Düzenle
                         </Button>
-                        <div className="menupage-food-card-stock-bar">
+                        <div className='menupage-food-card-stock-bar'>
                           <div
-                            className="menupage-food-card-stock-progress"
+                            className='menupage-food-card-stock-progress'
                             style={{
                               width: `${
                                 (meal.currentStock / (meal.maxStock || 100)) *
