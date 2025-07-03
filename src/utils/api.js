@@ -81,13 +81,13 @@ export const setAuthHeaders = (token, uniqueId) => {
     localStorage.setItem("token", token);
     localStorage.setItem("uniqueId", uniqueId); // uniqueId'yi de localStorage'a yazma
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    api.defaults.headers.common["UniqueId"] = uniqueId; // UniqueId header'ını ekleme
+    api.defaults.headers.common["uniqueId"] = uniqueId; // uniqueId header'ını ekleme
   } else {
     localStorage.removeItem("token");
     localStorage.removeItem("uniqueId"); // uniqueId'yi de localStorage'dan silme
     localStorage.removeItem("user"); // "user" anahtarını da localStorage'dan silme
     delete api.defaults.headers.common["Authorization"];
-    delete api.defaults.headers.common["UniqueId"]; // UniqueId header'ını silme
+    delete api.defaults.headers.common["uniqueId"]; // uniqueId header'ını silme
   }
 };
 
@@ -342,7 +342,7 @@ export const fetchRestaurantMeals = async (restaurantId) => {
     try {
       if (userJson) {
         user = JSON.parse(userJson);
-        uniqueId = user.uniqueId || user.unique_id || user.id;
+        uniqueId = user.uniqueId;
       }
     } catch (parseError) {
       console.error(
