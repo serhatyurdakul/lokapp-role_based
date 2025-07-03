@@ -4,6 +4,9 @@ import "./MenuPage.scss";
 import FilterBar from "@/components/common/FilterBar/FilterBar";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import { ReactComponent as AddIcon } from "@/assets/icons/add.svg";
+import { ReactComponent as MoreIcon } from "@/assets/icons/more.svg";
+import { ReactComponent as EditIcon } from "@/assets/icons/edit.svg";
+import { ReactComponent as DeleteIcon } from "@/assets/icons/delete.svg";
 import Button from "@/components/common/Button/Button";
 import AddMealModal from "../../components/AddMealModal/AddMealModal";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
@@ -94,6 +97,9 @@ const MenuPage = () => {
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
 
+  // Dropdown state
+  const [openDropdownId, setOpenDropdownId] = useState(null);
+
   useEffect(() => {
     // Kategorileri çek
     dispatch(fetchRestaurantCategories());
@@ -105,6 +111,13 @@ const MenuPage = () => {
       dispatch(fetchRestaurantMenuData(restaurantId));
     }
   }, [dispatch, restaurantId]);
+
+  // Outside click handler
+  useEffect(() => {
+    const handleOutsideClick = () => setOpenDropdownId(null);
+    document.addEventListener("click", handleOutsideClick);
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, []);
 
   const { menuMeals, categoriesForFilterBar } = useMemo(() => {
     if (!restaurantMenuData || restaurantMenuData.length === 0) {
@@ -186,6 +199,21 @@ const MenuPage = () => {
 
   const handleEdit = (meal) => {
     openUpdateModal(meal);
+  };
+
+  // Dropdown handlers
+  const toggleDropdown = (mealId) => {
+    setOpenDropdownId(openDropdownId === mealId ? null : mealId);
+  };
+
+  const handleDropdownEdit = (meal) => {
+    setOpenDropdownId(null);
+    handleEdit(meal);
+  };
+
+  const handleDropdownDelete = (meal) => {
+    setOpenDropdownId(null);
+    // Şimdilik hiçbir şey yapmayacak
   };
 
   const filteredMeals = useMemo(
@@ -293,13 +321,36 @@ const MenuPage = () => {
                             porsiyon
                           </span>
                         </div>
-                        <Button
-                          variant='secondary'
-                          onClick={() => handleEdit(meal)}
-                          disabled={false}
-                        >
-                          Düzenle
-                        </Button>
+                        <div className='meal-actions-wrapper'>
+                          <button
+                            className='meal-actions-trigger'
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleDropdown(meal.id);
+                            }}
+                          >
+                            <MoreIcon />
+                          </button>
+
+                          {openDropdownId === meal.id && (
+                            <div className='meal-actions-dropdown'>
+                              <div
+                                className='dropdown-item'
+                                onClick={() => handleDropdownEdit(meal)}
+                              >
+                                <EditIcon />
+                                <span>Düzenle</span>
+                              </div>
+                              <div
+                                className='dropdown-item delete'
+                                onClick={() => handleDropdownDelete(meal)}
+                              >
+                                <DeleteIcon />
+                                <span>Sil</span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
                         <div className='menupage-food-card-stock-bar'>
                           <div
                             className='menupage-food-card-stock-progress'

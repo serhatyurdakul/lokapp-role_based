@@ -47,7 +47,7 @@
 .menupage-food-card {
   background-color: var(--background-primary);
   border-radius: $border-radius;
-  overflow: hidden;
+  overflow: visible;
   transition: $transition;
 
   .menupage-food-card-image {
@@ -145,6 +145,80 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: $spacing-24;
+    }
+  }
+}
+
+// Meal Actions Dropdown
+.meal-actions-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.meal-actions-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: $border-radius-medium;
+  background: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--background-color);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.meal-actions-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: $spacing-4;
+  background: var(--background-primary);
+  border: 1px solid var(--border-color);
+  border-radius: $border-radius-medium;
+  min-width: 120px;
+  z-index: 1000;
+  overflow: hidden;
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-8;
+    padding: $spacing-12 $spacing-8;
+
+    font-size: 0.875rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-color);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: var(--background-secondary);
+    }
+
+    &.delete {
+      color: var(--error-color);
+    }
+
+    svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    span {
+      line-height: 1;
     }
   }
 }
