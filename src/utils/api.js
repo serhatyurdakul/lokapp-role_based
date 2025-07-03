@@ -521,6 +521,30 @@ export const updateMealForRestaurant = async (mealData) => {
   }
 };
 
+export const deleteMealFromRestaurant = async (deleteData) => {
+  try {
+    // API, POST yöntemini ve JSON body formatını bekliyor
+    const response = await api.post("/deleteMealFromRestaurant", deleteData);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "deleteMealFromRestaurant API hatası:",
+      error.response?.data || error.message || error
+    );
+
+    if (error.response && error.response.data) {
+      // Sunucu yanıtı mevcutsa onu aynen döndür
+      return error.response.data;
+    }
+
+    // Axios veya ağ hatası
+    return {
+      error: true,
+      message: error.message || "Yemek silinirken bilinmeyen bir hata oluştu.",
+    };
+  }
+};
+
 export const createOrder = async (orderData) => {
   try {
     const response = await api.post(endpoints.createOrder, orderData);

@@ -1,0 +1,41 @@
+import GenericModal from "@/components/common/GenericModal/GenericModal";
+import ErrorMessage from "@/components/common/forms/ErrorMessage/ErrorMessage";
+import useDeleteMeal from "../../hooks/useDeleteMeal";
+
+const DeleteMealModal = ({
+  isOpen,
+  onClose,
+  selectedMeal,
+  restaurantId,
+  onMealDeleted,
+}) => {
+  // Hook'dan tüm logic'i al
+  const { isDeleting, error, isSubmitDisabled, handleDeleteMeal } =
+    useDeleteMeal(restaurantId, selectedMeal, onMealDeleted, onClose, isOpen);
+
+  if (!selectedMeal) {
+    return null; // Eğer seçili ürün yoksa modalı render etme
+  }
+
+  return (
+    <GenericModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title='Yemek Sil'
+      primaryButtonText={isDeleting ? "Siliniyor..." : "Sil"}
+      onPrimaryAction={handleDeleteMeal}
+      isPrimaryButtonDisabled={isSubmitDisabled}
+      primaryButtonClassName='btn-destructive'
+      secondaryButtonText='İptal'
+      onSecondaryAction={onClose}
+      primaryButtonLoading={isDeleting}
+    >
+      <ErrorMessage message={error} />
+      <h4>{selectedMeal.mealName}</h4>
+      <p>Bu yemeği silmek istediğinizden emin misiniz?</p>
+      <p>Bu işlem geri alınamaz</p>
+    </GenericModal>
+  );
+};
+
+export default DeleteMealModal;

@@ -57,3 +57,8 @@
     opacity: 0.8;
   }
 }
+
+.btn-destructive {
+  background-color: var(--error-color);
+  color: white;
+}

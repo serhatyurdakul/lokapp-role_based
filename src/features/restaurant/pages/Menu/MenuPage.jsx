@@ -10,6 +10,7 @@ import { ReactComponent as DeleteIcon } from "@/assets/icons/delete.svg";
 import Button from "@/components/common/Button/Button";
 import AddMealModal from "../../components/AddMealModal/AddMealModal";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
+import DeleteMealModal from "../../components/DeleteMealModal/DeleteMealModal";
 import {
   fetchRestaurantCategories,
   fetchRestaurantMenuData,
@@ -96,6 +97,10 @@ const MenuPage = () => {
   // UpdateMeal Modal state
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+
+  // DeleteMeal Modal state
+  const [selectedMealForDelete, setSelectedMealForDelete] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Dropdown state
   const [openDropdownId, setOpenDropdownId] = useState(null);
@@ -213,7 +218,19 @@ const MenuPage = () => {
 
   const handleDropdownDelete = (meal) => {
     setOpenDropdownId(null);
-    // Şimdilik hiçbir şey yapmayacak
+    setSelectedMealForDelete(meal);
+    setShowDeleteModal(true);
+  };
+
+  // DeleteMeal Modal actions
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSelectedMealForDelete(null);
+  };
+
+  const handleMealDeleted = () => {
+    // Başarı veya hata durumunda veriyi yeniden çekerek UI'ı güncel tut.
+    loadRestaurantMenu();
   };
 
   const filteredMeals = useMemo(
@@ -392,6 +409,14 @@ const MenuPage = () => {
         selectedMeal={selectedMeal}
         restaurantId={restaurantId}
         onMealUpdated={handleMealUpdated}
+      />
+
+      <DeleteMealModal
+        isOpen={showDeleteModal}
+        onClose={closeDeleteModal}
+        selectedMeal={selectedMealForDelete}
+        restaurantId={restaurantId}
+        onMealDeleted={handleMealDeleted}
       />
     </>
   );
