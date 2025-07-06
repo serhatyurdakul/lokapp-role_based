@@ -467,7 +467,11 @@ export const fetchRestaurantMenu = async (restaurantId) => {
               categoryId: meal.categoryId
                 ? parseInt(meal.categoryId, 10)
                 : null,
-              quantity: meal.quantity ? parseInt(meal.quantity, 10) : 0, // Stok yoksa 0
+              quantity: meal.quantity ? parseInt(meal.quantity, 10) : 0,
+              remainingQuantity: meal.remainingQuantity
+                ? parseInt(meal.remainingQuantity, 10)
+                : 0,
+              orderCount: meal.orderCount ? parseInt(meal.orderCount, 10) : 0,
             }))
           : [],
       }));

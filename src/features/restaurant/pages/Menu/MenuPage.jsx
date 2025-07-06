@@ -136,8 +136,7 @@ const MenuPage = () => {
     const allMeals = sortedMenuData.flatMap((categoryGroup) =>
       (categoryGroup.meals || []).map((meal) => ({
         ...meal,
-        currentStock: meal.quantity,
-        maxStock: meal.maxStock || 100,
+        currentStock: meal.remainingQuantity,
         mealName: meal.name,
         imageUrl: meal.photoUrl,
       }))
@@ -329,13 +328,12 @@ const MenuPage = () => {
                         <div className='menupage-food-card-stock-details'>
                           <span
                             className={`menupage-food-card-stock-badge ${
-                              meal.currentStock <= (meal.maxStock || 100) * 0.2
+                              meal.currentStock <= meal.quantity * 0.2
                                 ? "warning"
                                 : ""
                             }`}
                           >
-                            {meal.currentStock} / {meal.maxStock || 100}{" "}
-                            porsiyon
+                            {meal.currentStock} / {meal.quantity} porsiyon
                           </span>
                         </div>
                         <div className='meal-actions-wrapper'>
@@ -373,8 +371,9 @@ const MenuPage = () => {
                             className='menupage-food-card-stock-progress'
                             style={{
                               width: `${
-                                (meal.currentStock / (meal.maxStock || 100)) *
-                                100
+                                meal.quantity
+                                  ? (meal.currentStock / meal.quantity) * 100
+                                  : 0
                               }%`,
                               backgroundColor:
                                 meal.currentStock > 25

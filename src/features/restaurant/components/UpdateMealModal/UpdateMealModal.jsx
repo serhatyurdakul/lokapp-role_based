@@ -48,11 +48,6 @@ const UpdateMealModal = ({
         value={newStock}
         onChange={handleStockChange}
         min='0'
-        max={
-          selectedMeal.maxStock !== undefined
-            ? selectedMeal.maxStock
-            : undefined
-        }
         required
         isClearable={true}
         onClear={handleClearStock}

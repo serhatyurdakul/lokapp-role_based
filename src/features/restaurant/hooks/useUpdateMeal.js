@@ -16,7 +16,7 @@ const useUpdateMeal = (
   // Modal açıldığında form'u reset et ve mevcut stock'u set et
   useEffect(() => {
     if (isOpen && selectedMeal) {
-      setNewStock(selectedMeal.currentStock?.toString() || "");
+      setNewStock(selectedMeal.quantity?.toString() || "");
       setError("");
     }
   }, [isOpen, selectedMeal]);

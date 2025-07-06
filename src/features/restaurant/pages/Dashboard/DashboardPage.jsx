@@ -6,19 +6,19 @@ import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
 import { fetchRestaurantMenuData } from "../../store/restaurantMenuSlice";
 import "./DashboardPage.scss";
 
-// Kritik stok seviyesi kontrolü
-const isStockCritical = (currentStock, maxStock) => {
-  if (typeof maxStock !== "number" || maxStock === 0) return false; // maxStock tanımsız veya 0 ise kritik değil
-  const percentage = (currentStock / maxStock) * 100;
+// Kalan stok (remainingQuantity) toplam stoğa (quantity) oranla kritik mi?
+const isStockCritical = (remaining, total) => {
+  if (typeof total !== "number" || total === 0) return false;
+  const percentage = (remaining / total) * 100;
   return percentage <= 35; // %35 ve altı kritik kabul edilir
 };
 
-// Stok aciliyet seviyesi
-const getUrgencyLevel = (currentStock, maxStock) => {
-  if (typeof maxStock !== "number" || maxStock === 0) return "normal"; // maxStock tanımsız veya 0 ise normal
-  const percentage = (currentStock / maxStock) * 100;
-  if (percentage <= 20) return "critical"; // %20 ve altı kırmızı
-  if (percentage <= 35) return "warning"; // %35 ve altı turuncu
+// Aciliyet seviyesi belirleyici
+const getUrgencyLevel = (remaining, total) => {
+  if (typeof total !== "number" || total === 0) return "normal";
+  const percentage = (remaining / total) * 100;
+  if (percentage <= 20) return "critical";
+  if (percentage <= 35) return "warning";
   return "normal";
 };
 
@@ -63,19 +63,19 @@ const DashboardPage = () => {
       (categoryGroup.meals || []).map((meal) => ({
         ...meal, // Modal'ın ihtiyacı olan tüm orijinal veriyi koru
         mealName: meal.name,
-        currentStock: meal.quantity || 0,
-        maxStock: meal.maxStock || 100,
+        currentStock: meal.remainingQuantity ?? 0,
+        quantity: meal.quantity ?? 0,
       }))
     );
 
     // 2. Sadece kritik stoktakileri filtrele
     const criticalMeals = allMeals.filter((meal) =>
-      isStockCritical(meal.currentStock, meal.maxStock)
+      isStockCritical(meal.currentStock, meal.quantity)
     );
 
     // 3. En acil olanı (stok yüzdesi en düşük) en üste gelecek şekilde sırala
     criticalMeals.sort(
-      (a, b) => a.currentStock / a.maxStock - b.currentStock / b.maxStock
+      (a, b) => a.currentStock / a.quantity - b.currentStock / b.quantity
     );
 
     return criticalMeals;
@@ -96,27 +96,27 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="dashboard-content">
-      <PageHeader title="Özet" />
+    <div className='dashboard-content'>
+      <PageHeader title='Özet' />
 
-      <div className="critical-info">
-        <div className="stat-card primary">
+      <div className='critical-info'>
+        <div className='stat-card primary'>
           <h3>Bekleyen Siparişler</h3>
-          <p className="stat-value pending">{dailyStats.pendingOrders}</p>
-          <button className="action-button" onClick={() => navigate("/orders")}>
+          <p className='stat-value pending'>{dailyStats.pendingOrders}</p>
+          <button className='action-button' onClick={() => navigate("/orders")}>
             Siparişleri Yönet →
           </button>
         </div>
       </div>
 
-      <div className="stock-alerts">
-        <div className="section-header">
+      <div className='stock-alerts'>
+        <div className='section-header'>
           <h2>Kritik Stok Durumu</h2>
-          <button className="view-all-btn" onClick={() => navigate("/menu")}>
+          <button className='view-all-btn' onClick={() => navigate("/menu")}>
             Menü Yönetimi →
           </button>
         </div>
-        <div className="alert-cards">
+        <div className='alert-cards'>
           {isLoading && <p>Stok durumu yükleniyor...</p>}
           {!isLoading &&
             lowStockMeals.length > 0 &&
@@ -125,41 +125,45 @@ const DashboardPage = () => {
                 key={meal.id}
                 className={`alert-card ${getUrgencyLevel(
                   meal.currentStock,
-                  meal.maxStock
+                  meal.quantity
                 )}`}
                 onClick={() => openStockModal(meal)}
               >
-                <div className="alert-header">
+                <div className='alert-header'>
                   <h4>{meal.mealName}</h4>
-                  <span className="stock-badge">
-                    {meal.currentStock} / {meal.maxStock}
+                  <span className='stock-badge'>
+                    {meal.currentStock} / {meal.quantity}
                   </span>
                 </div>
-                <div className="stock-bar">
+                <div className='stock-bar'>
                   <div
                     className={`stock-progress ${getUrgencyLevel(
                       meal.currentStock,
-                      meal.maxStock
+                      meal.quantity
                     )}`}
                     style={{
-                      width: `${(meal.currentStock / meal.maxStock) * 100}%`,
+                      width: `${
+                        meal.quantity
+                          ? (meal.currentStock / meal.quantity) * 100
+                          : 0
+                      }%`,
                     }}
                   />
                 </div>
               </div>
             ))}
           {!isLoading && lowStockMeals.length === 0 && (
-            <div className="no-alerts">
+            <div className='no-alerts'>
               <p>Kritik stok durumu bulunmuyor</p>
             </div>
           )}
         </div>
       </div>
 
-      <div className="daily-summary">
+      <div className='daily-summary'>
         <h2>Günlük Özet</h2>
-        <div className="summary-chart">
-          <div className="chart-placeholder">
+        <div className='summary-chart'>
+          <div className='chart-placeholder'>
             <p>Saatlik sipariş ve gelir grafiği burada görüntülenecek</p>
           </div>
         </div>
