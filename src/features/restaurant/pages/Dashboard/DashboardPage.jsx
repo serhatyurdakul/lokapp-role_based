@@ -53,7 +53,7 @@ const DashboardPage = () => {
       }))
     );
 
-    // 2. Sadece kritik stoktakileri filtrele
+    // 2. Sadece kritik stoktakileri filtrele ("iyi" durumda olmayanlar)
     const criticalMeals = allMeals.filter(
       (meal) => getStockStatus(meal.currentStock) !== "good"
     );

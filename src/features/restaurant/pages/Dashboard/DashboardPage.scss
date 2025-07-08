@@ -156,6 +156,11 @@ section {
       }
     }
 
+    &.depleted {
+      border-color: var(--background-secondary);
+      opacity: 0.6;
+    }
+
     .alert-header {
       display: flex;
       justify-content: space-between;
