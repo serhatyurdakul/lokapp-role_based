@@ -15,6 +15,7 @@ import {
   fetchRestaurantCategories,
   fetchRestaurantMenuData,
 } from "../../store/restaurantMenuSlice";
+import { getStockStatus } from "../../utils/stockUtils";
 
 const sortMenuData = (menuDataToSort) => {
   if (!menuDataToSort || menuDataToSort.length === 0) {
@@ -327,11 +328,9 @@ const MenuPage = () => {
                       <div className='menupage-food-card-stock-info'>
                         <div className='menupage-food-card-stock-details'>
                           <span
-                            className={`menupage-food-card-stock-badge ${
-                              meal.currentStock <= meal.quantity * 0.2
-                                ? "warning"
-                                : ""
-                            }`}
+                            className={`menupage-food-card-stock-badge ${getStockStatus(
+                              meal.currentStock
+                            )}`}
                           >
                             {meal.currentStock} / {meal.quantity} porsiyon
                           </span>
@@ -376,7 +375,7 @@ const MenuPage = () => {
                                   : 0
                               }%`,
                               backgroundColor:
-                                meal.currentStock > 25
+                                getStockStatus(meal.currentStock) === "good"
                                   ? "var(--success-color)"
                                   : "var(--warning-color)",
                             }}
