@@ -1,7 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./MenuPage.scss";
-import FilterBar from "@/components/common/FilterBar/FilterBar";
+import FilterBar, {
+  ALL as ALL_FILTER,
+} from "@/components/common/FilterBar/FilterBar";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import { ReactComponent as AddIcon } from "@/assets/icons/add.svg";
 import { ReactComponent as MoreIcon } from "@/assets/icons/more.svg";
@@ -91,7 +93,7 @@ const MenuPage = () => {
   } = useSelector((state) => state.restaurantMenu);
   const restaurantId = user?.restaurantId;
 
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState(ALL_FILTER);
   const [showAddMealModal, setShowAddMealModal] = useState(false);
   const [lastSelectedCategory, setLastSelectedCategory] = useState("");
 
@@ -148,7 +150,7 @@ const MenuPage = () => {
       ...new Map(
         sortedMenuData.map((item) => [
           item.categoryId,
-          { id: item.categoryId, name: item.categoryName },
+          { id: String(item.categoryId), name: item.categoryName },
         ])
       ).values(),
     ];
@@ -158,19 +160,8 @@ const MenuPage = () => {
 
   // Kategori değişimi (FilterBar için)
   const handleCategoryChange = (categoryValue) => {
-    let newSelectedCategory = categoryValue;
-    if (categoryValue !== "all" && typeof categoryValue === "string") {
-      const parsedId = parseInt(categoryValue, 10);
-      if (!isNaN(parsedId)) {
-        newSelectedCategory = parsedId;
-      } else {
-        console.error(
-          `FilterBar'dan geçersiz kategori ID'si geldi: ${categoryValue}. 'all' kategorisine dönülüyor.`
-        );
-        newSelectedCategory = "all";
-      }
-    }
-    setSelectedCategory(newSelectedCategory);
+    // Kategoriler artık string olarak geliyor; doğrudan state'e yazmak yeterli.
+    setSelectedCategory(categoryValue);
   };
 
   const openAddMealModal = () => {
@@ -235,25 +226,28 @@ const MenuPage = () => {
 
   const filteredMeals = useMemo(
     () =>
-      selectedCategory === "all"
+      selectedCategory === ALL_FILTER
         ? menuMeals
-        : menuMeals.filter((meal) => meal.categoryId === selectedCategory),
+        : menuMeals.filter(
+            (meal) => String(meal.categoryId) === selectedCategory
+          ),
     [menuMeals, selectedCategory]
   );
 
   //Ekranda gösterilecek son veriyi (gruplanmış) hesaplayan useMemo.
   const mealsForDisplay = useMemo(() => {
-    if (selectedCategory === "all") {
+    if (selectedCategory === ALL_FILTER) {
       // Tüm kategoriler seçiliyse, yemekleri kategorilere göre grupla.
       return groupMealsByCategory(filteredMeals);
     } else {
       // Tek bir kategori seçiliyse, sadece o kategorinin yemeklerini göster.
       const categoryName =
-        apiCategories.find((cat) => cat.id === selectedCategory)?.name ||
-        "Seçili Kategori";
+        categoriesForFilterBar.find((cat) => cat.id === selectedCategory)
+          ?.name || "";
+
       return { [categoryName]: filteredMeals };
     }
-  }, [filteredMeals, selectedCategory, apiCategories]);
+  }, [filteredMeals, selectedCategory, categoriesForFilterBar]);
 
   // Refresh için helper function
   const loadRestaurantMenu = () => {
@@ -292,7 +286,7 @@ const MenuPage = () => {
       {!isLoading &&
         Object.keys(mealsForDisplay).length === 0 &&
         menuMeals.length > 0 &&
-        selectedCategory !== "all" && (
+        selectedCategory !== ALL_FILTER && (
           // Belirli bir kategori seçili ama o kategoride ürün yoksa
           <div className='empty-menu-message'>
             <p>Bu kategoride henüz yemek bulunmuyor.</p>
@@ -321,7 +315,7 @@ const MenuPage = () => {
                         {/* meal.categoryName api den geliyor olmalı, yoksa map'ten bulunur */}
                         {meal.categoryName ||
                           apiCategories.find(
-                            (cat) => cat.id === meal.categoryId
+                            (cat) => String(cat.id) === String(meal.categoryId)
                           )?.name ||
                           "Bilinmiyor"}
                       </span>

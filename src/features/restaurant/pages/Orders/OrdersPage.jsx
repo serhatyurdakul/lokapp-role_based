@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import OrderCard from "../../components/OrderCard/OrderCard";
-import FilterBar from "@/components/common/FilterBar/FilterBar";
+import FilterBar, {
+  ALL as ALL_FILTER,
+} from "@/components/common/FilterBar/FilterBar";
 import SearchBar from "@/components/common/SearchBar/SearchBar";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import { fetchRestaurantOrders } from "../../store/restaurantOrdersSlice";
@@ -35,7 +37,7 @@ const Orders = () => {
     }
   }, [dispatch, user?.restaurantId]);
 
-  const [filterType, setFilterType] = useState("all");
+  const [filterType, setFilterType] = useState(ALL_FILTER);
   const [searchQuery, setSearchQuery] = useState("");
 
   // Siparişleri filtreleme ve sıralama (şirket adına göre arama ve bölge filtresi)
@@ -45,7 +47,7 @@ const Orders = () => {
         .toLocaleLowerCase("tr-TR")
         .includes(searchQuery.toLocaleLowerCase("tr-TR"))
     )
-    .filter((order) => filterType === "all" || order.region === filterType)
+    .filter((order) => filterType === ALL_FILTER || order.region === filterType)
     .sort((a, b) => {
       // Zaman sıralaması için orderTime string'lerini karşılaştır
       const timeA = a.orderTime.replace(":", "");
