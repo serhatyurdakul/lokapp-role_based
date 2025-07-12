@@ -1,24 +1,30 @@
 import PropTypes from "prop-types";
+import React from "react";
 import "./FilterBar.scss";
 
-const FilterBar = ({ categories, selectedCategory, onCategoryChange }) => {
+export const ALL = "all"; // Uygulanan filtreleri kaldıran özel değer
+
+// ALL sabitini dışa aktararak uygulamada tekrarlı "all" stringi yerine tek kaynaklı değer kullanılmasını sağlıyoruz.
+// bileşenlerde tekrarlı "all" stringi yerine tek kaynaklı değer kullanılmasını sağlıyoruz.
+
+const FilterBar = ({ options, selectedValue, onChange }) => {
   return (
     <div className='category-filter'>
       <button
-        className={`filter-btn ${selectedCategory === "all" ? "active" : ""}`}
-        onClick={() => onCategoryChange("all")}
+        className={`filter-btn ${selectedValue === ALL ? "active" : ""}`}
+        onClick={() => onChange(ALL)}
       >
         Tümü
       </button>
-      {categories.map((category) => (
+      {options.map((option) => (
         <button
-          key={category.id}
+          key={option.id}
           className={`filter-btn ${
-            selectedCategory === category.id ? "active" : ""
+            selectedValue === String(option.id) ? "active" : ""
           }`}
-          onClick={() => onCategoryChange(category.id)}
+          onClick={() => onChange(String(option.id))}
         >
-          {category.name}
+          {option.name}
         </button>
       ))}
     </div>
@@ -26,14 +32,14 @@ const FilterBar = ({ categories, selectedCategory, onCategoryChange }) => {
 };
 
 FilterBar.propTypes = {
-  categories: PropTypes.arrayOf(
+  options: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       name: PropTypes.string.isRequired,
     })
   ).isRequired,
-  selectedCategory: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  onCategoryChange: PropTypes.func.isRequired,
+  selectedValue: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
-export default FilterBar;
+export default React.memo(FilterBar);

@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
 import { fetchMealCategories, fetchRestaurantMenu } from "@/utils/api";
 
 // Thunk - restoran kategorilerini getirme
@@ -88,3 +88,68 @@ const restaurantMenuSlice = createSlice({
 export const { clearError, resetMenuData, setLastAddedCategory } =
   restaurantMenuSlice.actions;
 export default restaurantMenuSlice.reducer;
+
+/* ---------- Selectors & Derived Helpers ---------- */
+
+// Menü verisini sıralı hale getirir (en son eklenen yemekler en üstte)
+const sortMenuData = (menuData) => {
+  if (!menuData || menuData.length === 0) return [];
+
+  // Shallow copy – referansları bozmamak için
+  const sorted = menuData.map((categoryGroup) => ({
+    ...categoryGroup,
+    meals: (categoryGroup.meals || []).map((meal) => ({ ...meal })),
+  }));
+
+  // Yemekleri createdAt'e göre sırala
+  sorted.forEach((categoryGroup) => {
+    if (categoryGroup.meals?.length) {
+      categoryGroup.meals.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      categoryGroup.latestMealCreatedAt = categoryGroup.meals[0].createdAt;
+    } else {
+      categoryGroup.latestMealCreatedAt = "1970-01-01T00:00:00Z";
+    }
+  });
+
+  // Kategorileri en son yemek ekleme tarihine göre sırala
+  sorted.sort(
+    (a, b) =>
+      new Date(b.latestMealCreatedAt) - new Date(a.latestMealCreatedAt)
+  );
+
+  return sorted;
+};
+
+// Dilimden (slice) ham menü verisini al
+const selectMenuData = (state) => state.restaurantMenu.menuData;
+
+// UI katmanının ihtiyaç duyduğu: düzleştirilmiş yemek listesi + FilterBar kategorileri
+export const selectMenuMealsAndCategories = createSelector(
+  [selectMenuData],
+  (menuData) => {
+    const sortedMenuData = sortMenuData(menuData);
+
+    const menuMeals = sortedMenuData.flatMap((categoryGroup) =>
+      (categoryGroup.meals || []).map((meal) => ({
+        ...meal,
+        currentStock: meal.remainingQuantity,
+        mealName: meal.name,
+        imageUrl: meal.photoUrl,
+      }))
+    );
+
+    const categoriesForFilterBar = [
+      ...new Map(
+        sortedMenuData.map((item) => [
+          item.categoryId,
+          { id: String(item.categoryId), name: item.categoryName },
+        ])
+      ).values(),
+    ];
+
+    return { menuMeals, categoriesForFilterBar };
+  }
+);
+

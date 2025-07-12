@@ -7,8 +7,6 @@ import {
   verifyUserToken,
 } from "@/utils/api";
 
-// const API_URL = "https://emreustaa.com/public/api";
-
 export const register = createAsyncThunk(
   "auth/register",
   async (userData, { rejectWithValue }) => {

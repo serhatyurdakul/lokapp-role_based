@@ -1,7 +1,15 @@
 import axios from "axios";
 
 // API URL
-export const API_BASE_URL = "https://emreustaa.com/public/api";
+const { VITE_API_BASE_URL } = import.meta.env;
+
+if (!VITE_API_BASE_URL) {
+  throw new Error(
+    "VITE_API_BASE_URL is not defined. Please set it in your environment variables (.env.*)"
+  );
+}
+
+export const API_BASE_URL = VITE_API_BASE_URL;
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

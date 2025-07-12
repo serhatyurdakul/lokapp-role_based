@@ -3,34 +3,6 @@
 @use "breakpoints" as *;
 @use "global";
 @use "buttons";
+@use "../components/common/Loading/Loading.scss" as *;
 @use "../features/customer/components/CategoryRow/CategoryRow.scss" as *;
 @use "../features/customer/components/ProductCard/ProductCard.scss" as *;
-
-
-
-
-.order-button {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: max(env(safe-area-inset-bottom), $spacing-16);
-  width: auto;
-  min-width: 160px;
-  max-width: 280px;
-  padding: $spacing-12 $spacing-16;
-  background: var(--primary-color);
-  color: var(--text-color);
-  border-radius: $border-radius-large;
-  font-weight: 600;
-  font-size: 1rem;
-
-  margin: 0 $spacing-16 $spacing-16;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  transition: transform $transition;
-
-  &:active {
-    transform: translateX(-50%) scale(0.96);
-  }
-}
-

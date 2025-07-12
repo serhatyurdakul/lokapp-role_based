@@ -2,25 +2,11 @@ import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
+import Loading from "@/components/common/Loading/Loading.jsx";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
 import { fetchRestaurantMenuData } from "../../store/restaurantMenuSlice";
+import { getStockStatus } from "../../utils/stockUtils";
 import "./DashboardPage.scss";
-
-// Kalan stok (remainingQuantity) toplam stoğa (quantity) oranla kritik mi?
-const isStockCritical = (remaining, total) => {
-  if (typeof total !== "number" || total === 0) return false;
-  const percentage = (remaining / total) * 100;
-  return percentage <= 35; // %35 ve altı kritik kabul edilir
-};
-
-// Aciliyet seviyesi belirleyici
-const getUrgencyLevel = (remaining, total) => {
-  if (typeof total !== "number" || total === 0) return "normal";
-  const percentage = (remaining / total) * 100;
-  if (percentage <= 20) return "critical";
-  if (percentage <= 35) return "warning";
-  return "normal";
-};
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -68,15 +54,13 @@ const DashboardPage = () => {
       }))
     );
 
-    // 2. Sadece kritik stoktakileri filtrele
-    const criticalMeals = allMeals.filter((meal) =>
-      isStockCritical(meal.currentStock, meal.quantity)
+    // 2. Sadece kritik stoktakileri filtrele ("iyi" durumda olmayanlar)
+    const criticalMeals = allMeals.filter(
+      (meal) => getStockStatus(meal.currentStock) !== "good"
     );
 
-    // 3. En acil olanı (stok yüzdesi en düşük) en üste gelecek şekilde sırala
-    criticalMeals.sort(
-      (a, b) => a.currentStock / a.quantity - b.currentStock / b.quantity
-    );
+    // 3. En acil olanı (stok adedi en düşük) en üste gelecek şekilde sırala
+    criticalMeals.sort((a, b) => a.currentStock - b.currentStock);
 
     return criticalMeals;
   }, [menuData]); // Bu hesaplama sadece menuData değiştiğinde yeniden yapılır
@@ -117,16 +101,13 @@ const DashboardPage = () => {
           </button>
         </div>
         <div className='alert-cards'>
-          {isLoading && <p>Stok durumu yükleniyor...</p>}
+          {isLoading && <Loading text="Stok durumu yükleniyor..." />}
           {!isLoading &&
             lowStockMeals.length > 0 &&
             lowStockMeals.slice(0, 5).map((meal) => (
               <div
                 key={meal.id}
-                className={`alert-card ${getUrgencyLevel(
-                  meal.currentStock,
-                  meal.quantity
-                )}`}
+                className={`alert-card ${getStockStatus(meal.currentStock)}`}
                 onClick={() => openStockModal(meal)}
               >
                 <div className='alert-header'>
@@ -137,9 +118,8 @@ const DashboardPage = () => {
                 </div>
                 <div className='stock-bar'>
                   <div
-                    className={`stock-progress ${getUrgencyLevel(
-                      meal.currentStock,
-                      meal.quantity
+                    className={`stock-progress ${getStockStatus(
+                      meal.currentStock
                     )}`}
                     style={{
                       width: `${

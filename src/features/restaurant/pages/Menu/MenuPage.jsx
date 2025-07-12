@@ -1,20 +1,24 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./MenuPage.scss";
-import FilterBar from "@/components/common/FilterBar/FilterBar";
+import FilterBar, {
+  ALL as ALL_FILTER,
+} from "@/components/common/FilterBar/FilterBar";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
+import Loading from "@/components/common/Loading/Loading.jsx";
 import { ReactComponent as AddIcon } from "@/assets/icons/add.svg";
 import { ReactComponent as MoreIcon } from "@/assets/icons/more.svg";
 import { ReactComponent as EditIcon } from "@/assets/icons/edit.svg";
 import { ReactComponent as DeleteIcon } from "@/assets/icons/delete.svg";
-import Button from "@/components/common/Button/Button";
 import AddMealModal from "../../components/AddMealModal/AddMealModal";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
 import DeleteMealModal from "../../components/DeleteMealModal/DeleteMealModal";
 import {
   fetchRestaurantCategories,
   fetchRestaurantMenuData,
+  selectMenuMealsAndCategories,
 } from "../../store/restaurantMenuSlice";
+import { getStockStatus } from "../../utils/stockUtils";
 
 const sortMenuData = (menuDataToSort) => {
   if (!menuDataToSort || menuDataToSort.length === 0) {
@@ -90,9 +94,8 @@ const MenuPage = () => {
   } = useSelector((state) => state.restaurantMenu);
   const restaurantId = user?.restaurantId;
 
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState(ALL_FILTER);
   const [showAddMealModal, setShowAddMealModal] = useState(false);
-  const [lastSelectedCategory, setLastSelectedCategory] = useState("");
 
   // UpdateMeal Modal state
   const [selectedMeal, setSelectedMeal] = useState(null);
@@ -124,52 +127,18 @@ const MenuPage = () => {
     return () => document.removeEventListener("click", handleOutsideClick);
   }, []);
 
-  const { menuMeals, categoriesForFilterBar } = useMemo(() => {
-    if (!restaurantMenuData || restaurantMenuData.length === 0) {
-      return { menuMeals: [], categoriesForFilterBar: [] };
-    }
+  // Slice selector ile türetilmiş menü ve kategori verilerini al
+  const { menuMeals, categoriesForFilterBar } = useSelector(
+    selectMenuMealsAndCategories
+  );
 
-    // Orijinal veriyi sırala. sortMenuData zaten verinin kopyasını alıyor.
-    const sortedMenuData = sortMenuData(restaurantMenuData);
+  /* eski useMemo blok kaldırıldı */
 
-    // Tüm yemekleri, ek bilgilerle birlikte düz bir diziye çevir.
-    const allMeals = sortedMenuData.flatMap((categoryGroup) =>
-      (categoryGroup.meals || []).map((meal) => ({
-        ...meal,
-        currentStock: meal.remainingQuantity,
-        mealName: meal.name,
-        imageUrl: meal.photoUrl,
-      }))
-    );
-
-    // FilterBar için benzersiz kategorileri oluştur.
-    const uniqueCategories = [
-      ...new Map(
-        sortedMenuData.map((item) => [
-          item.categoryId,
-          { id: item.categoryId, name: item.categoryName },
-        ])
-      ).values(),
-    ];
-
-    return { menuMeals: allMeals, categoriesForFilterBar: uniqueCategories };
-  }, [restaurantMenuData]);
 
   // Kategori değişimi (FilterBar için)
   const handleCategoryChange = (categoryValue) => {
-    let newSelectedCategory = categoryValue;
-    if (categoryValue !== "all" && typeof categoryValue === "string") {
-      const parsedId = parseInt(categoryValue, 10);
-      if (!isNaN(parsedId)) {
-        newSelectedCategory = parsedId;
-      } else {
-        console.error(
-          `FilterBar'dan geçersiz kategori ID'si geldi: ${categoryValue}. 'all' kategorisine dönülüyor.`
-        );
-        newSelectedCategory = "all";
-      }
-    }
-    setSelectedCategory(newSelectedCategory);
+    // Kategoriler artık string olarak geliyor; doğrudan state'e yazmak yeterli.
+    setSelectedCategory(categoryValue);
   };
 
   const openAddMealModal = () => {
@@ -234,31 +203,132 @@ const MenuPage = () => {
 
   const filteredMeals = useMemo(
     () =>
-      selectedCategory === "all"
+      selectedCategory === ALL_FILTER
         ? menuMeals
-        : menuMeals.filter((meal) => meal.categoryId === selectedCategory),
+        : menuMeals.filter(
+            (meal) => String(meal.categoryId) === selectedCategory
+          ),
     [menuMeals, selectedCategory]
   );
 
   //Ekranda gösterilecek son veriyi (gruplanmış) hesaplayan useMemo.
   const mealsForDisplay = useMemo(() => {
-    if (selectedCategory === "all") {
+    if (selectedCategory === ALL_FILTER) {
       // Tüm kategoriler seçiliyse, yemekleri kategorilere göre grupla.
       return groupMealsByCategory(filteredMeals);
     } else {
       // Tek bir kategori seçiliyse, sadece o kategorinin yemeklerini göster.
       const categoryName =
-        apiCategories.find((cat) => cat.id === selectedCategory)?.name ||
-        "Seçili Kategori";
+        categoriesForFilterBar.find((cat) => cat.id === selectedCategory)
+          ?.name || "";
+
       return { [categoryName]: filteredMeals };
     }
-  }, [filteredMeals, selectedCategory, apiCategories]);
+  }, [filteredMeals, selectedCategory, categoriesForFilterBar]);
 
-  // Refresh için helper function
-  const loadRestaurantMenu = () => {
+  // Refresh için helper function (stable reference)
+  const loadRestaurantMenu = useCallback(() => {
     if (restaurantId) {
       dispatch(fetchRestaurantMenuData(restaurantId));
     }
+  }, [dispatch, restaurantId]);
+
+  // Yardımcı render fonksiyonu: içerik durumlarını yönetir
+  const renderBody = () => {
+    if (isLoading) {
+      return <Loading text="Menü yükleniyor..." />;
+    }
+
+    // Hiç yemek yok
+    if (Object.keys(mealsForDisplay).length === 0) {
+      if (menuMeals.length === 0) {
+        return (
+          <div className='empty-menu-message'>
+            <p>Menüde henüz hiç yemek bulunmuyor. Hemen ekleyin!</p>
+          </div>
+        );
+      }
+      if (selectedCategory !== ALL_FILTER) {
+        return (
+          <div className='empty-menu-message'>
+            <p>Bu kategoride henüz yemek bulunmuyor.</p>
+          </div>
+        );
+      }
+    }
+
+    // Normal içerik
+    return (
+      <div className='menupage-items-by-category'>
+        {Object.entries(mealsForDisplay).map(([categoryName, meals]) => (
+          <div key={categoryName} className='menupage-category-section'>
+            <h3 className='menupage-category-title'>{categoryName}</h3>
+            <div className='menupage-category-grid'>
+              {meals.map((meal) => (
+                <div key={meal.id} className='menupage-food-card'>
+                  <div className='menupage-food-card-image'>
+                    <img
+                      src={meal.imageUrl || "https://via.placeholder.com/150"}
+                      alt={meal.mealName}
+                    />
+                  </div>
+                  <div className='menupage-food-card-content'>
+                    <h3 className='menupage-food-card-name'>{meal.mealName}</h3>
+                    <span className='menupage-food-card-category-tag'>
+                      {meal.categoryName ||
+                        apiCategories.find((cat) => String(cat.id) === String(meal.categoryId))?.name ||
+                        "Bilinmiyor"}
+                    </span>
+                    <div className='menupage-food-card-stock-info'>
+                      <div className='menupage-food-card-stock-details'>
+                        <span className={`menupage-food-card-stock-badge ${getStockStatus(meal.currentStock)}`}>
+                          {meal.currentStock} / {meal.quantity} porsiyon
+                        </span>
+                      </div>
+                      <div className='meal-actions-wrapper'>
+                        <button
+                          className='meal-actions-trigger'
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleDropdown(meal.id);
+                          }}
+                        >
+                          <MoreIcon />
+                        </button>
+                        {openDropdownId === meal.id && (
+                          <div className='meal-actions-dropdown'>
+                            <div className='dropdown-item' onClick={() => handleDropdownEdit(meal)}>
+                              <EditIcon />
+                              <span>Düzenle</span>
+                            </div>
+                            <div className='dropdown-item delete' onClick={() => handleDropdownDelete(meal)}>
+                              <DeleteIcon />
+                              <span>Sil</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className='menupage-food-card-stock-bar'>
+                        <div
+                          className='menupage-food-card-stock-progress'
+                          style={{
+                            width: `${meal.quantity ? Math.min(Math.max(((meal.currentStock ?? 0) / meal.quantity), 0), 1) * 100 : 0}%`,
+                            backgroundColor:
+                              getStockStatus(meal.currentStock) === "good"
+                                ? "var(--success-color)"
+                                : "var(--warning-color)",
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   return (
@@ -274,123 +344,11 @@ const MenuPage = () => {
       </PageHeader>
 
       <FilterBar
-        categories={categoriesForFilterBar}
-        selectedCategory={selectedCategory}
-        onCategoryChange={handleCategoryChange}
+        options={categoriesForFilterBar}
+        selectedValue={selectedCategory}
+        onChange={handleCategoryChange}
       />
-
-      {isLoading && <p>Menü yükleniyor...</p>}
-      {!isLoading &&
-        Object.keys(mealsForDisplay).length === 0 &&
-        menuMeals.length === 0 && (
-          // Hiç ürün yoksa (api den hiç gelmediyse)
-          <div className='empty-menu-message'>
-            <p>Menüde henüz hiç yemek bulunmuyor. Hemen ekleyin!</p>
-          </div>
-        )}
-      {!isLoading &&
-        Object.keys(mealsForDisplay).length === 0 &&
-        menuMeals.length > 0 &&
-        selectedCategory !== "all" && (
-          // Belirli bir kategori seçili ama o kategoride ürün yoksa
-          <div className='empty-menu-message'>
-            <p>Bu kategoride henüz yemek bulunmuyor.</p>
-          </div>
-        )}
-
-      {!isLoading && Object.keys(mealsForDisplay).length > 0 && (
-        <div className='menupage-items-by-category'>
-          {Object.entries(mealsForDisplay).map(([categoryName, meals]) => (
-            <div key={categoryName} className='menupage-category-section'>
-              <h3 className='menupage-category-title'>{categoryName}</h3>
-              <div className='menupage-category-grid'>
-                {meals.map((meal) => (
-                  <div key={meal.id} className='menupage-food-card'>
-                    <div className='menupage-food-card-image'>
-                      <img
-                        src={meal.imageUrl || "https://via.placeholder.com/150"}
-                        alt={meal.mealName}
-                      />
-                    </div>
-                    <div className='menupage-food-card-content'>
-                      <h3 className='menupage-food-card-name'>
-                        {meal.mealName}
-                      </h3>
-                      <span className='menupage-food-card-category-tag'>
-                        {/* meal.categoryName api den geliyor olmalı, yoksa map'ten bulunur */}
-                        {meal.categoryName ||
-                          apiCategories.find(
-                            (cat) => cat.id === meal.categoryId
-                          )?.name ||
-                          "Bilinmiyor"}
-                      </span>
-                      <div className='menupage-food-card-stock-info'>
-                        <div className='menupage-food-card-stock-details'>
-                          <span
-                            className={`menupage-food-card-stock-badge ${
-                              meal.currentStock <= meal.quantity * 0.2
-                                ? "warning"
-                                : ""
-                            }`}
-                          >
-                            {meal.currentStock} / {meal.quantity} porsiyon
-                          </span>
-                        </div>
-                        <div className='meal-actions-wrapper'>
-                          <button
-                            className='meal-actions-trigger'
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleDropdown(meal.id);
-                            }}
-                          >
-                            <MoreIcon />
-                          </button>
-
-                          {openDropdownId === meal.id && (
-                            <div className='meal-actions-dropdown'>
-                              <div
-                                className='dropdown-item'
-                                onClick={() => handleDropdownEdit(meal)}
-                              >
-                                <EditIcon />
-                                <span>Düzenle</span>
-                              </div>
-                              <div
-                                className='dropdown-item delete'
-                                onClick={() => handleDropdownDelete(meal)}
-                              >
-                                <DeleteIcon />
-                                <span>Sil</span>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                        <div className='menupage-food-card-stock-bar'>
-                          <div
-                            className='menupage-food-card-stock-progress'
-                            style={{
-                              width: `${
-                                meal.quantity
-                                  ? (meal.currentStock / meal.quantity) * 100
-                                  : 0
-                              }%`,
-                              backgroundColor:
-                                meal.currentStock > 25
-                                  ? "var(--success-color)"
-                                  : "var(--warning-color)",
-                            }}
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      {renderBody()}
 
       <AddMealModal
         isOpen={showAddMealModal}

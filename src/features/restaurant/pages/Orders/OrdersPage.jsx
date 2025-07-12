@@ -1,33 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import OrderCard from "../../components/OrderCard/OrderCard";
-import FilterBar from "@/components/common/FilterBar/FilterBar";
+import FilterBar, {
+  ALL as ALL_FILTER,
+} from "@/components/common/FilterBar/FilterBar";
 import SearchBar from "@/components/common/SearchBar/SearchBar";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
-import { fetchRestaurantOrders } from "../../store/restaurantOrdersSlice";
+import Loading from "@/components/common/Loading/Loading.jsx";
+import { fetchRestaurantOrders, selectRegionCategories, makeSelectGroupedByRegion } from "../../store/restaurantOrdersSlice";
 import "./OrdersPage.scss";
 
-// FilterBar için bölge kategorileri doğrudan tanımlandı - BU KISIM DA DİNAMİKLEŞTİRİLEBİLİR
-const regionCategories = [
-  { id: "Tümsan SS", name: "Tümsan SS" },
-  { id: "İsdök SS", name: "İsdök SS" },
-  { id: "Çevre SS", name: "Çevre SS" },
-  { id: "Eskoop SS", name: "Eskoop SS" },
-  { id: "Seafköy SS", name: "Seafköy SS" },
-  { id: "Göngören SS", name: "Göngören SS" },
-  { id: "Bağcılar SS", name: "Bağcılar SS" },
-];
+
 
 const Orders = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
-  const { orders, isLoading, error } = useSelector(
-    (state) => state.restaurantOrders
-  );
+  const { isLoading, error } = useSelector((state) => state.restaurantOrders);
+
+    const regionCategories = useSelector(selectRegionCategories);
 
   useEffect(() => {
     if (user?.restaurantId) {
@@ -35,83 +29,117 @@ const Orders = () => {
     }
   }, [dispatch, user?.restaurantId]);
 
-  const [filterType, setFilterType] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedValue, setSelectedValue] = useState(ALL_FILTER);
 
-  // Siparişleri filtreleme ve sıralama (şirket adına göre arama ve bölge filtresi)
-  const filteredOrders = [...orders]
-    .filter((order) =>
-      order.company
-        .toLocaleLowerCase("tr-TR")
-        .includes(searchQuery.toLocaleLowerCase("tr-TR"))
-    )
-    .filter((order) => filterType === "all" || order.region === filterType)
-    .sort((a, b) => {
-      // Zaman sıralaması için orderTime string'lerini karşılaştır
-      const timeA = a.orderTime.replace(":", "");
-      const timeB = b.orderTime.replace(":", "");
-      return timeA.localeCompare(timeB);
-    });
-
-  const pendingOrders = filteredOrders.filter(
-    (order) => order.status === "pending"
-  );
-  const completedOrders = filteredOrders.filter(
-    (order) => order.status === "completed"
+  // Memoized selector instance for grouped lists
+  const selectGrouped = useMemo(makeSelectGroupedByRegion, []);
+  const { pendingGrouped, completedGrouped } = useSelector((state) =>
+    selectGrouped(state, searchQuery, selectedValue)
   );
 
-  // Siparişleri site (region) bazında gruplandırma
-  const groupOrdersByRegion = (ordersList) => {
-    return ordersList.reduce((acc, order) => {
-      if (!acc[order.region]) {
-        acc[order.region] = [];
-      }
-      acc[order.region].push(order);
-      return acc;
-    }, {});
-  };
+  const pendingCount = useMemo(() => Object.values(pendingGrouped).reduce((s, arr) => s + arr.length, 0), [pendingGrouped]);
+  const completedCount = useMemo(() => Object.values(completedGrouped).reduce((s, arr) => s + arr.length, 0), [completedGrouped]);
+
+  
+
+
 
   const handleOrderClick = (companyId) => {
     navigate(`/orders/${companyId}`);
   };
 
-  if (isLoading) {
-    return (
-      <div className='loading-container'>
-        <div className='loading-spinner'></div>
-        <p>Siparişler yükleniyor...</p>
-      </div>
-    );
-  }
+  // Tek bir fonksiyonda içerik durumlarını yönet
+  const renderBody = () => {
+    if (isLoading) {
+      return <Loading text="Siparişler yükleniyor..." />;
+    }
 
-  if (error) {
-    return (
-      <div className='error-container'>
-        <div className='error-message'>
-          <h2>Hata!</h2>
-          <p>{error}</p>
-          <button
-            onClick={() =>
-              user?.restaurantId &&
-              dispatch(fetchRestaurantOrders(user.restaurantId))
-            }
-            disabled={!user?.restaurantId || isLoading}
-          >
-            Tekrar Dene
-          </button>
+    if (error) {
+      return (
+        <div className='error-container'>
+          <div className='error-message'>
+            <h2>Hata!</h2>
+            <p>{error}</p>
+            <button
+              onClick={() =>
+                user?.restaurantId &&
+                dispatch(fetchRestaurantOrders(user.restaurantId))
+              }
+            >
+              Yeniden Dene
+            </button>
+          </div>
         </div>
+      );
+    }
+
+    if (pendingCount === 0 && completedCount === 0) {
+      return (
+        <div className='empty-message'>
+          <h2>Sipariş Bulunamadı</h2>
+          <p>Seçtiğiniz kriterlere uygun bir sipariş bulunmamaktadır.</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className='orders-layout'>
+        {pendingCount > 0 && (
+          <div className='orders-section'>
+            <h2 className='section-title'>Bekleyen Siparişler</h2>
+            <div className='orders-grid'>
+              {Object.entries(pendingGrouped).map(([region, regionOrders]) => (
+                <div key={region} className='orders-by-region'>
+                  <h3 className='region-title'>{region}</h3>
+                  <div className='orders-region-grid'>
+                    {regionOrders.map((order) => (
+                      <OrderCard
+                        key={order.id}
+                        order={order}
+                        onClick={() => handleOrderClick(order.companyId)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {completedCount > 0 && (
+          <div className='orders-section completed-section'>
+            <h2 className='section-title'>Tamamlanan Siparişler</h2>
+            <div className='orders-grid'>
+              {Object.entries(completedGrouped).map(([region, regionOrders]) => (
+                <div key={region} className='orders-by-region'>
+                  <h3 className='region-title'>{region}</h3>
+                  <div className='orders-region-grid'>
+                    {regionOrders.map((order) => (
+                      <OrderCard
+                        key={order.id}
+                        order={order}
+                        onClick={() => handleOrderClick(order.companyId)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
-  }
+  };
 
   return (
     <div className='orders-content'>
       <PageHeader title='Siparişler' />
 
       <FilterBar
-        categories={regionCategories}
-        selectedCategory={filterType}
-        onCategoryChange={setFilterType}
+        options={regionCategories}
+        selectedValue={selectedValue}
+        onChange={setSelectedValue}
       />
 
       <SearchBar
@@ -120,60 +148,7 @@ const Orders = () => {
         placeholder='Firma Ara...'
       />
 
-      <div className='orders-layout'>
-        {pendingOrders.length > 0 && (
-          <div className='orders-section'>
-            <h2 className='section-title'>Bekleyen Siparişler</h2>
-            <div className='orders-grid'>
-              {Object.entries(groupOrdersByRegion(pendingOrders)).map(
-                ([region, regionOrders]) => (
-                  <div key={region} className='orders-by-region'>
-                    <h3 className='region-title'>{region}</h3>
-                    <div className='orders-region-grid'>
-                      {regionOrders.map((order) => (
-                        <OrderCard
-                          key={order.id}
-                          order={order}
-                          onClick={() => handleOrderClick(order.companyId)}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )
-              )}
-            </div>
-          </div>
-        )}
-        {completedOrders.length > 0 && (
-          <div className='orders-section completed-section'>
-            <h2 className='section-title'>Tamamlanan Siparişler</h2>
-            <div className='orders-grid'>
-              {Object.entries(groupOrdersByRegion(completedOrders)).map(
-                ([region, regionOrders]) => (
-                  <div key={region} className='orders-by-region'>
-                    <h3 className='region-title'>{region}</h3>
-                    <div className='orders-region-grid'>
-                      {regionOrders.map((order) => (
-                        <OrderCard
-                          key={order.id}
-                          order={order}
-                          onClick={() => handleOrderClick(order.companyId)}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )
-              )}
-            </div>
-          </div>
-        )}
-        {!isLoading && filteredOrders.length === 0 && (
-          <div className='empty-message'>
-            <h2>Sipariş Bulunamadı</h2>
-            <p>Seçtiğiniz kriterlere uygun bir sipariş bulunmamaktadır.</p>
-          </div>
-        )}
-      </div>
+      {renderBody()}
     </div>
   );
 };

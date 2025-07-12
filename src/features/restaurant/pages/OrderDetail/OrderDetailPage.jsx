@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "./OrderDetailPage.scss";
 import OrderCard from "../../components/OrderCard/OrderCard";
 import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
+import Loading from "@/components/common/Loading/Loading.jsx";
 import GenericModal from "@/components/common/GenericModal/GenericModal";
 import {
   fetchOrderDetails,
@@ -73,12 +74,7 @@ const OrderDetailPage = () => {
   };
 
   if (isDetailsLoading) {
-    return (
-      <div className='loading-container'>
-        <div className='loading-spinner'></div>
-        <p>Sipariş detayları yükleniyor...</p>
-      </div>
-    );
+    return <Loading text="Sipariş detayları yükleniyor..." />;
   }
 
   if (detailsError) {
@@ -167,9 +163,7 @@ const OrderDetailPage = () => {
         onClick={() => setShowStatusModal(true)}
         disabled={isStatusUpdating}
       >
-        {isStatusUpdating ? (
-          <div className='loading-spinner-inline'></div>
-        ) : order?.summary.status === "pending" ? (
+        {order?.summary.status === "pending" ? (
           <>
             <span>Siparişi Tamamla</span>
             <svg

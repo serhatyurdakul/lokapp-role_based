@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
 import {
   getRestaurantsOrderList,
   getRestaurantOrderDetails,
@@ -229,5 +229,64 @@ const restaurantOrdersSlice = createSlice({
       });
   },
 });
+
+// Memoized selectors -------------------------------------------------
+const selectOrdersState = (state) => state.restaurantOrders;
+export const selectAllOrders = createSelector(
+  [selectOrdersState],
+  (ordersState) => ordersState.orders
+);
+
+export const selectRegionCategories = createSelector(
+  [selectAllOrders],
+  (orders) => {
+    const unique = new Map();
+    orders.forEach((o) => {
+      if (o.region) unique.set(o.region, { id: o.region, name: o.region });
+    });
+    return Array.from(unique.values());
+  }
+);
+
+export const makeSelectFilteredOrders = () =>
+  createSelector(
+    [selectAllOrders, (_state, searchQuery) => searchQuery, (_state, _q, selectedValue) => selectedValue],
+    (orders, searchQuery, selectedValue) => {
+      const lowerQuery = (searchQuery || "").toLocaleLowerCase("tr-TR");
+      return orders
+        .filter((o) => o.company.toLocaleLowerCase("tr-TR").includes(lowerQuery))
+        .filter((o) => selectedValue === "all" || o.region === selectedValue)
+        .sort((a, b) => {
+          const timeA = a.orderTime.replace(":", "");
+          const timeB = b.orderTime.replace(":", "");
+          return timeA.localeCompare(timeB);
+        });
+    }
+  );
+
+export const makeSelectPendingAndCompleted = () => {
+  const selectFiltered = makeSelectFilteredOrders();
+  return createSelector([selectFiltered], (filtered) => ({
+    pending: filtered.filter((o) => o.status === "pending"),
+    completed: filtered.filter((o) => o.status === "completed"),
+  }));
+};
+
+// Selector: pending & completed orders grouped by region
+export const makeSelectGroupedByRegion = () => {
+  const selectPendingCompleted = makeSelectPendingAndCompleted();
+  return createSelector([selectPendingCompleted], ({ pending, completed }) => {
+    const group = (list) =>
+      list.reduce((acc, order) => {
+        (acc[order.region] = acc[order.region] || []).push(order);
+        return acc;
+      }, {});
+
+    return {
+      pendingGrouped: group(pending),
+      completedGrouped: group(completed),
+    };
+  });
+};
 
 export default restaurantOrdersSlice.reducer;

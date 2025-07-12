@@ -7,6 +7,7 @@ import {
 } from "../../store/customerMenuSlice";
 import CategoryRow from "../../components/CategoryRow/CategoryRow.jsx";
 import GenericModal from "@/components/common/GenericModal/GenericModal.jsx";
+import Loading from "@/components/common/Loading/Loading.jsx";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import "./HomePage.scss"; // SCSS importu güncellendi
 
@@ -65,130 +66,130 @@ const HomePage = () => {
     dispatch(clearOrderStatus());
   };
 
-  // Yükleme durumunu göster
-  if (isLoading) {
-    return (
-      <div className='loading-container'>
-        <div className='loading-spinner'></div>
-        <p>Yemekler yükleniyor...</p>
-      </div>
-    );
-  }
+  // Yardımcı render fonksiyonu: tüm sayfa içeriğini duruma göre döndürür
+  const renderBody = () => {
+    if (isLoading) {
+      return <Loading text="Yemekler yükleniyor..." />;
+    }
 
-  // Hata durumunu göster
-  if (error) {
-    return (
-      <div className='error-container'>
-        <div className='error-message'>
-          <h2>Hata!</h2>
-          <p>{error}</p>
-          <button
-            onClick={() => restaurantId && dispatch(fetchMeals(restaurantId))}
-            disabled={!restaurantId}
-          >
-            Tekrar Dene
-          </button>
+    if (error) {
+      return (
+        <div className='error-container'>
+          <div className='error-message'>
+            <h2>Hata!</h2>
+            <p>{error}</p>
+            <button
+              onClick={() => restaurantId && dispatch(fetchMeals(restaurantId))}
+              disabled={!restaurantId}
+            >
+              Tekrar Dene
+            </button>
+          </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  // Kategori yoksa veya boşsa
-  if (!categories || categories.length === 0) {
-    return (
-      <div className='empty-container'>
-        <div className='empty-message'>
-          <h2>Yemek Menüsü Bulunamadı</h2>
-          <p>
-            Bu restoran için henüz yemek menüsü oluşturulmamış veya API'den veri
-            getirirken bir sorun oluştu.
-          </p>
-          <button
-            onClick={() => restaurantId && dispatch(fetchMeals(restaurantId))}
-            disabled={!restaurantId}
-          >
-            Tekrar Dene
-          </button>
+    if (!categories || categories.length === 0) {
+      return (
+        <div className='empty-container'>
+          <div className='empty-message'>
+            <h2>Yemek Menüsü Bulunamadı</h2>
+            <p>
+              Bu restoran için henüz yemek menüsü oluşturulmamış veya API'den veri
+              getirirken bir sorun oluştu.
+            </p>
+            <button
+              onClick={() => restaurantId && dispatch(fetchMeals(restaurantId))}
+              disabled={!restaurantId}
+            >
+              Tekrar Dene
+            </button>
+          </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  return (
-    <div className='has-order-button'>
-      <PageHeader title='Sipariş Ekranı' />
-      {categories.map((category) => (
-        <CategoryRow
-          key={category.id}
-          categoryId={category.id}
-          title={category.title}
-          items={category.items}
-        />
-      ))}
+    // Normal içerik
+    return (
+      <div className='has-order-button'>
+        {categories.map((category) => (
+          <CategoryRow
+            key={category.id}
+            categoryId={category.id}
+            title={category.title}
+            items={category.items}
+          />
+        ))}
 
-      {showWarningModal && (
-        <GenericModal
-          isOpen={showWarningModal}
-          onClose={() => setShowWarningModal(false)}
-          title='Eksik Seçimler'
-          primaryButtonText='Devam Et'
-          onPrimaryAction={handleConfirmOrder}
-          secondaryButtonText='Seçimlere Dön'
-        >
-          <p>Aşağıdaki kategorilerden seçim yapmadınız:</p>
-          <ul className='modal-items-list'>
-            {categories
-              .filter((cat) => !selectedItems[cat.id])
-              .map((cat) => cat.title)
-              .map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-          </ul>
-          <p>Bu şekilde devam etmek istiyor musunuz?</p>
-        </GenericModal>
-      )}
-
-      {orderSuccessMessage && (
-        <GenericModal
-          isOpen={true}
-          onClose={closeStatusModal}
-          title='Başarılı!'
-          primaryButtonText='Tamam'
-          onPrimaryAction={closeStatusModal}
-        >
-          <p>{orderSuccessMessage}</p>
-        </GenericModal>
-      )}
-
-      {orderError && (
-        <GenericModal
-          isOpen={true}
-          onClose={closeStatusModal}
-          title='Hata!'
-          primaryButtonText='Tamam'
-          onPrimaryAction={closeStatusModal}
-          isError={true}
-        >
-          <p>
-            Siparişiniz oluşturulurken bir hata oluştu: <br />
-            <strong>{orderError}</strong>
-          </p>
-        </GenericModal>
-      )}
-
-      <button
-        className='order-button'
-        onClick={handleOrder}
-        disabled={isOrderLoading}
-      >
-        {isOrderLoading ? (
-          <div className='loading-spinner-inline'></div>
-        ) : (
-          "Siparişi Onayla"
+        {showWarningModal && (
+          <GenericModal
+            isOpen={showWarningModal}
+            onClose={() => setShowWarningModal(false)}
+            title='Eksik Seçimler'
+            primaryButtonText='Devam Et'
+            onPrimaryAction={handleConfirmOrder}
+            secondaryButtonText='Seçimlere Dön'
+          >
+            <p>Aşağıdaki kategorilerden seçim yapmadınız:</p>
+            <ul className='modal-items-list'>
+              {categories
+                .filter((cat) => !selectedItems[cat.id])
+                .map((cat) => cat.title)
+                .map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+            </ul>
+            <p>Bu şekilde devam etmek istiyor musunuz?</p>
+          </GenericModal>
         )}
-      </button>
-    </div>
-  );
+
+        {orderSuccessMessage && (
+          <GenericModal
+            isOpen={true}
+            onClose={closeStatusModal}
+            title='Başarılı!'
+            primaryButtonText='Tamam'
+            onPrimaryAction={closeStatusModal}
+          >
+            <p>{orderSuccessMessage}</p>
+          </GenericModal>
+        )}
+
+        {orderError && (
+          <GenericModal
+            isOpen={true}
+            onClose={closeStatusModal}
+            title='Hata!'
+            primaryButtonText='Tamam'
+            onPrimaryAction={closeStatusModal}
+            isError={true}
+          >
+            <p>
+              Siparişiniz oluşturulurken bir hata oluştu: <br />
+              <strong>{orderError}</strong>
+            </p>
+          </GenericModal>
+        )}
+
+        <button
+          className='order-button'
+          onClick={handleOrder}
+          disabled={isOrderLoading}
+        >
+          Siparişi Onayla
+        </button>
+      </div>
+    );
+};
+
+// ----- Render -----
+
+return (
+  <>
+    <PageHeader title='Sipariş Ekranı' />
+    {renderBody()}
+  </>
+);
 };
 
 export default HomePage;
