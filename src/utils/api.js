@@ -18,6 +18,40 @@ export const api = axios.create({
   },
 });
 
+// ---- Global Axios Auth Interceptors ---------------------------------
+// Bu interceptor'lar token geçersiz olduğunda veya başka cihaz/sekmede oturum açıldığında
+// uygulamayı güvenli şekilde oturumdan düşürür.
+
+// Dinamik import ile dairesel bağımlılıktan kaçınarak redux logout dispatch eden yardımcı
+const triggerGlobalLogout = async () => {
+  try {
+    const [{ store }, { logout }] = await Promise.all([
+      import("@/store"),
+      import("@/features/auth/store/authSlice"),
+    ]);
+    store.dispatch(logout());
+  } catch (err) {
+    console.error("triggerGlobalLogout error:", err);
+  }
+};
+
+// Axios response & error interceptor
+api.interceptors.response.use(
+  (response) => {
+    if (response?.data?.tokenError === true) {
+      triggerGlobalLogout();
+    }
+    return response;
+  },
+  (error) => {
+    if (error?.response?.status === 401) {
+      triggerGlobalLogout();
+    }
+    return Promise.reject(error);
+  }
+);
+
+
 const handleApiResponse = (response, dataKey = null) => {
   if (response && response.data) {
     const { data } = response;

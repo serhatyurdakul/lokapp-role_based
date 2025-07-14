@@ -70,6 +70,12 @@ function App() {
           );
           dispatch(logout());
         }
+      } else if (event.key === "token" && event.oldValue && event.newValue && event.oldValue !== event.newValue) {
+        // Başka sekmede kullanıcı yeniden giriş yaptı → mevcut sekmeyi güvenli şekilde oturumdan düşür
+        if (isAuthenticated) {
+          console.log("Token değeri değişti, mevcut sekme logout ediliyor.");
+          dispatch(logout());
+        }
       } else if (event.key === "user" && event.newValue === null) {
         if (isAuthenticated) {
           console.log(
