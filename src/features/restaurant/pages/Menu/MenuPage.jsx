@@ -6,6 +6,8 @@ import FilterBar, {
 } from "@/components/common/FilterBar/FilterBar";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import Loading from "@/components/common/Loading/Loading.jsx";
+import EmptyState from "@/components/common/StateMessage/EmptyState";
+import ErrorState from "@/components/common/StateMessage/ErrorState";
 import { ReactComponent as AddIcon } from "@/assets/icons/add.svg";
 import { ReactComponent as MoreIcon } from "@/assets/icons/more.svg";
 import { ReactComponent as EditIcon } from "@/assets/icons/edit.svg";
@@ -90,6 +92,7 @@ const MenuPage = () => {
     categories: apiCategories,
     menuData: restaurantMenuData,
     isLoading,
+    error,
     lastAddedCategoryId,
   } = useSelector((state) => state.restaurantMenu);
   const restaurantId = user?.restaurantId;
@@ -134,6 +137,15 @@ const MenuPage = () => {
 
   /* eski useMemo blok kaldırıldı */
 
+  // Kategori listesi değişip mevcut seçim silinmişse filtreyi 'Tümü'ne sıfırla
+  useEffect(() => {
+    if (
+      selectedCategory !== ALL_FILTER &&
+      !categoriesForFilterBar.some((c) => c.id === selectedCategory)
+    ) {
+      setSelectedCategory(ALL_FILTER);
+    }
+  }, [categoriesForFilterBar, selectedCategory]);
 
   // Kategori değişimi (FilterBar için)
   const handleCategoryChange = (categoryValue) => {
@@ -239,55 +251,57 @@ const MenuPage = () => {
       return <Loading text="Menü yükleniyor..." />;
     }
 
-    // Hiç yemek yok
-    if (Object.keys(mealsForDisplay).length === 0) {
-      if (menuMeals.length === 0) {
-        return (
-          <div className='empty-menu-message'>
-            <p>Menüde henüz hiç yemek bulunmuyor. Hemen ekleyin!</p>
-          </div>
-        );
-      }
-      if (selectedCategory !== ALL_FILTER) {
-        return (
-          <div className='empty-menu-message'>
-            <p>Bu kategoride henüz yemek bulunmuyor.</p>
-          </div>
-        );
-      }
+    if (error) {
+      return (
+        <ErrorState
+          message={error}
+          onRetry={() => restaurantId && loadRestaurantMenu()}
+        />
+      );
+    }
+
+    // Hiç yemek yok (menü tamamen boş)
+    if (menuMeals.length === 0) {
+      return <EmptyState message="Henüz yemek eklemediniz" />;
     }
 
     // Normal içerik
     return (
-      <div className='menupage-items-by-category'>
+      <div className="menupage-items-by-category">
         {Object.entries(mealsForDisplay).map(([categoryName, meals]) => (
-          <div key={categoryName} className='menupage-category-section'>
-            <h3 className='menupage-category-title'>{categoryName}</h3>
-            <div className='menupage-category-grid'>
+          <div key={categoryName} className="menupage-category-section">
+            <h3 className="menupage-category-title">{categoryName}</h3>
+            <div className="menupage-category-grid">
               {meals.map((meal) => (
-                <div key={meal.id} className='menupage-food-card'>
-                  <div className='menupage-food-card-image'>
+                <div key={meal.id} className="menupage-food-card">
+                  <div className="menupage-food-card-image">
                     <img
                       src={meal.imageUrl || "https://via.placeholder.com/150"}
                       alt={meal.mealName}
                     />
                   </div>
-                  <div className='menupage-food-card-content'>
-                    <h3 className='menupage-food-card-name'>{meal.mealName}</h3>
-                    <span className='menupage-food-card-category-tag'>
+                  <div className="menupage-food-card-content">
+                    <h3 className="menupage-food-card-name">{meal.mealName}</h3>
+                    <span className="menupage-food-card-category-tag">
                       {meal.categoryName ||
-                        apiCategories.find((cat) => String(cat.id) === String(meal.categoryId))?.name ||
+                        apiCategories.find(
+                          (cat) => String(cat.id) === String(meal.categoryId)
+                        )?.name ||
                         "Bilinmiyor"}
                     </span>
-                    <div className='menupage-food-card-stock-info'>
-                      <div className='menupage-food-card-stock-details'>
-                        <span className={`menupage-food-card-stock-badge ${getStockStatus(meal.currentStock)}`}>
+                    <div className="menupage-food-card-stock-info">
+                      <div className="menupage-food-card-stock-details">
+                        <span
+                          className={`menupage-food-card-stock-badge ${getStockStatus(
+                            meal.currentStock
+                          )}`}
+                        >
                           {meal.currentStock} / {meal.quantity} porsiyon
                         </span>
                       </div>
-                      <div className='meal-actions-wrapper'>
+                      <div className="meal-actions-wrapper">
                         <button
-                          className='meal-actions-trigger'
+                          className="meal-actions-trigger"
                           onClick={(e) => {
                             e.stopPropagation();
                             toggleDropdown(meal.id);
@@ -296,23 +310,39 @@ const MenuPage = () => {
                           <MoreIcon />
                         </button>
                         {openDropdownId === meal.id && (
-                          <div className='meal-actions-dropdown'>
-                            <div className='dropdown-item' onClick={() => handleDropdownEdit(meal)}>
+                          <div className="meal-actions-dropdown">
+                            <div
+                              className="dropdown-item"
+                              onClick={() => handleDropdownEdit(meal)}
+                            >
                               <EditIcon />
                               <span>Düzenle</span>
                             </div>
-                            <div className='dropdown-item delete' onClick={() => handleDropdownDelete(meal)}>
+                            <div
+                              className="dropdown-item delete"
+                              onClick={() => handleDropdownDelete(meal)}
+                            >
                               <DeleteIcon />
                               <span>Sil</span>
                             </div>
                           </div>
                         )}
                       </div>
-                      <div className='menupage-food-card-stock-bar'>
+                      <div className="menupage-food-card-stock-bar">
                         <div
-                          className='menupage-food-card-stock-progress'
+                          className="menupage-food-card-stock-progress"
                           style={{
-                            width: `${meal.quantity ? Math.min(Math.max(((meal.currentStock ?? 0) / meal.quantity), 0), 1) * 100 : 0}%`,
+                            width: `${
+                              meal.quantity
+                                ? Math.min(
+                                    Math.max(
+                                      (meal.currentStock ?? 0) / meal.quantity,
+                                      0
+                                    ),
+                                    1
+                                  ) * 100
+                                : 0
+                            }%`,
                             backgroundColor:
                               getStockStatus(meal.currentStock) === "good"
                                 ? "var(--success-color)"
@@ -333,12 +363,12 @@ const MenuPage = () => {
 
   return (
     <>
-      <PageHeader title='Menü Yönetimi'>
+      <PageHeader title="Menü Yönetimi">
         <button
           className={`add-button ${showAddMealModal ? "disabled" : ""}`}
           onClick={openAddMealModal}
         >
-          <AddIcon className='icon' />
+          <AddIcon className="icon" />
           <span>Yeni Yemek</span>
         </button>
       </PageHeader>

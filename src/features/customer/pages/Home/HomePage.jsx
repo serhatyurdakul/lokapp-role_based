@@ -8,6 +8,8 @@ import {
 import CategoryRow from "../../components/CategoryRow/CategoryRow.jsx";
 import GenericModal from "@/components/common/GenericModal/GenericModal.jsx";
 import Loading from "@/components/common/Loading/Loading.jsx";
+import EmptyState from "@/components/common/StateMessage/EmptyState";
+import ErrorState from "@/components/common/StateMessage/ErrorState";
 import Button from "@/components/common/Button/Button";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import "./HomePage.scss"; // SCSS importu güncellendi
@@ -72,46 +74,28 @@ const HomePage = () => {
       return <Loading text="Yemekler yükleniyor..." />;
     }
 
-    if (error) {
+    // Sadece gerçek hatalarda ErrorState göster
+    if (error && categories.length > 0) {
       return (
-        <div className='error-container'>
-          <div className='error-message'>
-            <h2>Hata!</h2>
-            <p>{error}</p>
-            <button
-              onClick={() => restaurantId && dispatch(fetchMeals(restaurantId))}
-              disabled={!restaurantId}
-            >
-              Tekrar Dene
-            </button>
-          </div>
-        </div>
+        <ErrorState
+          message={error}
+          onRetry={() => restaurantId && dispatch(fetchMeals(restaurantId))}
+        />
       );
     }
 
     if (!categories || categories.length === 0) {
       return (
-        <div className='empty-container'>
-          <div className='empty-message'>
-            <h2>Yemek Menüsü Bulunamadı</h2>
-            <p>
-              Bu restoran için henüz yemek menüsü oluşturulmamış veya API'den veri
-              getirirken bir sorun oluştu.
-            </p>
-            <button
-              onClick={() => restaurantId && dispatch(fetchMeals(restaurantId))}
-              disabled={!restaurantId}
-            >
-              Tekrar Dene
-            </button>
-          </div>
-        </div>
+        <EmptyState
+          message="Sipariş listesinde yemek bulunmamaktadır."
+          onRefresh={() => restaurantId && dispatch(fetchMeals(restaurantId))}
+        />
       );
     }
 
     // Normal içerik
     return (
-      <div className='has-order-button'>
+      <div className="has-order-button">
         {categories.map((category) => (
           <CategoryRow
             key={category.id}
@@ -125,13 +109,13 @@ const HomePage = () => {
           <GenericModal
             isOpen={showWarningModal}
             onClose={() => setShowWarningModal(false)}
-            title='Eksik Seçimler'
-            primaryButtonText='Devam Et'
+            title="Eksik Seçimler"
+            primaryButtonText="Devam Et"
             onPrimaryAction={handleConfirmOrder}
-            secondaryButtonText='Seçimlere Dön'
+            secondaryButtonText="Seçimlere Dön"
           >
             <p>Aşağıdaki kategorilerden seçim yapmadınız:</p>
-            <ul className='modal-items-list'>
+            <ul className="modal-items-list">
               {categories
                 .filter((cat) => !selectedItems[cat.id])
                 .map((cat) => cat.title)
@@ -147,8 +131,8 @@ const HomePage = () => {
           <GenericModal
             isOpen={true}
             onClose={closeStatusModal}
-            title='Başarılı!'
-            primaryButtonText='Tamam'
+            title="Başarılı!"
+            primaryButtonText="Tamam"
             onPrimaryAction={closeStatusModal}
           >
             <p>{orderSuccessMessage}</p>
@@ -159,8 +143,8 @@ const HomePage = () => {
           <GenericModal
             isOpen={true}
             onClose={closeStatusModal}
-            title='Hata!'
-            primaryButtonText='Tamam'
+            title="Hata!"
+            primaryButtonText="Tamam"
             onPrimaryAction={closeStatusModal}
             isError={true}
           >
@@ -172,7 +156,7 @@ const HomePage = () => {
         )}
 
         <Button
-          className='order-button'
+          className="order-button"
           onClick={handleOrder}
           disabled={isOrderDisabled || isOrderLoading}
           loading={isOrderLoading}
@@ -181,16 +165,16 @@ const HomePage = () => {
         </Button>
       </div>
     );
-};
+  };
 
-// ----- Render -----
+  // ----- Render -----
 
-return (
-  <>
-    <PageHeader title='Sipariş Ekranı' />
-    {renderBody()}
-  </>
-);
+  return (
+    <>
+      <PageHeader title="Sipariş Ekranı" />
+      {renderBody()}
+    </>
+  );
 };
 
 export default HomePage;

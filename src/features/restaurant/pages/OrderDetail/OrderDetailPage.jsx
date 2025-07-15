@@ -6,6 +6,7 @@ import "./OrderDetailPage.scss";
 import OrderCard from "../../components/OrderCard/OrderCard";
 import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
 import Loading from "@/components/common/Loading/Loading.jsx";
+import ErrorState from "@/components/common/StateMessage/ErrorState";
 import Button from "@/components/common/Button/Button";
 import GenericModal from "@/components/common/GenericModal/GenericModal";
 import {
@@ -74,88 +75,79 @@ const OrderDetailPage = () => {
     setShowStatusModal(false);
   };
 
+  // Redirect away when data yok veya hata
+  useEffect(() => {
+    if (!isDetailsLoading && (!order || detailsError)) {
+      navigate("/orders");
+    }
+  }, [isDetailsLoading, order, detailsError, navigate]);
+
   if (isDetailsLoading) {
     return <Loading text="Sipariş detayları yükleniyor..." />;
   }
 
-  if (detailsError) {
-    return (
-      <div className='error-container'>
-        <DetailPageHeader title='Hata' backPath='/orders' backText='Geri' />
-        <div className='error-message'>
-          <h2>Hata!</h2>
-          <p>{detailsError}</p>
-          <Button
-            onClick={() =>
-              user?.restaurantId &&
-              companyId &&
-              dispatch(
-                fetchOrderDetails({
-                  restaurantId: user.restaurantId,
-                  companyId,
-                })
-              )
-            }
-            disabled={!user?.restaurantId || !companyId || isDetailsLoading}
-          >
-            Tekrar Dene
-          </Button>
-        </div>
-      </div>
-    );
+  // order yoksa (hata da yok) redirect beklenirken kısa süreli spinner göster
+  if (!order && !detailsError) {
+    return null;
   }
 
-  if (!order) {
+  // Error state
+  if (detailsError) {
     return (
-      <div className='order-detail'>
+      <div className="order-detail">
         <DetailPageHeader
-          title='Sipariş Detayı'
-          backPath='/orders'
-          backText='Geri'
+          title="Sipariş Detayı"
+          backPath="/orders"
+          backText="Geri"
         />
-        <div className='empty-message'>
-          <h2>Sipariş Bulunamadı</h2>
-          <p>İstenen sipariş detayı mevcut değil veya yüklenemedi.</p>
-        </div>
+        <ErrorState
+          message={detailsError}
+          onRetry={() =>
+            user?.restaurantId &&
+            companyId &&
+            dispatch(
+              fetchOrderDetails({
+                restaurantId: user.restaurantId,
+                companyId,
+              })
+            )
+          }
+        />
       </div>
     );
   }
 
   return (
-    <div className='order-detail'>
+    <div className="order-detail">
       <DetailPageHeader
-        title='Sipariş Detayı'
-        backPath='/orders'
-        backText='Geri'
+        title="Sipariş Detayı"
+        backPath="/orders"
+        backText="Geri"
       />
 
-      <div className='order-content'>
-        <OrderCard order={order.summary} onClick={() => {}} />
+      <OrderCard order={order.summary} onClick={() => {}} />
 
-        <div className='detail-content'>
-          <h3>Sipariş Detayı</h3>
-          <div className='categories-list'>
-            {order.groupedItems.map((category) => (
-              <div key={category.categoryId} className='category-group'>
-                <h4 className='category-title'>
-                  {category.categoryName}
-                  <span className='category-total'>
-                    {category.totalQuantity} adet
-                  </span>
-                </h4>
-                <div className='items-list'>
-                  {category.items.map((meal) => (
-                    <div key={meal.id} className='detail-item'>
-                      <span className='item-name'>{meal.mealName}</span>
-                      <span className='item-quantity'>
-                        {meal.quantity} adet
-                      </span>
-                    </div>
-                  ))}
-                </div>
+      <div className="detail-content">
+        <h3>Sipariş Detayı</h3>
+        <div className="categories-list">
+          {order.groupedItems.map((category) => (
+            <div key={category.categoryId} className="category-group">
+              <h4 className="category-title">
+                {category.categoryName}
+                <span className="category-total">
+                  {category.totalQuantity} adet
+                </span>
+              </h4>
+              <div className="items-list">
+                {category.items.map((meal) => (
+                  <div key={meal.id} className="detail-item">
+                    <span className="item-name">{meal.mealName}</span>
+                    <span className="item-quantity">{meal.quantity} adet</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -168,18 +160,18 @@ const OrderDetailPage = () => {
           <>
             <span>Siparişi Tamamla</span>
             <svg
-              width='20'
-              height='20'
-              viewBox='0 0 20 20'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d='M16.875 5.625L8.125 14.375L3.75 10'
-                stroke='currentColor'
-                strokeWidth='1.5'
-                strokeLinecap='round'
-                strokeLinejoin='round'
+                d="M16.875 5.625L8.125 14.375L3.75 10"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </>
@@ -187,25 +179,25 @@ const OrderDetailPage = () => {
           <>
             <span>Beklemeye Al</span>
             <svg
-              width='20'
-              height='20'
-              viewBox='0 0 20 20'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d='M10 4.375V10L13.125 13.125'
-                stroke='currentColor'
-                strokeWidth='1.5'
-                strokeLinecap='round'
-                strokeLinejoin='round'
+                d="M10 4.375V10L13.125 13.125"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
-                d='M10 18.125C14.4873 18.125 18.125 14.4873 18.125 10C18.125 5.51269 14.4873 1.875 10 1.875C5.51269 1.875 1.875 5.51269 1.875 10C1.875 14.4873 5.51269 18.125 10 18.125Z'
-                stroke='currentColor'
-                strokeWidth='1.5'
-                strokeLinecap='round'
-                strokeLinejoin='round'
+                d="M10 18.125C14.4873 18.125 18.125 14.4873 18.125 10C18.125 5.51269 14.4873 1.875 10 1.875C5.51269 1.875 1.875 5.51269 1.875 10C1.875 14.4873 5.51269 18.125 10 18.125Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </>
@@ -216,12 +208,12 @@ const OrderDetailPage = () => {
         <GenericModal
           isOpen={showStatusModal}
           onClose={() => setShowStatusModal(false)}
-          title='Sipariş Durumu'
+          title="Sipariş Durumu"
           primaryButtonText={
             order.summary.status === "pending" ? "Tamamla" : "Beklemeye Al"
           }
           onPrimaryAction={handleStatusChange}
-          secondaryButtonText='Vazgeç'
+          secondaryButtonText="Vazgeç"
           primaryButtonClassName={order.summary.status}
           isPrimaryDisabled={isStatusUpdating}
         >
@@ -237,8 +229,8 @@ const OrderDetailPage = () => {
         <GenericModal
           isOpen={showErrorModal}
           onClose={() => setShowErrorModal(false)}
-          title='Güncelleme Başarısız'
-          primaryButtonText='Tamam'
+          title="Güncelleme Başarısız"
+          primaryButtonText="Tamam"
           onPrimaryAction={() => setShowErrorModal(false)}
           isError={true}
         >

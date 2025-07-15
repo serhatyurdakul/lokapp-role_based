@@ -9,6 +9,8 @@ import FilterBar, {
 import SearchBar from "@/components/common/SearchBar/SearchBar";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import Loading from "@/components/common/Loading/Loading.jsx";
+import EmptyState from "@/components/common/StateMessage/EmptyState";
+import ErrorState from "@/components/common/StateMessage/ErrorState";
 import { fetchRestaurantOrders, selectRegionCategories, makeSelectGroupedByRegion } from "../../store/restaurantOrdersSlice";
 import "./OrdersPage.scss";
 
@@ -57,29 +59,25 @@ const Orders = () => {
 
     if (error) {
       return (
-        <div className='error-container'>
-          <div className='error-message'>
-            <h2>Hata!</h2>
-            <p>{error}</p>
-            <button
-              onClick={() =>
-                user?.restaurantId &&
-                dispatch(fetchRestaurantOrders(user.restaurantId))
-              }
-            >
-              Yeniden Dene
-            </button>
-          </div>
-        </div>
+        <ErrorState
+          message={error}
+          onRetry={() =>
+            user?.restaurantId &&
+            dispatch(fetchRestaurantOrders(user.restaurantId))
+          }
+        />
+
       );
     }
 
     if (pendingCount === 0 && completedCount === 0) {
       return (
-        <div className='empty-message'>
-          <h2>Sipariş Bulunamadı</h2>
-          <p>Seçtiğiniz kriterlere uygun bir sipariş bulunmamaktadır.</p>
-        </div>
+        <EmptyState
+          message="Henüz sipariş verilmedi"
+          onRefresh={() =>
+            user?.restaurantId && dispatch(fetchRestaurantOrders(user.restaurantId))
+          }
+        />
       );
     }
 

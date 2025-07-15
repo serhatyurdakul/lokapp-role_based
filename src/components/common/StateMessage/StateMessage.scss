@@ -1,0 +1,40 @@
+@use "../../../styles/variables" as *;
+
+.state-message {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: $spacing-32 $spacing-16;
+
+  &__icon {
+    width: 160px;
+    max-width: 40vw;
+    margin-bottom: $spacing-24;
+    color: var(--text-secondary);
+
+    path {
+      fill: currentColor;
+      stroke: currentColor;
+    }
+  }
+
+  &__message {
+    margin-bottom: $spacing-24;
+    font-size: 1rem;
+    color: var(--text-secondary);
+  }
+
+  &__button {
+    margin-top: $spacing-8;
+  }
+
+  &--error {
+    .state-message__message,
+    .state-message__icon {
+      color: var(--error-color, #e53935);
+    }
+  }
+}

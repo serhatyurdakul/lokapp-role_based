@@ -169,14 +169,10 @@ const menuSlice = createSlice({
         console.log("fetchMeals.fulfilled - Payload:", action.payload);
 
         // Gelen veri null veya boş mu kontrolü yapma
-        if (
-          !action.payload ||
-          !Array.isArray(action.payload) ||
-          action.payload.length === 0
-        ) {
+        if (!action.payload || !Array.isArray(action.payload) || action.payload.length === 0) {
+          // Boş liste: hata değil, empty state
           state.mealCategories = [];
           state.categories = [];
-          state.error = "Yemek verisi bulunamadı.";
           return;
         }
 
