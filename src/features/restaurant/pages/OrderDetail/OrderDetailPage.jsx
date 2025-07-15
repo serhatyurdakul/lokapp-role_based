@@ -6,6 +6,7 @@ import "./OrderDetailPage.scss";
 import OrderCard from "../../components/OrderCard/OrderCard";
 import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
 import Loading from "@/components/common/Loading/Loading.jsx";
+import Button from "@/components/common/Button/Button";
 import GenericModal from "@/components/common/GenericModal/GenericModal";
 import {
   fetchOrderDetails,
@@ -84,7 +85,7 @@ const OrderDetailPage = () => {
         <div className='error-message'>
           <h2>Hata!</h2>
           <p>{detailsError}</p>
-          <button
+          <Button
             onClick={() =>
               user?.restaurantId &&
               companyId &&
@@ -98,7 +99,7 @@ const OrderDetailPage = () => {
             disabled={!user?.restaurantId || !companyId || isDetailsLoading}
           >
             Tekrar Dene
-          </button>
+          </Button>
         </div>
       </div>
     );
