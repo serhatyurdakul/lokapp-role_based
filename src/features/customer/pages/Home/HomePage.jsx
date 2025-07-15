@@ -8,6 +8,7 @@ import {
 import CategoryRow from "../../components/CategoryRow/CategoryRow.jsx";
 import GenericModal from "@/components/common/GenericModal/GenericModal.jsx";
 import Loading from "@/components/common/Loading/Loading.jsx";
+import Button from "@/components/common/Button/Button";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import "./HomePage.scss"; // SCSS importu güncellendi
 
@@ -38,13 +39,12 @@ const HomePage = () => {
     }
   }, [dispatch, restaurantId]);
 
+  // En az bir ürün seçilmediyse sipariş butonunu devre dışı bırak
+  const isOrderDisabled = Object.keys(selectedItems).length === 0;
+
   const handleOrder = () => {
-    // Hiçbir ürün seçilmemişse uyarı ver
-    if (Object.keys(selectedItems).length === 0) {
-      // TODO: Daha şık bir bildirim sistemi eklenebilir (örn: toast)
-      alert("Lütfen sipariş vermek için en az bir ürün seçin.");
-      return;
-    }
+    // Koruma: buton disabled ise fonksiyonu çalıştırma
+    if (isOrderDisabled) return;
 
     const missingCategories = categories
       .filter((cat) => !selectedItems[cat.id])
@@ -171,13 +171,14 @@ const HomePage = () => {
           </GenericModal>
         )}
 
-        <button
+        <Button
           className='order-button'
           onClick={handleOrder}
-          disabled={isOrderLoading}
+          disabled={isOrderDisabled || isOrderLoading}
+          loading={isOrderLoading}
         >
           Siparişi Onayla
-        </button>
+        </Button>
       </div>
     );
 };
