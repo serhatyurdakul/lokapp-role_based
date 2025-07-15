@@ -13,6 +13,7 @@
   }
   
   .orders-layout {
+    align-content: flex-start;
     display: grid;
     grid-template-columns: 1fr;
     gap: $spacing-32 $spacing-16;
