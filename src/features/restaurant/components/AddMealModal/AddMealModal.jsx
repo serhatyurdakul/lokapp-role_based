@@ -56,7 +56,7 @@ const AddMealModal = ({
       onSecondaryAction={onClose}
       isLoading={isLoadingCategories || isLoadingMealOptions || isSubmitting}
     >
-      <form className='menu-form'>
+      <form className='menu-form' autoComplete='off'>
         <ErrorMessage message={mealExistsError} />
         <FormSelect
           label='Kategori'
@@ -85,6 +85,8 @@ const AddMealModal = ({
             onChange={handleMealOptionSearchChange}
             placeholder='Yemek adını yazarak arayın'
             autoComplete='off'
+            autoCorrect='off'
+            spellCheck='false'
             required
             isClearable={true}
             onClear={handleClearMealOptionSearch}
@@ -126,6 +128,7 @@ const AddMealModal = ({
           onChange={(e) => setNewStock(e.target.value)}
           placeholder='Stok miktarını girin'
           min='0'
+          autoComplete='off'
           required
           isClearable={true}
           onClear={() => setNewStock("")}
