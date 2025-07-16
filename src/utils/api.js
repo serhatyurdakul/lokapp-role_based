@@ -44,14 +44,38 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
+    // 401 → oturum geçersiz
     if (error?.response?.status === 401) {
       triggerGlobalLogout();
     }
-    return Promise.reject(error);
+
+    // Ağ yok / CORS
+    if (error.message === "Network Error") {
+      return Promise.reject(
+        new Error("Bağlantı hatası. Lütfen internetinizi kontrol edin.")
+      );
+    }
+
+    // Timeout
+    if (error.code === "ECONNABORTED") {
+      return Promise.reject(
+        new Error("Sunucu yanıt vermedi. Lütfen tekrar deneyin.")
+      );
+    }
+
+    // Backend özel mesajı varsa onu koru
+    if (error.response && error.response.data?.message) {
+      return Promise.reject(error);
+    }
+
+    // Bilinmeyen hata
+    return Promise.reject(
+      new Error("Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.")
+    );
   }
 );
 
-
+// API yanıtlarını işleyen yardımcı fonksiyon
 const handleApiResponse = (response, dataKey = null) => {
   if (response && response.data) {
     const { data } = response;
@@ -465,7 +489,7 @@ export const fetchMealCategories = async () => {
     return [];
   } catch (error) {
     console.error("fetchMealCategories API hatası:", error.message || error);
-    return [];
+    throw new Error(error.message || "Kategoriler yüklenemedi");
   }
 };
 
@@ -524,7 +548,7 @@ export const fetchRestaurantMenu = async (restaurantId) => {
       `fetchRestaurantMenu API hatası (restaurantId: ${restaurantId}):`,
       error.message || error
     );
-    return [];
+    throw new Error(error.message || "Menü verileri yüklenemedi");
   }
 };
 
@@ -657,10 +681,14 @@ export const getRestaurantsOrderList = async (restaurantId, tabId = 0) => {
       "Restoran sipariş listesi API hatası:",
       error.response?.data || error.message
     );
-    // Hata durumunda, hatayı fırlatarak thunk'ın reject case'ine düşmesini sağla
-    throw new Error(
-      error.response?.data?.message || "Sipariş listesi alınamadı."
-    );
+
+    // Axios ağ hatası (response yok) → interceptor zaten kullanıcı dostu mesaj üretti
+    if (!error.response) {
+      throw error; // Mesajı olduğu gibi ilet
+    }
+
+    // Backend taraflı hata → varsa API mesajını koru, yoksa varsayılan
+    throw new Error(error.response.data?.message || "Sipariş listesi alınamadı.");
   }
 };
 
@@ -675,9 +703,11 @@ export const getRestaurantOrderDetails = async (restaurantId, companyId) => {
       "Restoran sipariş detayı API hatası:",
       error.response?.data || error.message
     );
-    throw new Error(
-      error.response?.data?.message || "Sipariş detayları alınamadı."
-    );
+
+    if (!error.response) {
+      throw error;
+    }
+    throw new Error(error.response.data?.message || "Sipariş detayları alınamadı.");
   }
 };
 

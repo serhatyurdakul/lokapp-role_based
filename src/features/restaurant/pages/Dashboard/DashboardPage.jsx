@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import Loading from "@/components/common/Loading/Loading.jsx";
+import NoticeBanner from "@/components/common/NoticeBanner/NoticeBanner";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
 import { fetchRestaurantMenuData } from "../../store/restaurantMenuSlice";
 import { getStockStatus } from "../../utils/stockUtils";
@@ -14,11 +15,16 @@ const DashboardPage = () => {
 
   // Redux state'lerini alma
   const { user } = useSelector((state) => state.auth);
-  const { menuData, isLoading } = useSelector((state) => state.restaurantMenu);
+  const { menuData, isLoading, error } = useSelector((state) => state.restaurantMenu);
   const restaurantId = user?.restaurantId;
 
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [showStockModal, setShowStockModal] = useState(false);
+  const [showBanner, setShowBanner] = useState(false);
+
+  useEffect(() => {
+    setShowBanner(!!error);
+  }, [error]);
 
   // mock veriler (Daha sonra api den gelecek)
   const [dailyStats] = useState({
@@ -82,6 +88,9 @@ const DashboardPage = () => {
   return (
     <div className='dashboard-content'>
       <PageHeader title='Özet' />
+      {showBanner && error && (
+        <NoticeBanner message={error} onClose={() => setShowBanner(false)} />
+      )}
 
       <div className='critical-info'>
         <div className='stat-card primary'>

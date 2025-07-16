@@ -90,3 +90,10 @@
     font-size: 14px;
   }
 }
+
+// Disable state for out-of-stock items (no class name changes)
+.product-card[disabled] {
+  opacity: 0.5;
+  pointer-events: none; // Prevent hover on Safari
+  cursor: not-allowed;
+}

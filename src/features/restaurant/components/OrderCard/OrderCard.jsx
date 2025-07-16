@@ -4,7 +4,7 @@ const OrderCard = ({ order, onClick }) => {
   return (
     <div
       className={`order-card ${order.status}`}
-      onClick={() => onClick(order.id)}
+      onClick={() => onClick(order.companyId)}
       role='button'
       tabIndex={0}
     >

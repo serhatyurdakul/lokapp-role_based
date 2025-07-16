@@ -75,12 +75,12 @@ const OrderDetailPage = () => {
     setShowStatusModal(false);
   };
 
-  // Redirect away when data yok veya hata
+  // Hata oluştuğunda liste sayfasına geri dön
   useEffect(() => {
-    if (!isDetailsLoading && (!order || detailsError)) {
+    if (detailsError) {
       navigate("/orders");
     }
-  }, [isDetailsLoading, order, detailsError, navigate]);
+  }, [detailsError, navigate]);
 
   if (isDetailsLoading) {
     return <Loading text="Sipariş detayları yükleniyor..." />;

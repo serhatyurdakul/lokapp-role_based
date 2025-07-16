@@ -2,11 +2,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectItem } from "@/features/customer/store/customerMenuSlice";
 import "./ProductCard.scss";
 
-const ProductCard = ({ name, price, image, categoryId, itemId }) => {
+const ProductCard = ({
+  name,
+  price,
+  image,
+  categoryId,
+  itemId,
+  remainingQuantity = 0,
+}) => {
   const dispatch = useDispatch();
   const isSelected = useSelector(
     (state) => state.customerMenu.selectedItems[categoryId] === itemId
   );
+  const isOutOfStock = remainingQuantity === 0;
 
   // Ürün fiyatını formatlayarak gösteren yardımcı fonksiyon
   const formatPrice = (price) => {
@@ -21,6 +29,8 @@ const ProductCard = ({ name, price, image, categoryId, itemId }) => {
   return (
     <button
       className={`product-card ${isSelected ? "product-card--selected" : ""}`}
+      disabled={isOutOfStock}
+      aria-disabled={isOutOfStock}
       onClick={() => dispatch(selectItem({ categoryId, itemId }))}
     >
       <img

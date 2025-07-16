@@ -36,6 +36,7 @@ const CategoryRow = ({ categoryId, title, items }) => {
               name={item.name}
               price={item.price}
               image={item.image}
+              remainingQuantity={item.remainingQuantity}
               categoryId={categoryId}
               itemId={item.id}
             />

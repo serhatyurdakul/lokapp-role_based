@@ -1,0 +1,25 @@
+.notice-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--error-color, #e74c3c);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  margin-bottom: 12px;
+}
+
+.notice-banner-message {
+  flex: 1;
+}
+
+.notice-banner-close {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+}

@@ -117,6 +117,10 @@ const processMealCategories = (mealCategories) => {
         price: parseFloat(meal.price) || 0,
         image: meal.photoUrl, // Direct usage - no transformation needed
         description: meal.description || "",
+        remainingQuantity:
+          meal.remainingQuantity !== undefined
+            ? parseInt(meal.remainingQuantity, 10) || 0
+            : 0,
       }));
 
       console.log(
