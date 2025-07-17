@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { MSG_NETWORK_ERROR } from "@/constants/messages";
 import { deleteMealFromRestaurant } from "@/utils/api";
 
 const useDeleteMeal = (
@@ -60,7 +61,7 @@ const useDeleteMeal = (
       }
     } catch (error) {
       console.error("Yemek silme API çağrısı sırasında hata:", error);
-      setError("Sunucuyla iletişim kurulamadı. Lütfen tekrar deneyin.");
+      setError(MSG_NETWORK_ERROR);
     } finally {
       setIsDeleting(false);
     }

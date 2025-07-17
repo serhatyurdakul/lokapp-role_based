@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { MSG_NETWORK_ERROR, MSG_UNKNOWN_ERROR } from "@/constants/messages";
 import { useDispatch } from "react-redux";
 import { fetchMealOptionsByCategory, addRestaurantMeal } from "@/utils/api";
 import { setLastAddedCategory } from "../store/restaurantMenuSlice";
@@ -194,7 +195,7 @@ const useAddMeal = (
         } else {
           console.error(
             "Yemek ekleme başarısız:",
-            response?.message || "Bilinmeyen bir hata oluştu."
+            response?.message || MSG_UNKNOWN_ERROR
           );
           setMealExistsError(
             response?.message ||
@@ -208,7 +209,7 @@ const useAddMeal = (
         error
       );
       setMealExistsError(
-        "Sunucuyla iletişim kurulamadı. Lütfen tekrar deneyin."
+        MSG_NETWORK_ERROR
       );
     } finally {
       setIsSubmitting(false);

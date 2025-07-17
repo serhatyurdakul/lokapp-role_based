@@ -189,6 +189,9 @@ const menuSlice = createSlice({
       .addCase(fetchMeals.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+        // Kategorileri temizle – hata durumunda bayat veriyi saklama
+        state.categories = [];
+        state.mealCategories = [];
         console.error("Yemekler yüklenemedi:", action.payload);
       })
       // Sipariş oluşturma durumu

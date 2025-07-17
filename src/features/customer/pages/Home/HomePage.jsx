@@ -9,6 +9,7 @@ import CategoryRow from "../../components/CategoryRow/CategoryRow.jsx";
 import GenericModal from "@/components/common/GenericModal/GenericModal.jsx";
 import Loading from "@/components/common/Loading/Loading.jsx";
 import EmptyState from "@/components/common/StateMessage/EmptyState";
+import { MSG_NETWORK_ERROR, MSG_TIMEOUT_ERROR, MSG_UNKNOWN_ERROR } from "@/constants/messages";
 import ErrorState from "@/components/common/StateMessage/ErrorState";
 import Button from "@/components/common/Button/Button";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
@@ -74,8 +75,9 @@ const HomePage = () => {
       return <Loading text="Yemekler yükleniyor..." />;
     }
 
-    // Sadece gerçek hatalarda ErrorState göster
-    if (error && categories.length > 0) {
+    // Hata varsa, ama bu hatanın "veri yok" durumu mu yoksa ağ/sunucu hatası mı olduğuna bak.
+    const genericErrors = [MSG_NETWORK_ERROR, MSG_TIMEOUT_ERROR, MSG_UNKNOWN_ERROR];
+    if (error && (genericErrors.includes(error) || (categories && categories.length > 0))) {
       return (
         <ErrorState
           message={error}

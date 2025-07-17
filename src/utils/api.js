@@ -1,4 +1,5 @@
 import axios from "axios";
+import { MSG_NETWORK_ERROR, MSG_TIMEOUT_ERROR, MSG_UNKNOWN_ERROR } from "@/constants/messages";
 
 // API URL
 const { VITE_API_BASE_URL } = import.meta.env;
@@ -52,14 +53,14 @@ api.interceptors.response.use(
     // Ağ yok / CORS
     if (error.message === "Network Error") {
       return Promise.reject(
-        new Error("Bağlantı hatası. Lütfen internetinizi kontrol edin.")
+        new Error(MSG_NETWORK_ERROR)
       );
     }
 
     // Timeout
     if (error.code === "ECONNABORTED") {
       return Promise.reject(
-        new Error("Sunucu yanıt vermedi. Lütfen tekrar deneyin.")
+        new Error(MSG_TIMEOUT_ERROR)
       );
     }
 
@@ -70,7 +71,7 @@ api.interceptors.response.use(
 
     // Bilinmeyen hata
     return Promise.reject(
-      new Error("Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.")
+      new Error(MSG_UNKNOWN_ERROR)
     );
   }
 );

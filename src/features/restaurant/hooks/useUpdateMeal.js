@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { MSG_NETWORK_ERROR } from "@/constants/messages";
 import { updateMealForRestaurant } from "@/utils/api";
 
 const useUpdateMeal = (
@@ -82,7 +83,7 @@ const useUpdateMeal = (
       }
     } catch (error) {
       console.error("Yemek güncelleme API çağrısı sırasında hata:", error);
-      setError("Sunucuyla iletişim kurulamadı. Lütfen tekrar deneyin.");
+      setError(MSG_NETWORK_ERROR);
     } finally {
       setIsSubmitting(false);
     }
