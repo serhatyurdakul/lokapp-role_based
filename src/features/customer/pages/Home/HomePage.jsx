@@ -71,7 +71,8 @@ const HomePage = () => {
 
   // Yardımcı render fonksiyonu: tüm sayfa içeriğini duruma göre döndürür
   const renderBody = () => {
-    if (isLoading) {
+    // Tam ekran spinner yalnızca veri henüz hiç gelmemişse gösterilir
+    if (isLoading && (!categories || categories.length === 0)) {
       return <Loading text="Yemekler yükleniyor..." />;
     }
 

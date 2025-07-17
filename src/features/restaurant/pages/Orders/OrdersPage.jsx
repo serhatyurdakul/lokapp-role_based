@@ -53,7 +53,8 @@ const Orders = () => {
 
   // Tek bir fonksiyonda içerik durumlarını yönet
   const renderBody = () => {
-    if (isLoading) {
+    // Tam ekran spinner yalnızca liste henüz boşken gösterilir
+    if (isLoading && pendingCount === 0 && completedCount === 0) {
       return <Loading text="Siparişler yükleniyor..." />;
     }
 

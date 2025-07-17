@@ -110,9 +110,10 @@ const DashboardPage = () => {
           </button>
         </div>
         <div className='alert-cards'>
-          {isLoading && <Loading text="Stok durumu yükleniyor..." />}
-          {!isLoading &&
-            lowStockMeals.length > 0 &&
+          {(isLoading && lowStockMeals.length === 0) && (
+            <Loading text="Stok durumu yükleniyor..." />
+          )}
+          {lowStockMeals.length > 0 &&
             lowStockMeals.slice(0, 5).map((meal) => (
               <div
                 key={meal.id}

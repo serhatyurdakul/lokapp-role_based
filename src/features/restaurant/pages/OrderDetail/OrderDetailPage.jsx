@@ -82,7 +82,8 @@ const OrderDetailPage = () => {
     }
   }, [detailsError, navigate]);
 
-  if (isDetailsLoading) {
+  // Tam ekran spinner yalnızca sipariş verisi henüz gelmemişse gösterilir
+  if (isDetailsLoading && !order) {
     return <Loading text="Sipariş detayları yükleniyor..." />;
   }
 

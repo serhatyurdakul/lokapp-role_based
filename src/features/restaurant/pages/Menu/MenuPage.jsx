@@ -247,7 +247,8 @@ const MenuPage = () => {
 
   // Yardımcı render fonksiyonu: içerik durumlarını yönetir
   const renderBody = () => {
-    if (isLoading) {
+    // Tam ekran spinner yalnızca menü verisi henüz gelmemişse gösterilir
+    if (isLoading && menuMeals.length === 0) {
       return <Loading text="Menü yükleniyor..." />;
     }
 
