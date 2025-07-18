@@ -4,6 +4,7 @@ import {
   getRestaurantOrderDetails,
   setOrderStatus,
 } from "@/utils/api";
+import { groupOrderItemsByName } from "../utils/groupOrderItemsByName";
 
 // API'den gelen sipariş verisini ön yüzün kullanacağı formata dönüştüren yardımcı fonksiyon
 const mapOrderData = (apiOrderData) => {
@@ -55,47 +56,9 @@ const mapOrderDetailsData = (apiDetailsData) => {
   // API'den gelen ham verileri alıyoruz: sipariş özeti ve sipariş kalemleri listesi.
   const { summary, items } = apiDetailsData.orderDetails;
 
-  // Sipariş kalemlerini (items) önce kategoriye, sonra yemeğe göre gruplayıp adetleri toplayalım.
-  const groupedItems = Object.values(
-    (items || []).reduce((acc, item) => {
-      // Her bir sipariş kaleminin kategorisini ve yemek adını alıyoruz.
-      const { categoryId, categoryName, mealId, mealName, quantity } = item;
-
-      // Eğer bu kategori daha önce oluşturulmamışsa, accumulator'de (acc) oluşturalım.
-      if (!acc[categoryId]) {
-        acc[categoryId] = {
-          categoryId,
-          categoryName,
-          items: {}, // Yemekleri de kendi içinde gruplamak için bir obje.
-          totalQuantity: 0,
-        };
-      }
-
-      // Eğer o kategoride bu yemek daha önce eklenmemişse, onu da oluşturalım.
-      if (!acc[categoryId].items[mealId]) {
-        acc[categoryId].items[mealId] = {
-          // React'in 'key' prop'u için stabil bir ID'ye ihtiyacımız var.
-          // Gruplanmış bir satırın temsili ID'si olarak mealId'yi kullanabiliriz.
-          id: mealId,
-          mealName,
-          quantity: 0,
-        };
-      }
-
-      // API'den gelen adet string olduğu için, sayıya çevirip ekliyoruz.
-      const itemQuantity = parseInt(quantity, 10) || 0;
-
-      // Yemeğin ve kategorinin toplam adetini güncelleyelim.
-      acc[categoryId].items[mealId].quantity += itemQuantity;
-      acc[categoryId].totalQuantity += itemQuantity;
-
-      return acc;
-    }, {})
-  ).map((category) => ({
-    // Son olarak, her bir kategori içindeki yemekler objesini de bir diziye çevirelim.
-    ...category,
-    items: Object.values(category.items),
-  }));
+  // Sipariş kalemlerini mealName'e (normalize edilmiş) göre grupla – geçici çözüm
+  // TODO[backend_id_fix]: Backend sabit baseMealId döndürdüğünde eski mealId tabanlı gruplayıcıya geri dön.
+  const groupedItems = groupOrderItemsByName(items);
 
   return {
     summary: {

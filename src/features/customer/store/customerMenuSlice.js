@@ -6,7 +6,7 @@ import {
 
 // Thunk - restoran yemeklerini api'den getirme
 export const fetchMeals = createAsyncThunk(
-  "menu/fetchMeals",
+  "customerMenu/fetchMeals",
   async (restaurantId, { rejectWithValue }) => {
     try {
       const mealCategories = await fetchRestaurantMeals(restaurantId);
@@ -18,7 +18,7 @@ export const fetchMeals = createAsyncThunk(
 );
 
 export const createOrder = createAsyncThunk(
-  "menu/createOrder",
+  "customerMenu/createOrder",
   async (_, { getState, rejectWithValue }) => {
     const state = getState();
     const { user } = state.auth;
@@ -137,7 +137,7 @@ const processMealCategories = (mealCategories) => {
 };
 
 const menuSlice = createSlice({
-  name: "menu",
+  name: "customerMenu",
   initialState,
   reducers: {
     // Yemek seçme/güncelleme
@@ -173,7 +173,11 @@ const menuSlice = createSlice({
         console.log("fetchMeals.fulfilled - Payload:", action.payload);
 
         // Gelen veri null veya boş mu kontrolü yapma
-        if (!action.payload || !Array.isArray(action.payload) || action.payload.length === 0) {
+        if (
+          !action.payload ||
+          !Array.isArray(action.payload) ||
+          action.payload.length === 0
+        ) {
           // Boş liste: hata değil, empty state
           state.mealCategories = [];
           state.categories = [];

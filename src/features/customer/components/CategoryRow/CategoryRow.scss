@@ -26,17 +26,13 @@
 
   &__items {
     display: flex;
-    gap: $spacing-4;
+    gap: $spacing-8;
     overflow-x: auto;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
 
     &::-webkit-scrollbar {
       display: none;
-    }
-
-    @include respond-to("medium") {
-      gap: $spacing-8;
     }
   }
 
