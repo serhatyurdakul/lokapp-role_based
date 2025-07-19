@@ -1,5 +1,8 @@
+import { useState } from "react";
 import "./FormInput.scss";
 import { ReactComponent as CloseIcon } from "@/assets/icons/close.svg";
+import { ReactComponent as EyeIcon } from "@/assets/icons/eye.svg";
+import { ReactComponent as EyeOffIcon } from "@/assets/icons/eye-off.svg";
 
 const FormInput = ({
   label,
@@ -16,6 +19,10 @@ const FormInput = ({
   isClearable = false,
   onClear,
 }) => {
+  const isPasswordField = type === "password";
+  const [showPassword, setShowPassword] = useState(false);
+  const inputType = isPasswordField ? (showPassword ? "text" : "password") : type;
+
   const handleClear = (e) => {
     e.stopPropagation();
     if (onClear) {
@@ -28,7 +35,7 @@ const FormInput = ({
       <label htmlFor={id}>{label}</label>
       <div className="input-wrapper">
       <input
-        type={type}
+        type={inputType}
         id={id}
         name={name}
         value={value}
@@ -39,7 +46,18 @@ const FormInput = ({
         max={type === "number" ? max : undefined}
         className={`form-input ${error ? "error" : ""}`.trim()}
       />
-        {isClearable && value && (
+        {isPasswordField && (
+          <button
+            type="button"
+            className="toggle-button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            aria-label={showPassword ? "Şifreyi gizle" : "Şifreyi göster"}
+          >
+            {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+          </button>
+        )}
+
+        {!isPasswordField && isClearable && value && (
           <button type="button" className="clear-button" onClick={handleClear} aria-label="İçeriği temizle">
             <CloseIcon />
           </button>

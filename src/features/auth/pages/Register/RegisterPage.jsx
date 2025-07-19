@@ -397,8 +397,6 @@ const UserRegistrationForm = () => {
               onChange={handleChange}
               required
               error={inputErrors.password}
-              isClearable={true}
-              onClear={() => setFormData((prev) => ({ ...prev, password: "" }))}
             />
 
             <FormInput
@@ -410,10 +408,6 @@ const UserRegistrationForm = () => {
               onChange={handleChange}
               required
               error={inputErrors.confirmPassword}
-              isClearable={true}
-              onClear={() =>
-                setFormData((prev) => ({ ...prev, confirmPassword: "" }))
-              }
             />
           </>
         )}
@@ -489,8 +483,6 @@ const UserRegistrationForm = () => {
               onChange={handleChange}
               required
               error={inputErrors.password}
-              isClearable={true}
-              onClear={() => setFormData((prev) => ({ ...prev, password: "" }))}
             />
 
             <FormInput
@@ -502,10 +494,6 @@ const UserRegistrationForm = () => {
               onChange={handleChange}
               required
               error={inputErrors.confirmPassword}
-              isClearable={true}
-              onClear={() =>
-                setFormData((prev) => ({ ...prev, confirmPassword: "" }))
-              }
             />
           </>
         )}
