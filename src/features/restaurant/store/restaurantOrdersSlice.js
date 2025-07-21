@@ -160,7 +160,7 @@ const restaurantOrdersSlice = createSlice({
       .addCase(fetchRestaurantOrders.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-        state.orders = [];
+        // Önceki başarılı sipariş listesi korunur; liste boşaltılmaz.
       })
       // Order Details Reducers
       .addCase(fetchOrderDetails.pending, (state) => {

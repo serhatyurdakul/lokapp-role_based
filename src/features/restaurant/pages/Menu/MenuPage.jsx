@@ -7,7 +7,7 @@ import FilterBar, {
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import Loading from "@/components/common/Loading/Loading.jsx";
 import EmptyState from "@/components/common/StateMessage/EmptyState";
-import ErrorState from "@/components/common/StateMessage/ErrorState";
+import NoticeBanner from "@/components/common/NoticeBanner/NoticeBanner";
 import { ReactComponent as AddIcon } from "@/assets/icons/add.svg";
 import { ReactComponent as MoreIcon } from "@/assets/icons/more.svg";
 import { ReactComponent as EditIcon } from "@/assets/icons/edit.svg";
@@ -110,6 +110,8 @@ const MenuPage = () => {
 
   // Dropdown state
   const [openDropdownId, setOpenDropdownId] = useState(null);
+  // Banner visibility
+  const [showBanner, setShowBanner] = useState(true);
 
   useEffect(() => {
     // Kategorileri çek
@@ -122,6 +124,10 @@ const MenuPage = () => {
       dispatch(fetchRestaurantMenuData(restaurantId));
     }
   }, [dispatch, restaurantId]);
+
+  useEffect(() => {
+    setShowBanner(Boolean(error));
+  }, [error]);
 
   // Outside click handler
   useEffect(() => {
@@ -252,15 +258,6 @@ const MenuPage = () => {
       return <Loading text="Menü yükleniyor..." />;
     }
 
-    if (error) {
-      return (
-        <ErrorState
-          message={error}
-          onRetry={() => restaurantId && loadRestaurantMenu()}
-        />
-      );
-    }
-
     // Hiç yemek yok (menü tamamen boş)
     if (menuMeals.length === 0) {
       return <EmptyState message="Henüz yemek eklemediniz" />;
@@ -379,6 +376,14 @@ const MenuPage = () => {
         selectedValue={selectedCategory}
         onChange={handleCategoryChange}
       />
+      {showBanner && error && (
+        <NoticeBanner
+          message={error}
+          actionText="Yenile"
+          onAction={loadRestaurantMenu}
+          onClose={() => setShowBanner(false)}
+        />
+      )}
       {renderBody()}
 
       <AddMealModal

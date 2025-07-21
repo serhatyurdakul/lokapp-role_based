@@ -89,7 +89,12 @@ const DashboardPage = () => {
     <div className='dashboard-content'>
       <PageHeader title='Özet' />
       {showBanner && error && (
-        <NoticeBanner message={error} onClose={() => setShowBanner(false)} />
+        <NoticeBanner
+          message={error}
+          actionText="Yenile"
+          onAction={loadRestaurantMenu}
+          onClose={() => setShowBanner(false)}
+        />
       )}
 
       <div className='critical-info'>

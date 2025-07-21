@@ -14,6 +14,26 @@
   flex: 1;
 }
 
+.notice-banner-action {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+  padding: 4px 8px;
+  line-height: 1;
+  border-radius: 4px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
 .notice-banner-close {
   background: transparent;
   border: none;
@@ -21,5 +41,5 @@
   font-size: 1.25rem;
   cursor: pointer;
   line-height: 1;
-  padding: 0 4px;
+  padding: 4px 4px;
 }

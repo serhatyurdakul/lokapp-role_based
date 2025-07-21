@@ -9,13 +9,15 @@ import CategoryRow from "../../components/CategoryRow/CategoryRow.jsx";
 import GenericModal from "@/components/common/GenericModal/GenericModal.jsx";
 import Loading from "@/components/common/Loading/Loading.jsx";
 import EmptyState from "@/components/common/StateMessage/EmptyState";
-import { MSG_NETWORK_ERROR, MSG_TIMEOUT_ERROR, MSG_UNKNOWN_ERROR } from "@/constants/messages";
-import ErrorState from "@/components/common/StateMessage/ErrorState";
+
+import NoticeBanner from "@/components/common/NoticeBanner/NoticeBanner";
 import Button from "@/components/common/Button/Button";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import "./HomePage.scss"; // SCSS importu güncellendi
 
 const HomePage = () => {
+  // Banner visibility state
+  const [showBanner, setShowBanner] = useState(true);
   const dispatch = useDispatch();
   const {
     categories,
@@ -41,6 +43,11 @@ const HomePage = () => {
       dispatch(fetchMeals(restaurantId));
     }
   }, [dispatch, restaurantId]);
+
+  // Update banner visibility when error changes
+  useEffect(() => {
+    setShowBanner(Boolean(error));
+  }, [error]);
 
   // En az bir ürün seçilmediyse sipariş butonunu devre dışı bırak
   const isOrderDisabled = Object.keys(selectedItems).length === 0;
@@ -77,15 +84,7 @@ const HomePage = () => {
     }
 
     // Hata varsa, ama bu hatanın "veri yok" durumu mu yoksa ağ/sunucu hatası mı olduğuna bak.
-    const genericErrors = [MSG_NETWORK_ERROR, MSG_TIMEOUT_ERROR, MSG_UNKNOWN_ERROR];
-    if (error && (genericErrors.includes(error) || (categories && categories.length > 0))) {
-      return (
-        <ErrorState
-          message={error}
-          onRetry={() => restaurantId && dispatch(fetchMeals(restaurantId))}
-        />
-      );
-    }
+    
 
     if (!categories || categories.length === 0) {
       return (
@@ -174,6 +173,14 @@ const HomePage = () => {
 
   return (
     <>
+      {showBanner && error && (
+        <NoticeBanner
+          message={error}
+          actionText="Yenile"
+          onAction={() => restaurantId && dispatch(fetchMeals(restaurantId))}
+          onClose={() => setShowBanner(false)}
+        />
+      )}
       <PageHeader title="Sipariş Ekranı" />
       {renderBody()}
     </>

@@ -10,7 +10,7 @@ import SearchBar from "@/components/common/SearchBar/SearchBar";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import Loading from "@/components/common/Loading/Loading.jsx";
 import EmptyState from "@/components/common/StateMessage/EmptyState";
-import ErrorState from "@/components/common/StateMessage/ErrorState";
+import NoticeBanner from "@/components/common/NoticeBanner/NoticeBanner";
 import { fetchRestaurantOrders, selectRegionCategories, makeSelectGroupedByRegion } from "../../store/restaurantOrdersSlice";
 import "./OrdersPage.scss";
 
@@ -33,6 +33,13 @@ const Orders = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedValue, setSelectedValue] = useState(ALL_FILTER);
+  // Banner visibility
+  const [showBanner, setShowBanner] = useState(true);
+
+  // Show banner whenever there is an error
+  useEffect(() => {
+    setShowBanner(Boolean(error));
+  }, [error]);
 
   // Memoized selector instance for grouped lists
   const selectGrouped = useMemo(makeSelectGroupedByRegion, []);
@@ -58,18 +65,7 @@ const Orders = () => {
       return <Loading text="Siparişler yükleniyor..." />;
     }
 
-    if (error) {
-      return (
-        <ErrorState
-          message={error}
-          onRetry={() =>
-            user?.restaurantId &&
-            dispatch(fetchRestaurantOrders(user.restaurantId))
-          }
-        />
-
-      );
-    }
+    
 
     if (pendingCount === 0 && completedCount === 0) {
       return (
@@ -146,6 +142,17 @@ const Orders = () => {
         onChange={(e) => setSearchQuery(e.target.value)}
         placeholder='Firma Ara...'
       />
+
+      {showBanner && error && (
+        <NoticeBanner
+          message={error}
+          actionText="Yenile"
+          onAction={() =>
+            user?.restaurantId && dispatch(fetchRestaurantOrders(user.restaurantId))
+          }
+          onClose={() => setShowBanner(false)}
+        />
+      )}
 
       {renderBody()}
     </div>
