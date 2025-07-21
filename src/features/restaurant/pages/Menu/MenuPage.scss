@@ -41,7 +41,7 @@
 
 .menupage-food-card {
   background-color: var(--background-primary);
-  border-radius: $border-radius;
+  border-radius: $border-radius-medium;
   overflow: visible;
   transition: $transition;
 
@@ -126,7 +126,7 @@
   .menupage-category-section {
     background-color: var(--background-secondary);
     border: 1px solid var(--border-color);
-    border-radius: $border-radius;
+    border-radius: $border-radius-medium;
     padding: $spacing-12;
 
     .menupage-category-title {

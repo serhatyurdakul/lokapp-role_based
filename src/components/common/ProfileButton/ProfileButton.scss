@@ -8,9 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
-
+  transition: $transition;
   position: absolute;
   right: $spacing-16;
   top: 50%;

@@ -57,7 +57,7 @@
     grid-column: 1 / -1;
     background-color: var(--background-secondary);
     border: 1px solid var(--border-color);
-    border-radius: $border-radius;
+    border-radius: $border-radius-medium;
     padding: $spacing-12;
   
     .region-title {
