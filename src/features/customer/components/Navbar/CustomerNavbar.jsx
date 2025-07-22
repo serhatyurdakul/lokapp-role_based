@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 const CustomerNavbar = () => {
   const { user } = useSelector((state) => state.auth);
 
-  const userInitial = user?.name?.[0]?.toUpperCase() || "M";
+  const userInitial = user?.name ? user.name.trim().charAt(0).toLocaleUpperCase("tr-TR") : "";
 
   const links = [
     { to: "/", label: "Sipariş", end: true },

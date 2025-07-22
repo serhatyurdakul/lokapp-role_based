@@ -1,17 +1,16 @@
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/features/auth/store/authSlice";
 import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
+import { ReactComponent as LogoutIcon } from "@/assets/icons/logout.svg";
+import { ReactComponent as ChevronRightIcon } from "@/assets/icons/chevron-right.svg";
 import "./ProfilePage.scss"; // SCSS importu güncellendi
 
 const ProfilePage = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/login");
   };
 
   // Örnek yemek geçmişi verisi
@@ -53,7 +52,7 @@ const ProfilePage = () => {
         {/* Profil başlığı */}
         <div className='profile-header'>
           <div className='profile-avatar'>
-            <span>{user?.name?.[0]?.toUpperCase()}</span>
+            <span>{user?.name ? user.name.trim().charAt(0).toLocaleUpperCase("tr-TR") : ""}</span>
           </div>
           <h2>
             {user?.name} {user?.surname}
@@ -145,27 +144,11 @@ const ProfilePage = () => {
           <div className='settings-list'>
             <button className='settings-item'>
               <span>Profili Düzenle</span>
-              <svg width='20' height='20' viewBox='0 0 20 20' fill='none'>
-                <path
-                  d='M7.5 15L12.5 10L7.5 5'
-                  stroke='currentColor'
-                  strokeWidth='1.5'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-              </svg>
+              <ChevronRightIcon width={20} height={20} className='icon' />
             </button>
             <button className='settings-item'>
               <span>Bildirim Tercihleri</span>
-              <svg width='20' height='20' viewBox='0 0 20 20' fill='none'>
-                <path
-                  d='M7.5 15L12.5 10L7.5 5'
-                  stroke='currentColor'
-                  strokeWidth='1.5'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                />
-              </svg>
+              <ChevronRightIcon width={20} height={20} className='icon' />
             </button>
           </div>
         </div>
@@ -176,29 +159,7 @@ const ProfilePage = () => {
           onClick={handleLogout}
           aria-label='Çıkış Yap'
         >
-          <svg width='20' height='20' viewBox='0 0 24 24' fill='none'>
-            <path
-              d='M8 20H5C4.46957 20 3.96086 19.7893 3.58579 19.4142C3.21071 19.0391 3 18.5304 3 18V6C3 5.46957 3.21071 4.96086 3.58579 4.58579C3.96086 4.21071 4.46957 4 5 4H8'
-              stroke='currentColor'
-              strokeWidth='1.5'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-            />
-            <path
-              d='M16 16L20 12L16 8'
-              stroke='currentColor'
-              strokeWidth='1.5'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-            />
-            <path
-              d='M20 12H8'
-              stroke='currentColor'
-              strokeWidth='1.5'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-            />
-          </svg>
+          <LogoutIcon width={20} height={20} className='icon' />
           Çıkış Yap
         </button>
       </div>

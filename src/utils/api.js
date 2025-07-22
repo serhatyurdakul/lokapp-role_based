@@ -443,16 +443,31 @@ export const fetchRestaurantMeals = async (restaurantId) => {
     });
 
     if (response.data) {
+      // 'error:true' geldiğinde mealList kontrolü
       if (response.data.error === true) {
         console.log(
           "API yanıtı hata içeriyor (fetchRestaurantMeals):",
           response.data.message
         );
+
+        // mealList yoksa veya boşsa bunu 'boş veri' olarak ele al
+        if (
+          !response.data.mealList ||
+          (Array.isArray(response.data.mealList) &&
+            response.data.mealList.length === 0)
+        ) {
+          return [];
+        }
+
+        // Gerçek hatalar için throw
         throw new Error(response.data.message || "Yemekler alınamadı");
       }
+
+      // mealList varsa ve dizi ise doğrudan döndür
       if (response.data.mealList && Array.isArray(response.data.mealList)) {
         return response.data.mealList;
       }
+
       if (Array.isArray(response.data)) {
         return response.data;
       }

@@ -1,5 +1,5 @@
-@use "../../../../styles/variables" as *;
-@use "../../../../styles/breakpoints" as *;
+@use "@/styles/variables" as *;
+@use "@/styles/breakpoints" as *;
 
 // Profil içeriği
 .profile-content {
@@ -206,8 +206,10 @@
     background: var(--background-primary);
   }
 
-  svg {
+  .icon {
     color: var(--text-secondary);
+    flex-shrink: 0;
+    line-height: 1;
   }
 }
 
@@ -218,7 +220,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: $spacing-8;
+  gap: $spacing-6;
   width: 100%;
   padding: $spacing-12;
   background: var(--background-secondary);
@@ -226,21 +228,15 @@
   color: var(--error-color);
   font-size: 14px;
   font-weight: 500;
-  transition: $transition;
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
     stroke: currentColor;
-    transition: $transition;
   }
 
   &:hover {
-    background: var(--error-color);
-    color: var(--text-color);
-
-    svg {
-      transform: translateX(2px);
-    }
+    background: var(--overlay-light-2);
   }
 }

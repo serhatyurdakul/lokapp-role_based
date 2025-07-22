@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 const RestaurantNavbar = () => {
   const { user } = useSelector((state) => state.auth);
 
-  const userInitial = user?.name?.[0]?.toUpperCase() || "R";
+  const userInitial = user?.name ? user.name.trim().charAt(0).toLocaleUpperCase("tr-TR") : "";
 
   const links = [
     { to: "/", label: "Özet", end: true },
