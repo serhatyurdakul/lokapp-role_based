@@ -56,6 +56,12 @@ $z-index-modal: 1000;
   --order-completed-color: #81c784;
   --order-pending-color: #ffb74d;
 
+  // Badge renkleri
+  --badge-dinein-text: var(--success-color);
+  --badge-dinein-bg: rgba(48, 209, 88, 0.12); // success %12
+  --badge-delivery-text: var(--primary-color);
+  --badge-delivery-bg: rgba(10, 132, 255, 0.12); // primary %12
+
   // Overlay ve arka plan renkleri
   --overlay-light-03: rgba(
     255,

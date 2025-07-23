@@ -154,13 +154,13 @@
       border-radius: 6px;
 
       &[data-type="Lokantada"] {
-        background-color: rgba(52, 199, 89, 0.12);
-        color: rgb(52, 199, 89);
+        background-color: var(--badge-dinein-bg);
+        color: var(--badge-dinein-text);
       }
 
       &[data-type="Sipariş"] {
-        background-color: rgba(0, 122, 255, 0.12);
-        color: rgb(0, 122, 255);
+        background-color: var(--badge-delivery-bg);
+        color: var(--badge-delivery-text);
       }
     }
   }
