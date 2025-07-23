@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as BackIcon } from "@/assets/icons/back.svg";
+import { ReactComponent as ChevronLeftIcon } from "@/assets/icons/chevron-left.svg";
 import "./DetailPageHeader.scss";
 
 const DetailPageHeader = ({ title, backPath, backText = "Geri", children }) => {
@@ -13,7 +13,7 @@ const DetailPageHeader = ({ title, backPath, backText = "Geri", children }) => {
   return (
     <header className='page-header with-back'>
       <button className='btn btn-nav-back' onClick={handleBack}>
-        <BackIcon className='icon' />
+        <ChevronLeftIcon className='icon' />
         <span>{backText}</span>
       </button>
       <h1>{title}</h1>
