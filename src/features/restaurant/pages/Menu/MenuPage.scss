@@ -46,6 +46,8 @@
   transition: $transition;
 
   .menupage-food-card-image {
+    border-top-left-radius: $border-radius-medium;
+    border-top-right-radius: $border-radius-medium;
     width: 100%;
     height: 150px;
     overflow: hidden;
