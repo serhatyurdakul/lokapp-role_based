@@ -1,8 +1,10 @@
+@use "@/styles/variables" as *;
+
 .order-card {
   background-color: var(--background-primary);
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 1rem;
+  padding: $spacing-12;
   cursor: pointer;
   position: relative;
 
@@ -19,7 +21,6 @@
       border-bottom-left-radius: 8px;
     }
   }
-
 
   &.pending {
     &::before {
