@@ -13,7 +13,7 @@ const useAddMeal = (
   isOpen
 ) => {
   const dispatch = useDispatch();
-  // State'ler - AddMealModal'dan kopyalandı
+
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchResults, setShowSearchResults] = useState(false);
   const searchResultsRef = useRef(null);
@@ -26,8 +26,7 @@ const useAddMeal = (
   const [isLoadingMealOptions, setIsLoadingMealOptions] = useState(false);
   const [mealExistsError, setMealExistsError] = useState("");
 
-  // useEffect'ler - AddMealModal'dan kopyalandı
-  // Modal açıldığında kategori seçimi
+  // Initialize selected category when the modal opens
   useEffect(() => {
     if (isOpen) {
       resetFormStates();
@@ -42,7 +41,7 @@ const useAddMeal = (
     }
   }, [isOpen, initialCategoryId, categories]);
 
-  // Kategori seçildiğinde yemek şablonlarını çekme
+  // Fetch meal templates whenever the selected category changes
   useEffect(() => {
     if (
       selectedCategoryInModal &&
@@ -64,7 +63,7 @@ const useAddMeal = (
     }
   }, [selectedCategoryInModal]);
 
-  // Arama sonuçları dışına tıklandığında listeyi gizleme
+  // Hide search results when clicking outside the list
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -81,8 +80,7 @@ const useAddMeal = (
     };
   }, []);
 
-  // Functions - AddMealModal'dan kopyalandı
-  // Form state'lerini sıfırlama
+  // Reset all form-related state
   const resetFormStates = () => {
     setSearchQuery("");
     setNewStock("");
@@ -92,7 +90,6 @@ const useAddMeal = (
     setMealExistsError("");
   };
 
-  // Modal'daki kategori değişimini izleme
   const handleModalCategoryChange = (e) => {
     const newCategoryIdString = e.target.value;
     const newCategoryId = newCategoryIdString
@@ -108,27 +105,29 @@ const useAddMeal = (
     setMealExistsError("");
   };
 
-  // Yemek arama
   const handleMealOptionSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
     setSelectedMeal(null);
 
-    if (query.length >= 1 && mealOptions.length > 0) {
-      const filtered = mealOptions.filter((option) =>
-        option.name
-          .toLocaleLowerCase("tr-TR")
-          .includes(query.toLocaleLowerCase("tr-TR"))
-      );
+    if (query.length >= 1) {
+      const filtered =
+        mealOptions.length > 0
+          ? mealOptions.filter((option) =>
+              option.name
+                .toLocaleLowerCase("tr-TR")
+                .includes(query.toLocaleLowerCase("tr-TR"))
+            )
+          : [];
+
       setFilteredMealOptions(filtered);
-      setShowSearchResults(filtered.length > 0);
+      setShowSearchResults(true);
     } else {
       setFilteredMealOptions([]);
       setShowSearchResults(false);
     }
   };
 
-  // Arama sonuçlarından yemek seçme
   const handleSelectMealOption = (mealOption) => {
     setSearchQuery(mealOption.name);
     setSelectedMeal({
@@ -138,7 +137,6 @@ const useAddMeal = (
     setShowSearchResults(false);
   };
 
-  // Yemek adı input'unu temizleme
   const handleClearMealOptionSearch = () => {
     setSearchQuery("");
     setSelectedMeal(null);
@@ -146,7 +144,6 @@ const useAddMeal = (
     setShowSearchResults(false);
   };
 
-  // Form gönderme
   const handleAddMeal = async (event) => {
     if (event) {
       event.preventDefault();
@@ -214,7 +211,7 @@ const useAddMeal = (
     }
   };
 
-  // Modal butonunun disabled durumunu belirlemek
+  // Derive disabled state for the primary button
   const stockValue = Number(newStock);
   const isStockInvalid =
     newStock.trim() === "" || isNaN(stockValue) || stockValue <= 0;
@@ -223,9 +220,7 @@ const useAddMeal = (
   const finalIsPrimaryButtonDisabled =
     isSubmitting || isButtonDisabledDueToFields;
 
-  // Return - Component'ın kullanacağı interface
   return {
-    // State values
     searchQuery,
     showSearchResults,
     searchResultsRef,

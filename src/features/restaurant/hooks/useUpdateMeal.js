@@ -13,7 +13,7 @@ const useUpdateMeal = (
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  // Prefill current stock and reset error when modal opens
+  // Prefill stock and clear error when the modal opens
   useEffect(() => {
     if (isOpen && selectedMeal) {
       setNewStock(selectedMeal.quantity?.toString() || "");
@@ -28,7 +28,7 @@ const useUpdateMeal = (
 
   const handleStockChange = (e) => {
     setNewStock(e.target.value);
-    setError(""); // Clear error when user starts typing
+    setError("");
   };
 
   const handleClearStock = () => {

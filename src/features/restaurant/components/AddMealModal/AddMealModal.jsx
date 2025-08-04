@@ -14,7 +14,6 @@ const AddMealModal = ({
   onMealAdded,
   isLoadingCategories,
 }) => {
-
   const {
     searchQuery,
     showSearchResults,
@@ -45,21 +44,19 @@ const AddMealModal = ({
     <GenericModal
       isOpen={isOpen}
       onClose={onClose}
-      title='Yeni Yemek Ekle'
+      title="Yeni Yemek Ekle"
       primaryButtonText={isSubmitting ? "Ekleniyor..." : "Ekle"}
       onPrimaryAction={handleAddMeal}
       isPrimaryButtonDisabled={finalIsPrimaryButtonDisabled}
-      showSecondaryButton={true}
-      secondaryButtonText='İptal'
+      secondaryButtonText="İptal"
       onSecondaryAction={onClose}
-      isLoading={isLoadingCategories || isLoadingMealOptions || isSubmitting}
     >
-      <form className='menu-form' autoComplete='off'>
+      <form className="menu-form" autoComplete="off">
         <ErrorMessage message={mealExistsError} />
         <FormSelect
-          label='Kategori'
-          id='category-modal-select'
-          name='category'
+          label="Kategori"
+          id="category-modal-select"
+          name="category"
           value={selectedCategoryInModal}
           onChange={handleModalCategoryChange}
           options={categories.map((category) => ({
@@ -73,61 +70,60 @@ const AddMealModal = ({
           disabled={isLoadingCategories}
         />
 
-        <div className='search-input-container'>
+        <div className="search-input-container">
           <FormInput
-            label='Yemek Ara'
-            id='name-modal-input'
-            name='name'
-            type='text'
+            label="Yemek Ara"
+            id="name-modal-input"
+            name="name"
+            type="text"
             value={searchQuery}
             onChange={handleMealOptionSearchChange}
             placeholder="Yemek adı arayın"
-            autoComplete='off'
-            autoCorrect='off'
-            spellCheck='false'
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck="false"
             required
             isClearable={true}
             onClear={handleClearMealOptionSearch}
             isSearchable={true}
           />
           {isLoadingMealOptions && (
-            <div className='search-loading'>Yemekler yükleniyor...</div>
+            <div className="search-loading">Yemekler yükleniyor...</div>
           )}
-          {!isLoadingMealOptions &&
-            showSearchResults &&
-            filteredMealOptions.length > 0 && (
-              <div className='search-results' ref={searchResultsRef}>
-                {filteredMealOptions.map((mealOption) => (
+          {!isLoadingMealOptions && showSearchResults && (
+            <div className="search-results" ref={searchResultsRef}>
+              {filteredMealOptions.length > 0 ? (
+                filteredMealOptions.map((mealOption) => (
                   <div
                     key={mealOption.id || mealOption.name}
-                    className='search-result-item'
+                    className="search-result-item"
                     onClick={() => handleSelectMealOption(mealOption)}
                   >
                     {mealOption.name}
                   </div>
-                ))}
-              </div>
-            )}
-          {!isLoadingMealOptions &&
-            showSearchResults &&
-            searchQuery.length > 0 &&
-            filteredMealOptions.length === 0 && (
-              <div className='search-no-results'>
-                "{searchQuery}" ile eşleşen yemek bulunamadı.
-              </div>
-            )}
+                ))
+              ) : (
+                <div
+                  className="search-result-item no-match"
+                  aria-disabled="true"
+                >
+                  "{searchQuery}" ile eşleşen yemek bulunamadı.
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <FormInput
           label="Porsiyon Sayısı"
-          id='stock-modal-input'
-          name='stock'
-          type='number'
+          id="stock-modal-input"
+          name="stock"
+          type="number"
           value={newStock}
           onChange={(e) => setNewStock(e.target.value)}
           placeholder="Örneğin: 50"
-          min='0'
-          autoComplete='off'
+          min="0"
+          autoComplete="off"
           required
           isClearable={true}
           onClear={() => setNewStock("")}
