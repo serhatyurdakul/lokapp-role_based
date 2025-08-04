@@ -21,11 +21,6 @@ const useUpdateMeal = (
     }
   }, [isOpen, selectedMeal]);
 
-  const resetForm = () => {
-    setNewStock("");
-    setError("");
-  };
-
   const handleStockChange = (e) => {
     setNewStock(e.target.value);
     setError("");
@@ -36,10 +31,7 @@ const useUpdateMeal = (
     setError("");
   };
 
-  const handleUpdateMeal = async (event) => {
-    if (event) {
-      event.preventDefault();
-    }
+  const handleUpdateMeal = async () => {
     setError("");
 
     if (!selectedMeal || !selectedMeal.id) {
@@ -68,7 +60,6 @@ const useUpdateMeal = (
     try {
       const response = await updateMealForRestaurant(updateData);
       if (response && !response.error) {
-        console.log("Yemek başarıyla güncellendi:", response.message);
         onMealUpdated && onMealUpdated(response);
         onClose();
       } else {
@@ -96,7 +87,6 @@ const useUpdateMeal = (
     handleStockChange,
     handleClearStock,
     handleUpdateMeal,
-    resetForm,
   };
 };
 
