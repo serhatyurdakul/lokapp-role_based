@@ -21,14 +21,7 @@ $breakpoints: (
   }
 }
 
-// Hover mixin
-@mixin hover {
-  @media (hover: hover) {
-    &:hover {
-      @content;
-    }
-  }
-}
+
 
 // Safe area padding mixin
 @mixin safe-area-padding($direction) {

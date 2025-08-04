@@ -208,9 +208,7 @@ const useAddMeal = (
         "Yemek ekleme API çağrısı sırasında bir hata oluştu:",
         error
       );
-      setMealExistsError(
-        MSG_NETWORK_ERROR
-      );
+      setMealExistsError(MSG_NETWORK_ERROR);
     } finally {
       setIsSubmitting(false);
     }
@@ -241,10 +239,8 @@ const useAddMeal = (
     mealExistsError,
     finalIsPrimaryButtonDisabled,
 
-    // State setters için handler'lar
     setNewStock,
 
-    // Functions
     resetFormStates,
     handleModalCategoryChange,
     handleMealOptionSearchChange,

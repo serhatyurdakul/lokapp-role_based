@@ -6,9 +6,6 @@
   align-items: center;
 
   margin-bottom: $spacing-16;
-  width: 100%;
-  text-align: left;
-  height: 36px;
 
   h1 {
     font-size: 1.5rem;
@@ -17,7 +14,7 @@
     margin: 0;
   }
 
-  .header-actions {
+  .page-header-actions {
     display: flex;
     align-items: center;
     gap: $spacing-8;

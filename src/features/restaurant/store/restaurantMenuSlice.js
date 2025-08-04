@@ -1,7 +1,11 @@
-import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createSelector,
+} from "@reduxjs/toolkit";
 import { fetchMealCategories, fetchRestaurantMenu } from "@/utils/api";
 
-// Thunk - restoran kategorilerini getirme
+// Thunk: fetch meal categories
 export const fetchRestaurantCategories = createAsyncThunk(
   "restaurantMenu/fetchCategories",
   async (_, { rejectWithValue }) => {
@@ -14,7 +18,7 @@ export const fetchRestaurantCategories = createAsyncThunk(
   }
 );
 
-// Thunk - restoran menüsünü getirme
+// Thunk: fetch restaurant menu
 export const fetchRestaurantMenuData = createAsyncThunk(
   "restaurantMenu/fetchMenuData",
   async (restaurantId, { rejectWithValue }) => {
@@ -53,7 +57,7 @@ const restaurantMenuSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Categories
+      // Fetch categories
       .addCase(fetchRestaurantCategories.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -68,7 +72,7 @@ const restaurantMenuSlice = createSlice({
         state.error = action.payload;
       })
 
-      // Menu Data
+      // Fetch menu data
       .addCase(fetchRestaurantMenuData.pending, (state) => {
         state.isLoading = true;
         state.error = null;
@@ -91,17 +95,16 @@ export default restaurantMenuSlice.reducer;
 
 /* ---------- Selectors & Derived Helpers ---------- */
 
-// Menü verisini sıralı hale getirir (en son eklenen yemekler en üstte)
+// Sort menu data (newest meals first)
 const sortMenuData = (menuData) => {
   if (!menuData || menuData.length === 0) return [];
 
-  // Shallow copy – referansları bozmamak için
+  // Shallow copy to avoid mutating references
   const sorted = menuData.map((categoryGroup) => ({
     ...categoryGroup,
     meals: (categoryGroup.meals || []).map((meal) => ({ ...meal })),
   }));
 
-  // Yemekleri createdAt'e göre sırala
   sorted.forEach((categoryGroup) => {
     if (categoryGroup.meals?.length) {
       categoryGroup.meals.sort(
@@ -113,19 +116,17 @@ const sortMenuData = (menuData) => {
     }
   });
 
-  // Kategorileri en son yemek ekleme tarihine göre sırala
+  // Sort categories by latest meal date
   sorted.sort(
-    (a, b) =>
-      new Date(b.latestMealCreatedAt) - new Date(a.latestMealCreatedAt)
+    (a, b) => new Date(b.latestMealCreatedAt) - new Date(a.latestMealCreatedAt)
   );
 
   return sorted;
 };
 
-// Dilimden (slice) ham menü verisini al
 const selectMenuData = (state) => state.restaurantMenu.menuData;
 
-// UI katmanının ihtiyaç duyduğu: düzleştirilmiş yemek listesi + FilterBar kategorileri
+// Flattened meals list and categories for FilterBar
 export const selectMenuMealsAndCategories = createSelector(
   [selectMenuData],
   (menuData) => {
@@ -152,4 +153,3 @@ export const selectMenuMealsAndCategories = createSelector(
     return { menuMeals, categoriesForFilterBar };
   }
 );
-

@@ -9,24 +9,23 @@ const DeleteMealModal = ({
   restaurantId,
   onMealDeleted,
 }) => {
-  // Hook'dan tüm logic'i al
   const { isDeleting, error, isSubmitDisabled, handleDeleteMeal } =
     useDeleteMeal(restaurantId, selectedMeal, onMealDeleted, onClose, isOpen);
 
   if (!selectedMeal) {
-    return null; // Eğer seçili ürün yoksa modalı render etme
+    return null;
   }
 
   return (
     <GenericModal
       isOpen={isOpen}
       onClose={onClose}
-      title='Yemek Sil'
+      title="Yemek Sil"
       primaryButtonText={isDeleting ? "Siliniyor..." : "Sil"}
       onPrimaryAction={handleDeleteMeal}
       isPrimaryButtonDisabled={isSubmitDisabled}
-      primaryButtonClassName='btn-destructive'
-      secondaryButtonText='İptal'
+      primaryButtonClassName="btn-destructive"
+      secondaryButtonText="İptal"
       onSecondaryAction={onClose}
       primaryButtonLoading={isDeleting}
     >

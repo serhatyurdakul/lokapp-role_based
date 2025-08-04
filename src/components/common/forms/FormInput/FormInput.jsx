@@ -3,6 +3,7 @@ import "./FormInput.scss";
 import { ReactComponent as CloseIcon } from "@/assets/icons/close.svg";
 import { ReactComponent as EyeIcon } from "@/assets/icons/eye.svg";
 import { ReactComponent as EyeOffIcon } from "@/assets/icons/eye-off.svg";
+import { ReactComponent as SearchIcon } from "@/assets/icons/search.svg";
 
 const FormInput = ({
   label,
@@ -18,6 +19,7 @@ const FormInput = ({
   max,
   isClearable = false,
   onClear,
+  isSearchable = false,
 }) => {
   const isPasswordField = type === "password";
   const [showPassword, setShowPassword] = useState(false);
@@ -34,6 +36,7 @@ const FormInput = ({
     <div className={`form-group ${isClearable ? "form-group-clearable" : ""}`.trim()}>
       <label htmlFor={id}>{label}</label>
       <div className="input-wrapper">
+        {isSearchable && <SearchIcon className="search-icon" />}
       <input
         type={inputType}
         id={id}
@@ -44,7 +47,7 @@ const FormInput = ({
         placeholder={placeholder}
         min={type === "number" ? min : undefined}
         max={type === "number" ? max : undefined}
-        className={`form-input ${error ? "error" : ""}`.trim()}
+        className={`form-input ${error ? "error" : ""} ${isSearchable ? "searchable" : ""}`.trim()}
       />
         {isPasswordField && (
           <button

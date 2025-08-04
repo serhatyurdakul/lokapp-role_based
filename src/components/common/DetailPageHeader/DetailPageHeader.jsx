@@ -7,19 +7,19 @@ const DetailPageHeader = ({ title, backPath, backText = "Geri", children }) => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    // 1) Eğer spesifik bir rota verildiyse onu kullan
+    // 1) If a specific route is provided, use it
     if (typeof backPath !== "undefined" && backPath !== null) {
       navigate(backPath);
       return;
     }
 
-    // 2) Tarayıcı geçmişi varsa bir adım geri git
+    // 2) If browser history exists, go back one step
     if (window.history.length > 1) {
       navigate(-1);
       return;
     }
 
-    // 3) Fallback: Uygulamanın ana giriş noktası
+    // 3) Fallback: Go to app's main entry point
     navigate("/");
   };
 
@@ -30,7 +30,7 @@ const DetailPageHeader = ({ title, backPath, backText = "Geri", children }) => {
         <span>{backText}</span>
       </button>
       <h1>{title}</h1>
-      {children && <div className='header-actions'>{children}</div>}
+      {children && <div className='detail-page-header-actions'>{children}</div>}
     </header>
   );
 };

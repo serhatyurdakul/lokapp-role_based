@@ -1,6 +1,8 @@
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import ProductCard from "@/features/customer/components/ProductCard/ProductCard";
+import { ReactComponent as ChevronLeftIcon } from "@/assets/icons/chevron-left.svg";
+import { ReactComponent as ChevronRightIcon } from "@/assets/icons/chevron-right.svg";
 import "./CategoryRow.scss";
 
 const CategoryRow = ({ categoryId, title, items }) => {
@@ -25,9 +27,10 @@ const CategoryRow = ({ categoryId, title, items }) => {
       <div className='category__items-container'>
         <button
           className='category__nav-button category__nav-button--prev'
+          aria-label='Önceki'
           onClick={() => handleScroll("left")}
         >
-          ‹
+          <ChevronLeftIcon className='icon' />
         </button>
         <div className='category__items' ref={scrollRef}>
           {items.map((item) => (
@@ -44,9 +47,10 @@ const CategoryRow = ({ categoryId, title, items }) => {
         </div>
         <button
           className='category__nav-button category__nav-button--next'
+          aria-label='Sonraki'
           onClick={() => handleScroll("right")}
         >
-          ›
+          <ChevronRightIcon className='icon' />
         </button>
       </div>
     </div>

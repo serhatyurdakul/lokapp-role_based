@@ -5,7 +5,9 @@
   font-size: 0.875rem;
   margin-top: $spacing-8;
   padding: $spacing-8 $spacing-12;
-  background: var(--error-background);
   border-radius: $border-radius;
   text-align: center;
+  font-weight: 500;
+  margin-bottom: $spacing-16;
+  border-left: 4px solid var(--error-color);
 }

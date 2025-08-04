@@ -32,7 +32,6 @@
   }
 }
 
-// Yemek Grid
 .menupage-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -121,7 +120,6 @@
   }
 }
 
-// Kategori bazlı grid düzeni
 .menupage-items-by-category {
   display: grid;
   gap: $spacing-32;
@@ -146,7 +144,6 @@
   }
 }
 
-// Meal Actions Dropdown
 .meal-actions-wrapper {
   position: relative;
   flex-shrink: 0;

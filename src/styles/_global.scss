@@ -73,7 +73,7 @@ input::placeholder {
   color: var(--text-secondary);
 }
 
-// Number input lar için spin button'larını gizleme
+// Hide number input spin buttons
 input[type="number"] {
   appearance: textfield;
   -moz-appearance: textfield;

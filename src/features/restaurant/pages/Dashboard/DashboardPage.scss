@@ -4,7 +4,6 @@
   h2 {
     font-size: 1.125rem;
     font-weight: 600;
-    margin-bottom: $spacing-12;
     color: var(--text-color);
 
     @media (min-width: 768px) {
@@ -45,7 +44,6 @@ section {
   }
 }
 
-// Kritik Bilgiler
 .critical-info {
   display: grid;
   grid-template-columns: 1fr;

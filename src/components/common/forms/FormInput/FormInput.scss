@@ -1,16 +1,26 @@
-@use "../forms" as forms;
 @use "../../../../styles/variables" as *;
 
-.form-group-clearable { 
+.form-group-clearable {
   .input-wrapper {
     position: relative;
-    display: flex; 
-    align-items: center; 
+    display: flex;
+    align-items: center;
   }
 }
 
-.input-wrapper { 
-  position: relative; 
+.input-wrapper {
+  position: relative;
+
+  .search-icon {
+    position: absolute;
+    left: $spacing-12;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1rem;
+    height: 1rem;
+    color: var(--text-secondary);
+    pointer-events: none;
+  }
 }
 
 .form-input {
@@ -22,6 +32,9 @@
   font-size: 1rem;
   transition: $transition;
 
+  &.searchable {
+    padding-left: $spacing-32 + $spacing-4;
+  }
 
   &.error {
     border-color: var(--error-color);
@@ -36,12 +49,12 @@
 .toggle-button,
 .clear-button {
   position: absolute;
-  right: $spacing-8; 
+  right: $spacing-8;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
-  padding: $spacing-4; 
+  padding: $spacing-4;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -49,11 +62,11 @@
   color: var(--text-secondary);
 
   svg {
-    width: 16px; 
+    width: 16px;
     height: 16px;
   }
 
   &:hover {
-    color: var(--text-primary);
+    color: var(--text-color);
   }
 }

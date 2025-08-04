@@ -9,12 +9,11 @@ const useUpdateMeal = (
   onClose,
   isOpen
 ) => {
-  // State'ler
   const [newStock, setNewStock] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  // Modal açıldığında form'u reset et ve mevcut stock'u set et
+  // Prefill current stock and reset error when modal opens
   useEffect(() => {
     if (isOpen && selectedMeal) {
       setNewStock(selectedMeal.quantity?.toString() || "");
@@ -22,32 +21,27 @@ const useUpdateMeal = (
     }
   }, [isOpen, selectedMeal]);
 
-  // Form'u reset etme
   const resetForm = () => {
     setNewStock("");
     setError("");
   };
 
-  // Stock değişimi handler'ı
   const handleStockChange = (e) => {
     setNewStock(e.target.value);
-    setError(""); // Kullanıcı yazmaya başladığında error'u temizle
+    setError(""); // Clear error when user starts typing
   };
 
-  // Stock temizleme handler'ı
   const handleClearStock = () => {
     setNewStock("");
     setError("");
   };
 
-  // Update işlemi
   const handleUpdateMeal = async (event) => {
     if (event) {
       event.preventDefault();
     }
     setError("");
 
-    // Validation
     if (!selectedMeal || !selectedMeal.id) {
       setError("Güncellenecek yemek seçilmedi.");
       return;
@@ -64,7 +58,6 @@ const useUpdateMeal = (
       return;
     }
 
-    // API çağrısı için data hazırlama
     const updateData = {
       mealId: selectedMeal.id.toString(),
       quantity: stockValue.toString(),
@@ -89,20 +82,17 @@ const useUpdateMeal = (
     }
   };
 
-  // Submit butonunun disabled durumu
   const stockValue = Number(newStock);
   const isStockInvalid =
     newStock.trim() === "" || isNaN(stockValue) || stockValue < 0;
   const isSubmitDisabled = isSubmitting || isStockInvalid || !selectedMeal;
 
   return {
-    // State values
     newStock,
     isSubmitting,
     error,
     isSubmitDisabled,
 
-    // Handlers
     handleStockChange,
     handleClearStock,
     handleUpdateMeal,

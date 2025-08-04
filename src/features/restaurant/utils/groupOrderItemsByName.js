@@ -1,13 +1,6 @@
-
-/**
- * Grup sipariş kalemlerini kategori + normalize edilmiş yemek adına göre.
- * Bu, aynı gün farklı mealId'lere sahip ama adı aynı öğeleri tek satıra toplar.
- *
- * @param {Array} items - API'den gelen raw order items
- * @returns {Array}   - [{ categoryId, categoryName, items: [{ id, mealName, quantity }], totalQuantity }]
- */
-// Geçici: Yemek adını karşılaştırma için normalize et
-// TODO[backend_id_fix]: Backend baseMealId geldiğinde bu helper gereksiz hale gelebilir.
+// Group items by category and meal name (case-insensitive)
+// Temporary helper: normalize meal name for comparison
+// TODO[backend_id_fix]: Remove when backend returns stable baseMealId
 const normalizeMealName = (name = "") => name.trim().toLocaleLowerCase("tr-TR");
 
 export const groupOrderItemsByName = (items = []) => {
@@ -28,7 +21,7 @@ export const groupOrderItemsByName = (items = []) => {
 
     if (!acc[catKey].items[mealKey]) {
       acc[catKey].items[mealKey] = {
-        id: mealKey, // React key için stabil değer
+        id: mealKey, // Stable value for React key
         mealName,
         quantity: 0,
       };

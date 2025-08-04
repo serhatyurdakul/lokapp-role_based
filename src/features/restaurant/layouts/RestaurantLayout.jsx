@@ -1,10 +1,13 @@
+import { Outlet } from "react-router-dom";
 import RestaurantNavbar from "../components/Navbar/RestaurantNavbar.jsx";
 
-const RestaurantLayout = ({ children }) => {
+const RestaurantLayout = () => {
   return (
-    <div className='layout'>
+    <div className="layout">
       <RestaurantNavbar />
-      <main className='container'>{children}</main>
+      <main className="container">
+        <Outlet />
+      </main>
     </div>
   );
 };

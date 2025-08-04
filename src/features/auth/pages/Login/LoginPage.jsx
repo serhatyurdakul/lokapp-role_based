@@ -5,20 +5,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, clearError } from "../../store/authSlice";
 import FormInput from "@/components/common/forms/FormInput/FormInput";
 import Button from "@/components/common/Button/Button";
+import ErrorMessage from "@/components/common/forms/ErrorMessage/ErrorMessage";
 import "./LoginPage.scss";
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Redux stateinden isAuthenticated, isLoading ve error u alma
+  // Extract authentication state from Redux
   const {
     isAuthenticated,
-    isLoading: authIsLoading, // Redux taki genel yükleme durumu
-    error: authError, // Redux taki genel hata durumu
+    isLoading: authIsLoading,
+    error: authError,
   } = useSelector((state) => state.auth);
 
-  const [isSubmitting, setIsSubmitting] = useState(false); // Buton için lokal yükleme durumu
-  const [localError, setLocalError] = useState(null); // Lokal hata mesajı için
+  const [localError, setLocalError] = useState(null);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -26,13 +26,26 @@ const LoginPage = () => {
   });
 
 
-  // isAuthenticated true olduğunda ana sayfaya yönlendir
+  const handleClearEmail = () => {
+    setFormData((prev) => ({ ...prev, email: "" }));
+  };
+
+  const getDisplayError = () => {
+    if (localError) return localError;
+    if (authError && !authIsLoading) {
+      if (typeof authError === "string") return authError;
+      if (authError?.message) return authError.message;
+      return "Bilinmeyen bir hata oluştu.";
+    }
+    return null;
+  };
+
+  // Redirect to home if authenticated
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/");
     }
   }, [isAuthenticated, navigate]);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,78 +57,60 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setLocalError(null);
-    // authSlice da clearError olup olmadığını kontrol etmeye gerek yok, varsa importta hata vermezse çağrılır.
+    // Clear any previous auth error
     dispatch(clearError());
 
     try {
-      // Redux login işlemi
+
       await dispatch(login(formData)).unwrap();
-      // Başarılı olursa, yukarıdaki useEffect yönlendirmeyi yapacak.
     } catch (rejectedValue) {
-      // unwrap(), thunk tan dönen hata mesajını fırlatır
+      // unwrap() throws the rejected value
       console.error("Giriş hatası (LoginPage catch):", rejectedValue);
-      // Gelen hatanın yapısını kontrol ederek daha iyi bir mesaj oluşturma
+      // Build a user-friendly error message
       let errorMessage = "Giriş işlemi sırasında bir hata oluştu.";
       if (typeof rejectedValue === "string") {
         errorMessage = rejectedValue;
       } else if (rejectedValue && rejectedValue.message) {
         errorMessage = rejectedValue.message;
       } else if (authError && authError.message) {
-        // Redux taki hatayı da kontrol et
+        // Fallback to redux error
         errorMessage = authError.message;
       } else if (typeof authError === "string") {
         errorMessage = authError;
       }
       setLocalError(errorMessage);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
   return (
     <AuthLayout>
       <h1>Giriş Yap</h1>
-      {/* Hata mesajlarını gösterirken hem localError hem de authError u dikkate alabiliriz */}
-      {/* Öncelik localError, sonra Redux tan gelen authError */}
-      {(localError || (authError && !isSubmitting && !localError)) && (
-        <div className='error-message'>
-          {localError ||
-            authError?.message ||
-            (typeof authError === "string"
-              ? authError
-              : "Bilinmeyen bir hata oluştu.")}
-        </div>
-      )}
+      <ErrorMessage message={getDisplayError()} />
       <form onSubmit={handleSubmit}>
         <FormInput
-          label='Email'
-          type='email'
-          id='email'
-          name='email'
+          label="Email"
+          type="email"
+          id="email"
+          name="email"
           value={formData.email}
           onChange={handleChange}
           required
           isClearable={true}
-          onClear={() => setFormData(prev => ({ ...prev, email: "" }))}
+          onClear={handleClearEmail}
         />
         <FormInput
-          label='Şifre'
-          type='password'
-          id='password'
-          name='password'
+          label="Şifre"
+          type="password"
+          id="password"
+          name="password"
           value={formData.password}
           onChange={handleChange}
           required
         />
-        <div className='form-actions'>
-          <Button
-            type='submit'
-            variant='primary'
-            disabled={isSubmitting || authIsLoading}
-          >
-            {isSubmitting || authIsLoading ? "Giriş yapılıyor..." : "Giriş Yap"}
+        <div className="form-actions">
+          <Button type="submit" variant="primary" disabled={authIsLoading}>
+            {authIsLoading ? "Giriş yapılıyor..." : "Giriş Yap"}
           </Button>
         </div>
       </form>

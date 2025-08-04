@@ -13,10 +13,9 @@ import EmptyState from "@/components/common/StateMessage/EmptyState";
 import NoticeBanner from "@/components/common/NoticeBanner/NoticeBanner";
 import Button from "@/components/common/Button/Button";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
-import "./HomePage.scss"; // SCSS importu güncellendi
+import "./HomePage.scss";
 
 const HomePage = () => {
-  // Banner visibility state
   const [showBanner, setShowBanner] = useState(true);
   const dispatch = useDispatch();
   const {
@@ -44,16 +43,13 @@ const HomePage = () => {
     }
   }, [dispatch, restaurantId]);
 
-  // Update banner visibility when error changes
   useEffect(() => {
     setShowBanner(Boolean(error));
   }, [error]);
 
-  // En az bir ürün seçilmediyse sipariş butonunu devre dışı bırak
   const isOrderDisabled = Object.keys(selectedItems).length === 0;
 
   const handleOrder = () => {
-    // Koruma: buton disabled ise fonksiyonu çalıştırma
     if (isOrderDisabled) return;
 
     const missingCategories = categories
@@ -76,15 +72,11 @@ const HomePage = () => {
     dispatch(clearOrderStatus());
   };
 
-  // Yardımcı render fonksiyonu: tüm sayfa içeriğini duruma göre döndürür
   const renderBody = () => {
-    // Tam ekran spinner yalnızca veri henüz hiç gelmemişse gösterilir
+    // Show full-screen spinner while initial data is loading
     if (isLoading && (!categories || categories.length === 0)) {
       return <Loading text="Yemekler yükleniyor..." />;
     }
-
-    // Hata varsa, ama bu hatanın "veri yok" durumu mu yoksa ağ/sunucu hatası mı olduğuna bak.
-    
 
     if (!categories || categories.length === 0) {
       return (
@@ -95,7 +87,6 @@ const HomePage = () => {
       );
     }
 
-    // Normal içerik
     return (
       <div className="has-order-button">
         {categories.map((category) => (
@@ -168,8 +159,6 @@ const HomePage = () => {
       </div>
     );
   };
-
-  // ----- Render -----
 
   return (
     <>

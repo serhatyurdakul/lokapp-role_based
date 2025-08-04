@@ -11,7 +11,7 @@ const appReducer = combineReducers({
   restaurantOrders: restaurantOrdersReducer,
 });
 
-// rootReducer: logout olduğunda tüm store'u başlangıç hâline döndür
+// Reset Redux state on logout
 const rootReducer = (state, action) => {
   if (action.type === "auth/logout") {
     state = undefined;

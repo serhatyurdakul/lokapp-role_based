@@ -2,10 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import "./FilterBar.scss";
 
-export const ALL = "all"; // Uygulanan filtreleri kaldıran özel değer
-
-// ALL sabitini dışa aktararak uygulamada tekrarlı "all" stringi yerine tek kaynaklı değer kullanılmasını sağlıyoruz.
-// bileşenlerde tekrarlı "all" stringi yerine tek kaynaklı değer kullanılmasını sağlıyoruz.
+export const ALL = "all"; // Special value to clear applied filters
 
 const FilterBar = ({ options, selectedValue, onChange }) => {
   return (

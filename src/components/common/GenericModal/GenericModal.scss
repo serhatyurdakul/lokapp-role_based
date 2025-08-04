@@ -6,7 +6,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--overlay-light-2);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,11 +30,10 @@
     margin: $spacing-4 0rem $spacing-16;
 
     .modal-title {
-      // h3 etiketi için stil
       font-size: 1.25rem;
       font-weight: 600;
       color: var(--text-color);
-      margin: 0; // h3'ün kendi margin'ini sıfırla
+      margin: 0; // Reset h3's default margin
     }
 
     .close-btn {
@@ -71,17 +70,13 @@
       font-size: 0.875rem;
       color: var(--text-secondary);
       font-weight: 500;
-      margin: $spacing-8 0;
+      margin: 0 0 $spacing-8;
     }
 
     h4 {
       margin-bottom: $spacing-16;
       font-size: 1.125rem;
       font-weight: 600;
-    }
-
-    .form-group:last-of-type {
-      margin-bottom: 0;
     }
   }
 }

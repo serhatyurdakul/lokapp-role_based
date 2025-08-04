@@ -28,7 +28,7 @@ $transition: all 0.3s ease;
 $z-index-modal: 1000;
 
 :root {
-  // // Colors - Light Theme
+  // Colors – Light theme (reference)
   // --primary-color: #007aff;
   // --background-color: #f2f2f7;
   // --background-primary: #ffffff;
@@ -52,94 +52,48 @@ $z-index-modal: 1000;
   --warning-color: #ff9f0a;
   --success-color: #30d158;
 
-  // Sipariş durum renkleri
+  // Order status colors
   --order-completed-color: #81c784;
   --order-pending-color: #ffb74d;
 
-  // Badge renkleri
+  // Badge colors
   --badge-dinein-text: var(--success-color);
-  --badge-dinein-bg: rgba(48, 209, 88, 0.12); // success %12
+  --badge-dinein-bg: rgba(48, 209, 88, 0.12); // success 12% opacity
   --badge-delivery-text: var(--primary-color);
-  --badge-delivery-bg: rgba(10, 132, 255, 0.12); // primary %12
+  --badge-delivery-bg: rgba(10, 132, 255, 0.12); // primary 12% opacity
 
-  // Overlay ve arka plan renkleri
-  --overlay-light-03: rgba(
-    255,
-    255,
-    255,
-    0.03
-  ); 
+  // Overlay / background colors
+  --overlay-light-03: rgba(255, 255, 255, 0.03);
 
-  --overlay-light-05: rgba(
-    255,
-    255,
-    255,
-    0.05
-  ); 
-  --overlay-light-08: rgba(
-    255,
-    255,
-    255,
-    0.08
-  ); 
-  --overlay-light-1: rgba(
-    255,
-    255,
-    255,
-    0.1
-  ); 
-  --overlay-light-2: rgba(
-    255,
-    255,
-    255,
-    0.21
-  ); 
-  --overlay-light-3: rgba(
-    255,
-    255,
-    255,
-    0.3
-  ); 
+  --overlay-light-05: rgba(255, 255, 255, 0.05);
+  --overlay-light-08: rgba(255, 255, 255, 0.08);
+  --overlay-light-1: rgba(255, 255, 255, 0.1);
+  --overlay-light-2: rgba(255, 255, 255, 0.21);
+  --overlay-light-3: rgba(255, 255, 255, 0.3);
 
-  // Sipariş durumu overlay renkleri
+  // Order status overlay colors
   --overlay-pending-bg: rgba(
     255,
     183,
     77,
     0.15
-  ); // --order-pending-color (#ffb74d) %15 opaklıkta
+  ); // order-pending-color (#ffb74d) at 15% opacity
   --overlay-pending-border: rgba(
     255,
     183,
     77,
     0.3
-  ); // --order-pending-color (#ffb74d) %30 opaklıkta
+  ); // order-pending-color (#ffb74d) at 30% opacity
   --overlay-completed-bg: rgba(
     129,
     199,
     132,
     0.15
-  ); // --order-completed-color (#81c784) %15 opaklıkta
+  ); // order-completed-color (#81c784) at 15% opacity
   --overlay-completed-border: rgba(
     129,
     199,
     132,
     0.3
-  ); // --order-completed-color (#81c784) %30 opaklıkta
-
-  /*
-  @media (prefers-color-scheme: dark) {
-    // Colors - Dark Theme
-    --primary-color: #0a84ff;
-    --background-color: #000000;
-    --background-primary: #1c1c1e;
-    --background-secondary: #2c2c2e;
-    --text-color: #ffffff;
-    --text-secondary: #98989d;
-    --border-color: #38383a;
-    --border-opacity: rgba(255, 255, 255, 0.08);
-    --error-color: #ff453a;
-
-  }
-  */
+  ); // order-completed-color (#81c784) at 30% opacity
 }

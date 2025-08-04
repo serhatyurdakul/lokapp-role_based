@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  createSelector,
+} from "@reduxjs/toolkit";
 import {
   getRestaurantsOrderList,
   getRestaurantOrderDetails,
@@ -6,7 +10,7 @@ import {
 } from "@/utils/api";
 import { groupOrderItemsByName } from "../utils/groupOrderItemsByName";
 
-// API'den gelen sipariş verisini ön yüzün kullanacağı formata dönüştüren yardımcı fonksiyon
+// Map API order list to UI-friendly format
 const mapOrderData = (apiOrderData) => {
   if (!apiOrderData || !Array.isArray(apiOrderData.orderList)) {
     return [];
@@ -31,11 +35,11 @@ const mapOrderData = (apiOrderData) => {
               totalPeople: order.companyTotalOrders,
               status:
                 order.statusText === "Yeni Sipariş" ? "pending" : "completed",
-              // API'den gelen "2025-06-28 12:19:50" formatındaki createdAt'i "12:19" formatına dönüştür
+              // Convert 'YYYY-MM-DD HH:mm:ss' to 'HH:mm' format
               orderTime: order.createdAt
                 ? order.createdAt.substring(11, 16)
                 : "",
-              // Detay sayfasında gerekebilecek diğer ham veriler
+              // Additional raw data for detail page
               _raw: order,
             };
             allOrders.push(mappedOrder);
@@ -48,16 +52,16 @@ const mapOrderData = (apiOrderData) => {
   return allOrders;
 };
 
-// Detay API'sinden gelen veriyi ön yüz formatına dönüştüren yardımcı fonksiyon
+// Map order details API response to UI format
 const mapOrderDetailsData = (apiDetailsData) => {
   if (!apiDetailsData || !apiDetailsData.orderDetails) {
     return null;
   }
-  // API'den gelen ham verileri alıyoruz: sipariş özeti ve sipariş kalemleri listesi.
+
   const { summary, items } = apiDetailsData.orderDetails;
 
-  // Sipariş kalemlerini mealName'e (normalize edilmiş) göre grupla – geçici çözüm
-  // TODO[backend_id_fix]: Backend sabit baseMealId döndürdüğünde eski mealId tabanlı gruplayıcıya geri dön.
+  // Group items by normalized mealName (temporary workaround)
+  // TODO[backend_id_fix]: Revert to mealId-based grouping once backend provides stable baseMealId
   const groupedItems = groupOrderItemsByName(items);
 
   return {
@@ -65,15 +69,14 @@ const mapOrderDetailsData = (apiDetailsData) => {
       id: summary.companyId,
       company: summary.companyName,
       region: summary.industrialSiteName,
-      // Detay sayfasının tepesindeki kart için "kişi" sayısı "totalOrders" alanından geliyor.
+      // totalPeople is derived from totalOrders
       totalPeople: summary.totalOrders,
       status: summary.statusText === "Yeni Sipariş" ? "pending" : "completed",
       orderTime: summary.createdAt ? summary.createdAt.substring(11, 16) : "",
     },
-    // Yeni oluşturduğumuz, tamamen gruplanmış ve toplanmış veri yapısını atayalım.
+
     groupedItems: groupedItems,
-    // DURUM GÜNCELLEME İÇİN GEREKLİ: API'den gelen orijinal sipariş kalemlerini
-    // (orderCode'ları içeren) burada saklıyoruz.
+    // Keep original items for status updates
     rawItems: items,
   };
 };
@@ -84,10 +87,10 @@ export const fetchRestaurantOrders = createAsyncThunk(
     try {
       const data = await getRestaurantsOrderList(restaurantId);
       if (data && data.error === false) {
-        // Gelen veriyi ön yüz formatına dönüştür
+        // Map to UI format
         return mapOrderData(data);
       } else {
-        return rejectWithValue(data.message || "Sipariş listesi alınamadı.");
+        return rejectWithValue(data.message || "Failed to fetch order list.");
       }
     } catch (error) {
       return rejectWithValue(error.message);
@@ -103,7 +106,9 @@ export const fetchOrderDetails = createAsyncThunk(
       if (data && data.error === false) {
         return mapOrderDetailsData(data);
       } else {
-        return rejectWithValue(data.message || "Sipariş detayları alınamadı.");
+        return rejectWithValue(
+          data.message || "Failed to fetch order details."
+        );
       }
     } catch (error) {
       return rejectWithValue(error.message);
@@ -117,12 +122,11 @@ export const updateOrderStatus = createAsyncThunk(
     try {
       const data = await setOrderStatus(statusUpdateData);
       if (data && data.error === false) {
-        // Durum başarıyla güncellendiğinde, sipariş listesini yeniden çekerek
-        // verinin tutarlılığını sağlıyoruz.
+        // After successful status update, refetch order list for consistency
         await dispatch(fetchRestaurantOrders(statusUpdateData.restaurantId));
-        return data; // Başarılı yanıtı döndür
+        return data; // Pass through success response
       } else {
-        return rejectWithValue(data.message || "Durum güncellenemedi.");
+        return rejectWithValue(data.message || "Failed to update status.");
       }
     } catch (error) {
       return rejectWithValue(error.message);
@@ -134,11 +138,11 @@ const initialState = {
   orders: [],
   isLoading: false,
   error: null,
-  // Detay sayfası için state'ler
+  // Detail page state
   selectedOrderDetails: null,
   isDetailsLoading: false,
   detailsError: null,
-  // Durum güncelleme için state'ler
+  // Status update state
   isStatusUpdating: false,
   statusUpdateError: null,
 };
@@ -160,7 +164,7 @@ const restaurantOrdersSlice = createSlice({
       .addCase(fetchRestaurantOrders.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-        // Önceki başarılı sipariş listesi korunur; liste boşaltılmaz.
+        // Preserve previously fetched list
       })
       // Order Details Reducers
       .addCase(fetchOrderDetails.pending, (state) => {
@@ -183,7 +187,7 @@ const restaurantOrdersSlice = createSlice({
       })
       .addCase(updateOrderStatus.fulfilled, (state) => {
         state.isStatusUpdating = false;
-        // Detay sayfasındaki veriyi temizleyebiliriz, çünkü kullanıcı listeye yönlendirilecek.
+        // Clear details; user will be redirected
         state.selectedOrderDetails = null;
       })
       .addCase(updateOrderStatus.rejected, (state, action) => {
@@ -213,11 +217,17 @@ export const selectRegionCategories = createSelector(
 
 export const makeSelectFilteredOrders = () =>
   createSelector(
-    [selectAllOrders, (_state, searchQuery) => searchQuery, (_state, _q, selectedValue) => selectedValue],
+    [
+      selectAllOrders,
+      (_state, searchQuery) => searchQuery,
+      (_state, _q, selectedValue) => selectedValue,
+    ],
     (orders, searchQuery, selectedValue) => {
       const lowerQuery = (searchQuery || "").toLocaleLowerCase("tr-TR");
       return orders
-        .filter((o) => o.company.toLocaleLowerCase("tr-TR").includes(lowerQuery))
+        .filter((o) =>
+          o.company.toLocaleLowerCase("tr-TR").includes(lowerQuery)
+        )
         .filter((o) => selectedValue === "all" || o.region === selectedValue)
         .sort((a, b) => {
           const timeA = a.orderTime.replace(":", "");

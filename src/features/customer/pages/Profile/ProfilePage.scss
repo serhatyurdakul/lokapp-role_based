@@ -1,14 +1,12 @@
 @use "@/styles/variables" as *;
 @use "@/styles/breakpoints" as *;
 
-// Profil içeriği
 .profile-content {
   display: flex;
   flex-direction: column;
   gap: $spacing-24;
 }
 
-// Profil başlığı
 .profile-header {
   display: flex;
   flex-direction: column;
@@ -49,7 +47,6 @@
   }
 }
 
-// Profil bölümleri
 .profile-section {
   background: var(--background-secondary);
   border-radius: $border-radius-medium;
@@ -86,7 +83,6 @@
   }
 }
 
-// Bilgi listesi
 .info-list {
   display: flex;
   flex-direction: column;
@@ -184,7 +180,6 @@
   }
 }
 
-// Ayarlar listesi
 .settings-list {
   display: flex;
   flex-direction: column;
@@ -213,7 +208,6 @@
   }
 }
 
-// Çıkış yap butonu
 .logout-button {
   margin-top: $spacing-8;
   margin-bottom: max(env(safe-area-inset-bottom), $spacing-24);

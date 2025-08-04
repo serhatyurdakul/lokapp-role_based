@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectItem } from "@/features/customer/store/customerMenuSlice";
 import "./ProductCard.scss";
 
+const PLACEHOLDER_IMAGE = "https://placehold.co/150x150?text=Yemek";
+
 const ProductCard = ({
   name,
   price,
@@ -16,7 +18,6 @@ const ProductCard = ({
   );
   const isOutOfStock = remainingQuantity === 0;
 
-  // Ürün fiyatını formatlayarak gösteren yardımcı fonksiyon
   const formatPrice = (price) => {
     return typeof price === "number"
       ? price.toLocaleString("tr-TR", {
@@ -36,17 +37,17 @@ const ProductCard = ({
       <img
         src={image}
         alt={name}
-        className='product-card__image'
-        loading='lazy'
+        className="product-card__image"
+        loading="lazy"
         onError={(e) => {
-          e.target.src = "https://placehold.co/150x150?text=Yemek";
+          e.target.src = PLACEHOLDER_IMAGE;
         }}
       />
-      <div className='product-card__content'>
-        <h3 className='product-card__name'>{name}</h3>
-        <p className='product-card__price'>{formatPrice(price)} ₺</p>
+      <div className="product-card__content">
+        <h3 className="product-card__name">{name}</h3>
+        <p className="product-card__price">{formatPrice(price)} ₺</p>
       </div>
-      {isSelected && <div className='product-card__selected-indicator'>✓</div>}
+      {isSelected && <div className="product-card__selected-indicator">✓</div>}
     </button>
   );
 };

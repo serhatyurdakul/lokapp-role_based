@@ -16,16 +16,13 @@
   -webkit-backdrop-filter: blur(10px);
 }
 
-// Ana menü container'ı
 .navbar-menu {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--overlay-light-03);
   border-radius: $border-radius-medium;
-  position: relative;
   padding: 2px;
   width: 240px;
-  margin: 0 auto;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -34,14 +31,14 @@
     width: 280px;
   }
 
-  // Aktif menü göstergesi
+  // The sliding indicator for the active menu item
   &::before {
     content: "";
     position: absolute;
     top: 2px;
     bottom: 2px;
     left: 2px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--overlay-light-1);
     border-radius: $border-radius-small;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     width: calc((100% - 4px) / var(--total-links, 2));
@@ -50,7 +47,7 @@
     visibility: visible;
   }
 
-  // Active index -1 olduğunda göstergeyi gizle
+  // Hide the indicator when no item is active (index is -1)
   &[style*="--active-index: -1"]::before {
     opacity: 0;
     visibility: hidden;

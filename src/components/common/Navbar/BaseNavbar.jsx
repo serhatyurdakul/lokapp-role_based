@@ -4,7 +4,7 @@ import "./BaseNavbar.scss";
 
 const BaseNavbar = ({
   links, 
-  rightAction, 
+  rightAction = null, 
   className,
 }) => {
   const location = useLocation();
@@ -28,7 +28,7 @@ const BaseNavbar = ({
   }, [location, links]);
 
   return (
-    <nav className={`navbar ${className || ""}`}>
+    <nav className={className ? `navbar ${className}` : "navbar"}>
       <div className='navbar-menu' ref={navRef}>
         {links.map((link) => (
           <NavLink
@@ -37,13 +37,13 @@ const BaseNavbar = ({
             className={`navbar-menu-item ${
               location.pathname === link.to ? "active" : ""
             }`}
-            end={link.end}
+            end={link.end || undefined}
           >
             {link.label}
           </NavLink>
         ))}
       </div>
-      {rightAction}
+      {rightAction && rightAction}
     </nav>
   );
 };

@@ -48,17 +48,17 @@ const OrderDetailPage = () => {
   const handleStatusChange = () => {
     if (!order || !user?.restaurantId || !companyId) return;
 
-    // Mevcut duruma göre yeni durum ID'sini belirle
-    const newStatusId = order.summary.status === "pending" ? 4 : 1; // 4 = Tamamlandı, 1 = Yeni Sipariş
+    // Determine next status ID
+    const newStatusId = order.summary.status === "pending" ? 4 : 1; // 4 = Completed, 1 = New
 
-    // 1. Benzersiz orderCode'ları topla - ARTIK DOĞRU YERDEN OKUNUYOR
+    // Collect unique order codes
     const uniqueOrderCodes = new Set(
       (order.rawItems || []).map((item) => item.orderCode)
     );
 
     const statusUpdateData = {
       orderCodes: Array.from(uniqueOrderCodes),
-      statusId: newStatusId, // Dinamik olarak belirlenen statusId'yi kullan
+      statusId: newStatusId,
       restaurantId: user.restaurantId,
       companyId: parseInt(companyId),
     };
@@ -75,24 +75,22 @@ const OrderDetailPage = () => {
     setShowStatusModal(false);
   };
 
-  // Hata oluştuğunda liste sayfasına geri dön
+  // Navigate back to list on error
   useEffect(() => {
     if (detailsError) {
       navigate("/orders");
     }
   }, [detailsError, navigate]);
 
-  // Tam ekran spinner yalnızca sipariş verisi henüz gelmemişse gösterilir
+  // Full-screen spinner while order data is loading
   if (isDetailsLoading && !order) {
     return <Loading text="Sipariş detayları yükleniyor..." />;
   }
 
-  // order yoksa (hata da yok) redirect beklenirken kısa süreli spinner göster
   if (!order && !detailsError) {
     return null;
   }
 
-  // Error state
   if (detailsError) {
     return (
       <div className="order-detail">

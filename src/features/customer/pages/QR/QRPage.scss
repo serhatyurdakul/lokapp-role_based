@@ -1,13 +1,4 @@
-@use "../../../../styles/variables" as *;
-@use "../../../../styles/breakpoints" as *;
-
-.qr-page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: var(--background-color);
-}
-
+@use "@/styles/variables" as *;
 
 .qr-content {
   display: flex;
@@ -17,25 +8,6 @@
   max-width: 480px;
   margin: 0 auto;
   width: 100%;
-}
-
-.qr-info {
-  text-align: center;
-  width: 100%;
-
-  h2 {
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: $spacing-16;
-  }
-
-  p {
-    color: var(--text-secondary);
-    font-size: 1rem;
-    line-height: 1.5;
-    margin-bottom: $spacing-24;
-  }
 }
 
 .qr-steps {
@@ -68,7 +40,7 @@
     p {
       margin: 0;
       font-size: 0.875rem;
-      color: var(--text-primary);
+      color: var(--text-color);
     }
   }
 }

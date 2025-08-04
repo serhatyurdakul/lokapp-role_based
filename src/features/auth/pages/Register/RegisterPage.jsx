@@ -1,22 +1,23 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { register } from "../../store/authSlice";
-import AuthLayout from "../../layouts/AuthLayout.jsx";
+
 import FormInput from "@/components/common/forms/FormInput/FormInput";
 import FormSelect from "@/components/common/forms/FormSelect/FormSelect";
 import Button from "@/components/common/Button/Button";
+import ErrorMessage from "@/components/common/forms/ErrorMessage/ErrorMessage";
+
+import { register } from "../../store/authSlice";
+import AuthLayout from "../../layouts/AuthLayout.jsx";
 import {
   fetchCities,
   fetchDistricts,
   fetchIndustrialSites,
   fetchRestaurants,
   fetchLocaleCompanies,
-  registerUser,
 } from "../../../../utils/api";
 import "./RegisterPage.scss";
 
-// Kullanıcı kayıt formu
 const UserRegistrationForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -41,9 +42,9 @@ const UserRegistrationForm = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [industrialSites, setIndustrialSites] = useState([]);
   const [companies, setCompanies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState({ submit: false });
   const [error, setError] = useState("");
-  // Her alan için ayrı hata mesajları
+
   const [inputErrors, setInputErrors] = useState({
     name: "",
     email: "",
@@ -84,7 +85,6 @@ const UserRegistrationForm = () => {
       company: "",
     });
 
-    // Seçilen şehire göre ilçeleri yükleme
     try {
       const response = await fetchDistricts(cityId);
       setDistricts(response);
@@ -104,12 +104,11 @@ const UserRegistrationForm = () => {
       company: "",
     });
 
-    // Kullanıcı tipine göre restaurant veya sanayi sitelerini yükleme
+    // Load restaurants or industrial sites based on user type
     if (
       formData.userType === "restaurantEmployee" ||
       formData.userType === "restaurantManager"
     ) {
-      // Restoranları yükleme
       try {
         const response = await fetchRestaurants(districtId, formData.city);
         setRestaurants(response);
@@ -122,7 +121,6 @@ const UserRegistrationForm = () => {
       formData.userType === "companyEmployee" ||
       formData.userType === "companyManager"
     ) {
-      // Sanayi sitelerini yükleme
       try {
         const response = await fetchIndustrialSites(districtId, formData.city);
         setIndustrialSites(response);
@@ -137,7 +135,6 @@ const UserRegistrationForm = () => {
   const handleIndustrialSiteChange = async (siteId) => {
     setFormData({ ...formData, industrialSite: siteId });
 
-    // api firmaları çekme
     try {
       const response = await fetchLocaleCompanies(
         formData.city,
@@ -163,7 +160,6 @@ const UserRegistrationForm = () => {
       company: "",
     });
 
-    // Kullanıcı tipi değiştiğinde ilçeleri temizleme
     setDistricts([]);
     setRestaurants([]);
     setIndustrialSites([]);
@@ -180,7 +176,7 @@ const UserRegistrationForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLoading((prev) => ({ ...prev, submit: true }));
     setError("");
     setInputErrors({
       name: "",
@@ -195,23 +191,20 @@ const UserRegistrationForm = () => {
       confirmPassword: "",
     });
 
-    // Form validation
     let hasError = false;
     const newInputErrors = { ...inputErrors };
 
-    // Şifre kontrolü
     if (formData.password !== formData.confirmPassword) {
       newInputErrors.confirmPassword = "Şifreler eşleşmiyor";
       hasError = true;
     }
 
-    // Şifre uzunluk kontrolü
     if (formData.password.length < 8) {
       newInputErrors.password = "Şifreniz en az 8 karakter olmalıdır";
       hasError = true;
     }
 
-    // Firma kontrolü - Eğer firma çalışanı/sorumlusu seçildiyse
+    // Ensure company selected for company roles
     if (
       (formData.userType === "companyEmployee" ||
         formData.userType === "companyManager") &&
@@ -221,29 +214,28 @@ const UserRegistrationForm = () => {
       hasError = true;
     }
 
-    // Hata varsa güncelleme ve işlemi durdurma
     if (hasError) {
       setInputErrors(newInputErrors);
-      setIsLoading(false);
+      setLoading((prev) => ({ ...prev, submit: false }));
       return;
     }
 
-    // api için verileri hazırlama
+    // Prepare payload for API
     let determinedUserTypeId = null;
     let determinedRoleId = null;
 
     if (formData.userType === "restaurantEmployee") {
-      determinedUserTypeId = 1; // userTypes.id  "Lokanta Çalışanı" için  userTypes.id
-      determinedRoleId = 1; // roles.id  "Aşçı" için  roles.id
+      determinedUserTypeId = 1; // userTypes.id for "Restaurant Employee"
+      determinedRoleId = 1; // roles.id for "Chef"
     } else if (formData.userType === "restaurantManager") {
-      determinedUserTypeId = 1; // "Lokanta Çalışanı" için  userTypes.id
-      determinedRoleId = 2; // "Lokanta Sorumlusu" için  roles.id
+      determinedUserTypeId = 1; // userTypes.id for "Restaurant Employee"
+      determinedRoleId = 2; // roles.id for "Restaurant Manager"
     } else if (formData.userType === "companyEmployee") {
-      determinedUserTypeId = 2; // "Firma Çalışanı" için userTypes.id
-      determinedRoleId = 4; // "Firma Çalışanı" için roles.id
+      determinedUserTypeId = 2; // userTypes.id for "Company Employee"
+      determinedRoleId = 4; // roles.id for "Company Employee"
     } else if (formData.userType === "companyManager") {
-      determinedUserTypeId = 2; // "Firma Çalışanı" için userTypes.id
-      determinedRoleId = 3; // "Firma Sorumlusu" için roles.id
+      determinedUserTypeId = 2; // userTypes.id for "Company Employee"
+      determinedRoleId = 3; // roles.id for "Company Manager"
     }
 
     const userData = {
@@ -266,12 +258,11 @@ const UserRegistrationForm = () => {
     };
 
     try {
-      // Redux üzerinden kayıt işlemini gerçekleştirme
       await dispatch(register(userData)).unwrap();
       navigate("/login");
     } catch (err) {
-      console.error("Kayıt işlemi hatası:", err); // Hatanın yapısını detaylı görebilmek için
-      setIsLoading(false);
+      console.error("Kayıt işlemi hatası:", err);
+      setLoading((prev) => ({ ...prev, submit: false }));
       if (err.isValidationError && err.fieldErrors) {
         const newServerInputErrors = {};
         for (const key in err.fieldErrors) {
@@ -297,12 +288,12 @@ const UserRegistrationForm = () => {
       <h1>Kullanıcı Kaydı</h1>
 
       <form onSubmit={handleSubmit}>
-        {/* Tüm kullanıcı tipleri için temel bilgiler */}
+        {/* Common fields for all user types */}
         <FormInput
-          label='Ad Soyad'
-          type='text'
-          id='name'
-          name='name'
+          label="Ad Soyad"
+          type="text"
+          id="name"
+          name="name"
           value={formData.name}
           onChange={handleChange}
           required
@@ -312,10 +303,10 @@ const UserRegistrationForm = () => {
         />
 
         <FormInput
-          label='E-Mail'
-          type='email'
-          id='email'
-          name='email'
+          label="E-Mail"
+          type="email"
+          id="email"
+          name="email"
           value={formData.email}
           onChange={handleChange}
           required
@@ -325,14 +316,14 @@ const UserRegistrationForm = () => {
         />
 
         <FormSelect
-          label='Kullanıcı Tipi'
-          id='userType'
-          name='userType'
+          label="Kullanıcı Tipi"
+          id="userType"
+          name="userType"
           value={formData.userType}
           onChange={(e) => handleUserTypeChange(e.target.value)}
           required
           error={inputErrors.userType}
-          defaultOptionText='Seçiniz'
+          defaultOptionText="Seçiniz"
           options={[
             { value: "restaurantEmployee", label: "Lokanta Çalışanı" },
             { value: "restaurantManager", label: "Lokanta Sorumlusu" },
@@ -341,58 +332,58 @@ const UserRegistrationForm = () => {
           ]}
         />
 
-        {/* Lokanta Çalışanı veya Lokanta Sorumlusu ise */}
+        {/* Restaurant Employee/Manager fields */}
         {(formData.userType === "restaurantEmployee" ||
           formData.userType === "restaurantManager") && (
           <>
             <FormSelect
-              label='İl'
-              id='city-user-restaurant'
-              name='city'
+              label="İl"
+              id="city-user-restaurant"
+              name="city"
               value={formData.city}
               onChange={(e) => handleCityChange(e.target.value)}
               required
               error={inputErrors.city}
               options={cities}
-              defaultOptionText='Seçiniz'
-              disabledOptionText='Şehir bilgisi yüklenemedi'
+              defaultOptionText="Seçiniz"
+              disabledOptionText="Şehir bilgisi yüklenemedi"
             />
 
             {formData.city && (
               <FormSelect
-                label='İlçe'
-                id='district-user-restaurant'
-                name='district'
+                label="İlçe"
+                id="district-user-restaurant"
+                name="district"
                 value={formData.district}
                 onChange={(e) => handleDistrictChange(e.target.value)}
                 required
                 error={inputErrors.district}
                 options={districts}
-                defaultOptionText='Seçiniz'
-                disabledOptionText='İlçe bilgisi yüklenemedi'
+                defaultOptionText="Seçiniz"
+                disabledOptionText="İlçe bilgisi yüklenemedi"
               />
             )}
 
             {formData.district && (
               <FormSelect
-                label='Restoran'
-                id='restaurant-user'
-                name='restaurant'
+                label="Restoran"
+                id="restaurant-user"
+                name="restaurant"
                 value={formData.restaurant}
                 onChange={handleChange}
                 required
                 error={inputErrors.restaurant}
                 options={restaurants}
-                defaultOptionText='Seçiniz'
-                disabledOptionText='Bu ilçede kayıtlı restoran bulunamadı'
+                defaultOptionText="Seçiniz"
+                disabledOptionText="Bu ilçede kayıtlı restoran bulunamadı"
               />
             )}
 
             <FormInput
-              label='Şifre'
-              type='password'
-              id='password'
-              name='password'
+              label="Şifre"
+              type="password"
+              id="password"
+              name="password"
               value={formData.password}
               onChange={handleChange}
               required
@@ -400,10 +391,10 @@ const UserRegistrationForm = () => {
             />
 
             <FormInput
-              label='Şifre Tekrar'
-              type='password'
-              id='confirmPassword'
-              name='confirmPassword'
+              label="Şifre Tekrar"
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
               required
@@ -412,73 +403,73 @@ const UserRegistrationForm = () => {
           </>
         )}
 
-        {/* Firma Çalışanı veya Firma Sorumlusu ise */}
+        {/* Company Employee/Manager fields */}
         {(formData.userType === "companyEmployee" ||
           formData.userType === "companyManager") && (
           <>
             <FormSelect
-              label='İl'
-              id='city-user-company'
-              name='city'
+              label="İl"
+              id="city-user-company"
+              name="city"
               value={formData.city}
               onChange={(e) => handleCityChange(e.target.value)}
               required
               error={inputErrors.city}
               options={cities}
-              defaultOptionText='Seçiniz'
-              disabledOptionText='Şehir bilgisi yüklenemedi'
+              defaultOptionText="Seçiniz"
+              disabledOptionText="Şehir bilgisi yüklenemedi"
             />
 
             {formData.city && (
               <FormSelect
-                label='İlçe'
-                id='district-user-company'
-                name='district'
+                label="İlçe"
+                id="district-user-company"
+                name="district"
                 value={formData.district}
                 onChange={(e) => handleDistrictChange(e.target.value)}
                 required
                 error={inputErrors.district}
                 options={districts}
-                defaultOptionText='Seçiniz'
-                disabledOptionText='İlçe bilgisi yüklenemedi'
+                defaultOptionText="Seçiniz"
+                disabledOptionText="İlçe bilgisi yüklenemedi"
               />
             )}
 
             {formData.district && (
               <FormSelect
-                label='Sanayi Sitesi'
-                id='industrialSite-user'
-                name='industrialSite'
+                label="Sanayi Sitesi"
+                id="industrialSite-user"
+                name="industrialSite"
                 value={formData.industrialSite}
                 onChange={(e) => handleIndustrialSiteChange(e.target.value)}
                 required
                 error={inputErrors.industrialSite}
                 options={industrialSites}
-                defaultOptionText='Seçiniz'
-                disabledOptionText='Bu ilçede kayıtlı sanayi sitesi bulunamadı'
+                defaultOptionText="Seçiniz"
+                disabledOptionText="Bu ilçede kayıtlı sanayi sitesi bulunamadı"
               />
             )}
 
             {formData.industrialSite && (
               <FormSelect
-                label='Firma'
-                id='company-user'
-                name='company'
+                label="Firma"
+                id="company-user"
+                name="company"
                 value={formData.company}
                 onChange={handleChange}
                 required
                 error={inputErrors.company}
                 options={companies}
-                defaultOptionText='Seçiniz'
-                disabledOptionText='Bu sanayi sitesinde kayıtlı firma bulunamadı'
+                defaultOptionText="Seçiniz"
+                disabledOptionText="Bu sanayi sitesinde kayıtlı firma bulunamadı"
               />
             )}
 
             <FormInput
-              label='Şifre'
-              type='password'
-              id='password'
-              name='password'
+              label="Şifre"
+              type="password"
+              id="password"
+              name="password"
               value={formData.password}
               onChange={handleChange}
               required
@@ -486,10 +477,10 @@ const UserRegistrationForm = () => {
             />
 
             <FormInput
-              label='Şifre Tekrar'
-              type='password'
-              id='confirmPassword'
-              name='confirmPassword'
+              label="Şifre Tekrar"
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
               required
@@ -498,19 +489,15 @@ const UserRegistrationForm = () => {
           </>
         )}
 
-        {(error || reduxError) && (
-          <div className='error-message global-form-error'>
-            {error || reduxError}
-          </div>
-        )}
+        <ErrorMessage message={error || reduxError} />
 
-        <div className='form-actions'>
+        <div className="form-actions">
           <Button
-            variant='primary'
-            type='submit'
-            disabled={isLoading || reduxLoading}
+            variant="primary"
+            type="submit"
+            disabled={loading.submit || reduxLoading}
           >
-            {isLoading || reduxLoading ? "Kaydediliyor..." : "Kayıt Ol"}
+            {loading.submit || reduxLoading ? "Kaydediliyor..." : "Kayıt Ol"}
           </Button>
         </div>
       </form>

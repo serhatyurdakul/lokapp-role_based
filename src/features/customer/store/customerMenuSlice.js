@@ -4,7 +4,7 @@ import {
   createOrder as createOrderApi,
 } from "@/utils/api";
 
-// Thunk - restoran yemeklerini api'den getirme
+// Async thunk: fetch restaurant meals
 export const fetchMeals = createAsyncThunk(
   "customerMenu/fetchMeals",
   async (restaurantId, { rejectWithValue }) => {
@@ -28,8 +28,8 @@ export const createOrder = createAsyncThunk(
       return rejectWithValue("Kullanıcı bilgileri bulunamadı.");
     }
 
-    // Firma çalışanları için sipariş verilecek restoran ID'si 'contractedRestaurantId'dir.
-    // Bu, kullanıcı rolüne göre doğru restoran ID'sini seçmemizi sağlar.
+    // Determine restaurantId based on role: use contractedRestaurantId for company employees
+
     const orderRestaurantId =
       user.isCompanyEmployee === 1
         ? user.contractedRestaurantId
@@ -44,7 +44,7 @@ export const createOrder = createAsyncThunk(
     const meals = Object.entries(selectedItems).map(([categoryId, mealId]) => ({
       mealId: String(mealId),
       categoryId: String(categoryId),
-      quantity: "1",
+      quantity: "1", // Business rule: always 1 item per category
     }));
 
     if (meals.length === 0) {
@@ -70,7 +70,7 @@ export const createOrder = createAsyncThunk(
 
 const initialState = {
   categories: [],
-  mealCategories: [],
+
   selectedItems: {},
   isLoading: false,
   error: null,
@@ -79,43 +79,33 @@ const initialState = {
   orderSuccessMessage: null,
 };
 
-// Yemek kategorilerini işleme fonksiyonu
+// Transform API meal categories into UI-friendly structure
 const processMealCategories = (mealCategories) => {
   if (
     !mealCategories ||
     !Array.isArray(mealCategories) ||
     mealCategories.length === 0
   ) {
-    console.log("İşlenecek yemek kategorileri bulunamadı");
     return [];
   }
 
-  console.log("İşlenecek yemek kategorileri:", mealCategories);
-
-  // Her bir kategori için ayrı kategori oluşturma
   return mealCategories
     .map((category, index) => {
-      // Kategori bilgilerini kontrol etme
-      console.log(`İşlenen kategori ${index}:`, category);
-
       if (
         !category.meals ||
         !Array.isArray(category.meals) ||
         category.meals.length === 0
       ) {
-        console.log(`Kategori ${index} için yemek bulunamadı`);
         return null;
       }
 
-      // Kategori adını alma
       const categoryName = category.categoryName || `Kategori ${index + 1}`;
 
-      // Yemekleri hazırlama
       const items = category.meals.map((meal) => ({
         id: meal.id,
         name: meal.name,
         price: parseFloat(meal.price) || 0,
-        image: meal.photoUrl, // Direct usage - no transformation needed
+        image: meal.photoUrl,
         description: meal.description || "",
         remainingQuantity:
           meal.remainingQuantity !== undefined
@@ -123,39 +113,29 @@ const processMealCategories = (mealCategories) => {
             : 0,
       }));
 
-      console.log(
-        `Kategori ${categoryName} için ${items.length} yemek işlendi`
-      );
-
       return {
         id: category.categoryId || index + 1,
         title: categoryName,
         items: items,
       };
     })
-    .filter(Boolean); // null değerleri filtrele
+    .filter(Boolean);
 };
 
 const menuSlice = createSlice({
   name: "customerMenu",
   initialState,
   reducers: {
-    // Yemek seçme/güncelleme
     selectItem(state, action) {
       const { categoryId, itemId } = action.payload;
 
-      // Eğer aynı ürün seçili ise, seçimi kaldırma (toggle)
       if (state.selectedItems[categoryId] === itemId) {
         delete state.selectedItems[categoryId];
       } else {
-        // Değilse yeni seçimi yapma
         state.selectedItems[categoryId] = itemId;
       }
     },
-    // Seçimi temizleme
-    clearSelection(state) {
-      state.selectedItems = {};
-    },
+
     clearOrderStatus(state) {
       state.orderError = null;
       state.orderSuccessMessage = null;
@@ -163,40 +143,34 @@ const menuSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Yemekleri getirme durumu
+      // Fetch meals – pending
       .addCase(fetchMeals.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(fetchMeals.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log("fetchMeals.fulfilled - Payload:", action.payload);
 
-        // Gelen veri null veya boş mu kontrolü yapma
+        // Handle empty or invalid payload
         if (
           !action.payload ||
           !Array.isArray(action.payload) ||
           action.payload.length === 0
         ) {
-          // Boş liste: hata değil, empty state
-          state.mealCategories = [];
+          // Empty list is not an error; show empty state
           state.categories = [];
           return;
         }
 
-        state.mealCategories = action.payload;
-
-        // Yemek kategorilerini işleme
-        state.categories = processMealCategories(state.mealCategories);
-        console.log("Kategoriler oluşturuldu:", state.categories);
+        state.categories = processMealCategories(action.payload);
       })
       .addCase(fetchMeals.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-        // Önceki menü verisi korunur; kullanıcı mevcut listede seçim yapmaya devam edebilir.
+        // Preserve previous menu so the user can keep existing selections
         console.error("Yemekler yüklenemedi:", action.payload);
       })
-      // Sipariş oluşturma durumu
+      // Create order – pending
       .addCase(createOrder.pending, (state) => {
         state.isOrderLoading = true;
         state.orderError = null;
@@ -205,8 +179,8 @@ const menuSlice = createSlice({
       .addCase(createOrder.fulfilled, (state, action) => {
         state.isOrderLoading = false;
         state.orderSuccessMessage =
-          action.payload.message || "Siparişiniz başarıyla oluşturuldu.";
-        state.selectedItems = {}; // Sipariş başarılı olunca seçimleri temizle
+          action.payload.message || "Order created successfully.";
+        state.selectedItems = {}; // Clear selection after successful order
         state.orderError = null;
       })
       .addCase(createOrder.rejected, (state, action) => {
@@ -217,6 +191,5 @@ const menuSlice = createSlice({
   },
 });
 
-export const { selectItem, clearSelection, clearOrderStatus } =
-  menuSlice.actions;
+export const { selectItem, clearOrderStatus } = menuSlice.actions;
 export default menuSlice.reducer;

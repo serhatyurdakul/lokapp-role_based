@@ -10,7 +10,6 @@ const UpdateMealModal = ({
   restaurantId,
   onMealUpdated,
 }) => {
-  // Hook'dan tüm logic'i al
   const {
     newStock,
     isSubmitting,
@@ -22,32 +21,33 @@ const UpdateMealModal = ({
   } = useUpdateMeal(restaurantId, selectedMeal, onMealUpdated, onClose, isOpen);
 
   if (!selectedMeal) {
-    return null; // Eğer seçili ürün yoksa modalı render etme
+    return null;
   }
 
   return (
     <GenericModal
       isOpen={isOpen}
       onClose={onClose}
-      title='Stok Güncelle'
+      title="Kalan Porsiyon Sayısı"
       primaryButtonText={isSubmitting ? "Güncelleniyor..." : "Güncelle"}
       onPrimaryAction={handleUpdateMeal}
       isPrimaryButtonDisabled={isSubmitDisabled}
       showSecondaryButton={true}
-      secondaryButtonText='İptal'
+      secondaryButtonText="İptal"
       onSecondaryAction={onClose}
       isLoading={isSubmitting}
     >
       <ErrorMessage message={error} />
       <h4>{selectedMeal.mealName}</h4>
       <FormInput
-        label='Yeni Stok Miktarı'
-        type='number'
-        id='newStockModalInput'
-        name='newStock'
+        label="Kalan Porsiyon Sayısı"
+        placeholder="Örneğin: 50"
+        type="number"
+        id="newStockModalInput"
+        name="newStock"
         value={newStock}
         onChange={handleStockChange}
-        min='0'
+        min="0"
         required
         isClearable={true}
         onClear={handleClearStock}

@@ -1,5 +1,9 @@
 import axios from "axios";
-import { MSG_NETWORK_ERROR, MSG_TIMEOUT_ERROR, MSG_UNKNOWN_ERROR } from "@/constants/messages";
+import {
+  MSG_NETWORK_ERROR,
+  MSG_TIMEOUT_ERROR,
+  MSG_UNKNOWN_ERROR,
+} from "@/constants/messages";
 
 // API URL
 const { VITE_API_BASE_URL } = import.meta.env;
@@ -20,10 +24,9 @@ export const api = axios.create({
 });
 
 // ---- Global Axios Auth Interceptors ---------------------------------
-// Bu interceptor'lar token geçersiz olduğunda veya başka cihaz/sekmede oturum açıldığında
-// uygulamayı güvenli şekilde oturumdan düşürür.
+// Logs out if token is invalid or used elsewhere
 
-// Dinamik import ile dairesel bağımlılıktan kaçınarak redux logout dispatch eden yardımcı
+// Helper to dispatch logout via dynamic import (avoids circular deps)
 const triggerGlobalLogout = async () => {
   try {
     const [{ store }, { logout }] = await Promise.all([
@@ -45,38 +48,32 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    // 401 → oturum geçersiz
+    // 401 → invalid session
     if (error?.response?.status === 401) {
       triggerGlobalLogout();
     }
 
-    // Ağ yok / CORS
+    // Network error / CORS issue
     if (error.message === "Network Error") {
-      return Promise.reject(
-        new Error(MSG_NETWORK_ERROR)
-      );
+      return Promise.reject(new Error(MSG_NETWORK_ERROR));
     }
 
     // Timeout
     if (error.code === "ECONNABORTED") {
-      return Promise.reject(
-        new Error(MSG_TIMEOUT_ERROR)
-      );
+      return Promise.reject(new Error(MSG_TIMEOUT_ERROR));
     }
 
-    // Backend özel mesajı varsa onu koru
+    // Preserve backend message if provided
     if (error.response && error.response.data?.message) {
       return Promise.reject(error);
     }
 
-    // Bilinmeyen hata
-    return Promise.reject(
-      new Error(MSG_UNKNOWN_ERROR)
-    );
+    // Unknown error
+    return Promise.reject(new Error(MSG_UNKNOWN_ERROR));
   }
 );
 
-// API yanıtlarını işleyen yardımcı fonksiyon
+// Parses API response
 const handleApiResponse = (response, dataKey = null) => {
   if (response && response.data) {
     const { data } = response;
@@ -146,27 +143,25 @@ export const endpoints = {
 export const setAuthHeaders = (token, uniqueId) => {
   if (token && uniqueId) {
     localStorage.setItem("token", token);
-    localStorage.setItem("uniqueId", uniqueId); // uniqueId'yi de localStorage'a yazma
+    localStorage.setItem("uniqueId", uniqueId);
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    api.defaults.headers.common["uniqueId"] = uniqueId; // uniqueId header'ını ekleme
+    api.defaults.headers.common["uniqueId"] = uniqueId;
   } else {
     localStorage.removeItem("token");
-    localStorage.removeItem("uniqueId"); // uniqueId'yi de localStorage'dan silme
-    localStorage.removeItem("user"); // "user" anahtarını da localStorage'dan silme
+    localStorage.removeItem("uniqueId");
+    localStorage.removeItem("user");
     delete api.defaults.headers.common["Authorization"];
-    delete api.defaults.headers.common["uniqueId"]; // uniqueId header'ını silme
+    delete api.defaults.headers.common["uniqueId"];
   }
 };
 
 const initialToken = localStorage.getItem("token");
-const initialUniqueId = localStorage.getItem("uniqueId"); // uniqueId'yi de localStorage'dan okuma
+const initialUniqueId = localStorage.getItem("uniqueId");
 
 if (initialToken && initialUniqueId) {
-  setAuthHeaders(initialToken, initialUniqueId); // Her ikisi de varsa header'ları ayarlama
+  setAuthHeaders(initialToken, initialUniqueId);
 } else {
-  // Eğer biri eksikse, tutarlılık için ikisini de temizleyebiliriz.
-  // Bu, sadece token varken ama uniqueId yokken (veya tam tersi) bir durum oluşmasını engeller.
-  setAuthHeaders(null, null); // Header'ları ve localStorage'ı temizleme
+  setAuthHeaders(null, null);
 }
 
 export const fetchCities = async () => {
@@ -248,7 +243,6 @@ export const registerUser = async (userData) => {
   try {
     const response = await api.post(endpoints.register, userData);
 
-    // Hata durumlarını kontrol etme
     if (response.data.error || response.data.status >= 400) {
       const apiError = new Error(
         response.data.message || "Kayıt sırasında sunucuda bir hata oluştu."
@@ -268,7 +262,7 @@ export const registerUser = async (userData) => {
     if (error.isValidationError || error.isOperational) {
       throw error;
     }
-    // Axios hatası veya diğer beklenmedik hataları kontrol etme
+
     if (error.response && error.response.data) {
       console.error(
         "registerUser - API Hata Yanıtı (Detaylı):",
@@ -288,12 +282,11 @@ export const registerUser = async (userData) => {
   }
 };
 
-// Kullanıcı girişi için API fonksiyonu
+// Login API call
 export const loginUser = async (credentials) => {
   try {
     const response = await api.post(endpoints.login, credentials);
 
-    // Hata durumlarını kontrol etme
     if (response.data.error || response.data.status >= 400) {
       const apiError = new Error(
         response.data.message || "Giriş sırasında sunucuda bir hata oluştu."
@@ -315,7 +308,7 @@ export const loginUser = async (credentials) => {
     if (error.isValidationError || error.isOperational) {
       throw error;
     }
-    // Axios hatası veya diğer beklenmedik hatalar
+
     if (error.response && error.response.data) {
       console.error(
         "loginUser - API Hata Yanıtı (Detaylı):",
@@ -335,12 +328,11 @@ export const loginUser = async (credentials) => {
   }
 };
 
-// Token doğrulama için API fonksiyonu
+// Verify token
 export const verifyUserToken = async (token) => {
   try {
     const response = await api.post(endpoints.verifyToken, { token });
 
-    // Hata durumlarını kontrol etme
     if (response.data.error || response.data.status >= 400) {
       const apiError = new Error(
         response.data.message || "Token doğrulama sırasında bir hata oluştu."
@@ -354,7 +346,7 @@ export const verifyUserToken = async (token) => {
     if (error.isOperational) {
       throw error;
     }
-    // Axios hatası veya diğer beklenmedik hatalar
+
     if (error.response && error.response.data) {
       console.error(
         "verifyUserToken - API Hata Yanıtı (Detaylı):",
@@ -398,10 +390,9 @@ export const fetchLocaleCompanies = async (
   }
 };
 
-// Yeni eklenen yemekleri getirme fonksiyonu
+// Fetch newly added meals
 export const fetchRestaurantMeals = async (restaurantId) => {
   try {
-    // Kullanıcı bilgilerini localStorage'dan alma
     const userJson = localStorage.getItem("user");
     let user = null;
     let uniqueId = null;
@@ -416,7 +407,6 @@ export const fetchRestaurantMeals = async (restaurantId) => {
         "Kullanıcı bilgileri parse edilemedi (fetchRestaurantMeals):",
         parseError
       );
-      // uniqueId null kalacak, bu durumda header a eklenmeyecek
     }
 
     const requestHeaders = {};
@@ -434,23 +424,20 @@ export const fetchRestaurantMeals = async (restaurantId) => {
       headers: requestHeaders,
     });
 
-    // API yanıtı yapısını inceleme
     console.log("Restoran Yemekleri API yanıtı veri yapısı:", {
       isArray: Array.isArray(response.data),
       dataType: typeof response.data,
       dataLength: Array.isArray(response.data) ? response.data.length : "N/A",
-      dataKeys: response.data ? Object.keys(response.data) : [], // response.data null/undefined kontrolü
+      dataKeys: response.data ? Object.keys(response.data) : [],
     });
 
     if (response.data) {
-      // 'error:true' geldiğinde mealList kontrolü
       if (response.data.error === true) {
         console.log(
           "API yanıtı hata içeriyor (fetchRestaurantMeals):",
           response.data.message
         );
 
-        // mealList yoksa veya boşsa bunu 'boş veri' olarak ele al
         if (
           !response.data.mealList ||
           (Array.isArray(response.data.mealList) &&
@@ -459,11 +446,9 @@ export const fetchRestaurantMeals = async (restaurantId) => {
           return [];
         }
 
-        // Gerçek hatalar için throw
         throw new Error(response.data.message || "Yemekler alınamadı");
       }
 
-      // mealList varsa ve dizi ise doğrudan döndür
       if (response.data.mealList && Array.isArray(response.data.mealList)) {
         return response.data.mealList;
       }
@@ -497,7 +482,7 @@ export const fetchRestaurantMeals = async (restaurantId) => {
 export const fetchMealCategories = async () => {
   try {
     const response = await api.get(endpoints.getCategories);
-    // handleApiResponse, categoryList anahtarını ve isActive filtresini dikkate almalı
+
     const categories = handleApiResponse(response, "categoryList");
     if (Array.isArray(categories)) {
       return categories.filter((category) => category.isActive === "1");
@@ -514,11 +499,11 @@ export const fetchMealOptionsByCategory = async (categoryId) => {
     const response = await api.get(
       `${endpoints.getMealMenu}?categoryId=${categoryId}`
     );
-    const meals = handleApiResponse(response, "data"); // API yanıtı 'data' anahtarı altında
+    const meals = handleApiResponse(response, "data");
     if (Array.isArray(meals)) {
       return meals.map((meal) => ({
         ...meal,
-        // categoryId string olarak gelirse, sayıya çevirme
+
         categoryId: meal.categoryId ? parseInt(meal.categoryId, 10) : null,
         id: meal.id ? parseInt(meal.id, 10) : null,
       }));
@@ -609,7 +594,6 @@ export const updateMealForRestaurant = async (mealData) => {
 
 export const deleteMealFromRestaurant = async (deleteData) => {
   try {
-    // API, POST yöntemini ve JSON body formatını bekliyor
     const response = await api.post("/deleteMealFromRestaurant", deleteData);
     return response.data;
   } catch (error) {
@@ -619,11 +603,9 @@ export const deleteMealFromRestaurant = async (deleteData) => {
     );
 
     if (error.response && error.response.data) {
-      // Sunucu yanıtı mevcutsa onu aynen döndür
       return error.response.data;
     }
 
-    // Axios veya ağ hatası
     return {
       error: true,
       message: error.message || "Yemek silinirken bilinmeyen bir hata oluştu.",
@@ -635,34 +617,30 @@ export const createOrder = async (orderData) => {
   try {
     const response = await api.post(endpoints.createOrder, orderData);
 
-    // API'den dönen yanıtın içindeki .data'yı kontrol ediyoruz.
     const responseData = response.data;
 
-    // API'nin kendi içindeki `error: true` bayrağını kontrol et
     if (responseData.error || responseData.status >= 400) {
-      // API'den anlamlı bir hata mesajı geliyorsa onu kullan
+      // Use API-provided error message if available
       const message =
         responseData.message || "Sipariş oluşturulurken bir hata oluştu.";
       const apiError = new Error(message);
 
-      // Token hatası gibi özel durumları ayırt etmek için
+      // Distinguish token errors
       if (responseData.tokenError) {
         apiError.tokenError = true;
       }
       throw apiError;
     }
 
-    // Başarılı durumda, sipariş bilgisini içeren tüm yanıtı döndür
+    // Return full response on success
     return responseData;
   } catch (error) {
-    // Yukarıda bizim fırlattığımız `apiError` ise tekrar fırlat
     if (error.isOperational || error.tokenError) {
       throw error;
     }
 
-    // Axios veya ağ hatası ise, daha genel bir hata mesajı oluştur
+    // If Axios or network error, create general message
     if (error.response) {
-      // Sunucudan bir yanıt geldi ama status kodu 2xx değil
       console.error(
         "createOrder - API Hata Yanıtı (Detaylı):",
         JSON.stringify(error.response.data, null, 2)
@@ -672,13 +650,12 @@ export const createOrder = async (orderData) => {
         "Sipariş oluşturma sırasında sunucuda bir hata oluştu.";
       throw new Error(message);
     } else if (error.request) {
-      // İstek yapıldı ama yanıt alınamadı
+      // Request made but no response
       console.error("createOrder - Yanıt Alınamadı:", error.request);
       throw new Error(
         "Sipariş oluşturulamadı, lütfen daha sonra tekrar deneyin."
       );
     } else {
-      // İsteği hazırlarken bir hata oluştu
       console.error("createOrder - İstek Kurulum Hatası:", error.message);
       throw new Error("Sipariş isteği oluşturulurken bir hata oluştu.");
     }
@@ -690,7 +667,7 @@ export const getRestaurantsOrderList = async (restaurantId, tabId = 0) => {
     const response = await api.get(endpoints.getRestaurantsOrderList, {
       params: { restaurantId, tabId },
     });
-    // Doğrudan tüm yanıtı döndür, hata kontrolü ve veri işleme thunk içinde yapılacak
+
     return response.data;
   } catch (error) {
     console.error(
@@ -698,13 +675,14 @@ export const getRestaurantsOrderList = async (restaurantId, tabId = 0) => {
       error.response?.data || error.message
     );
 
-    // Axios ağ hatası (response yok) → interceptor zaten kullanıcı dostu mesaj üretti
     if (!error.response) {
-      throw error; // Mesajı olduğu gibi ilet
+      throw error;
     }
 
-    // Backend taraflı hata → varsa API mesajını koru, yoksa varsayılan
-    throw new Error(error.response.data?.message || "Sipariş listesi alınamadı.");
+    // Use backend message if available, otherwise default
+    throw new Error(
+      error.response.data?.message || "Sipariş listesi alınamadı."
+    );
   }
 };
 
@@ -723,7 +701,9 @@ export const getRestaurantOrderDetails = async (restaurantId, companyId) => {
     if (!error.response) {
       throw error;
     }
-    throw new Error(error.response.data?.message || "Sipariş detayları alınamadı.");
+    throw new Error(
+      error.response.data?.message || "Sipariş detayları alınamadı."
+    );
   }
 };
 

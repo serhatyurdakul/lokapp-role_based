@@ -1,4 +1,6 @@
 import "./NoticeBanner.scss";
+import { ReactComponent as CloseIcon } from "../../../assets/icons/close.svg";
+import { ReactComponent as RefreshIcon } from "../../../assets/icons/reload.svg";
 
 const NoticeBanner = ({ message, onClose, actionText, onAction }) => {
   if (!message) return null;
@@ -13,7 +15,7 @@ const NoticeBanner = ({ message, onClose, actionText, onAction }) => {
           onClick={onAction}
           aria-label={actionText}
         >
-          ↻ {actionText}
+          <RefreshIcon /> {actionText}
         </button>
       )}
       {onClose && (
@@ -23,7 +25,7 @@ const NoticeBanner = ({ message, onClose, actionText, onAction }) => {
           aria-label="Kapat"
           type="button"
         >
-          ×
+          <CloseIcon />
         </button>
       )}
     </div>

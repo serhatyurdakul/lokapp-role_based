@@ -58,12 +58,6 @@
       display: flex;
     }
 
-    @media (prefers-color-scheme: dark) {
-      border-color: rgba(255, 255, 255, 0.1);
-    }
-
-    @include hover;
-
     &--prev {
       left: -8px;
     }

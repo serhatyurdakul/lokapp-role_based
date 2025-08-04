@@ -3,7 +3,6 @@ import {
   Routes,
   Route,
   Navigate,
-  Outlet,
 } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,21 +28,13 @@ const RoleBasedLayout = () => {
   const { user } = useSelector((state) => state.auth);
 
   if (!user) {
-    return <Navigate to='/login' replace />;
+    return <Navigate to="/login" replace />;
   }
 
   if (user.isRestaurantEmployee === 1) {
-    return (
-      <RestaurantLayout>
-        <Outlet />
-      </RestaurantLayout>
-    );
+    return <RestaurantLayout />;
   }
-  return (
-    <CustomerLayout>
-      <Outlet />
-    </CustomerLayout>
-  );
+  return <CustomerLayout />;
 };
 
 function App() {
@@ -70,8 +61,13 @@ function App() {
           );
           dispatch(logout());
         }
-      } else if (event.key === "token" && event.oldValue && event.newValue && event.oldValue !== event.newValue) {
-        // Başka sekmede kullanıcı yeniden giriş yaptı → mevcut sekmeyi güvenli şekilde oturumdan düşür
+      } else if (
+        event.key === "token" &&
+        event.oldValue &&
+        event.newValue &&
+        event.oldValue !== event.newValue
+      ) {
+        // Token changed in another tab — logout current tab for security
         if (isAuthenticated) {
           console.log("Token değeri değişti, mevcut sekme logout ediliyor.");
           dispatch(logout());
@@ -94,17 +90,16 @@ function App() {
   }, [dispatch, isAuthenticated, logout]);
 
   if (authIsLoading && tokenFromStore && !userFromStore) {
-    // Token varsa ve kullanıcı bilgisi bekleniyorsa yükleme gösterme
     return <div>Kimlik doğrulanıyor...</div>;
   }
 
   return (
     <Router>
       <Routes>
-        <Route path='/login' element={<AuthLoginPage />} />
-        <Route path='/register' element={<AuthRegisterPage />} />
+        <Route path="/login" element={<AuthLoginPage />} />
+        <Route path="/register" element={<AuthRegisterPage />} />
 
-        {/* Protected Routes - Tek bir giriş noktası */}
+        {/* Protected routes — single entry point */}
         <Route
           element={
             <PrivateRoute>
@@ -113,7 +108,7 @@ function App() {
           }
         >
           <Route
-            path='/'
+            path="/"
             element={
               <RoleRenderer
                 customerComponent={<CustomerHomePage />}
@@ -123,7 +118,7 @@ function App() {
           />
 
           <Route
-            path='/profile'
+            path="/profile"
             element={
               <RoleRenderer
                 customerComponent={<CustomerProfilePage />}
@@ -133,51 +128,50 @@ function App() {
           />
 
           <Route
-            path='/qr'
+            path="/qr"
             element={
               <RoleRenderer
                 customerComponent={<CustomerQRPage />}
-                restaurantComponent={<Navigate to='/' replace />}
+                restaurantComponent={<Navigate to="/" replace />}
               />
             }
           />
 
           <Route
-            path='/menu'
+            path="/menu"
             element={
               <RoleRenderer
-                customerComponent={<Navigate to='/' replace />}
+                customerComponent={<Navigate to="/" replace />}
                 restaurantComponent={<RestaurantMenuPage />}
               />
             }
           />
           <Route
-            path='/orders'
+            path="/orders"
             element={
               <RoleRenderer
-                customerComponent={<Navigate to='/' replace />}
+                customerComponent={<Navigate to="/" replace />}
                 restaurantComponent={<RestaurantOrdersPage />}
               />
             }
           />
           <Route
-            path='/orders/:companyId'
+            path="/orders/:companyId"
             element={
               <RoleRenderer
-                customerComponent={<Navigate to='/' replace />}
+                customerComponent={<Navigate to="/" replace />}
                 restaurantComponent={<RestaurantOrderDetailPage />}
               />
             }
           />
         </Route>
-        {/* Yakalanamayan tüm yollar için ana sayfaya yönlendirme veya 404 */}
-        <Route path='*' element={<Navigate to='/' replace />} />
+        {/* Catch-all: redirect unmatched routes to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
 }
 
-// RoleRenderer
 const RoleRenderer = ({ customerComponent, restaurantComponent }) => {
   const { user, isLoading } = useSelector((state) => state.auth);
 
@@ -186,7 +180,7 @@ const RoleRenderer = ({ customerComponent, restaurantComponent }) => {
   }
 
   if (!user) {
-    return <Navigate to='/login' replace />;
+    return <Navigate to="/login" replace />;
   }
 
   if (user.isRestaurantEmployee === 1) {

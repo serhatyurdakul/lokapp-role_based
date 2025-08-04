@@ -1,6 +1,6 @@
 @use "../../../../styles/variables" as *;
 
-// Arama sonuçları ve input container stilleri
+
 .search-input-container {
   position: relative;
   width: 100%;
@@ -27,10 +27,6 @@
 
       &:last-child {
         border-bottom: none;
-      }
-
-      &:hover {
-        background-color: var(--hover-color);
       }
     }
   }

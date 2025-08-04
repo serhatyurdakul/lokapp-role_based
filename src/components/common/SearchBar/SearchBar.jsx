@@ -1,9 +1,11 @@
 import PropTypes from "prop-types";
 import "./SearchBar.scss";
+import { ReactComponent as SearchIcon } from "../../../assets/icons/search.svg";
 
 const SearchBar = ({ value, onChange, placeholder = "Ara..." }) => {
   return (
     <div className='search-bar'>
+      <SearchIcon className='search-bar__icon' />
       <input
         type='text'
         placeholder={placeholder}

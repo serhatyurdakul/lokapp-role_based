@@ -9,30 +9,30 @@ const useDeleteMeal = (
   onClose,
   isOpen
 ) => {
-  // State'ler
+
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState("");
 
-  // Modal açıldığında form'u reset et
+  // Reset error state when modal opens or selected meal changes
   useEffect(() => {
     if (isOpen && selectedMeal) {
       setError("");
     }
   }, [isOpen, selectedMeal]);
 
-  // Form'u reset etme
+
   const resetForm = () => {
     setError("");
   };
 
-  // Delete işlemi
+
   const handleDeleteMeal = async (event) => {
     if (event) {
       event.preventDefault();
     }
     setError("");
 
-    // Validation
+
     if (!selectedMeal || !selectedMeal.id) {
       setError("Silinecek yemek seçilmedi.");
       return;
@@ -43,7 +43,7 @@ const useDeleteMeal = (
       return;
     }
 
-    // API çağrısı için data hazırlama
+
     const deleteData = {
       mealId: selectedMeal.id.toString(),
       restaurantId: restaurantId.toString(),
@@ -67,16 +67,16 @@ const useDeleteMeal = (
     }
   };
 
-  // Submit butonunun disabled durumu
+
   const isSubmitDisabled = isDeleting || !selectedMeal;
 
   return {
-    // State values
+
     isDeleting,
     error,
     isSubmitDisabled,
 
-    // Handlers
+
     handleDeleteMeal,
     resetForm,
   };

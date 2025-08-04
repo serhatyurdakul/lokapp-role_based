@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  api,
   setAuthHeaders,
   registerUser,
   loginUser,
@@ -11,15 +10,13 @@ export const register = createAsyncThunk(
   "auth/register",
   async (userData, { rejectWithValue }) => {
     try {
-      // registerUser fonksiyonu response.data dır
       const response = await registerUser(userData);
 
       if (
         !response.error &&
         (response.status === 200 || response.status === 201)
       ) {
-        // kullanıcı kaydı (registerUser)
-        // Token ve uniqueId içeren user nesnesi bekleniyor.
+        // Expecting user object with token and uniqueId.
         if (response.user && response.user.uniqueId && response.user.token) {
           const token = response.user.token;
           const user = response.user;
@@ -112,6 +109,7 @@ export const verifyToken = createAsyncThunk(
         }
         return {
           user: response.user,
+          token: response.user.token,
         };
       } else {
         setAuthHeaders(null, null);
@@ -170,8 +168,6 @@ const authSlice = createSlice({
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
-        state.registrationMessage =
-          "Kayıt işleminiz başarıyla tamamlandı. Şimdi giriş yapabilirsiniz.";
       })
       .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
@@ -181,7 +177,6 @@ const authSlice = createSlice({
         state.token = null;
       });
 
-    // Login
     builder
       .addCase(login.pending, (state) => {
         state.isLoading = true;
@@ -193,7 +188,6 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.isAuthenticated = true;
         state.error = null;
-        state.registrationMessage = null;
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
@@ -201,22 +195,20 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
         state.token = null;
-        state.registrationMessage = null;
       });
 
-    // Verify Token
     builder
       .addCase(verifyToken.pending, (state) => {
         state.isLoading = true;
         state.error = null;
-        state.registrationMessage = null;
       })
       .addCase(verifyToken.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.user;
+        state.token = action.payload.token;
         state.isAuthenticated = true;
         state.error = null;
-        state.registrationMessage = null;
+        setAuthHeaders(action.payload.token, action.payload.user.uniqueId);
       })
       .addCase(verifyToken.rejected, (state, action) => {
         state.isLoading = false;
@@ -224,7 +216,6 @@ const authSlice = createSlice({
         state.token = null;
         state.isAuthenticated = false;
         state.error = action.payload;
-        state.registrationMessage = null;
       });
   },
 });

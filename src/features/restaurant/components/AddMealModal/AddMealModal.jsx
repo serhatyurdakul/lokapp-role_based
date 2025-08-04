@@ -14,16 +14,14 @@ const AddMealModal = ({
   onMealAdded,
   isLoadingCategories,
 }) => {
-  // Hook'dan tüm logic'i al
+
   const {
     searchQuery,
     showSearchResults,
     searchResultsRef,
     selectedCategoryInModal,
     newStock,
-    selectedMeal,
     isSubmitting,
-    mealOptions,
     filteredMealOptions,
     isLoadingMealOptions,
     mealExistsError,
@@ -77,19 +75,20 @@ const AddMealModal = ({
 
         <div className='search-input-container'>
           <FormInput
-            label='Yemek Adı'
+            label='Yemek Ara'
             id='name-modal-input'
             name='name'
             type='text'
             value={searchQuery}
             onChange={handleMealOptionSearchChange}
-            placeholder='Yemek adını yazarak arayın'
+            placeholder="Yemek adı arayın"
             autoComplete='off'
             autoCorrect='off'
             spellCheck='false'
             required
             isClearable={true}
             onClear={handleClearMealOptionSearch}
+            isSearchable={true}
           />
           {isLoadingMealOptions && (
             <div className='search-loading'>Yemekler yükleniyor...</div>
@@ -120,13 +119,13 @@ const AddMealModal = ({
         </div>
 
         <FormInput
-          label='Stok Miktarı'
+          label="Porsiyon Sayısı"
           id='stock-modal-input'
           name='stock'
           type='number'
           value={newStock}
           onChange={(e) => setNewStock(e.target.value)}
-          placeholder='Stok miktarını girin'
+          placeholder="Örneğin: 50"
           min='0'
           autoComplete='off'
           required

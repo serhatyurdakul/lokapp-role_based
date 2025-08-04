@@ -13,9 +13,10 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Redux state'lerini alma
   const { user } = useSelector((state) => state.auth);
-  const { menuData, isLoading, error } = useSelector((state) => state.restaurantMenu);
+  const { menuData, isLoading, error } = useSelector(
+    (state) => state.restaurantMenu
+  );
   const restaurantId = user?.restaurantId;
 
   const [selectedMeal, setSelectedMeal] = useState(null);
@@ -26,7 +27,7 @@ const DashboardPage = () => {
     setShowBanner(!!error);
   }, [error]);
 
-  // mock veriler (Daha sonra api den gelecek)
+  // TODO: Replace with real API data once the backend is integrated
   const [dailyStats] = useState({
     totalOrders: 140,
     pendingOrders: 32,
@@ -40,7 +41,7 @@ const DashboardPage = () => {
     }
   };
 
-  // Dashboard sayfası her ziyaret edildiğinde güncel menü verisini çeker.
+  // Fetch latest menu data on mount or when restaurantId changes
   useEffect(() => {
     loadRestaurantMenu();
   }, [restaurantId]);
@@ -50,26 +51,26 @@ const DashboardPage = () => {
       return [];
     }
 
-    // 1. flatMap ile tüm yemekleri tek bir diziye indirge ve ihtiyacımız olan formata dönüştür
+    // 1. Flatten all meals and map to desired structure
     const allMeals = menuData.flatMap((categoryGroup) =>
       (categoryGroup.meals || []).map((meal) => ({
-        ...meal, // Modal'ın ihtiyacı olan tüm orijinal veriyi koru
+        ...meal, // Preserve all original data needed by the modal
         mealName: meal.name,
         currentStock: meal.remainingQuantity ?? 0,
         quantity: meal.quantity ?? 0,
       }))
     );
 
-    // 2. Sadece kritik stoktakileri filtrele ("iyi" durumda olmayanlar)
+    // 2. Keep only meals that are not in "good" stock status
     const criticalMeals = allMeals.filter(
       (meal) => getStockStatus(meal.currentStock) !== "good"
     );
 
-    // 3. En acil olanı (stok adedi en düşük) en üste gelecek şekilde sırala
+    // 3. Sort by remaining quantity ascending (most critical first)
     criticalMeals.sort((a, b) => a.currentStock - b.currentStock);
 
     return criticalMeals;
-  }, [menuData]); // Bu hesaplama sadece menuData değiştiğinde yeniden yapılır
+  }, [menuData]);
 
   const openStockModal = (meal) => {
     setSelectedMeal(meal);
@@ -86,8 +87,8 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className='dashboard-content'>
-      <PageHeader title='Özet' />
+    <div className="dashboard-content">
+      <PageHeader title="Özet" />
       {showBanner && error && (
         <NoticeBanner
           message={error}
@@ -97,25 +98,25 @@ const DashboardPage = () => {
         />
       )}
 
-      <div className='critical-info'>
-        <div className='stat-card primary'>
+      <div className="critical-info">
+        <div className="stat-card primary">
           <h3>Bekleyen Siparişler</h3>
-          <p className='stat-value pending'>{dailyStats.pendingOrders}</p>
-          <button className='action-button' onClick={() => navigate("/orders")}>
+          <p className="stat-value pending">{dailyStats.pendingOrders}</p>
+          <button className="action-button" onClick={() => navigate("/orders")}>
             Siparişleri Yönet →
           </button>
         </div>
       </div>
 
-      <div className='stock-alerts'>
-        <div className='section-header'>
-          <h2>Kritik Stok Durumu</h2>
-          <button className='view-all-btn' onClick={() => navigate("/menu")}>
+      <div className="stock-alerts">
+        <div className="section-header">
+          <h2>Az Kalanlar</h2>
+          <button className="view-all-btn" onClick={() => navigate("/menu")}>
             Menü Yönetimi →
           </button>
         </div>
-        <div className='alert-cards'>
-          {(isLoading && lowStockMeals.length === 0) && (
+        <div className="alert-cards">
+          {isLoading && lowStockMeals.length === 0 && (
             <Loading text="Stok durumu yükleniyor..." />
           )}
           {lowStockMeals.length > 0 &&
@@ -125,13 +126,13 @@ const DashboardPage = () => {
                 className={`alert-card ${getStockStatus(meal.currentStock)}`}
                 onClick={() => openStockModal(meal)}
               >
-                <div className='alert-header'>
+                <div className="alert-header">
                   <h4>{meal.mealName}</h4>
-                  <span className='stock-badge'>
+                  <span className="stock-badge">
                     {meal.currentStock} / {meal.quantity}
                   </span>
                 </div>
-                <div className='stock-bar'>
+                <div className="stock-bar">
                   <div
                     className={`stock-progress ${getStockStatus(
                       meal.currentStock
@@ -148,17 +149,17 @@ const DashboardPage = () => {
               </div>
             ))}
           {!isLoading && lowStockMeals.length === 0 && (
-            <div className='no-alerts'>
+            <div className="no-alerts">
               <p>Kritik stok durumu bulunmuyor</p>
             </div>
           )}
         </div>
       </div>
 
-      <div className='daily-summary'>
+      <div className="daily-summary">
         <h2>Günlük Özet</h2>
-        <div className='summary-chart'>
-          <div className='chart-placeholder'>
+        <div className="summary-chart">
+          <div className="chart-placeholder">
             <p>Saatlik sipariş ve gelir grafiği burada görüntülenecek</p>
           </div>
         </div>

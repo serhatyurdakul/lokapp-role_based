@@ -1,5 +1,4 @@
 @use "../../../../styles/variables" as *;
-@use "../../../../styles/breakpoints" as *;
 
 .order-button {
   position: fixed;
@@ -7,24 +6,24 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 99;
+
+  &.btn {
+    padding: $spacing-12 $spacing-16;
+    border-radius: $border-radius-large;
+    font-weight: 600;
+  }
 }
 
-.order-button.btn {
-  padding: $spacing-12 $spacing-16;
-  border-radius: $border-radius-large;
-  font-weight: 600;
-}
 
-// Modal içindeki liste için stiller
 .modal-items-list {
-  padding-left: $spacing-24; // Örnek bir padding değeri
+  padding-left: $spacing-24;
   margin-top: $spacing-12;
   margin-bottom: $spacing-12;
-  list-style-type: disc; // Madde imlerini göster
+  list-style-type: disc;
 
   li {
-    margin-bottom: $spacing-8; // Liste elemanları arası boşluk
-    color: var(--text-secondary); // Metin rengi, temanıza göre ayarlayın
+    margin-bottom: $spacing-8;
+    color: var(--text-secondary);
 
     &:last-child {
       margin-bottom: 0;

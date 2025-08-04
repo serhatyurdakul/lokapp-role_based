@@ -15,9 +15,9 @@ const Button = ({
   const baseClassName = "btn";
   const variantClassName = `btn-${variant}`;
 
-  // className prop'u ile gelen ek sınıfları birleştir
+  // Merge additional classes received via className prop
   const combinedClassName =
-    `${baseClassName} ${variantClassName} ${className} ${loading ? "btn-loading" : ""}`.trim();
+    `${baseClassName} ${variantClassName} ${className}`.trim();
 
   return (
     <button

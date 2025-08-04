@@ -27,15 +27,15 @@ const sortMenuData = (menuDataToSort) => {
     return [];
   }
 
-  // Orijinal veriyi değiştirmemek için iki seviyeli kopya alma
-  // JSON.parse(JSON.stringify()) yerine manuel .map spread yaklaşımı: Date nesneleri bozulmaz
+  // Deep copy to avoid mutating original data
+  // Manual spread preserves Date objects
   const sortedData = menuDataToSort.map((categoryGroup) => ({
     ...categoryGroup,
-    // meal dizisinin de kopyasını alıyoruz, meal objelerini de shallow kopyalıyoruz
+    // Also shallow-copy meal objects
     meals: (categoryGroup.meals || []).map((meal) => ({ ...meal })),
   }));
 
-  // 1. Her kategori içindeki yemekleri createdAt e göre sırala (en yeni en üstte)
+  // Sort meals in each category by createdAt (newest first)
   sortedData.forEach((categoryGroup) => {
     if (categoryGroup.meals && categoryGroup.meals.length > 0) {
       categoryGroup.meals.sort((a, b) => {
@@ -43,15 +43,15 @@ const sortMenuData = (menuDataToSort) => {
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
       });
-      // Kategori grubuna en yeni yemeğin tarihini ekle (kategorileri sıralamak için)
+      // Cache newest meal date for category sorting
       categoryGroup.latestMealCreatedAt = categoryGroup.meals[0].createdAt;
     } else {
-      // Eğer kategoride hiç yemek yoksa, sıralamada sona düşmesi için çok eski bir tarih ata
+      // Use epoch date for empty categories so they sort last
       categoryGroup.latestMealCreatedAt = "1970-01-01T00:00:00Z";
     }
   });
 
-  // 2. Kategorileri, içerdikleri en yeni yemeğin createdAt ine göre sırala (en son yemek eklenen kategori en üstte)
+  // Sort categories by newest meal date (recent first)
   sortedData.sort((a, b) => {
     return (
       new Date(b.latestMealCreatedAt).getTime() -
@@ -62,14 +62,14 @@ const sortMenuData = (menuDataToSort) => {
   return sortedData;
 };
 
-// Bu fonksiyon bileşene bağımlı olmadığı için dışarıya taşındı.
-// Bu, her render'da yeniden oluşturulmasını engeller.
+// Extracted outside component to keep stable reference
+
 const groupMealsByCategory = (meals) => {
   if (!meals || meals.length === 0) return {};
 
   const groups = {};
 
-  // Her yemeği kategorisine göre grupla
+  // Group meals by category
   meals.forEach((meal) => {
     const categoryName = meal.categoryName || "Diğer";
 
@@ -86,7 +86,6 @@ const groupMealsByCategory = (meals) => {
 const MenuPage = () => {
   const dispatch = useDispatch();
 
-  // Redux state'lerini alma
   const { user } = useSelector((state) => state.auth);
   const {
     categories: apiCategories,
@@ -100,26 +99,21 @@ const MenuPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(ALL_FILTER);
   const [showAddMealModal, setShowAddMealModal] = useState(false);
 
-  // UpdateMeal Modal state
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
 
-  // DeleteMeal Modal state
   const [selectedMealForDelete, setSelectedMealForDelete] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  // Dropdown state
   const [openDropdownId, setOpenDropdownId] = useState(null);
-  // Banner visibility
+
   const [showBanner, setShowBanner] = useState(true);
 
   useEffect(() => {
-    // Kategorileri çek
     dispatch(fetchRestaurantCategories());
   }, [dispatch]);
 
   useEffect(() => {
-    // Restoran menüsünü çek
     if (restaurantId) {
       dispatch(fetchRestaurantMenuData(restaurantId));
     }
@@ -129,21 +123,18 @@ const MenuPage = () => {
     setShowBanner(Boolean(error));
   }, [error]);
 
-  // Outside click handler
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleOutsideClick = () => setOpenDropdownId(null);
     document.addEventListener("click", handleOutsideClick);
     return () => document.removeEventListener("click", handleOutsideClick);
   }, []);
 
-  // Slice selector ile türetilmiş menü ve kategori verilerini al
   const { menuMeals, categoriesForFilterBar } = useSelector(
     selectMenuMealsAndCategories
   );
 
-  /* eski useMemo blok kaldırıldı */
-
-  // Kategori listesi değişip mevcut seçim silinmişse filtreyi 'Tümü'ne sıfırla
+  // Reset filter to ALL if selected category is removed
   useEffect(() => {
     if (
       selectedCategory !== ALL_FILTER &&
@@ -153,9 +144,8 @@ const MenuPage = () => {
     }
   }, [categoriesForFilterBar, selectedCategory]);
 
-  // Kategori değişimi (FilterBar için)
+  // Handle category change
   const handleCategoryChange = (categoryValue) => {
-    // Kategoriler artık string olarak geliyor; doğrudan state'e yazmak yeterli.
     setSelectedCategory(categoryValue);
   };
 
@@ -168,11 +158,9 @@ const MenuPage = () => {
   };
 
   const handleMealAdded = () => {
-    // Başarı veya hata durumunda veriyi yeniden çekerek UI'ı güncel tut.
     loadRestaurantMenu();
   };
 
-  // UpdateMeal Modal actions
   const openUpdateModal = (meal) => {
     setSelectedMeal(meal);
     setShowUpdateModal(true);
@@ -184,7 +172,6 @@ const MenuPage = () => {
   };
 
   const handleMealUpdated = () => {
-    // Başarı veya hata durumunda veriyi yeniden çekerek UI'ı güncel tut.
     loadRestaurantMenu();
   };
 
@@ -192,7 +179,6 @@ const MenuPage = () => {
     openUpdateModal(meal);
   };
 
-  // Dropdown handlers
   const toggleDropdown = (mealId) => {
     setOpenDropdownId(openDropdownId === mealId ? null : mealId);
   };
@@ -208,14 +194,12 @@ const MenuPage = () => {
     setShowDeleteModal(true);
   };
 
-  // DeleteMeal Modal actions
   const closeDeleteModal = () => {
     setShowDeleteModal(false);
     setSelectedMealForDelete(null);
   };
 
   const handleMealDeleted = () => {
-    // Başarı veya hata durumunda veriyi yeniden çekerek UI'ı güncel tut.
     loadRestaurantMenu();
   };
 
@@ -229,13 +213,13 @@ const MenuPage = () => {
     [menuMeals, selectedCategory]
   );
 
-  //Ekranda gösterilecek son veriyi (gruplanmış) hesaplayan useMemo.
+  // Memo: compute grouped meals for display
   const mealsForDisplay = useMemo(() => {
     if (selectedCategory === ALL_FILTER) {
-      // Tüm kategoriler seçiliyse, yemekleri kategorilere göre grupla.
+      // Group meals by category when ALL selected
       return groupMealsByCategory(filteredMeals);
     } else {
-      // Tek bir kategori seçiliyse, sadece o kategorinin yemeklerini göster.
+      // Show meals only for the selected category
       const categoryName =
         categoriesForFilterBar.find((cat) => cat.id === selectedCategory)
           ?.name || "";
@@ -244,26 +228,26 @@ const MenuPage = () => {
     }
   }, [filteredMeals, selectedCategory, categoriesForFilterBar]);
 
-  // Refresh için helper function (stable reference)
+  // Helper to refetch menu data
   const loadRestaurantMenu = useCallback(() => {
     if (restaurantId) {
       dispatch(fetchRestaurantMenuData(restaurantId));
     }
   }, [dispatch, restaurantId]);
 
-  // Yardımcı render fonksiyonu: içerik durumlarını yönetir
+  // Render body based on data state
   const renderBody = () => {
-    // Tam ekran spinner yalnızca menü verisi henüz gelmemişse gösterilir
+    // Full-screen spinner while menu data is loading
     if (isLoading && menuMeals.length === 0) {
       return <Loading text="Menü yükleniyor..." />;
     }
 
-    // Hiç yemek yok (menü tamamen boş)
+    // Empty state when there are no meals
     if (menuMeals.length === 0) {
       return <EmptyState message="Henüz yemek eklemediniz" />;
     }
 
-    // Normal içerik
+    // Regular content
     return (
       <div className="menupage-items-by-category">
         {Object.entries(mealsForDisplay).map(([categoryName, meals]) => (
