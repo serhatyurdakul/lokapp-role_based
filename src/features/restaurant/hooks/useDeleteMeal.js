@@ -9,7 +9,6 @@ const useDeleteMeal = (
   onClose,
   isOpen
 ) => {
-
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState("");
 
@@ -20,18 +19,8 @@ const useDeleteMeal = (
     }
   }, [isOpen, selectedMeal]);
 
-
-  const resetForm = () => {
+  const handleDeleteMeal = async () => {
     setError("");
-  };
-
-
-  const handleDeleteMeal = async (event) => {
-    if (event) {
-      event.preventDefault();
-    }
-    setError("");
-
 
     if (!selectedMeal || !selectedMeal.id) {
       setError("Silinecek yemek seçilmedi.");
@@ -43,7 +32,6 @@ const useDeleteMeal = (
       return;
     }
 
-
     const deleteData = {
       mealId: selectedMeal.id.toString(),
       restaurantId: restaurantId.toString(),
@@ -53,7 +41,6 @@ const useDeleteMeal = (
     try {
       const response = await deleteMealFromRestaurant(deleteData);
       if (response && !response.error) {
-        console.log("Yemek başarıyla silindi:", response.message);
         onMealDeleted && onMealDeleted(response);
         onClose();
       } else {
@@ -67,18 +54,14 @@ const useDeleteMeal = (
     }
   };
 
-
   const isSubmitDisabled = isDeleting || !selectedMeal;
 
   return {
-
     isDeleting,
     error,
     isSubmitDisabled,
 
-
     handleDeleteMeal,
-    resetForm,
   };
 };
 

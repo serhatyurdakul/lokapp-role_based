@@ -1,6 +1,7 @@
 import GenericModal from "@/components/common/GenericModal/GenericModal";
 import ErrorMessage from "@/components/common/forms/ErrorMessage/ErrorMessage";
 import useDeleteMeal from "../../hooks/useDeleteMeal";
+import PropTypes from "prop-types";
 
 const DeleteMealModal = ({
   isOpen,
@@ -35,6 +36,18 @@ const DeleteMealModal = ({
       <p>Bu işlem geri alınamaz</p>
     </GenericModal>
   );
+};
+
+DeleteMealModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  selectedMeal: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    mealName: PropTypes.string,
+  }),
+  restaurantId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
+  onMealDeleted: PropTypes.func,
 };
 
 export default DeleteMealModal;
