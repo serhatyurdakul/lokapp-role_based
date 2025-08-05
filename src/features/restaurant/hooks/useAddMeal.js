@@ -144,10 +144,7 @@ const useAddMeal = (
     setShowSearchResults(false);
   };
 
-  const handleAddMeal = async (event) => {
-    if (event) {
-      event.preventDefault();
-    }
+  const handleAddMeal = async () => {
     setMealExistsError("");
 
     if (!selectedMeal || !selectedMeal.id) {
@@ -177,7 +174,6 @@ const useAddMeal = (
       const response = await addRestaurantMeal(mealToAdd);
 
       if (response && !response.error) {
-        console.log("Yemek başarıyla eklendi:", response.message);
         dispatch(setLastAddedCategory(selectedCategoryInModal));
         onMealAdded && onMealAdded(response);
         onClose();
@@ -228,7 +224,6 @@ const useAddMeal = (
     newStock,
     selectedMeal,
     isSubmitting,
-    mealOptions,
     filteredMealOptions,
     isLoadingMealOptions,
     mealExistsError,
@@ -236,7 +231,6 @@ const useAddMeal = (
 
     setNewStock,
 
-    resetFormStates,
     handleModalCategoryChange,
     handleMealOptionSearchChange,
     handleSelectMealOption,

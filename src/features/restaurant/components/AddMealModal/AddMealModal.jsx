@@ -4,6 +4,7 @@ import FormInput from "@/components/common/forms/FormInput/FormInput";
 import ErrorMessage from "@/components/common/forms/ErrorMessage/ErrorMessage";
 import useAddMeal from "../../hooks/useAddMeal";
 import "./AddMealModal.scss";
+import PropTypes from "prop-types";
 
 const AddMealModal = ({
   isOpen,
@@ -131,6 +132,22 @@ const AddMealModal = ({
       </form>
     </GenericModal>
   );
+};
+
+AddMealModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  categories: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  restaurantId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
+  initialCategoryId: PropTypes.number,
+  onMealAdded: PropTypes.func,
+  isLoadingCategories: PropTypes.bool,
 };
 
 export default AddMealModal;
