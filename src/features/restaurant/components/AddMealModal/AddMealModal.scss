@@ -1,6 +1,5 @@
 @use "@/styles/variables" as *;
 
-
 .search-input-container {
   position: relative;
   width: 100%;
@@ -23,6 +22,11 @@
       cursor: pointer;
       transition: background-color 0.2s;
       border-bottom: 1px solid var(--border-color);
+
+      &:hover {
+        background-color: var(--overlay-light-05);
+      }
+
       font-size: 0.875rem;
       white-space: nowrap;
       overflow: hidden;
@@ -48,4 +52,4 @@
     font-size: 0.875rem;
     color: var(--text-secondary);
   }
-} 
+}

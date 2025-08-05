@@ -52,7 +52,7 @@
     .order-region {
       display: inline-block;
       font-size: 0.875rem;
-      padding: 0.2rem 0.5rem;
+      padding: $spacing-2 $spacing-8;
       border-radius: 4px;
       background-color: var(--overlay-light-1);
       color: var(--text-color);

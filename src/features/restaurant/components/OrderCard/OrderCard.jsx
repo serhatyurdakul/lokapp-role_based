@@ -1,4 +1,5 @@
 import './OrderCard.scss';
+import PropTypes from 'prop-types';
 
 const OrderCard = ({ order, onClick }) => {
   return (
@@ -25,6 +26,21 @@ const OrderCard = ({ order, onClick }) => {
       </div>
     </div>
   );
+};
+
+OrderCard.propTypes = {
+  order: PropTypes.shape({
+    companyId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      .isRequired,
+    company: PropTypes.string.isRequired,
+    region: PropTypes.string.isRequired,
+    status: PropTypes.oneOf(['pending', 'completed']).isRequired,
+    totalPeople: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      .isRequired,
+    orderTime: PropTypes.string,
+    time: PropTypes.string,
+  }).isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default OrderCard;

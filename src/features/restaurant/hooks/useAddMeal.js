@@ -48,12 +48,14 @@ const useAddMeal = (
       typeof selectedCategoryInModal === "number"
     ) {
       const loadMealOptions = async () => {
+        const currentCategory = selectedCategoryInModal;
         setIsLoadingMealOptions(true);
-        const optionsData = await fetchMealOptionsByCategory(
-          selectedCategoryInModal
-        );
-        setMealOptions(optionsData || []);
-        setFilteredMealOptions([]);
+        const optionsData = await fetchMealOptionsByCategory(currentCategory);
+        // Sadece aynı kategori hâlâ seçiliyse state güncelle
+        if (currentCategory === selectedCategoryInModal) {
+          setMealOptions(optionsData || []);
+          setFilteredMealOptions([]);
+        }
         setIsLoadingMealOptions(false);
       };
       loadMealOptions();
@@ -153,7 +155,7 @@ const useAddMeal = (
     }
 
     const stockValue = parseInt(newStock, 10);
-    if (isNaN(stockValue) || stockValue < 0) {
+    if (isNaN(stockValue) || stockValue <= 0) {
       console.error("Geçerli bir stok miktarı girin.");
       return;
     }
