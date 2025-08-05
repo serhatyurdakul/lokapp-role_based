@@ -3,7 +3,7 @@
 .order-card {
   background-color: var(--background-primary);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: $border-radius-medium;
   padding: $spacing-12;
   cursor: pointer;
   position: relative;
@@ -17,8 +17,8 @@
       width: 4px;
       height: 100%;
       background: var(--order-completed-color);
-      border-top-left-radius: 8px;
-      border-bottom-left-radius: 8px;
+      border-top-left-radius: $border-radius-medium;
+      border-bottom-left-radius: $border-radius-medium;
     }
   }
 
@@ -31,8 +31,8 @@
       width: 4px;
       height: 100%;
       background: var(--order-pending-color);
-      border-top-left-radius: 8px;
-      border-bottom-left-radius: 8px;
+      border-top-left-radius: $border-radius-medium;
+      border-bottom-left-radius: $border-radius-medium;
     }
   }
 
@@ -40,13 +40,13 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 1rem;
+    margin-bottom: $spacing-16;
 
     > div {
       display: inline-flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.5rem;
+      gap: $spacing-8;
     }
 
     .order-region {
@@ -82,8 +82,8 @@
 
     .order-status {
       font-size: 0.875rem;
-      padding: 0.25rem 0.75rem;
-      border-radius: 12px;
+      padding: $spacing-4 $spacing-12;
+      border-radius: $border-radius-medium;
 
       &.pending {
         background: var(--overlay-pending-bg);
