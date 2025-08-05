@@ -46,14 +46,6 @@ const restaurantMenuSlice = createSlice({
     setLastAddedCategory(state, action) {
       state.lastAddedCategoryId = action.payload;
     },
-    clearError(state) {
-      state.error = null;
-    },
-    resetMenuData(state) {
-      state.menuData = [];
-      state.categories = [];
-      state.error = null;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -89,8 +81,7 @@ const restaurantMenuSlice = createSlice({
   },
 });
 
-export const { clearError, resetMenuData, setLastAddedCategory } =
-  restaurantMenuSlice.actions;
+export const { setLastAddedCategory } = restaurantMenuSlice.actions;
 export default restaurantMenuSlice.reducer;
 
 /* ---------- Selectors & Derived Helpers ---------- */

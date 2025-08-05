@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { MSG_NETWORK_ERROR, MSG_UNKNOWN_ERROR } from "@/constants/messages";
+import { MSG_NETWORK_ERROR } from "@/constants/messages";
 import { useDispatch } from "react-redux";
 import { fetchMealOptionsByCategory, addRestaurantMeal } from "@/utils/api";
 import { setLastAddedCategory } from "../store/restaurantMenuSlice";
@@ -219,9 +219,7 @@ const useAddMeal = (
     isLoadingMealOptions,
     mealExistsError,
     finalIsPrimaryButtonDisabled,
-
     setNewStock,
-
     handleModalCategoryChange,
     handleMealOptionSearchChange,
     handleSelectMealOption,

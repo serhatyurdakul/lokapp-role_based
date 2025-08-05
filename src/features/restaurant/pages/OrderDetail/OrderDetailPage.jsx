@@ -7,8 +7,9 @@ import OrderCard from "../../components/OrderCard/OrderCard";
 import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
 import Loading from "@/components/common/Loading/Loading.jsx";
 import ErrorState from "@/components/common/StateMessage/ErrorState";
-import Button from "@/components/common/Button/Button";
 import GenericModal from "@/components/common/GenericModal/GenericModal";
+import { ReactComponent as CheckIcon } from "@/assets/icons/check.svg";
+import { ReactComponent as ClockIcon } from "@/assets/icons/clock.svg";
 import {
   fetchOrderDetails,
   updateOrderStatus,
@@ -67,8 +68,7 @@ const OrderDetailPage = () => {
       .unwrap()
       .then(() => {
         navigate("/orders");
-      })
-
+      });
 
     setShowStatusModal(false);
   };
@@ -156,47 +156,12 @@ const OrderDetailPage = () => {
         {order?.summary.status === "pending" ? (
           <>
             <span>Siparişi Tamamla</span>
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M16.875 5.625L8.125 14.375L3.75 10"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <CheckIcon />
           </>
         ) : (
           <>
             <span>Beklemeye Al</span>
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M10 4.375V10L13.125 13.125"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M10 18.125C14.4873 18.125 18.125 14.4873 18.125 10C18.125 5.51269 14.4873 1.875 10 1.875C5.51269 1.875 1.875 5.51269 1.875 10C1.875 14.4873 5.51269 18.125 10 18.125Z"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <ClockIcon />
           </>
         )}
       </button>

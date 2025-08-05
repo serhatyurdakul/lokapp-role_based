@@ -22,46 +22,6 @@ import {
 } from "../../store/restaurantMenuSlice";
 import { getStockStatus } from "../../utils/stockUtils";
 
-const sortMenuData = (menuDataToSort) => {
-  if (!menuDataToSort || menuDataToSort.length === 0) {
-    return [];
-  }
-
-  // Deep copy to avoid mutating original data
-  // Manual spread preserves Date objects
-  const sortedData = menuDataToSort.map((categoryGroup) => ({
-    ...categoryGroup,
-    // Also shallow-copy meal objects
-    meals: (categoryGroup.meals || []).map((meal) => ({ ...meal })),
-  }));
-
-  // Sort meals in each category by createdAt (newest first)
-  sortedData.forEach((categoryGroup) => {
-    if (categoryGroup.meals && categoryGroup.meals.length > 0) {
-      categoryGroup.meals.sort((a, b) => {
-        return (
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-      });
-      // Cache newest meal date for category sorting
-      categoryGroup.latestMealCreatedAt = categoryGroup.meals[0].createdAt;
-    } else {
-      // Use epoch date for empty categories so they sort last
-      categoryGroup.latestMealCreatedAt = "1970-01-01T00:00:00Z";
-    }
-  });
-
-  // Sort categories by newest meal date (recent first)
-  sortedData.sort((a, b) => {
-    return (
-      new Date(b.latestMealCreatedAt).getTime() -
-      new Date(a.latestMealCreatedAt).getTime()
-    );
-  });
-
-  return sortedData;
-};
-
 // Extracted outside component to keep stable reference
 
 const groupMealsByCategory = (meals) => {
@@ -89,7 +49,6 @@ const MenuPage = () => {
   const { user } = useSelector((state) => state.auth);
   const {
     categories: apiCategories,
-    menuData: restaurantMenuData,
     isLoading,
     error,
     lastAddedCategoryId,
