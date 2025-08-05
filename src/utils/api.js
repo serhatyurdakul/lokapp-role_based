@@ -1,4 +1,5 @@
 import axios from "axios";
+import logger from "@/utils/logger";
 import {
   MSG_NETWORK_ERROR,
   MSG_TIMEOUT_ERROR,
@@ -23,7 +24,7 @@ export const api = axios.create({
   },
 });
 
-// ---- Global Axios Auth Interceptors ---------------------------------
+// Axios auth interceptors
 // Logs out if token is invalid or used elsewhere
 
 // Helper to dispatch logout via dynamic import (avoids circular deps)
@@ -35,7 +36,7 @@ const triggerGlobalLogout = async () => {
     ]);
     store.dispatch(logout());
   } catch (err) {
-    console.error("triggerGlobalLogout error:", err);
+    logger.error("triggerGlobalLogout error:", err);
   }
 };
 
@@ -86,12 +87,15 @@ const handleApiResponse = (response, dataKey = null) => {
             data.message.includes("liste bulunamadı"))) ||
         data.status === 422
       ) {
-        console.log(
-          "API'den beklenen veri bulunamadı (handleApiResponse):",
+        logger.warn(
+          "Expected data not found in API response (handleApiResponse):",
           data.message
         );
       } else {
-        console.error("API yanıtında hata (handleApiResponse):", data.message);
+        logger.error(
+          "Error in API response (handleApiResponse):",
+          data.message
+        );
       }
       return [];
     }
@@ -108,14 +112,14 @@ const handleApiResponse = (response, dataKey = null) => {
       return data;
     }
 
-    console.warn(
-      "API yanıtı beklenen dizi formatında değil veya veri içermiyor (handleApiResponse):",
+    logger.warn(
+      "API response is not in the expected array format or contains no data (handleApiResponse):",
       data
     );
     return [];
   }
 
-  console.error("Geçersiz veya boş API yanıtı (handleApiResponse):", response);
+  logger.error("Invalid or empty API response (handleApiResponse):", response);
   return [];
 };
 
@@ -169,7 +173,7 @@ export const fetchCities = async () => {
     const response = await api.get(endpoints.cities);
     return handleApiResponse(response, "cityList");
   } catch (error) {
-    console.error("fetchCities genel API hatası:", error.message || error);
+    logger.error("fetchCities general API error:", error.message || error);
     return [];
   }
 };
@@ -179,21 +183,8 @@ export const fetchDistricts = async (cityId) => {
     const response = await api.get(`${endpoints.districts}?cityId=${cityId}`);
     return handleApiResponse(response, "districtList");
   } catch (error) {
-    console.error(
-      `fetchDistricts genel API hatası (cityId: ${cityId}):`,
-      error.message || error
-    );
-    return [];
-  }
-};
-
-export const fetchIndustrialZones = async () => {
-  try {
-    const response = await api.get(endpoints.industrialZones);
-    return handleApiResponse(response, "industrialZoneList");
-  } catch (error) {
-    console.error(
-      "fetchIndustrialZones genel API hatası:",
+    logger.error(
+      `fetchDistricts general API error (cityId: ${cityId}):`,
       error.message || error
     );
     return [];
@@ -211,8 +202,8 @@ export const fetchIndustrialSites = async (districtId, cityId) => {
     });
     return handleApiResponse(response, "industrialSiteList");
   } catch (error) {
-    console.error(
-      `fetchIndustrialSites genel API hatası (districtId: ${districtId}, cityId: ${cityId}):`,
+    logger.error(
+      `fetchIndustrialSites general API error (districtId: ${districtId}, cityId: ${cityId}):`,
       error.message || error
     );
     return [];
@@ -230,8 +221,8 @@ export const fetchRestaurants = async (districtId, cityId) => {
     });
     return handleApiResponse(response, "restaurantList");
   } catch (error) {
-    console.error(
-      `fetchRestaurants genel API hatası (districtId: ${districtId}, cityId: ${cityId}):`,
+    logger.error(
+      `fetchRestaurants general API error (districtId: ${districtId}, cityId: ${cityId}):`,
       error.message || error
     );
     return [];
@@ -264,8 +255,8 @@ export const registerUser = async (userData) => {
     }
 
     if (error.response && error.response.data) {
-      console.error(
-        "registerUser - API Hata Yanıtı (Detaylı):",
+      logger.error(
+        "registerUser - API Error Response (Detailed):",
         JSON.stringify(error.response.data, null, 2)
       );
       const message =
@@ -274,7 +265,10 @@ export const registerUser = async (userData) => {
       const newError = new Error(message);
       throw newError;
     }
-    console.error("Kullanıcı kaydı API genel hatası:", error.message || error);
+    logger.error(
+      "User registration general API error:",
+      error.message || error
+    );
     throw new Error(
       error.message ||
         "Kayıt sırasında bilinmeyen bir ağ hatası veya sunucu hatası oluştu."
@@ -310,8 +304,8 @@ export const loginUser = async (credentials) => {
     }
 
     if (error.response && error.response.data) {
-      console.error(
-        "loginUser - API Hata Yanıtı (Detaylı):",
+      logger.error(
+        "loginUser - API Error Response (Detailed):",
         JSON.stringify(error.response.data, null, 2)
       );
       const message =
@@ -320,7 +314,7 @@ export const loginUser = async (credentials) => {
       const newError = new Error(message);
       throw newError;
     }
-    console.error("Kullanıcı girişi API genel hatası:", error.message || error);
+    logger.error("User login general API error:", error.message || error);
     throw new Error(
       error.message ||
         "Giriş sırasında bilinmeyen bir ağ hatası veya sunucu hatası oluştu."
@@ -348,8 +342,8 @@ export const verifyUserToken = async (token) => {
     }
 
     if (error.response && error.response.data) {
-      console.error(
-        "verifyUserToken - API Hata Yanıtı (Detaylı):",
+      logger.error(
+        "verifyUserToken - API Error Response (Detailed):",
         JSON.stringify(error.response.data, null, 2)
       );
       const message =
@@ -358,7 +352,10 @@ export const verifyUserToken = async (token) => {
       const newError = new Error(message);
       throw newError;
     }
-    console.error("Token doğrulama API genel hatası:", error.message || error);
+    logger.error(
+      "Token verification general API error:",
+      error.message || error
+    );
     throw new Error(
       error.message ||
         "Token doğrulama sırasında bilinmeyen bir ağ hatası veya sunucu hatası oluştu."
@@ -382,8 +379,8 @@ export const fetchLocaleCompanies = async (
     });
     return handleApiResponse(response, "companyList");
   } catch (error) {
-    console.error(
-      `fetchLocaleCompanies genel API hatası (cityId: ${cityId}, districtId: ${districtId}, industrialSiteId: ${industrialSiteId}):`,
+    logger.error(
+      `fetchLocaleCompanies general API error (cityId: ${cityId}, districtId: ${districtId}, industrialSiteId: ${industrialSiteId}):`,
       error.message || error
     );
     return [];
@@ -403,8 +400,8 @@ export const fetchRestaurantMeals = async (restaurantId) => {
         uniqueId = user.uniqueId;
       }
     } catch (parseError) {
-      console.error(
-        "Kullanıcı bilgileri parse edilemedi (fetchRestaurantMeals):",
+      logger.error(
+        "Failed to parse user info (fetchRestaurantMeals):",
         parseError
       );
     }
@@ -424,17 +421,10 @@ export const fetchRestaurantMeals = async (restaurantId) => {
       headers: requestHeaders,
     });
 
-    console.log("Restoran Yemekleri API yanıtı veri yapısı:", {
-      isArray: Array.isArray(response.data),
-      dataType: typeof response.data,
-      dataLength: Array.isArray(response.data) ? response.data.length : "N/A",
-      dataKeys: response.data ? Object.keys(response.data) : [],
-    });
-
     if (response.data) {
       if (response.data.error === true) {
-        console.log(
-          "API yanıtı hata içeriyor (fetchRestaurantMeals):",
+        logger.error(
+          "API response contains error (fetchRestaurantMeals):",
           response.data.message
         );
 
@@ -456,24 +446,22 @@ export const fetchRestaurantMeals = async (restaurantId) => {
       if (Array.isArray(response.data)) {
         return response.data;
       }
-      console.error(
-        "API yanıtında uygun formatta yemek verisi bulunamadı (fetchRestaurantMeals):",
+      logger.error(
+        "No properly formatted meal data found in API response (fetchRestaurantMeals):",
         response.data
       );
       return [];
     }
     return [];
   } catch (error) {
-    console.error(
-      "Restoran Yemekleri API hatası (fetchRestaurantMeals genel):",
-      error
-    );
     if (error.response) {
-      console.error("API hata yanıtı (fetchRestaurantMeals):", {
+      logger.error("API error response (fetchRestaurantMeals):", {
         status: error.response.status,
         statusText: error.response.statusText,
         data: error.response.data,
       });
+    } else {
+      logger.error("Restaurant meals API error (fetchRestaurantMeals):", error);
     }
     throw new Error(error.message || "Yemekler alınamadı");
   }
@@ -489,7 +477,7 @@ export const fetchMealCategories = async () => {
     }
     return [];
   } catch (error) {
-    console.error("fetchMealCategories API hatası:", error.message || error);
+    logger.error("fetchMealCategories API error:", error.message || error);
     throw new Error(error.message || "Kategoriler yüklenemedi");
   }
 };
@@ -510,8 +498,8 @@ export const fetchMealOptionsByCategory = async (categoryId) => {
     }
     return [];
   } catch (error) {
-    console.error(
-      `fetchMealOptionsByCategory API hatası (categoryId: ${categoryId}):`,
+    logger.error(
+      `fetchMealOptionsByCategory API error (categoryId: ${categoryId}):`,
       error.message || error
     );
     return [];
@@ -545,8 +533,8 @@ export const fetchRestaurantMenu = async (restaurantId) => {
     }
     return [];
   } catch (error) {
-    console.error(
-      `fetchRestaurantMenu API hatası (restaurantId: ${restaurantId}):`,
+    logger.error(
+      `fetchRestaurantMenu API error (restaurantId: ${restaurantId}):`,
       error.message || error
     );
     throw new Error(error.message || "Menü verileri yüklenemedi");
@@ -558,8 +546,8 @@ export const addRestaurantMeal = async (mealData) => {
     const response = await api.post("/addMealForRestaurant", mealData);
     return response.data;
   } catch (error) {
-    console.error(
-      "addRestaurantMeal API hatası:",
+    logger.error(
+      "addRestaurantMeal API error:",
       error.response?.data || error.message || error
     );
     if (error.response && error.response.data) {
@@ -577,8 +565,8 @@ export const updateMealForRestaurant = async (mealData) => {
     const response = await api.post("/updateMealForRestaurant", mealData);
     return response.data;
   } catch (error) {
-    console.error(
-      "updateMealForRestaurant API hatası:",
+    logger.error(
+      "updateMealForRestaurant API error:",
       error.response?.data || error.message || error
     );
     if (error.response && error.response.data) {
@@ -597,8 +585,8 @@ export const deleteMealFromRestaurant = async (deleteData) => {
     const response = await api.post("/deleteMealFromRestaurant", deleteData);
     return response.data;
   } catch (error) {
-    console.error(
-      "deleteMealFromRestaurant API hatası:",
+    logger.error(
+      "deleteMealFromRestaurant API error:",
       error.response?.data || error.message || error
     );
 
@@ -641,8 +629,8 @@ export const createOrder = async (orderData) => {
 
     // If Axios or network error, create general message
     if (error.response) {
-      console.error(
-        "createOrder - API Hata Yanıtı (Detaylı):",
+      logger.error(
+        "createOrder - API Error Response (Detailed):",
         JSON.stringify(error.response.data, null, 2)
       );
       const message =
@@ -651,12 +639,12 @@ export const createOrder = async (orderData) => {
       throw new Error(message);
     } else if (error.request) {
       // Request made but no response
-      console.error("createOrder - Yanıt Alınamadı:", error.request);
+      logger.error("createOrder - No response received:", error.request);
       throw new Error(
         "Sipariş oluşturulamadı, lütfen daha sonra tekrar deneyin."
       );
     } else {
-      console.error("createOrder - İstek Kurulum Hatası:", error.message);
+      logger.error("createOrder - Request setup error:", error.message);
       throw new Error("Sipariş isteği oluşturulurken bir hata oluştu.");
     }
   }
@@ -670,8 +658,8 @@ export const getRestaurantsOrderList = async (restaurantId, tabId = 0) => {
 
     return response.data;
   } catch (error) {
-    console.error(
-      "Restoran sipariş listesi API hatası:",
+    logger.error(
+      "Restaurant order list API error:",
       error.response?.data || error.message
     );
 
@@ -693,8 +681,8 @@ export const getRestaurantOrderDetails = async (restaurantId, companyId) => {
     });
     return response.data;
   } catch (error) {
-    console.error(
-      "Restoran sipariş detayı API hatası:",
+    logger.error(
+      "Restaurant order detail API error:",
       error.response?.data || error.message
     );
 
@@ -712,8 +700,8 @@ export const setOrderStatus = async (statusData) => {
     const response = await api.post(endpoints.setOrderStatus, statusData);
     return response.data;
   } catch (error) {
-    console.error(
-      "Sipariş durumu güncelleme API hatası:",
+    logger.error(
+      "Order status update API error:",
       error.response?.data || error.message
     );
     throw new Error(
