@@ -56,9 +56,6 @@ function App() {
     const handleStorageChange = (event) => {
       if (event.key === "token" && event.newValue === null) {
         if (isAuthenticated) {
-          console.log(
-            "Token localStorage'dan silindi, logout dispatch ediliyor."
-          );
           dispatch(logout());
         }
       } else if (
@@ -69,14 +66,10 @@ function App() {
       ) {
         // Token changed in another tab — logout current tab for security
         if (isAuthenticated) {
-          console.log("Token değeri değişti, mevcut sekme logout ediliyor.");
           dispatch(logout());
         }
       } else if (event.key === "user" && event.newValue === null) {
         if (isAuthenticated) {
-          console.log(
-            "User localStorage'dan silindi, logout dispatch ediliyor."
-          );
           dispatch(logout());
         }
       }

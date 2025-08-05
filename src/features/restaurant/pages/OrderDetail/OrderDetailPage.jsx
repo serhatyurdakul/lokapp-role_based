@@ -68,9 +68,7 @@ const OrderDetailPage = () => {
       .then(() => {
         navigate("/orders");
       })
-      .catch((error) => {
-        console.error("Sipariş durumu güncellenemedi:", error);
-      });
+
 
     setShowStatusModal(false);
   };

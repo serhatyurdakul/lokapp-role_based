@@ -68,7 +68,6 @@ export const login = createAsyncThunk(
           setAuthHeaders(token, user.uniqueId);
           localStorage.setItem("user", JSON.stringify(user));
         } else {
-          console.error("Login yanıtında user.uniqueId bulunamadı!", user);
           return rejectWithValue("Kullanıcı UniqueId bulunamadı");
         }
         return {
@@ -104,8 +103,6 @@ export const verifyToken = createAsyncThunk(
       if (!response.error && response.user) {
         if (response.user.uniqueId) {
           localStorage.setItem("user", JSON.stringify(response.user));
-        } else {
-          console.warn("verifyToken yanıtında user.uniqueId eksik.");
         }
         return {
           user: response.user,

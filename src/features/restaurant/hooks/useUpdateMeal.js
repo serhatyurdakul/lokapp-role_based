@@ -66,7 +66,6 @@ const useUpdateMeal = (
         setError(response?.message || "Yemek güncellenirken bir hata oluştu.");
       }
     } catch (error) {
-      console.error("Yemek güncelleme API çağrısı sırasında hata:", error);
       setError(MSG_NETWORK_ERROR);
     } finally {
       setIsSubmitting(false);

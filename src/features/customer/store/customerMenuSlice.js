@@ -168,7 +168,6 @@ const menuSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
         // Preserve previous menu so the user can keep existing selections
-        console.error("Yemekler yüklenemedi:", action.payload);
       })
       // Create order – pending
       .addCase(createOrder.pending, (state) => {

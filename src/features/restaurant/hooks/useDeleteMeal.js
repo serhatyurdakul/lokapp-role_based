@@ -47,7 +47,6 @@ const useDeleteMeal = (
         setError(response?.message || "Yemek silinirken bir hata oluştu.");
       }
     } catch (error) {
-      console.error("Yemek silme API çağrısı sırasında hata:", error);
       setError(MSG_NETWORK_ERROR);
     } finally {
       setIsDeleting(false);

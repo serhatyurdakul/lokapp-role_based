@@ -11,7 +11,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Extract authentication state from Redux
   const {
     isAuthenticated,
     isLoading: authIsLoading,
@@ -24,7 +23,6 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-
 
   const handleClearEmail = () => {
     setFormData((prev) => ({ ...prev, email: "" }));
@@ -40,7 +38,6 @@ const LoginPage = () => {
     return null;
   };
 
-  // Redirect to home if authenticated
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/");
@@ -58,26 +55,19 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLocalError(null);
-    // Clear any previous auth error
+
     dispatch(clearError());
 
     try {
-
       await dispatch(login(formData)).unwrap();
     } catch (rejectedValue) {
       // unwrap() throws the rejected value
-      console.error("Giriş hatası (LoginPage catch):", rejectedValue);
       // Build a user-friendly error message
       let errorMessage = "Giriş işlemi sırasında bir hata oluştu.";
       if (typeof rejectedValue === "string") {
         errorMessage = rejectedValue;
       } else if (rejectedValue && rejectedValue.message) {
         errorMessage = rejectedValue.message;
-      } else if (authError && authError.message) {
-        // Fallback to redux error
-        errorMessage = authError.message;
-      } else if (typeof authError === "string") {
-        errorMessage = authError;
       }
       setLocalError(errorMessage);
     }

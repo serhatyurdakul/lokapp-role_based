@@ -150,18 +150,15 @@ const useAddMeal = (
     setMealExistsError("");
 
     if (!selectedMeal || !selectedMeal.id) {
-      console.error("Lütfen bir yemek adı seçin.");
       return;
     }
 
     const stockValue = parseInt(newStock, 10);
     if (isNaN(stockValue) || stockValue <= 0) {
-      console.error("Geçerli bir stok miktarı girin.");
       return;
     }
 
     if (!restaurantId) {
-      console.error("Restoran ID bulunamadı. Kullanıcı girişi kontrol edin.");
       return;
     }
 
@@ -188,10 +185,6 @@ const useAddMeal = (
         ) {
           setMealExistsError(response.message);
         } else {
-          console.error(
-            "Yemek ekleme başarısız:",
-            response?.message || MSG_UNKNOWN_ERROR
-          );
           setMealExistsError(
             response?.message ||
               "Yemek eklenirken bir hata oluştu. Lütfen tekrar deneyin."
@@ -199,10 +192,6 @@ const useAddMeal = (
         }
       }
     } catch (error) {
-      console.error(
-        "Yemek ekleme API çağrısı sırasında bir hata oluştu:",
-        error
-      );
       setMealExistsError(MSG_NETWORK_ERROR);
     } finally {
       setIsSubmitting(false);

@@ -65,7 +65,6 @@ const UserRegistrationForm = () => {
           const response = await fetchCities();
           setCities(response);
         } catch (err) {
-          console.error("Şehirler yüklenirken hata:", err);
           setError("Şehirler yüklenirken bir hata oluştu");
           setCities([]);
         }
@@ -89,7 +88,6 @@ const UserRegistrationForm = () => {
       const response = await fetchDistricts(cityId);
       setDistricts(response);
     } catch (err) {
-      console.error("İlçeler yüklenirken hata:", err);
       setError("İlçeler yüklenirken bir hata oluştu");
       setDistricts([]);
     }
@@ -113,7 +111,6 @@ const UserRegistrationForm = () => {
         const response = await fetchRestaurants(districtId, formData.city);
         setRestaurants(response);
       } catch (err) {
-        console.error("Restoranlar yüklenirken hata:", err);
         setError("Restoranlar yüklenirken bir hata oluştu");
         setRestaurants([]);
       }
@@ -125,7 +122,6 @@ const UserRegistrationForm = () => {
         const response = await fetchIndustrialSites(districtId, formData.city);
         setIndustrialSites(response);
       } catch (err) {
-        console.error("Sanayi siteleri yüklenirken hata:", err);
         setError("Sanayi siteleri yüklenirken bir hata oluştu");
         setIndustrialSites([]);
       }
@@ -143,7 +139,6 @@ const UserRegistrationForm = () => {
       );
       setCompanies(response);
     } catch (err) {
-      console.error("Firmalar yüklenirken hata:", err);
       setError("Firmalar yüklenirken bir hata oluştu");
       setCompanies([]);
     }
@@ -261,7 +256,6 @@ const UserRegistrationForm = () => {
       await dispatch(register(userData)).unwrap();
       navigate("/login");
     } catch (err) {
-      console.error("Kayıt işlemi hatası:", err);
       setLoading((prev) => ({ ...prev, submit: false }));
       if (err.isValidationError && err.fieldErrors) {
         const newServerInputErrors = {};
