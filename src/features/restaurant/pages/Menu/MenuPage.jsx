@@ -20,7 +20,7 @@ import {
   fetchRestaurantMenuData,
   selectMenuMealsAndCategories,
 } from "../../store/restaurantMenuSlice";
-import { getStockStatus } from "../../utils/stockUtils";
+import StockBadge from "@/components/common/StockBadge/StockBadge";
 
 // Extracted outside component to keep stable reference
 
@@ -232,13 +232,10 @@ const MenuPage = () => {
                     </span>
                     <div className="menupage-food-card-stock-info">
                       <div className="menupage-food-card-stock-details">
-                        <span
-                          className={`menupage-food-card-stock-badge ${getStockStatus(
-                            meal.currentStock
-                          )}`}
-                        >
-                          {meal.currentStock} / {meal.quantity} porsiyon
-                        </span>
+                        <StockBadge
+                          remaining={meal.currentStock}
+                          sold={meal.orderCount}
+                        />
                       </div>
                       <div className="meal-actions-wrapper">
                         <button
@@ -268,28 +265,6 @@ const MenuPage = () => {
                             </div>
                           </div>
                         )}
-                      </div>
-                      <div className="menupage-food-card-stock-bar">
-                        <div
-                          className="menupage-food-card-stock-progress"
-                          style={{
-                            width: `${
-                              meal.quantity
-                                ? Math.min(
-                                    Math.max(
-                                      (meal.currentStock ?? 0) / meal.quantity,
-                                      0
-                                    ),
-                                    1
-                                  ) * 100
-                                : 0
-                            }%`,
-                            backgroundColor:
-                              getStockStatus(meal.currentStock) === "good"
-                                ? "var(--success-color)"
-                                : "var(--warning-color)",
-                          }}
-                        ></div>
                       </div>
                     </div>
                   </div>

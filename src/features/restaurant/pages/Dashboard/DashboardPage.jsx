@@ -7,6 +7,7 @@ import NoticeBanner from "@/components/common/NoticeBanner/NoticeBanner";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
 import { fetchRestaurantMenuData } from "../../store/restaurantMenuSlice";
 import { getStockStatus } from "../../utils/stockUtils";
+import StockBadge from "@/components/common/StockBadge/StockBadge";
 import "./DashboardPage.scss";
 
 const DashboardPage = () => {
@@ -29,10 +30,7 @@ const DashboardPage = () => {
 
   // TODO: Replace with real API data once the backend is integrated
   const [dailyStats] = useState({
-    totalOrders: 140,
     pendingOrders: 32,
-    completedOrders: 108,
-    totalRevenue: 8400,
   });
 
   const loadRestaurantMenu = () => {
@@ -58,12 +56,13 @@ const DashboardPage = () => {
         mealName: meal.name,
         currentStock: meal.remainingQuantity ?? 0,
         quantity: meal.quantity ?? 0,
+        status: getStockStatus(meal.remainingQuantity ?? 0),
       }))
     );
 
     // 2. Keep only meals that are not in "good" stock status
     const criticalMeals = allMeals.filter(
-      (meal) => getStockStatus(meal.currentStock) !== "good"
+      (meal) => meal.status !== "good"
     );
 
     // 3. Sort by remaining quantity ascending (most critical first)
@@ -109,7 +108,7 @@ const DashboardPage = () => {
       </div>
 
       <div className="stock-alerts">
-        <div className="section-header">
+        <div className="dashboard-section-header">
           <h2>Az Kalanlar</h2>
           <button className="view-all-btn" onClick={() => navigate("/menu")}>
             Menü Yönetimi →
@@ -120,32 +119,17 @@ const DashboardPage = () => {
             <Loading text="Stok durumu yükleniyor..." />
           )}
           {lowStockMeals.length > 0 &&
-            lowStockMeals.slice(0, 5).map((meal) => (
+            lowStockMeals.map((meal) => (
               <div
                 key={meal.id}
-                className={`alert-card ${getStockStatus(meal.currentStock)}`}
+                className={`alert-card ${meal.status}`}
                 onClick={() => openStockModal(meal)}
               >
                 <div className="alert-header">
                   <h4>{meal.mealName}</h4>
-                  <span className="stock-badge">
-                    {meal.currentStock} / {meal.quantity}
-                  </span>
+                  <StockBadge remaining={meal.currentStock} sold={meal.orderCount} />
                 </div>
-                <div className="stock-bar">
-                  <div
-                    className={`stock-progress ${getStockStatus(
-                      meal.currentStock
-                    )}`}
-                    style={{
-                      width: `${
-                        meal.quantity
-                          ? (meal.currentStock / meal.quantity) * 100
-                          : 0
-                      }%`,
-                    }}
-                  />
-                </div>
+
               </div>
             ))}
           {!isLoading && lowStockMeals.length === 0 && (
@@ -156,14 +140,6 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      <div className="daily-summary">
-        <h2>Günlük Özet</h2>
-        <div className="summary-chart">
-          <div className="chart-placeholder">
-            <p>Saatlik sipariş ve gelir grafiği burada görüntülenecek</p>
-          </div>
-        </div>
-      </div>
 
       <UpdateMealModal
         isOpen={showStockModal}
