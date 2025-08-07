@@ -13,13 +13,11 @@
   }
 }
 
-
-
 .dashboard-section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: $spacing-24;
+  margin-bottom: $spacing-16;
 
   h2 {
     font-size: 1.25rem;
@@ -139,12 +137,10 @@
 
     &.critical {
       border-color: var(--error-color);
-
     }
 
     &.warning {
       border-color: var(--warning-color);
-
     }
 
     &.depleted {
@@ -160,16 +156,12 @@
       align-items: center;
 
       h4 {
-        white-space: normal;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
+        white-space: nowrap;
         overflow: hidden;
+        text-overflow: ellipsis;
         font-size: 0.875rem;
         font-weight: 500;
       }
-
-
     }
   }
 
@@ -183,6 +175,3 @@
     font-size: 0.875rem;
   }
 }
-
-
-

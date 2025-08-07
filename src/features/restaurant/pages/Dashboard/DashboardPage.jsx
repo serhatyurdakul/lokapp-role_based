@@ -61,9 +61,7 @@ const DashboardPage = () => {
     );
 
     // 2. Keep only meals that are not in "good" stock status
-    const criticalMeals = allMeals.filter(
-      (meal) => meal.status !== "good"
-    );
+    const criticalMeals = allMeals.filter((meal) => meal.status !== "good");
 
     // 3. Sort by remaining quantity ascending (most critical first)
     criticalMeals.sort((a, b) => a.currentStock - b.currentStock);
@@ -127,19 +125,20 @@ const DashboardPage = () => {
               >
                 <div className="alert-header">
                   <h4>{meal.mealName}</h4>
-                  <StockBadge remaining={meal.currentStock} sold={meal.orderCount} />
+                  <StockBadge
+                    remaining={meal.currentStock}
+                    sold={meal.orderCount}
+                  />
                 </div>
-
               </div>
             ))}
           {!isLoading && lowStockMeals.length === 0 && (
             <div className="no-alerts">
-              <p>Kritik stok durumu bulunmuyor</p>
+              <p>Kritik porsiyon durumu bulunmuyor</p>
             </div>
           )}
         </div>
       </div>
-
 
       <UpdateMealModal
         isOpen={showStockModal}
