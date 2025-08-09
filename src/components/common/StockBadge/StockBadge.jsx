@@ -8,7 +8,9 @@ const StockBadge = ({ remaining, sold = 0 }) => {
 
   return (
     <div className="meal-stock-badge-wrapper">
-      <span className={`badge remaining ${status}`}>Kalan: {remaining}</span>
+      <span className={`badge remaining ${status}`}>
+        {remaining === 0 ? "Tükendi" : `Kalan: ${remaining}`}
+      </span>
       <span className="badge sold">Satılan: {sold}</span>
     </div>
   );

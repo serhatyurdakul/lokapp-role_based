@@ -4,6 +4,7 @@ import "./MenuPage.scss";
 import FilterBar, {
   ALL as ALL_FILTER,
 } from "@/components/common/FilterBar/FilterBar";
+import SearchBar from "@/components/common/SearchBar/SearchBar";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import Loading from "@/components/common/Loading/Loading.jsx";
 import EmptyState from "@/components/common/StateMessage/EmptyState";
@@ -56,6 +57,7 @@ const MenuPage = () => {
   const restaurantId = user?.restaurantId;
 
   const [selectedCategory, setSelectedCategory] = useState(ALL_FILTER);
+  const [searchQuery, setSearchQuery] = useState("");
   const [showAddMealModal, setShowAddMealModal] = useState(false);
 
   const [selectedMeal, setSelectedMeal] = useState(null);
@@ -171,21 +173,30 @@ const MenuPage = () => {
           ),
     [menuMeals, selectedCategory]
   );
+ 
+   const searchedMeals = useMemo(() => {
+     if (!searchQuery) return filteredMeals;
+     const q = searchQuery.trim().toLowerCase();
+     return filteredMeals.filter((meal) =>
+       String(meal.mealName || "").toLowerCase().includes(q)
+     );
+   }, [filteredMeals, searchQuery]);
 
   // Memo: compute grouped meals for display
   const mealsForDisplay = useMemo(() => {
     if (selectedCategory === ALL_FILTER) {
-      // Group meals by category when ALL selected
-      return groupMealsByCategory(filteredMeals);
+      // When ALL is selected, group the text-filtered meals (searchedMeals) by category
+      return groupMealsByCategory(searchedMeals);
     } else {
       // Show meals only for the selected category
       const categoryName =
         categoriesForFilterBar.find((cat) => cat.id === selectedCategory)
           ?.name || "";
 
-      return { [categoryName]: filteredMeals };
+      // If search yields no results for the selected category, render nothing
+      return searchedMeals.length > 0 ? { [categoryName]: searchedMeals } : {};
     }
-  }, [filteredMeals, selectedCategory, categoriesForFilterBar]);
+  }, [searchedMeals, selectedCategory, categoriesForFilterBar]);
 
   // Helper to refetch menu data
   const loadRestaurantMenu = useCallback(() => {
@@ -294,6 +305,11 @@ const MenuPage = () => {
         selectedValue={selectedCategory}
         onChange={handleCategoryChange}
       />
+       <SearchBar
+         value={searchQuery}
+         onChange={(e) => setSearchQuery(e.target.value)}
+         placeholder="Yemek Ara..."
+       />
       {showBanner && error && (
         <NoticeBanner
           message={error}

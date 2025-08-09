@@ -40,7 +40,7 @@ const useUpdateMeal = (
 
     const stockValue = parseInt(newStock, 10);
     if (isNaN(stockValue) || stockValue < 0) {
-      setError("Geçerli bir stok miktarı girin.");
+      setError("Geçerli bir porsiyon sayısı girin.");
       return;
     }
 

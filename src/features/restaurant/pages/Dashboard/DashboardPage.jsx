@@ -114,7 +114,7 @@ const DashboardPage = () => {
         </div>
         <div className="alert-cards">
           {isLoading && lowStockMeals.length === 0 && (
-            <Loading text="Stok durumu yükleniyor..." />
+            <Loading text="Kalan porsiyonlar yükleniyor..." />
           )}
           {lowStockMeals.length > 0 &&
             lowStockMeals.map((meal) => (
