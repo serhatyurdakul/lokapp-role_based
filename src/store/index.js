@@ -1,5 +1,5 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import authReducer from "../features/auth/store/authSlice";
+import authReducer, { logout } from "../features/auth/store/authSlice";
 import customerMenuReducer from "../features/customer/store/customerMenuSlice";
 import restaurantMenuReducer from "../features/restaurant/store/restaurantMenuSlice";
 import restaurantOrdersReducer from "../features/restaurant/store/restaurantOrdersSlice";
@@ -13,10 +13,11 @@ const appReducer = combineReducers({
   restaurantInfo: restaurantInfoReducer,
 });
 
-// Reset Redux state on logout
+// Reset Redux state on logout (preserve cleaned auth, reset others)
 const rootReducer = (state, action) => {
-  if (action.type === "auth/logout") {
-    state = undefined;
+  if (action.type === logout.fulfilled.type) {
+    const preservedAuth = state?.auth;
+    state = { auth: preservedAuth };
   }
   return appReducer(state, action);
 };
