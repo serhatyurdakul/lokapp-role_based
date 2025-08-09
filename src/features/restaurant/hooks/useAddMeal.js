@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { MSG_NETWORK_ERROR } from "@/constants/messages";
 import { useDispatch } from "react-redux";
 import { fetchMealOptionsByCategory, addRestaurantMeal } from "@/utils/api";
 import { setLastAddedCategory } from "../store/restaurantMenuSlice";
@@ -171,28 +170,11 @@ const useAddMeal = (
     setIsSubmitting(true);
     try {
       const response = await addRestaurantMeal(mealToAdd);
-
-      if (response && !response.error) {
-        dispatch(setLastAddedCategory(selectedCategoryInModal));
-        onMealAdded && onMealAdded(response);
-        onClose();
-      } else {
-        if (
-          response &&
-          response.error &&
-          response.message &&
-          response.message.includes("Bu yemek günlük menüde bulunmaktadır")
-        ) {
-          setMealExistsError(response.message);
-        } else {
-          setMealExistsError(
-            response?.message ||
-              "Yemek eklenirken bir hata oluştu. Lütfen tekrar deneyin."
-          );
-        }
-      }
+      dispatch(setLastAddedCategory(selectedCategoryInModal));
+      onMealAdded && onMealAdded(response);
+      onClose();
     } catch (error) {
-      setMealExistsError(MSG_NETWORK_ERROR);
+      setMealExistsError(error.message);
     } finally {
       setIsSubmitting(false);
     }

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { MSG_NETWORK_ERROR } from "@/constants/messages";
 import { deleteMealFromRestaurant } from "@/utils/api";
 
 const useDeleteMeal = (
@@ -40,14 +39,10 @@ const useDeleteMeal = (
     setIsDeleting(true);
     try {
       const response = await deleteMealFromRestaurant(deleteData);
-      if (response && !response.error) {
-        onMealDeleted && onMealDeleted(response);
-        onClose();
-      } else {
-        setError(response?.message || "Yemek silinirken bir hata oluştu.");
-      }
+      onMealDeleted && onMealDeleted(response);
+      onClose();
     } catch (error) {
-      setError(MSG_NETWORK_ERROR);
+      setError(error.message);
     } finally {
       setIsDeleting(false);
     }

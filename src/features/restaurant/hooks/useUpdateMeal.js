@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { MSG_NETWORK_ERROR } from "@/constants/messages";
 import { updateMealForRestaurant } from "@/utils/api";
 
 const useUpdateMeal = (
@@ -59,14 +58,10 @@ const useUpdateMeal = (
     setIsSubmitting(true);
     try {
       const response = await updateMealForRestaurant(updateData);
-      if (response && !response.error) {
-        onMealUpdated && onMealUpdated(response);
-        onClose();
-      } else {
-        setError(response?.message || "Yemek güncellenirken bir hata oluştu.");
-      }
+      onMealUpdated && onMealUpdated(response);
+      onClose();
     } catch (error) {
-      setError(MSG_NETWORK_ERROR);
+      setError(error.message);
     } finally {
       setIsSubmitting(false);
     }

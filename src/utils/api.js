@@ -15,7 +15,7 @@ if (!VITE_API_BASE_URL) {
   );
 }
 
-export const API_BASE_URL = VITE_API_BASE_URL;
+const API_BASE_URL = VITE_API_BASE_URL;
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -55,7 +55,11 @@ api.interceptors.response.use(
     }
 
     // Network error / CORS issue
-    if (error.message === "Network Error") {
+    if (
+      error.code === "ERR_NETWORK" ||
+      error.message === "Network Error" ||
+      (!error.response && error.request)
+    ) {
       return Promise.reject(new Error(MSG_NETWORK_ERROR));
     }
 
@@ -130,16 +134,19 @@ export const endpoints = {
 
   cities: "/cities",
   districts: "/districts",
-  industrialZones: "/industrialZones",
   industrialSites: "/getIndustrialSites",
   restaurants: "/restaurants",
   findLocaleCompany: "/findLocaleCompany",
   getMealsWithRestaurantId: "/getMealsWithRestaurantId",
   getCategories: "/getCategories",
   getMealMenu: "/getMealMenu",
+  addMealForRestaurant: "/addMealForRestaurant",
+  updateMealForRestaurant: "/updateMealForRestaurant",
+  deleteMealFromRestaurant: "/deleteMealFromRestaurant",
   createOrder: "/createOrder",
   getRestaurantsOrderList: "/getRestaurantsOrderList",
   getRestaurantOrderDetails: "/getRestaurantOrderDetails",
+  getRestaurantInfo: "/getRestaurantInfo",
   setOrderStatus: "/setOrderStatus",
 };
 
@@ -171,23 +178,45 @@ if (initialToken && initialUniqueId) {
 export const fetchCities = async () => {
   try {
     const response = await api.get(endpoints.cities);
+    if (response?.data?.error === true) {
+      const msg = response.data.message || "Şehirler yüklenemedi";
+      if (
+        msg.includes("listesi bulunamadı") ||
+        msg.includes("liste bulunamadı")
+      ) {
+        return [];
+      }
+      throw new Error(msg);
+    }
     return handleApiResponse(response, "cityList");
   } catch (error) {
     logger.error("fetchCities general API error:", error.message || error);
-    return [];
+    throw new Error(error.message || "Şehirler yüklenemedi");
   }
 };
 
 export const fetchDistricts = async (cityId) => {
   try {
-    const response = await api.get(`${endpoints.districts}?cityId=${cityId}`);
+    const response = await api.get(endpoints.districts, {
+      params: { cityId },
+    });
+    if (response?.data?.error === true) {
+      const msg = response.data.message || "İlçeler yüklenemedi";
+      if (
+        msg.includes("listesi bulunamadı") ||
+        msg.includes("liste bulunamadı")
+      ) {
+        return [];
+      }
+      throw new Error(msg);
+    }
     return handleApiResponse(response, "districtList");
   } catch (error) {
     logger.error(
       `fetchDistricts general API error (cityId: ${cityId}):`,
       error.message || error
     );
-    return [];
+    throw new Error(error.message || "İlçeler yüklenemedi");
   }
 };
 
@@ -200,13 +229,52 @@ export const fetchIndustrialSites = async (districtId, cityId) => {
     const response = await api.get(endpoints.industrialSites, {
       params: queryParams,
     });
+    if (response?.data?.error === true) {
+      const msg = response.data.message || "Sanayi siteleri yüklenemedi";
+      if (
+        msg.includes("listesi bulunamadı") ||
+        msg.includes("liste bulunamadı")
+      ) {
+        return [];
+      }
+      throw new Error(msg);
+    }
     return handleApiResponse(response, "industrialSiteList");
   } catch (error) {
     logger.error(
       `fetchIndustrialSites general API error (districtId: ${districtId}, cityId: ${cityId}):`,
       error.message || error
     );
-    return [];
+    throw new Error(error.message || "Sanayi siteleri yüklenemedi");
+  }
+};
+
+// Fetch detailed restaurant info
+export const fetchRestaurantInfo = async (restaurantId) => {
+  try {
+    if (!restaurantId) {
+      throw new Error("restaurantId zorunludur");
+    }
+
+    const response = await api.get(endpoints.getRestaurantInfo, {
+      params: { restaurantId },
+    });
+
+    if (response?.data?.error) {
+      throw new Error(response.data.message || "Restoran bulunamadı");
+    }
+
+    if (response?.data?.restaurant) {
+      return response.data.restaurant;
+    }
+
+    throw new Error("Beklenmeyen API formatı");
+  } catch (error) {
+    logger.error(
+      `fetchRestaurantInfo API error (restaurantId: ${restaurantId}):`,
+      error.response?.data || error.message || error
+    );
+    throw new Error(error.message || "Restoran bilgileri alınamadı");
   }
 };
 
@@ -219,13 +287,23 @@ export const fetchRestaurants = async (districtId, cityId) => {
     const response = await api.get(endpoints.restaurants, {
       params: queryParams,
     });
+    if (response?.data?.error === true) {
+      const msg = response.data.message || "Restoranlar yüklenemedi";
+      if (
+        msg.includes("listesi bulunamadı") ||
+        msg.includes("liste bulunamadı")
+      ) {
+        return [];
+      }
+      throw new Error(msg);
+    }
     return handleApiResponse(response, "restaurantList");
   } catch (error) {
     logger.error(
       `fetchRestaurants general API error (districtId: ${districtId}, cityId: ${cityId}):`,
       error.message || error
     );
-    return [];
+    throw new Error(error.message || "Restoranlar yüklenemedi");
   }
 };
 
@@ -323,9 +401,9 @@ export const loginUser = async (credentials) => {
 };
 
 // Verify token
-export const verifyUserToken = async (token) => {
+export const verifyUserToken = async () => {
   try {
-    const response = await api.post(endpoints.verifyToken, { token });
+    const response = await api.post(endpoints.verifyToken);
 
     if (response.data.error || response.data.status >= 400) {
       const apiError = new Error(
@@ -377,40 +455,29 @@ export const fetchLocaleCompanies = async (
     const response = await api.get(endpoints.findLocaleCompany, {
       params: queryParams,
     });
+    if (response?.data?.error === true) {
+      const msg = response.data.message || "Firma listesi yüklenemedi";
+      if (
+        msg.includes("listesi bulunamadı") ||
+        msg.includes("liste bulunamadı")
+      ) {
+        return [];
+      }
+      throw new Error(msg);
+    }
     return handleApiResponse(response, "companyList");
   } catch (error) {
     logger.error(
       `fetchLocaleCompanies general API error (cityId: ${cityId}, districtId: ${districtId}, industrialSiteId: ${industrialSiteId}):`,
       error.message || error
     );
-    return [];
+    throw new Error(error.message || "Firma listesi yüklenemedi");
   }
 };
 
 // Fetch newly added meals
 export const fetchRestaurantMeals = async (restaurantId) => {
   try {
-    const userJson = localStorage.getItem("user");
-    let user = null;
-    let uniqueId = null;
-
-    try {
-      if (userJson) {
-        user = JSON.parse(userJson);
-        uniqueId = user.uniqueId;
-      }
-    } catch (parseError) {
-      logger.error(
-        "Failed to parse user info (fetchRestaurantMeals):",
-        parseError
-      );
-    }
-
-    const requestHeaders = {};
-    if (uniqueId) {
-      requestHeaders["uniqueId"] = uniqueId;
-    }
-
     const queryParams = {};
     if (restaurantId) {
       queryParams.restaurantId = restaurantId;
@@ -418,7 +485,6 @@ export const fetchRestaurantMeals = async (restaurantId) => {
 
     const response = await api.get(endpoints.getMealsWithRestaurantId, {
       params: queryParams,
-      headers: requestHeaders,
     });
 
     if (response.data) {
@@ -484,9 +550,9 @@ export const fetchMealCategories = async () => {
 
 export const fetchMealOptionsByCategory = async (categoryId) => {
   try {
-    const response = await api.get(
-      `${endpoints.getMealMenu}?categoryId=${categoryId}`
-    );
+    const response = await api.get(endpoints.getMealMenu, {
+      params: { categoryId },
+    });
     const meals = handleApiResponse(response, "data");
     if (Array.isArray(meals)) {
       return meals.map((meal) => ({
@@ -508,9 +574,9 @@ export const fetchMealOptionsByCategory = async (categoryId) => {
 
 export const fetchRestaurantMenu = async (restaurantId) => {
   try {
-    const response = await api.get(
-      `${endpoints.getMealsWithRestaurantId}?restaurantId=${restaurantId}`
-    );
+    const response = await api.get(endpoints.getMealsWithRestaurantId, {
+      params: { restaurantId },
+    });
     const mealListByCategory = handleApiResponse(response, "mealList");
 
     if (Array.isArray(mealListByCategory)) {
@@ -543,7 +609,7 @@ export const fetchRestaurantMenu = async (restaurantId) => {
 
 export const addRestaurantMeal = async (mealData) => {
   try {
-    const response = await api.post("/addMealForRestaurant", mealData);
+    const response = await api.post(endpoints.addMealForRestaurant, mealData);
     return response.data;
   } catch (error) {
     logger.error(
@@ -551,18 +617,23 @@ export const addRestaurantMeal = async (mealData) => {
       error.response?.data || error.message || error
     );
     if (error.response && error.response.data) {
-      return error.response.data;
+      const message = error.response.data.message || error.message;
+      throw new Error(message);
     }
-    return {
-      error: true,
-      message: error.message || "Yemek eklenirken bilinmeyen bir hata oluştu.",
-    };
+    // Network or no-response case
+    if (error.code === "ECONNABORTED") {
+      throw new Error(MSG_TIMEOUT_ERROR);
+    }
+    throw new Error(MSG_NETWORK_ERROR);
   }
 };
 
 export const updateMealForRestaurant = async (mealData) => {
   try {
-    const response = await api.post("/updateMealForRestaurant", mealData);
+    const response = await api.post(
+      endpoints.updateMealForRestaurant,
+      mealData
+    );
     return response.data;
   } catch (error) {
     logger.error(
@@ -570,19 +641,23 @@ export const updateMealForRestaurant = async (mealData) => {
       error.response?.data || error.message || error
     );
     if (error.response && error.response.data) {
-      return error.response.data;
+      const message = error.response.data.message || error.message;
+      throw new Error(message);
     }
-    return {
-      error: true,
-      message:
-        error.message || "Yemek güncellenirken bilinmeyen bir hata oluştu.",
-    };
+    // Network or no-response case
+    if (error.code === "ECONNABORTED") {
+      throw new Error(MSG_TIMEOUT_ERROR);
+    }
+    throw new Error(MSG_NETWORK_ERROR);
   }
 };
 
 export const deleteMealFromRestaurant = async (deleteData) => {
   try {
-    const response = await api.post("/deleteMealFromRestaurant", deleteData);
+    const response = await api.post(
+      endpoints.deleteMealFromRestaurant,
+      deleteData
+    );
     return response.data;
   } catch (error) {
     logger.error(
@@ -591,13 +666,15 @@ export const deleteMealFromRestaurant = async (deleteData) => {
     );
 
     if (error.response && error.response.data) {
-      return error.response.data;
+      const message = error.response.data.message || error.message;
+      throw new Error(message);
     }
 
-    return {
-      error: true,
-      message: error.message || "Yemek silinirken bilinmeyen bir hata oluştu.",
-    };
+    // Network or no-response case
+    if (error.code === "ECONNABORTED") {
+      throw new Error(MSG_TIMEOUT_ERROR);
+    }
+    throw new Error(MSG_NETWORK_ERROR);
   }
 };
 

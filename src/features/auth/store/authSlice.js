@@ -12,36 +12,32 @@ export const register = createAsyncThunk(
     try {
       const response = await registerUser(userData);
 
-      if (
-        !response.error &&
-        (response.status === 200 || response.status === 201)
-      ) {
-        // Expecting user object with token and uniqueId.
-        if (response.user && response.user.uniqueId && response.user.token) {
-          const token = response.user.token;
-          const user = response.user;
-          return {
-            user,
-            token,
-          };
-        } else {
-          return rejectWithValue(
-            response.message ||
-              "Kullanıcı kayıt verisi eksik veya hatalı (uniqueId/token)"
-          );
-        }
+      if (!response.error && (response.status === 200 || response.status === 201)) {
+        // No auto-login after registration; return a success message only.
+        return { message: response.message || "Kayıt işlemi başarılı" };
       } else {
-        return rejectWithValue(
-          response.message ||
-            "Kayıt işlemi API tarafından başarısız olarak işaretlendi"
-        );
+        return rejectWithValue({
+          message:
+            response.message ||
+            "Kayıt işlemi API tarafından başarısız olarak işaretlendi",
+        });
       }
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message ||
+      // Preserve validation errors (RegisterPage.jsx expects this shape)
+      if (error.isValidationError) {
+        return rejectWithValue({
+          isValidationError: true,
+          fieldErrors: error.fieldErrors,
+          message: error.message || "Formda validasyon hataları bulundu.",
+        });
+      }
+      // Operational or generic error
+      return rejectWithValue({
+        message:
+          error.response?.data?.message ||
           error.message ||
-          "Kayıt işlemi sırasında bir hata oluştu"
-      );
+          "Kayıt işlemi sırasında bir hata oluştu",
+      });
     }
   }
 );
@@ -51,29 +47,20 @@ export const login = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await loginUser(credentials);
-      if (!response.error || (response.user && response.user.token)) {
-        let token;
-        let user;
-        if (response.user && response.user.token) {
-          token = response.user.token;
-          user = response.user;
-        } else if (response.token) {
-          token = response.token;
-          user = response.user;
-        } else {
+      if (!response.error && response.user) {
+        const user = response.user;
+        const token = user?.token;
+        const uniqueId = user?.uniqueId;
+
+        if (!token) {
           return rejectWithValue("Token bulunamadı");
         }
-
-        if (user && user.uniqueId) {
-          setAuthHeaders(token, user.uniqueId);
-          localStorage.setItem("user", JSON.stringify(user));
-        } else {
+        if (!uniqueId) {
           return rejectWithValue("Kullanıcı UniqueId bulunamadı");
         }
-        return {
-          user,
-          token,
-        };
+        setAuthHeaders(token, uniqueId);
+        localStorage.setItem("user", JSON.stringify(user));
+        return { user, token };
       } else {
         return rejectWithValue(
           response.message || "Giriş işlemi başarısız oldu"
@@ -98,12 +85,13 @@ export const verifyToken = createAsyncThunk(
         return rejectWithValue("Doğrulanacak token bulunamadı (state)");
       }
 
-      const response = await verifyUserToken(token);
+      const response = await verifyUserToken();
 
       if (!response.error && response.user) {
         if (response.user.uniqueId) {
           localStorage.setItem("user", JSON.stringify(response.user));
         }
+        setAuthHeaders(response.user.token, response.user.uniqueId);
         return {
           user: response.user,
           token: response.user.token,
@@ -111,7 +99,7 @@ export const verifyToken = createAsyncThunk(
       } else {
         setAuthHeaders(null, null);
         return rejectWithValue(
-          response.data.message || "Token doğrulaması başarısız oldu"
+          response.message || "Token doğrulaması başarısız oldu"
         );
       }
     } catch (error) {
@@ -139,18 +127,25 @@ const initialState = {
   error: null,
 };
 
+// Helper: reset auth state
+const resetAuthState = (state) => {
+  state.user = null;
+  state.token = null;
+  state.isAuthenticated = false;
+};
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logout(state) {
-      setAuthHeaders(null, null);
-      state.user = null;
-      state.token = null;
-      state.isAuthenticated = false;
+    clearAuth(state) {
+      resetAuthState(state);
     },
     clearError(state) {
       state.error = null;
+    },
+    setUser(state, action) {
+      state.user = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -188,10 +183,8 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
+        resetAuthState(state);
         state.error = action.payload;
-        state.isAuthenticated = false;
-        state.user = null;
-        state.token = null;
       });
 
     builder
@@ -205,17 +198,23 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.isAuthenticated = true;
         state.error = null;
-        setAuthHeaders(action.payload.token, action.payload.user.uniqueId);
       })
       .addCase(verifyToken.rejected, (state, action) => {
         state.isLoading = false;
-        state.user = null;
-        state.token = null;
-        state.isAuthenticated = false;
+        resetAuthState(state);
         state.error = action.payload;
       });
   },
 });
 
-export const { logout, clearError } = authSlice.actions;
+export const { clearError, setUser } = authSlice.actions;
+
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async (_, { dispatch }) => {
+    setAuthHeaders(null, null);
+    dispatch(authSlice.actions.clearAuth());
+  }
+);
+
 export default authSlice.reducer;

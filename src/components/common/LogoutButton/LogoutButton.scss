@@ -1,0 +1,28 @@
+@use "@/styles/variables" as *;
+
+.logout-button {
+  margin-top: $spacing-8;
+  margin-bottom: max(env(safe-area-inset-bottom), $spacing-24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-6;
+  width: 100%;
+  padding: $spacing-12;
+  background: var(--background-secondary);
+  border-radius: $border-radius;
+  color: var(--error-color);
+  font-size: 14px;
+  font-weight: 500;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    stroke: currentColor;
+  }
+
+  &:hover {
+    background: var(--overlay-light-2);
+  }
+}

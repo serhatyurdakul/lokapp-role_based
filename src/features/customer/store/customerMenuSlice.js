@@ -178,7 +178,7 @@ const menuSlice = createSlice({
       .addCase(createOrder.fulfilled, (state, action) => {
         state.isOrderLoading = false;
         state.orderSuccessMessage =
-          action.payload.message || "Order created successfully.";
+          action.payload.message || "Sipariş başarıyla oluşturuldu.";
         state.selectedItems = {}; // Clear selection after successful order
         state.orderError = null;
       })

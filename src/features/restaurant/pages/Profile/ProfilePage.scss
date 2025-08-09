@@ -1,0 +1,189 @@
+@use "@/styles/variables" as *;
+@use "@/styles/breakpoints" as *;
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-24;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: $spacing-24;
+  background: var(--background-secondary);
+  border-radius: $border-radius;
+
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: $spacing-16;
+
+    span {
+      color: var(--text-color);
+      font-size: 32px;
+      font-weight: 600;
+    }
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: $spacing-4;
+  }
+
+  .subtitle {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+}
+
+.profile-section {
+  background: var(--background-secondary);
+  border-radius: $border-radius-medium;
+  padding: $spacing-12;
+
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: $spacing-16;
+  }
+}
+
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-12;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-12;
+  background: var(--background-primary);
+  border-radius: $border-radius-small;
+
+  .label {
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .value {
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  
+  .value-wrapper {
+    display: flex;
+    align-items: center;
+    gap: $spacing-8;
+
+    .value {
+      line-height: 1;
+    }
+
+    .copy-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      line-height: 1;
+
+      .icon {
+        line-height: 1;
+        flex-shrink: 0;
+        color: var(--text-secondary);
+      }
+    }
+  }
+}
+
+// Hover rengi: ikon mavi (customer ile tutarlı)
+.info-item .value-wrapper .copy-button:hover .icon {
+  color: var(--primary-color);
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+}
+
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-12 $spacing-16;
+  background: none;
+  color: var(--text-color);
+  font-size: 14px;
+  border-radius: $border-radius-small;
+  transition: $transition;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--overlay-light-1);
+  }
+
+  &:hover {
+    background: var(--background-primary);
+  }
+
+  .icon {
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    line-height: 1;
+  }
+}
+
+.reports-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: $spacing-16;
+  background: var(--background-secondary);
+  border-radius: $border-radius;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  transition: $transition;
+
+  &:hover {
+    background: var(--overlay-light-2);
+  }
+
+  .reports-button-content {
+    display: flex;
+    align-items: center;
+    gap: $spacing-12;
+  }
+
+  .reports-icon {
+    color: var(--primary-color);
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .icon {
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    line-height: 1;
+  }
+}
