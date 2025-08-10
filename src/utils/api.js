@@ -610,7 +610,15 @@ export const fetchRestaurantMenu = async (restaurantId) => {
 export const addRestaurantMeal = async (mealData) => {
   try {
     const response = await api.post(endpoints.addMealForRestaurant, mealData);
-    return response.data;
+    const data = response?.data;
+
+    // If backend signals error in body (even with 2xx), surface it
+    if (data && (data.error === true || Number(data.status) >= 400)) {
+      // Use only API-provided message
+      throw new Error(data.message);
+    }
+
+    return data;
   } catch (error) {
     logger.error(
       "addRestaurantMeal API error:",
@@ -619,6 +627,10 @@ export const addRestaurantMeal = async (mealData) => {
     if (error.response && error.response.data) {
       const message = error.response.data.message || error.message;
       throw new Error(message);
+    }
+    // If the error was intentionally thrown above or by interceptors, preserve it
+    if (error instanceof Error && error.message) {
+      throw error;
     }
     // Network or no-response case
     if (error.code === "ECONNABORTED") {
@@ -634,7 +646,11 @@ export const updateMealForRestaurant = async (mealData) => {
       endpoints.updateMealForRestaurant,
       mealData
     );
-    return response.data;
+    const data = response?.data;
+    if (data && (data.error === true || Number(data.status) >= 400)) {
+      throw new Error(data.message);
+    }
+    return data;
   } catch (error) {
     logger.error(
       "updateMealForRestaurant API error:",
@@ -643,6 +659,9 @@ export const updateMealForRestaurant = async (mealData) => {
     if (error.response && error.response.data) {
       const message = error.response.data.message || error.message;
       throw new Error(message);
+    }
+    if (error instanceof Error && error.message) {
+      throw error;
     }
     // Network or no-response case
     if (error.code === "ECONNABORTED") {
@@ -658,7 +677,11 @@ export const deleteMealFromRestaurant = async (deleteData) => {
       endpoints.deleteMealFromRestaurant,
       deleteData
     );
-    return response.data;
+    const data = response?.data;
+    if (data && (data.error === true || Number(data.status) >= 400)) {
+      throw new Error(data.message);
+    }
+    return data;
   } catch (error) {
     logger.error(
       "deleteMealFromRestaurant API error:",
@@ -668,6 +691,9 @@ export const deleteMealFromRestaurant = async (deleteData) => {
     if (error.response && error.response.data) {
       const message = error.response.data.message || error.message;
       throw new Error(message);
+    }
+    if (error instanceof Error && error.message) {
+      throw error;
     }
 
     // Network or no-response case
