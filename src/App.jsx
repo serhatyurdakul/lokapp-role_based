@@ -68,6 +68,21 @@ function App() {
         if (isAuthenticated) {
           dispatch(logout());
         }
+      } else if (event.key === "uniqueId" && event.newValue === null) {
+        // uniqueId removed in another tab — logout for consistency and security
+        if (isAuthenticated) {
+          dispatch(logout());
+        }
+      } else if (
+        event.key === "uniqueId" &&
+        event.oldValue &&
+        event.newValue &&
+        event.oldValue !== event.newValue
+      ) {
+        // uniqueId changed in another tab — logout current tab for security
+        if (isAuthenticated) {
+          dispatch(logout());
+        }
       } else if (event.key === "user" && event.newValue === null) {
         if (isAuthenticated) {
           dispatch(logout());
@@ -80,7 +95,7 @@ function App() {
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
-  }, [dispatch, isAuthenticated, logout]);
+  }, [dispatch, isAuthenticated]);
 
   if (authIsLoading && tokenFromStore && !userFromStore) {
     return <div>Kimlik doğrulanıyor...</div>;

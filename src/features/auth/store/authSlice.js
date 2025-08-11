@@ -31,7 +31,6 @@ export const register = createAsyncThunk(
           message: error.message || "Formda validasyon hataları bulundu.",
         });
       }
-      // Operational or generic error
       return rejectWithValue({
         message:
           error.response?.data?.message ||
@@ -93,7 +92,7 @@ export const verifyToken = createAsyncThunk(
 
         localStorage.setItem("user", JSON.stringify(mergedUser));
 
-        // Sadece geçerli değerler geldiğinde auth header'larını güncelle
+        // Only update auth headers when both token and uniqueId are present.
         if (response.user.token && response.user.uniqueId) {
           setAuthHeaders(response.user.token, response.user.uniqueId);
         }
@@ -105,13 +104,11 @@ export const verifyToken = createAsyncThunk(
           token: nextToken,
         };
       } else {
-        setAuthHeaders(null, null);
         return rejectWithValue(
           response.message || "Token doğrulaması başarısız oldu"
         );
       }
     } catch (error) {
-      setAuthHeaders(null, null);
       return rejectWithValue(
         error.response?.data?.message ||
           "Token doğrulaması sırasında bir hata oluştu"
@@ -153,7 +150,13 @@ const authSlice = createSlice({
       state.error = null;
     },
     setUser(state, action) {
-      state.user = action.payload;
+      const mergedUser = { ...(state.user || {}), ...(action.payload || {}) };
+      state.user = mergedUser;
+      try {
+        localStorage.setItem("user", JSON.stringify(mergedUser));
+      } catch {
+        // ignore storage errors
+      }
     },
   },
   extraReducers: (builder) => {
@@ -209,7 +212,8 @@ const authSlice = createSlice({
       })
       .addCase(verifyToken.rejected, (state, action) => {
         state.isLoading = false;
-        resetAuthState(state);
+        // Do not force logout on any verifyToken failure here.
+        // Real invalid sessions (401/tokenError) are already handled by axios interceptors via global logout.
         state.error = action.payload;
       });
   },
