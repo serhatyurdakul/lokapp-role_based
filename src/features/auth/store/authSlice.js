@@ -88,13 +88,21 @@ export const verifyToken = createAsyncThunk(
       const response = await verifyUserToken();
 
       if (!response.error && response.user) {
-        if (response.user.uniqueId) {
-          localStorage.setItem("user", JSON.stringify(response.user));
+        const prevUser = getState().auth.user;
+        const mergedUser = { ...(prevUser || {}), ...response.user };
+
+        localStorage.setItem("user", JSON.stringify(mergedUser));
+
+        // Sadece geçerli değerler geldiğinde auth header'larını güncelle
+        if (response.user.token && response.user.uniqueId) {
+          setAuthHeaders(response.user.token, response.user.uniqueId);
         }
-        setAuthHeaders(response.user.token, response.user.uniqueId);
+
+        const nextToken = response.user.token || token;
+
         return {
-          user: response.user,
-          token: response.user.token,
+          user: mergedUser,
+          token: nextToken,
         };
       } else {
         setAuthHeaders(null, null);
