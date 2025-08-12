@@ -30,6 +30,11 @@ const useUpdateMeal = (
     setError("");
   };
 
+  const markSoldOut = () => {
+    setNewStock("0");
+    setError("");
+  };
+
   const handleUpdateMeal = async () => {
     setError("");
 
@@ -80,6 +85,7 @@ const useUpdateMeal = (
 
     handleStockChange,
     handleClearStock,
+    markSoldOut,
     handleUpdateMeal,
   };
 };

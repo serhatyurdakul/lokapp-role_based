@@ -3,6 +3,7 @@ import FormInput from "@/components/common/forms/FormInput/FormInput";
 import ErrorMessage from "@/components/common/forms/ErrorMessage/ErrorMessage";
 import useUpdateMeal from "../../hooks/useUpdateMeal";
 import PropTypes from "prop-types";
+import "./UpdateMealModal.scss";
 
 const UpdateMealModal = ({
   isOpen,
@@ -18,6 +19,7 @@ const UpdateMealModal = ({
     isSubmitDisabled,
     handleStockChange,
     handleClearStock,
+    markSoldOut,
     handleUpdateMeal,
   } = useUpdateMeal(restaurantId, selectedMeal, onMealUpdated, onClose, isOpen);
 
@@ -51,6 +53,16 @@ const UpdateMealModal = ({
         isClearable={true}
         onClear={handleClearStock}
       />
+      <div className="update-meal__tertiary">
+        <button
+          type="button"
+          onClick={markSoldOut}
+          aria-label="Tükendi yap"
+          className="update-meal__link"
+        >
+          Tükendi yap
+        </button>
+      </div>
     </GenericModal>
   );
 };
