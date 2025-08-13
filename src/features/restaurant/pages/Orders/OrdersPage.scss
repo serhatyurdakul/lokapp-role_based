@@ -16,7 +16,7 @@
   align-content: flex-start;
   display: grid;
   grid-template-columns: 1fr;
-  gap: $spacing-32 $spacing-16;
+  gap: $spacing-24 $spacing-16;
   height: calc(100vh - 180px);
 
   @media (max-width: 768px) {
