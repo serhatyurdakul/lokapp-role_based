@@ -2,8 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { logout, setUser } from "@/features/auth/store/authSlice";
-import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
-import MealHistoryCard from "../../components/MealHistoryCard/MealHistoryCard";
+import PageHeader from "@/components/common/PageHeader/PageHeader";
+import MealHistoryCard from "@/features/customer/components/MealHistoryCard/MealHistoryCard";
 import LogoutButton from "@/components/common/LogoutButton/LogoutButton";
 import { ReactComponent as ChevronRightIcon } from "@/assets/icons/chevron-right.svg";
 import { ReactComponent as CopyIcon } from "@/assets/icons/copy-icon.svg";
@@ -24,7 +24,10 @@ const ProfilePage = () => {
 
   // Derived values
   const companyCode = user?.companyCode || user?.company?.code;
-  const contractedRestaurant = user?.restaurantName || user?.restaurant?.name;
+  const contractedRestaurant =
+    user?.contractedRestaurantName ||
+    user?.restaurantName ||
+    user?.restaurant?.name;
 
   // handle copy
   const handleCopyCode = () => {
@@ -36,13 +39,10 @@ const ProfilePage = () => {
   };
 
   const handleFeedbackClick = () => {
-    window.open(
-      "mailto:support@exaple.com?subject=Geri%20Bildirim",
-      "_blank"
-    );
+    window.open("mailto:support@exaple.com?subject=Geri%20Bildirim", "_blank");
   };
 
-    // Eksik şirket bilgilerini API'den tamamlama
+  // Eksik şirket bilgilerini API'den tamamlama
   useEffect(() => {
     if (!user?.companyCode || !user?.companyName) {
       (async () => {
@@ -62,7 +62,7 @@ const ProfilePage = () => {
   const mealHistory = [
     {
       date: "2024-03-20",
-      type: "Lokantada",
+      type: "Restoranda",
       restaurant: "Bereket Sofrası",
       time: "12:30",
     },
@@ -89,111 +89,115 @@ const ProfilePage = () => {
 
   return (
     <>
-      <DetailPageHeader title="Profil" backPath={-1} />
+      <PageHeader title='Hesap' />
 
-      <div className="profile-content">
-        <div className="profile-header">
-          <div className="profile-avatar">
+      <div className='profile-content'>
+        <div className='profile-header'>
+          <div className='profile-avatar'>
             <span>
               {user?.name
                 ? user.name.trim().charAt(0).toLocaleUpperCase("tr-TR")
                 : ""}
             </span>
           </div>
-          <h2>{user?.name}</h2>
-          <p className="subtitle">{user?.email}</p>
+          <div className='profile-text'>
+            <h2>{user?.name}</h2>
+            <p className='subtitle'>
+              {user?.email ? (
+                <a href={`mailto:${user.email}`}>{user.email}</a>
+              ) : (
+                "Belirtilmemiş"
+              )}
+            </p>
+          </div>
         </div>
 
-        <div className="profile-section">
-          <h3>Şirket Bilgileri</h3>
-          <div className="info-list">
-            <div className="info-item">
-              <span className="label">Şirket</span>
-              <span className="value">
+        <div className='profile-section'>
+          <h3>Firma Bilgileri</h3>
+          <div className='info-list'>
+            <div className='info-item'>
+              <span className='label'>Firma</span>
+              <span className='value'>
                 {user?.companyName || "Belirtilmemiş"}
               </span>
             </div>
-            <div className="info-item">
-              <span className="label">Şirket Kodu</span>
-              <div className="value-wrapper">
-                <span className="value">{companyCode || "Belirtilmemiş"}</span>
+            <div className='info-item'>
+              <span className='label'>Firma Kodu</span>
+              <div className='value-wrapper'>
+                <span className='value'>{companyCode || "Belirtilmemiş"}</span>
                 {companyCode && (
                   <button
-                    type="button"
-                    className="copy-button"
-                    aria-label="Şirket kodunu kopyala"
-                    title="Kopyala"
+                    type='button'
+                    className='copy-button'
+                    aria-label='Firma kodunu kopyala'
+                    title='Kopyala'
                     onClick={handleCopyCode}
                   >
-                    <CopyIcon width={16} height={16} className="icon" />
+                    <CopyIcon width={16} height={16} className='icon' />
                   </button>
                 )}
               </div>
             </div>
-            <div className="info-item">
-              <span className="label">Anlaşmalı Restoran</span>
-              <span className="value">
+            <div className='info-item'>
+              <span className='label'>Anlaşmalı Restoran</span>
+              <span className='value'>
                 {contractedRestaurant || "Belirtilmemiş"}
               </span>
             </div>
           </div>
         </div>
 
-        <div className="profile-section">
-          <h3>Kişisel Bilgiler</h3>
-          <div className="info-list">
-            <div className="info-item">
-              <span className="label">Ad Soyad</span>
-              <span className="value">
-                {user?.name}
+        <div className='profile-section'>
+          <h3>Kullanıcı Bilgileri</h3>
+          <div className='info-list'>
+            <div className='info-item'>
+              <span className='label'>Telefon</span>
+              <span className='value'>
+                {user?.phoneNumber ? (
+                  <a href={`tel:${user.phoneNumber}`}>{user.phoneNumber}</a>
+                ) : (
+                  "Belirtilmemiş"
+                )}
               </span>
-            </div>
-            <div className="info-item">
-              <span className="label">E-posta</span>
-              <span className="value">{user?.email}</span>
-            </div>
-            <div className="info-item">
-              <span className="label">Telefon</span>
-              <span className="value">{user?.phoneNumber || "Belirtilmemiş"}</span>
             </div>
           </div>
         </div>
 
-        <div className="profile-section">
-          <div className="section-header">
+        <div className='profile-section'>
+          <div className='section-header'>
             <h3>Yemek Geçmişi</h3>
             <button
-              className="view-all-button"
+              className='view-all-button'
               onClick={() => navigate("/reports")}
             >
               Tümünü Gör
             </button>
           </div>
-          <div className="meal-history">
+          <div className='meal-history'>
             {mealHistory.map((meal, index) => (
               <MealHistoryCard key={index} meal={meal} />
             ))}
           </div>
         </div>
 
-        <div className="profile-section">
+        <div className='profile-section'>
           <h3>Ayarlar</h3>
-          <div className="settings-list">
-            <button className="settings-item">
+          <div className='settings-list'>
+            <button className='settings-item'>
               <span>Profili Düzenle</span>
-              <ChevronRightIcon width={20} height={20} className="icon" />
+              <ChevronRightIcon className='icon' />
             </button>
-            <button className="settings-item">
+            <button className='settings-item'>
               <span>Bildirim Tercihleri</span>
-              <ChevronRightIcon width={20} height={20} className="icon" />
+              <ChevronRightIcon className='icon' />
             </button>
-            <button className="settings-item">
+            <button className='settings-item'>
               <span>Yardım & Destek</span>
-              <ChevronRightIcon width={20} height={20} className="icon" />
+              <ChevronRightIcon className='icon' />
             </button>
-            <button className="settings-item" onClick={handleFeedbackClick}>
+            <button className='settings-item' onClick={handleFeedbackClick}>
               <span>Geri Bildirim Gönder</span>
-              <ChevronRightIcon width={20} height={20} className="icon" />
+              <ChevronRightIcon className='icon' />
             </button>
           </div>
         </div>

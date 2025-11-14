@@ -1,0 +1,64 @@
+@use "variables" as *;
+
+.group-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.order-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.order-cards-groups {
+  display: grid;
+  gap: 1rem;
+}
+
+.has-fixed-bottom-cta .menu-content > .category:last-child {
+  margin-bottom: 0;
+}
+
+.modal-items-list {
+  list-style: none;
+  padding-left: 0;
+}
+.modal-items-list li {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+.modal-items-list li:last-child {
+  margin-bottom: 0;
+}
+.modal-items-list .modal-item__label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+.modal-items-list .modal-item__value {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.order-page__cta {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 0.5rem;
+  width: min(480px, 100vw - 2rem);
+}
+
+.order-page__cta .btn {
+  width: 100%;
+}
+
+.modal-body .modal-items-list + p {
+  margin-top: 0.75rem;
+}

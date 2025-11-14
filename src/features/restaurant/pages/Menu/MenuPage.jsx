@@ -1,21 +1,23 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./MenuPage.scss";
-import FilterBar, {
-  ALL as ALL_FILTER,
-} from "@/components/common/FilterBar/FilterBar";
+import CustomDropdown from "@/components/common/CustomDropdown/CustomDropdown";
 import SearchBar from "@/components/common/SearchBar/SearchBar";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
 import Loading from "@/components/common/Loading/Loading.jsx";
 import EmptyState from "@/components/common/StateMessage/EmptyState";
 import NoticeBanner from "@/components/common/NoticeBanner/NoticeBanner";
+import Toast from "@/components/common/Toast/Toast.jsx";
+// Local sentinel value to indicate no category filter applied
+const ALL_FILTER = "all";
 import { ReactComponent as AddIcon } from "@/assets/icons/add.svg";
 import { ReactComponent as MoreIcon } from "@/assets/icons/more.svg";
 import { ReactComponent as EditIcon } from "@/assets/icons/edit.svg";
 import { ReactComponent as DeleteIcon } from "@/assets/icons/delete.svg";
-import AddMealModal from "../../components/AddMealModal/AddMealModal";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
-import DeleteMealModal from "../../components/DeleteMealModal/DeleteMealModal";
+import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal.jsx";
+import useDeleteMeal from "../../hooks/useDeleteMeal";
 import {
   fetchRestaurantCategories,
   fetchRestaurantMenuData,
@@ -46,43 +48,64 @@ const groupMealsByCategory = (meals) => {
 
 const MenuPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const { user } = useSelector((state) => state.auth);
+  const { info: restaurantInfo } = useSelector((state) => state.restaurantInfo);
   const {
-    categories: apiCategories,
     isLoading,
     error,
-    lastAddedCategoryId,
   } = useSelector((state) => state.restaurantMenu);
   const restaurantId = user?.restaurantId;
+  const orderCutoffTime =
+    restaurantInfo?.orderCutoffTime ||
+    user?.restaurant?.orderCutoffTime ||
+    "11:00";
 
   const [selectedCategory, setSelectedCategory] = useState(ALL_FILTER);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showAddMealModal, setShowAddMealModal] = useState(false);
-
-  const [selectedMeal, setSelectedMeal] = useState(null);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-
   const [selectedMealForDelete, setSelectedMealForDelete] = useState(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [selectedMealForUpdate, setSelectedMealForUpdate] = useState(null);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [openDropdownId, setOpenDropdownId] = useState(null);
 
   const [showBanner, setShowBanner] = useState(true);
+  const [toastMessage, setToastMessage] = useState("");
+  const [pendingFocusMealId, setPendingFocusMealId] = useState(null);
 
-  useEffect(() => {
+  const loadAllRestaurantData = useCallback(() => {
     dispatch(fetchRestaurantCategories());
-  }, [dispatch]);
-
-  useEffect(() => {
     if (restaurantId) {
       dispatch(fetchRestaurantMenuData(restaurantId));
     }
   }, [dispatch, restaurantId]);
 
   useEffect(() => {
+    loadAllRestaurantData();
+  }, [loadAllRestaurantData]);
+
+  useEffect(() => {
     setShowBanner(Boolean(error));
   }, [error]);
+
+  useEffect(() => {
+    const { toast: stateToast, focusMealId } = location.state || {};
+    const shouldReset = Boolean(stateToast) || Boolean(focusMealId);
+
+    if (stateToast) {
+      setToastMessage(stateToast);
+    }
+
+    if (focusMealId) {
+      setPendingFocusMealId(String(focusMealId));
+    }
+
+    if (shouldReset) {
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -110,38 +133,14 @@ const MenuPage = () => {
     setSelectedCategory(categoryValue);
   };
 
-  const openAddMealModal = () => {
-    setShowAddMealModal(true);
-  };
-
-  const closeAddMealModal = () => {
-    setShowAddMealModal(false);
-  };
-
-  const handleMealAdded = () => {
-    loadRestaurantMenu();
-  };
-
-  const openUpdateModal = (meal) => {
-    setSelectedMeal(meal);
-    setShowUpdateModal(true);
-  };
-
-  const closeUpdateModal = () => {
-    setShowUpdateModal(false);
-    setSelectedMeal(null);
-  };
-
-  const handleMealUpdated = () => {
-    loadRestaurantMenu();
-  };
-
-  const handleEdit = (meal) => {
-    openUpdateModal(meal);
-  };
+  const handleEdit = useCallback((meal) => {
+    setOpenDropdownId(null);
+    setSelectedMealForUpdate(meal);
+    setIsUpdateModalOpen(true);
+  }, []);
 
   const toggleDropdown = (mealId) => {
-    setOpenDropdownId(openDropdownId === mealId ? null : mealId);
+    setOpenDropdownId((prev) => (prev === mealId ? null : mealId));
   };
 
   const handleDropdownEdit = (meal) => {
@@ -152,17 +151,71 @@ const MenuPage = () => {
   const handleDropdownDelete = (meal) => {
     setOpenDropdownId(null);
     setSelectedMealForDelete(meal);
-    setShowDeleteModal(true);
+    setIsDeleteConfirmOpen(true);
   };
 
   const closeDeleteModal = () => {
-    setShowDeleteModal(false);
+    setIsDeleteConfirmOpen(false);
     setSelectedMealForDelete(null);
   };
 
+  // Helper to refetch menu data
+  const loadRestaurantMenu = useCallback(() => {
+    if (restaurantId) {
+      dispatch(fetchRestaurantMenuData(restaurantId));
+    }
+  }, [dispatch, restaurantId]);
+
   const handleMealDeleted = () => {
     loadRestaurantMenu();
+    setToastMessage("Yemek silindi");
   };
+
+  const {
+    isDeleting,
+    error: deleteError,
+    isSubmitDisabled,
+    handleDeleteMeal,
+  } = useDeleteMeal(
+    restaurantId,
+    selectedMealForDelete,
+    handleMealDeleted,
+    closeDeleteModal,
+    isDeleteConfirmOpen
+  );
+  const selectedMealOrderCount =
+    (selectedMealForDelete?.orderCount &&
+      Number(selectedMealForDelete.orderCount)) ||
+    0;
+
+  const closeUpdateModal = useCallback(() => {
+    setIsUpdateModalOpen(false);
+    setSelectedMealForUpdate(null);
+  }, []);
+
+  const handleMealUpdated = useCallback(() => {
+    closeUpdateModal();
+    loadRestaurantMenu();
+    setToastMessage("Yemek güncellendi");
+  }, [closeUpdateModal, loadRestaurantMenu]);
+
+  useEffect(() => {
+    if (!pendingFocusMealId) return;
+
+    const targetMeal = menuMeals.find(
+      (meal) => String(meal.id) === String(pendingFocusMealId)
+    );
+
+    if (targetMeal) {
+      handleEdit(targetMeal);
+      setPendingFocusMealId(null);
+      return;
+    }
+
+    if (pendingFocusMealId && menuMeals.length > 0) {
+      setPendingFocusMealId(null);
+    }
+  }, [pendingFocusMealId, menuMeals, handleEdit]);
 
   const filteredMeals = useMemo(
     () =>
@@ -173,14 +226,16 @@ const MenuPage = () => {
           ),
     [menuMeals, selectedCategory]
   );
- 
-   const searchedMeals = useMemo(() => {
-     if (!searchQuery) return filteredMeals;
-     const q = searchQuery.trim().toLowerCase();
-     return filteredMeals.filter((meal) =>
-       String(meal.mealName || "").toLowerCase().includes(q)
-     );
-   }, [filteredMeals, searchQuery]);
+
+  const searchedMeals = useMemo(() => {
+    if (!searchQuery) return filteredMeals;
+    const q = searchQuery.trim().toLowerCase();
+    return filteredMeals.filter((meal) =>
+      String(meal.mealName || "")
+        .toLowerCase()
+        .includes(q)
+    );
+  }, [filteredMeals, searchQuery]);
 
   // Memo: compute grouped meals for display
   const mealsForDisplay = useMemo(() => {
@@ -198,59 +253,58 @@ const MenuPage = () => {
     }
   }, [searchedMeals, selectedCategory, categoriesForFilterBar]);
 
-  // Helper to refetch menu data
-  const loadRestaurantMenu = useCallback(() => {
-    if (restaurantId) {
-      dispatch(fetchRestaurantMenuData(restaurantId));
-    }
-  }, [dispatch, restaurantId]);
+  const hasSearch = searchQuery.trim().length > 0;
 
   // Render body based on data state
   const renderBody = () => {
     // Full-screen spinner while menu data is loading
     if (isLoading && menuMeals.length === 0) {
-      return <Loading text="Menü yükleniyor..." />;
+      return <Loading text='Menü yükleniyor...' />;
     }
 
     // Empty state when there are no meals
     if (menuMeals.length === 0) {
-      return <EmptyState message="Henüz yemek eklemediniz" />;
+      return <EmptyState message='Henüz yemek eklemediniz' />;
+    }
+
+    if (hasSearch && searchedMeals.length === 0) {
+      return (
+        <div className='search-no-results'>Arama sonucuna uygun yemek bulunamadı.</div>
+      );
     }
 
     // Regular content
     return (
-      <div className="menupage-items-by-category">
+      <div className='menupage-items-by-category'>
         {Object.entries(mealsForDisplay).map(([categoryName, meals]) => (
-          <div key={categoryName} className="menupage-category-section">
-            <h3 className="menupage-category-title">{categoryName}</h3>
-            <div className="menupage-category-grid">
+          <div key={categoryName} className='menupage-category-section'>
+            <h3 className='menupage-category-title'>{categoryName}</h3>
+            <div className='menupage-category-grid'>
               {meals.map((meal) => (
-                <div key={meal.id} className="menupage-food-card">
-                  <div className="menupage-food-card-image">
+                <div
+                  key={meal.id}
+                  className='menupage-food-card'
+                  onClick={() => handleEdit(meal)}
+                >
+                  <div className='menupage-food-card-image'>
                     <img
                       src={meal.imageUrl || "https://via.placeholder.com/150"}
                       alt={meal.mealName}
                     />
                   </div>
-                  <div className="menupage-food-card-content">
-                    <h3 className="menupage-food-card-name">{meal.mealName}</h3>
-                    <span className="menupage-food-card-category-tag">
-                      {meal.categoryName ||
-                        apiCategories.find(
-                          (cat) => String(cat.id) === String(meal.categoryId)
-                        )?.name ||
-                        "Bilinmiyor"}
-                    </span>
-                    <div className="menupage-food-card-stock-info">
-                      <div className="menupage-food-card-stock-details">
+                  <div className='menupage-food-card-content'>
+                    <h3 className='menupage-food-card-name'>{meal.mealName}</h3>
+                    <div className='menupage-food-card-stock-info'>
+                      <div className='menupage-food-card-stock-details'>
                         <StockBadge
                           remaining={meal.currentStock}
                           sold={meal.orderCount}
                         />
                       </div>
-                      <div className="meal-actions-wrapper">
+                      <div className='meal-actions-wrapper'>
                         <button
-                          className="meal-actions-trigger"
+                          className='meal-actions-trigger'
+                          aria-label='Seçenekler'
                           onClick={(e) => {
                             e.stopPropagation();
                             toggleDropdown(meal.id);
@@ -259,17 +313,26 @@ const MenuPage = () => {
                           <MoreIcon />
                         </button>
                         {openDropdownId === meal.id && (
-                          <div className="meal-actions-dropdown">
+                          <div
+                            className='meal-actions-dropdown'
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <div
-                              className="dropdown-item"
-                              onClick={() => handleDropdownEdit(meal)}
+                              className='dropdown-item'
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDropdownEdit(meal);
+                              }}
                             >
                               <EditIcon />
                               <span>Düzenle</span>
                             </div>
                             <div
-                              className="dropdown-item delete"
-                              onClick={() => handleDropdownDelete(meal)}
+                              className='dropdown-item delete'
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDropdownDelete(meal);
+                              }}
                             >
                               <DeleteIcon />
                               <span>Sil</span>
@@ -290,61 +353,106 @@ const MenuPage = () => {
 
   return (
     <>
-      <PageHeader title="Menü Yönetimi">
-        <button
-          className={`add-button ${showAddMealModal ? "disabled" : ""}`}
-          onClick={openAddMealModal}
-        >
-          <AddIcon className="icon" />
-          <span>Yeni Yemek</span>
+      {openDropdownId !== null && (
+        // Backdrop captures outside clicks so they don't trigger card onClick (edit)
+        <div
+          className='meal-actions-backdrop'
+          onClick={() => setOpenDropdownId(null)}
+        />
+      )}
+      <PageHeader title='Menü'>
+        <button className='add-button' onClick={() => navigate("/menu/new")}>
+          <AddIcon className='icon' />
+          <span>Yemek Ekle</span>
         </button>
       </PageHeader>
+      <div className='cutoff-info'>
+        <span className='cutoff-info__text'>
+          Sipariş alımı {orderCutoffTime}’da kapanır.
+        </span>
+        <button
+          type='button'
+          className='cutoff-info__link'
+          onClick={() => navigate("/settings/order-cutoff")}
+        >
+          Saati ayarla
+        </button>
+      </div>
 
-      <FilterBar
-        options={categoriesForFilterBar}
-        selectedValue={selectedCategory}
-        onChange={handleCategoryChange}
-      />
-       <SearchBar
-         value={searchQuery}
-         onChange={(e) => setSearchQuery(e.target.value)}
-         placeholder="Yemek Ara..."
-       />
+      <div className='menu-filters'>
+        {/** Category dropdown */}
+        <CustomDropdown
+          options={[
+            { value: ALL_FILTER, label: "Tüm Kategoriler" },
+            ...categoriesForFilterBar.map((c) => ({
+              value: String(c.id),
+              label: c.name,
+            })),
+          ]}
+          selectedValue={selectedCategory}
+          onSelect={handleCategoryChange}
+          placeholder='Kategori seçiniz'
+        />
+
+        {/** Search input */}
+        <SearchBar
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onClear={() => setSearchQuery("")}
+          placeholder='Yemek Ara...'
+        />
+      </div>
       {showBanner && error && (
         <NoticeBanner
           message={error}
-          actionText="Yenile"
-          onAction={loadRestaurantMenu}
+          actionText='Yenile'
+          onAction={loadAllRestaurantData}
           onClose={() => setShowBanner(false)}
         />
       )}
       {renderBody()}
 
-      <AddMealModal
-        isOpen={showAddMealModal}
-        onClose={closeAddMealModal}
-        categories={apiCategories}
-        restaurantId={restaurantId}
-        initialCategoryId={lastAddedCategoryId}
-        onMealAdded={handleMealAdded}
-        isLoadingCategories={isLoading}
+      <ConfirmModal
+        isOpen={isDeleteConfirmOpen}
+        onClose={closeDeleteModal}
+        title='Yemek Sil'
+        message={
+          selectedMealForDelete ? (
+            <>
+              <h4>{selectedMealForDelete.mealName}</h4>
+              {selectedMealOrderCount > 0 && (
+                <p>
+                  Şu anda {selectedMealOrderCount} kişi bu yemeği sipariş etti. Silerseniz mevcut sipariş kayıtlarında görünmeye devam eder.
+                </p>
+              )}
+              <p className='menu-delete-warning'>
+                Bu yemeği silmek istediğinize emin misiniz?
+              </p>
+            </>
+          ) : (
+            <p className='menu-delete-warning'>
+              Bu yemeği silmek istediğinize emin misiniz?
+            </p>
+          )
+        }
+        confirmText='Sil'
+        cancelText='Vazgeç'
+        onConfirm={handleDeleteMeal}
+        variant='destructive'
+        isConfirmDisabled={isSubmitDisabled}
+        confirmLoading={isDeleting}
+        errorMessage={deleteError}
       />
 
       <UpdateMealModal
-        isOpen={showUpdateModal}
+        isOpen={isUpdateModalOpen}
         onClose={closeUpdateModal}
-        selectedMeal={selectedMeal}
+        selectedMeal={selectedMealForUpdate}
         restaurantId={restaurantId}
         onMealUpdated={handleMealUpdated}
       />
 
-      <DeleteMealModal
-        isOpen={showDeleteModal}
-        onClose={closeDeleteModal}
-        selectedMeal={selectedMealForDelete}
-        restaurantId={restaurantId}
-        onMealDeleted={handleMealDeleted}
-      />
+      <Toast message={toastMessage} onClose={() => setToastMessage("")} />
     </>
   );
 };

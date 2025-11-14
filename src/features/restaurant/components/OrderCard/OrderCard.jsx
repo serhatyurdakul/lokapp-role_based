@@ -1,5 +1,7 @@
-import './OrderCard.scss';
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import { ReactComponent as ChevronRightIcon } from "@/assets/icons/chevron-right.svg";
+import Badge from "@/components/common/Badge/Badge";
+import "./OrderCard.scss";
 
 const OrderCard = ({ order, onClick }) => {
   return (
@@ -10,19 +12,22 @@ const OrderCard = ({ order, onClick }) => {
       tabIndex={0}
     >
       <div className='order-header'>
-        <div>
+        <div className='order-header__top'>
           <h3>{order.company}</h3>
-          <span className='order-region'>{order.region}</span>
+          <ChevronRightIcon className='chevron' aria-hidden='true' />
         </div>
-        <span className='order-time'>{order.orderTime || order.time}</span>
+        <Badge className='order-region' tone='neutral'>
+          {order.region}
+        </Badge>
       </div>
       <div className='order-meta'>
-        <span className='order-items'>
-          {order.totalPeople} kişilik
-        </span>
-        <span className={`order-status ${order.status}`}>
+        <span className='order-items'>{order.totalPeople} kişilik</span>
+        <Badge
+          className='order-status'
+          tone={order.status === "pending" ? "pending" : "completed"}
+        >
           {order.status === "pending" ? "Bekliyor" : "Tamamlandı"}
-        </span>
+        </Badge>
       </div>
     </div>
   );
@@ -34,7 +39,7 @@ OrderCard.propTypes = {
       .isRequired,
     company: PropTypes.string.isRequired,
     region: PropTypes.string.isRequired,
-    status: PropTypes.oneOf(['pending', 'completed']).isRequired,
+    status: PropTypes.oneOf(["pending", "completed"]).isRequired,
     totalPeople: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
       .isRequired,
     orderTime: PropTypes.string,

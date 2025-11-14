@@ -29,6 +29,13 @@ const restaurantInfoSlice = createSlice({
       state.error = null;
       state.isLoading = false;
     },
+    setOrderCutoffTime(state, action) {
+      const cutoffTime = action.payload;
+      if (!state.info) {
+        state.info = {};
+      }
+      state.info.orderCutoffTime = cutoffTime;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -47,5 +54,5 @@ const restaurantInfoSlice = createSlice({
   },
 });
 
-export const { clearRestaurantInfo } = restaurantInfoSlice.actions;
+export const { clearRestaurantInfo, setOrderCutoffTime } = restaurantInfoSlice.actions;
 export default restaurantInfoSlice.reducer;

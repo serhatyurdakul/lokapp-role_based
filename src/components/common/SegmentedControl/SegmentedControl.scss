@@ -1,0 +1,43 @@
+@use "variables" as *;
+
+.segmented-control {
+  display: flex;
+  background-color: var(--background-secondary);
+  border-radius: $border-radius-medium;
+  padding: $spacing-2;
+  gap: $spacing-2;
+  margin-bottom: $spacing-16;
+
+  .segment {
+    flex: 1;
+    padding: $spacing-8 $spacing-12;
+    border-radius: $border-radius-small;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-color);
+    background-color: transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    min-height: 32px;
+
+    &:hover:not(.active) {
+      opacity: 0.7;
+    }
+
+    &.active {
+      background-color: var(--background-primary);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      color: var(--text-color);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 2px;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}

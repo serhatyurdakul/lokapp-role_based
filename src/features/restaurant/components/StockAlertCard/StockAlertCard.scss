@@ -1,0 +1,46 @@
+@use "variables" as *;
+
+.alert-card {
+  background-color: var(--background-primary);
+  padding: 0.75rem 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+  cursor: default;
+}
+.alert-card.interactive {
+  cursor: pointer;
+}
+.alert-card:hover {
+  background: var(--background-primary);
+}
+.alert-card:active {
+  background: var(--overlay-pressed);
+}
+.alert-card.critical {
+  border-color: var(--error-color);
+}
+.alert-card.warning {
+  border-color: var(--warning-color);
+}
+.alert-card.good {
+  border-color: var(--border-color);
+}
+.alert-card .alert-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.25rem;
+  justify-content: space-between;
+  align-items: center;
+}
+.alert-card .alert-header h4 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+.alert-card .alert-header .added-chip {
+  flex-shrink: 0;
+}

@@ -28,72 +28,55 @@ $transition: all 0.3s ease;
 $z-index-modal: 1000;
 
 :root {
-  // Colors – Light theme (reference)
-  // --primary-color: #007aff;
-  // --background-color: #f2f2f7;
-  // --background-primary: #ffffff;
-  // --background-secondary: #f9f9f9;
-  // --text-color: #000000;
-  // --text-secondary: #8e8e93;
-  // --border-color: #e5e5ea;
-  // --border-opacity: rgba(0, 0, 0, 0.08);
-  // --error-color: #ff3b30;
-
-  // Colors - Default (Dark) Theme
-  --primary-color: #0a84ff;
-  --background-color: #000000;
-  --background-primary: #1c1c1e;
-  --background-secondary: #2c2c2e;
-  --text-color: #ffffff;
-  --text-secondary: #98989d;
-  --border-color: #38383a;
-  --border-opacity: rgba(255, 255, 255, 0.08);
-  --error-color: #ff453a;
+  // Colors — Light theme
+  --primary-color: #007aff;
+  --background-color: #f2f2f7;
+  --background-primary: #ffffff;
+  --background-secondary: #f7f7f9;
+  --surface-tertiary: #e7e7e7;
+  --text-color: #1c1c1e;
+  --text-secondary: #6e6e73;
+  --border-color: #c6c6c8;
+  --border-subtle: rgba(60, 60, 67, 0.12);
+  --error-color: #ff3b30;
   --warning-color: #ff9f0a;
-  --success-color: #30d158;
+  --success-color: #34c759;
 
-  // Order status colors
+  // Order states
   --order-completed-color: #81c784;
   --order-pending-color: #ffb74d;
 
-  // Badge colors
-  --badge-dinein-text: var(--success-color);
-  --badge-dinein-bg: rgba(48, 209, 88, 0.12); // success 12% opacity
-  --badge-delivery-text: var(--primary-color);
-  --badge-delivery-bg: rgba(10, 132, 255, 0.12); // primary 12% opacity
+  // Badge palette
+  --badge-delivery-bg: #e0effe;
+  --badge-delivery-text: #0068d4;
+  --badge-dinein-bg: #e6f9eb;
+  --badge-dinein-text: #1b8130;
+  --badge-success-bg: #ebf7ec;
+  --badge-success-text: #1b8130;
+  --badge-warning-bg: #fff4e6;
+  --badge-warning-text: #c14c00;
+  --badge-error-bg: #ffe5e3;
+  --badge-error-text: #cc2418;
+  --badge-pending-bg: #fff4e6;
+  --badge-pending-text: #c14c00;
+  --badge-completed-bg: #ebf7ec;
+  --badge-completed-text: #1b8130;
 
-  // Overlay / background colors
-  --overlay-light-03: rgba(255, 255, 255, 0.03);
+  // Overlays & feedback
+  --overlay-hover: rgba(28, 28, 30, 0.04);
+  --overlay-pressed: rgba(28, 28, 30, 0.06);
+  --overlay-modal: rgba(28, 28, 30, 0.4);
+  --toast-bg: rgba(60, 60, 67, 0.85);
 
-  --overlay-light-05: rgba(255, 255, 255, 0.05);
-  --overlay-light-08: rgba(255, 255, 255, 0.08);
-  --overlay-light-1: rgba(255, 255, 255, 0.1);
-  --overlay-light-2: rgba(255, 255, 255, 0.21);
-  --overlay-light-3: rgba(255, 255, 255, 0.3);
+  // Shadows
+  --shadow-subtle: 0 2px 8px rgba(28, 28, 30, 0.08);
+  --shadow-card: 0 4px 12px rgba(28, 28, 30, 0.1);
+  --shadow-elevated: 0 8px 20px rgba(28, 28, 30, 0.14);
+  --shadow-modal: 0 16px 40px rgba(28, 28, 30, 0.18);
+  --shadow-selection-ring: 0 0 0 2px var(--primary-color);
 
-  // Order status overlay colors
-  --overlay-pending-bg: rgba(
-    255,
-    183,
-    77,
-    0.15
-  ); // order-pending-color (#ffb74d) at 15% opacity
-  --overlay-pending-border: rgba(
-    255,
-    183,
-    77,
-    0.3
-  ); // order-pending-color (#ffb74d) at 30% opacity
-  --overlay-completed-bg: rgba(
-    129,
-    199,
-    132,
-    0.15
-  ); // order-completed-color (#81c784) at 15% opacity
-  --overlay-completed-border: rgba(
-    129,
-    199,
-    132,
-    0.3
-  ); // order-completed-color (#81c784) at 30% opacity
+  // Status overlays
+  --overlay-pending-bg: rgba(255, 183, 77, 0.15);
+  --overlay-completed-bg: rgba(129, 199, 132, 0.15);
+  --overlay-error-bg: rgba(255, 59, 48, 0.12);
 }

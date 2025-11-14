@@ -1,10 +1,10 @@
-@use "@/styles/variables" as *;
+@use "variables" as *;
 
 .qr-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $spacing-24;
+  gap: 1.5rem;
   max-width: 480px;
   margin: 0 auto;
   width: 100%;
@@ -13,64 +13,55 @@
 .qr-steps {
   display: flex;
   flex-direction: column;
-  gap: $spacing-16;
-  background: var(--background-secondary);
-  padding: $spacing-16;
-  border-radius: $border-radius;
+  gap: 1rem;
+  background: var(--background-primary);
+  padding: 1rem;
+  border-radius: 16px;
   width: 100%;
-
-  .step {
-    display: flex;
-    align-items: center;
-    gap: $spacing-12;
-
-    .step-number {
-      width: 24px;
-      height: 24px;
-      border-radius: 12px;
-      background: var(--primary-color);
-      color: var(--text-color);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.875rem;
-      font-weight: 600;
-    }
-
-    p {
-      margin: 0;
-      font-size: 0.875rem;
-      color: var(--text-color);
-    }
-  }
+}
+.qr-steps .step {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.qr-steps .step .step-number {
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  background: var(--primary-color);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.qr-steps .step p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-color);
 }
 
 .qr-scanner-container {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: $spacing-16;
+  gap: 1rem;
   align-items: center;
-
-  &.success {
-    .qr-scanner {
-      border-color: var(--success-color);
-    }
-  }
-
-  &.error {
-    .qr-scanner {
-      border-color: var(--error-color);
-    }
-  }
+}
+.qr-scanner-container.success .qr-scanner {
+  border-color: var(--success-color);
+}
+.qr-scanner-container.error .qr-scanner {
+  border-color: var(--error-color);
 }
 
 .qr-scanner {
   width: 100%;
   max-width: 300px;
   aspect-ratio: 1;
-  background: var(--background-secondary);
-  border-radius: $border-radius;
+  background: var(--background-primary);
+  border-radius: 16px;
   overflow: hidden;
   position: relative;
   border: 2px solid transparent;
@@ -84,55 +75,48 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: $spacing-16;
+  gap: 1rem;
   color: var(--text-secondary);
-  background: var(--background-secondary);
-
-  svg {
-    width: 48px;
-    height: 48px;
-    opacity: 0.5;
-  }
-
-  p {
-    font-size: 0.875rem;
-    margin: 0;
-  }
+}
+.qr-placeholder svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.5;
+}
+.qr-placeholder p {
+  font-size: 0.875rem;
+  margin: 0;
 }
 
 .scan-status {
   text-align: center;
   min-height: 48px;
-
-  .status-message {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    margin: 0;
-  }
-
-  .status-success,
-  .status-error {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: $spacing-8;
-
-    svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    p {
-      margin: 0;
-      font-size: 0.875rem;
-    }
-  }
-
-  .status-success {
-    color: var(--success-color);
-  }
-
-  .status-error {
-    color: var(--error-color);
-  }
+}
+.scan-status .status-message {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin: 0;
+}
+.scan-status .status-success,
+.scan-status .status-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.scan-status .status-success svg,
+.scan-status .status-error svg {
+  width: 20px;
+  height: 20px;
+}
+.scan-status .status-success p,
+.scan-status .status-error p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+.scan-status .status-success {
+  color: var(--success-color);
+}
+.scan-status .status-error {
+  color: var(--error-color);
 }

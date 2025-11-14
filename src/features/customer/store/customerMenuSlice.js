@@ -31,7 +31,7 @@ export const createOrder = createAsyncThunk(
     // Determine restaurantId based on role: use contractedRestaurantId for company employees
 
     const orderRestaurantId =
-      user.isCompanyEmployee === 1
+      Number(user.isCompanyEmployee) === 1
         ? user.contractedRestaurantId
         : user.restaurantId;
 
@@ -128,12 +128,27 @@ const menuSlice = createSlice({
   reducers: {
     selectItem(state, action) {
       const { categoryId, itemId } = action.payload;
+      const categoryKey = String(categoryId);
+      const normalizedItemId = String(itemId);
 
-      if (state.selectedItems[categoryId] === itemId) {
-        delete state.selectedItems[categoryId];
+      if (state.selectedItems[categoryKey] === normalizedItemId) {
+        delete state.selectedItems[categoryKey];
       } else {
-        state.selectedItems[categoryId] = itemId;
+        state.selectedItems[categoryKey] = normalizedItemId;
       }
+    },
+
+    hydrateSelections(state, action) {
+      const payload = action.payload || {};
+      const normalized = {};
+      Object.entries(payload).forEach(([key, value]) => {
+        normalized[String(key)] = String(value);
+      });
+      state.selectedItems = normalized;
+    },
+
+    clearSelections(state) {
+      state.selectedItems = {};
     },
 
     clearOrderStatus(state) {
@@ -190,5 +205,10 @@ const menuSlice = createSlice({
   },
 });
 
-export const { selectItem, clearOrderStatus } = menuSlice.actions;
+export const {
+  selectItem,
+  clearSelections,
+  clearOrderStatus,
+  hydrateSelections,
+} = menuSlice.actions;
 export default menuSlice.reducer;

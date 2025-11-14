@@ -3,6 +3,7 @@
 @use "breakpoints" as *;
 @use "global";
 @use "buttons";
+@use "../components/common/Badge/Badge.scss" as *;
 @use "../components/common/Loading/Loading.scss" as *;
 @use "../features/customer/components/CategoryRow/CategoryRow.scss" as *;
 @use "../features/customer/components/ProductCard/ProductCard.scss" as *;

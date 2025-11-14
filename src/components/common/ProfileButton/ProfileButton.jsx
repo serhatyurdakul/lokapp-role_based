@@ -5,8 +5,8 @@ import "./ProfileButton.scss";
 const ProfileButton = ({
   userInitial,
   to = "/profile",
-  ariaLabel = "Profil Sayfası",
-  title = "Profil",
+  ariaLabel = "Hesap Sayfası",
+  title = "Hesap",
 }) => {
   if (!userInitial) {
     return null; 

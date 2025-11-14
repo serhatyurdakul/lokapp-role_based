@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
-import { ReactComponent as CloseIcon } from "@/assets/icons/close.svg";
 import Button from "../Button/Button";
 import "./GenericModal.scss";
 
@@ -18,6 +17,7 @@ const GenericModal = ({
   secondaryButtonClassName = "",
   isPrimaryButtonDisabled = false,
   primaryButtonLoading = false,
+  dialogRole = "dialog",
 }) => {
   useEffect(() => {
     const originalOverflow = document.body.style.overflow || 'auto';
@@ -46,14 +46,22 @@ const GenericModal = ({
   const effectiveOnSecondaryAction = onSecondaryAction || onClose;
 
   return ReactDOM.createPortal(
-    <div className='modal-overlay' onClick={handleOverlayClick}>
-      <div className='modal-content'>
+    <div
+      className='modal-overlay'
+      onClick={handleOverlayClick}
+      role='presentation'
+    >
+      <div
+        className='modal-content'
+        role={dialogRole}
+        aria-modal='true'
+        aria-label={title}
+      >
         {title && (
           <div className='modal-header'>
-            <h3 className='modal-title'>{title}</h3>
-            <button className='close-btn' onClick={onClose} aria-label='Kapat'>
-              <CloseIcon />
-            </button>
+            <h3 className='modal-title'>
+              {title}
+            </h3>
           </div>
         )}
         <div className='modal-body'>{children}</div>
@@ -93,7 +101,7 @@ const GenericModal = ({
 GenericModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   children: PropTypes.node.isRequired,
   primaryButtonText: PropTypes.string,
   onPrimaryAction: PropTypes.func,
@@ -103,6 +111,7 @@ GenericModal.propTypes = {
   secondaryButtonClassName: PropTypes.string,
   isPrimaryButtonDisabled: PropTypes.bool,
   primaryButtonLoading: PropTypes.bool,
+  dialogRole: PropTypes.oneOf(["dialog", "alertdialog"]),
 };
 
 export default GenericModal;

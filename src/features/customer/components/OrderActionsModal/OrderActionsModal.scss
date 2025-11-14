@@ -1,0 +1,32 @@
+@use "variables" as *;
+
+.order-actions-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.order-actions__note {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.order-actions__link {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  min-height: 36px;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+.order-actions__link:active {
+  background: var(--overlay-pressed);
+}
+
+.order-actions__link--destructive {
+  color: var(--error-color);
+}

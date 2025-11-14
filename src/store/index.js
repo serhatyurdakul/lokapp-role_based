@@ -1,9 +1,9 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import authReducer, { logout } from "../features/auth/store/authSlice";
-import customerMenuReducer from "../features/customer/store/customerMenuSlice";
-import restaurantMenuReducer from "../features/restaurant/store/restaurantMenuSlice";
-import restaurantOrdersReducer from "../features/restaurant/store/restaurantOrdersSlice";
-import restaurantInfoReducer from "../features/restaurant/store/restaurantInfoSlice";
+import authReducer, { logout } from "@/features/auth/store/authSlice";
+import customerMenuReducer from "@/features/customer/store/customerMenuSlice";
+import restaurantMenuReducer from "@/features/restaurant/store/restaurantMenuSlice";
+import restaurantOrdersReducer from "@/features/restaurant/store/restaurantOrdersSlice";
+import restaurantInfoReducer from "@/features/restaurant/store/restaurantInfoSlice";
 
 const appReducer = combineReducers({
   auth: authReducer,

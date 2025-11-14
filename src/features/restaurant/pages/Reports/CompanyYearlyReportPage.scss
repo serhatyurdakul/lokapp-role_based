@@ -1,0 +1,37 @@
+@use "variables" as *;
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.75rem;
+}
+
+.summary-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0;
+  color: var(--text-color);
+}
+
+.summary-row .filter-controls {
+  margin-left: auto;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.period-summary {
+  margin-bottom: 0.75rem;
+}
+.period-summary .summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.monthly-list .card-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}

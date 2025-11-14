@@ -1,22 +1,20 @@
-@use "../../../styles/variables" as *;
+@use "variables" as *;
 
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  margin-bottom: $spacing-16;
-
-  h1 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-color);
-    margin: 0;
-  }
-
-  .page-header-actions {
-    display: flex;
-    align-items: center;
-    gap: $spacing-8;
-  }
+  min-height: 44px;
+  margin-bottom: 0.5rem;
+}
+.page-header h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0;
+}
+.page-header .page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }

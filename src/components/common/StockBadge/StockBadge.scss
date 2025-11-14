@@ -1,35 +1,7 @@
-@use "../../../styles/variables" as *;
+@use "variables" as *;
 
 .meal-stock-badge-wrapper {
   display: inline-flex;
   align-items: center;
-  gap: $spacing-4;
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-4;
-  padding: $spacing-4 $spacing-6;
-  border-radius: $border-radius-small;
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
-  flex-shrink: 0;
-  background: var(--background-secondary);
-  color: var(--text-secondary);
-
-  &.good {
-    color: var(--success-color);
-  }
-  &.warning {
-    color: var(--warning-color);
-  }
-  &.critical {
-    color: var(--error-color);
-  }
-  &.depleted {
-    color: var(--text-secondary);
-
-  }
+  gap: 0.25rem;
 }

@@ -6,19 +6,24 @@ const useUpdateMeal = (
   selectedMeal,
   onMealUpdated,
   onClose,
-  isOpen
+  isOpen,
+  options = {}
 ) => {
+  const { autoCloseOnSuccess = true, enabled = true } = options;
   const [newStock, setNewStock] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   // Prefill stock and clear error when the modal opens
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
     if (isOpen && selectedMeal) {
       setNewStock(selectedMeal.quantity?.toString() || "");
       setError("");
     }
-  }, [isOpen, selectedMeal]);
+  }, [enabled, isOpen, selectedMeal]);
 
   const handleStockChange = (e) => {
     setNewStock(e.target.value);
@@ -36,6 +41,10 @@ const useUpdateMeal = (
   };
 
   const handleUpdateMeal = async () => {
+    if (!enabled) {
+      return;
+    }
+
     setError("");
 
     if (!selectedMeal || !selectedMeal.id) {
@@ -64,18 +73,24 @@ const useUpdateMeal = (
     try {
       const response = await updateMealForRestaurant(updateData);
       onMealUpdated && onMealUpdated(response);
-      onClose();
+      if (autoCloseOnSuccess) {
+        onClose?.();
+      }
+      return response;
     } catch (error) {
       setError(error.message);
     } finally {
       setIsSubmitting(false);
     }
+
+    return null;
   };
 
   const stockValue = Number(newStock);
   const isStockInvalid =
     newStock.trim() === "" || isNaN(stockValue) || stockValue < 0;
-  const isSubmitDisabled = isSubmitting || isStockInvalid || !selectedMeal;
+  const isSubmitDisabled =
+    !enabled || isSubmitting || isStockInvalid || !selectedMeal;
 
   return {
     newStock,

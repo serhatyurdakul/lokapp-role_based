@@ -3,17 +3,20 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import "./OrderDetailPage.scss";
-import OrderCard from "../../components/OrderCard/OrderCard";
+import CompanyHeader from "../../components/CompanyHeader/CompanyHeader";
 import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
 import Loading from "@/components/common/Loading/Loading.jsx";
 import ErrorState from "@/components/common/StateMessage/ErrorState";
 import GenericModal from "@/components/common/GenericModal/GenericModal";
 import { ReactComponent as CheckIcon } from "@/assets/icons/check.svg";
 import { ReactComponent as ClockIcon } from "@/assets/icons/clock.svg";
+import Button from "@/components/common/Button/Button";
 import {
   fetchOrderDetails,
   updateOrderStatus,
 } from "../../store/restaurantOrdersSlice";
+
+// Çalışan detayları ayrı ekranda ele alınacaktır
 
 const OrderDetailPage = () => {
   const { companyId } = useParams();
@@ -29,6 +32,7 @@ const OrderDetailPage = () => {
     statusUpdateError,
   } = useSelector((state) => state.restaurantOrders);
 
+  // Tek sayfa: özet + CTA
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
 
@@ -82,7 +86,7 @@ const OrderDetailPage = () => {
 
   // Full-screen spinner while order data is loading
   if (isDetailsLoading && !order) {
-    return <Loading text="Sipariş detayları yükleniyor..." />;
+    return <Loading text='Sipariş detayları yükleniyor...' />;
   }
 
   if (!order && !detailsError) {
@@ -91,12 +95,8 @@ const OrderDetailPage = () => {
 
   if (detailsError) {
     return (
-      <div className="order-detail">
-        <DetailPageHeader
-          title="Sipariş Detayı"
-          backPath="/orders"
-          backText="Geri"
-        />
+      <div className='order-detail'>
+        <DetailPageHeader title='Sipariş Detayı' backPath='/orders' />
         <ErrorState
           message={detailsError}
           onRetry={() =>
@@ -115,31 +115,49 @@ const OrderDetailPage = () => {
   }
 
   return (
-    <div className="order-detail">
-      <DetailPageHeader
-        title="Sipariş Detayı"
-        backPath="/orders"
-        backText="Geri"
+    <div className='order-detail has-fixed-bottom-cta'>
+      <DetailPageHeader title='Sipariş Detayı' backPath='/orders' />
+
+      <CompanyHeader
+        companyName={order.summary.company}
+        region={order.summary.region}
+        totalPeople={order.summary.totalPeople}
+        status={order.summary.status}
       />
 
-      <OrderCard order={order.summary} onClick={() => {}} />
-
-      <div className="detail-content">
-        <h3>Sipariş Detayı</h3>
-        <div className="categories-list">
+      <div className='summary-content'>
+        <div className='summary-header'>
+          <h3 className='tab-title'>Sipariş Özeti</h3>
+          <button
+            className='summary-action-link'
+            type='button'
+            onClick={() =>
+              navigate(`/orders/${companyId}/by-employee`, {
+                state: {
+                  companyName: order.summary.company,
+                  siteName: order.summary.region,
+                },
+              })
+            }
+            aria-label={"Sipariş verenler"}
+          >
+            {`Sipariş verenler`}
+          </button>
+        </div>
+        <div className='categories-list'>
           {order.groupedItems.map((category) => (
-            <div key={category.categoryId} className="category-group">
-              <h4 className="category-title">
+            <div key={category.categoryId} className='category-group'>
+              <h4 className='category-title'>
                 {category.categoryName}
-                <span className="category-total">
+                <span className='category-total'>
                   {category.totalQuantity} adet
                 </span>
               </h4>
-              <div className="items-list">
+              <div className='items-list'>
                 {category.items.map((meal) => (
-                  <div key={meal.id} className="detail-item">
-                    <span className="item-name">{meal.mealName}</span>
-                    <span className="item-quantity">{meal.quantity} adet</span>
+                  <div key={meal.id} className='detail-item'>
+                    <span className='item-name'>{meal.mealName}</span>
+                    <span className='item-quantity'>{meal.quantity} adet</span>
                   </div>
                 ))}
               </div>
@@ -148,8 +166,12 @@ const OrderDetailPage = () => {
         </div>
       </div>
 
-      <button
-        className={`status-toggle-button ${order?.summary.status}`}
+      <Button
+        className={`status-toggle-button fixed-cta ${
+          order?.summary.status === "pending"
+            ? "btn-status-completed"
+            : "btn-status-pending"
+        }`}
         onClick={() => setShowStatusModal(true)}
         disabled={isStatusUpdating}
       >
@@ -164,20 +186,19 @@ const OrderDetailPage = () => {
             <ClockIcon />
           </>
         )}
-      </button>
+      </Button>
 
       {showStatusModal && (
         <GenericModal
           isOpen={showStatusModal}
           onClose={() => setShowStatusModal(false)}
-          title="Sipariş Durumu"
+          title='Sipariş Durumu'
           primaryButtonText={
             order.summary.status === "pending" ? "Tamamla" : "Beklemeye Al"
           }
           onPrimaryAction={handleStatusChange}
-          secondaryButtonText="Vazgeç"
-          primaryButtonClassName={order.summary.status}
-          isPrimaryDisabled={isStatusUpdating}
+          secondaryButtonText='Vazgeç'
+          isPrimaryButtonDisabled={isStatusUpdating}
         >
           <p>
             {order.summary.status === "pending"
@@ -191,10 +212,9 @@ const OrderDetailPage = () => {
         <GenericModal
           isOpen={showErrorModal}
           onClose={() => setShowErrorModal(false)}
-          title="Güncelleme Başarısız"
-          primaryButtonText="Tamam"
+          title='Güncelleme Başarısız'
+          primaryButtonText='Tamam'
           onPrimaryAction={() => setShowErrorModal(false)}
-          isError={true}
         >
           <p>
             Sipariş durumu güncellenirken bir hata oluştu: <br />

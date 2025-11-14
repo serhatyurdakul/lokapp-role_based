@@ -30,7 +30,9 @@ const FormSelect = ({
         className={`${error ? "error" : ""} form-select`}
         {...rest}
       >
-        {defaultOptionText && <option value=''>{defaultOptionText}</option>}
+        {defaultOptionText ? (
+          <option value=''>{defaultOptionText}</option>
+        ) : null}
         {options.length > 0
           ? options.map((option) => (
               <option
@@ -40,7 +42,7 @@ const FormSelect = ({
                 {option.name || option.label}
               </option>
             ))
-          : defaultOptionText && (
+          : !defaultOptionText && (
               <option value='' disabled>
                 {disabledOptionText}
               </option>

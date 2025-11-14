@@ -9,9 +9,9 @@ const RestaurantNavbar = () => {
     user?.name?.trim()?.charAt(0)?.toLocaleUpperCase("tr-TR") ?? "";
 
   const links = [
-    { to: "/", label: "Özet", end: true },
-    { to: "/menu", label: "Menü" },
+    { to: "/", label: "Bugün", end: true, matchPrefixes: ["/", "/qr-activity"] },
     { to: "/orders", label: "Siparişler" },
+    { to: "/menu", label: "Menü" },
   ];
 
   const rightAction = <ProfileButton userInitial={userInitial} />;

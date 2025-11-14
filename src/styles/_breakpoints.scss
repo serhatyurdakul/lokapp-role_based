@@ -1,7 +1,6 @@
 @use "sass:map";
 @use "_variables" as *;
 
-
 $breakpoints: (
   "small": 576px,
   "medium": 768px,
@@ -20,8 +19,6 @@ $breakpoints: (
       + "Available breakpoints are: #{map.keys($breakpoints)}.";
   }
 }
-
-
 
 // Safe area padding mixin
 @mixin safe-area-padding($direction) {

@@ -1,57 +1,54 @@
-@use "../../../styles/variables" as *;
+@use "variables" as *;
 
 .navbar {
   background-color: var(--background-primary);
   border-bottom: 1px solid var(--border-color);
-  padding: $spacing-12;
+  padding: 0.75rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
   top: 0;
-  z-index: $z-index-modal;
+  z-index: 1000;
   height: 64px;
-  padding-top: calc($spacing-12 + env(safe-area-inset-top));
-  backdrop-filter: blur(10px);
+  padding-top: calc(0.75rem + env(safe-area-inset-top));
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .navbar-menu {
   display: flex;
   align-items: center;
-  background: var(--overlay-light-03);
-  border-radius: $border-radius-medium;
+  background-color: var(--surface-tertiary);
+  border-radius: 8px;
   padding: 2px;
   width: 240px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-
-  @media (min-width: 768px) {
+}
+@media (min-width: 768px) {
+  .navbar-menu {
     width: 280px;
   }
-
-  // The sliding indicator for the active menu item
-  &::before {
-    content: "";
-    position: absolute;
-    top: 2px;
-    bottom: 2px;
-    left: 2px;
-    background: var(--overlay-light-1);
-    border-radius: $border-radius-small;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    width: calc((100% - 4px) / var(--total-links, 2));
-    transform: translateX(calc(100% * var(--active-index, 0)));
-    opacity: 1;
-    visibility: visible;
-  }
-
-  // Hide the indicator when no item is active (index is -1)
-  &[style*="--active-index: -1"]::before {
-    opacity: 0;
-    visibility: hidden;
-  }
+}
+.navbar-menu::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  background: var(--background-primary);
+  border-radius: 6px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: calc((100% - 6px) / var(--total-links, 2));
+  transform: translateX(calc(100% * var(--active-index, 0)));
+  opacity: 1;
+  visibility: visible;
+}
+.navbar-menu[style*="--active-index: -1"]::before {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .navbar-menu-item {
@@ -64,15 +61,13 @@
   font-size: 14px;
   position: relative;
   z-index: 1;
-  padding: $spacing-4 $spacing-8;
+  padding: 0.5rem 0.75rem;
   transition: all 0.2s ease;
   font-weight: 500;
-
-  &:hover {
-    color: var(--text-color);
-  }
-
-  &.active {
-    color: var(--text-color);
-  }
+}
+.navbar-menu-item:hover {
+  color: var(--text-color);
+}
+.navbar-menu-item.active {
+  color: var(--text-color);
 }

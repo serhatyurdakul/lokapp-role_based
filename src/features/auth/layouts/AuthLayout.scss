@@ -1,48 +1,46 @@
-@use "../../../styles/variables" as *;
+@use "variables" as *;
 
 .auth-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: $spacing-16;
+  padding: 1rem;
   background-color: var(--background-color);
 }
 
 .auth-box {
   width: 100%;
   max-width: 400px;
-  padding: $spacing-16;
+  padding: 1rem;
   background-color: var(--background-primary);
-  border-radius: $border-radius;
-
-  h1 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: $spacing-24;
-    text-align: center;
-    color: var(--text-color);
-
-    @media (max-width: 576px) {
-      font-size: 1.25rem;
-      margin-bottom: $spacing-16;
-    }
+  border-radius: 12px;
+}
+.auth-box h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--text-color);
+}
+@media (max-width: 576px) {
+  .auth-box h1 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
   }
 }
 
 .auth-link {
   text-align: center;
-  margin-top: $spacing-16;
+  margin-top: 1rem;
   color: var(--text-secondary);
   font-size: 0.875rem;
-
-  a {
-    color: var(--primary-color);
-    font-weight: 500;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+}
+.auth-link a {
+  color: var(--primary-color);
+  font-weight: 500;
+  text-decoration: none;
+}
+.auth-link a:hover {
+  text-decoration: underline;
 }

@@ -16,7 +16,7 @@
   transition: $transition;
 
   &:hover {
-    opacity: 0.8;
+    opacity: 0.9;
   }
 
   &:disabled,
@@ -28,13 +28,16 @@
 
 .btn-primary {
   background-color: var(--primary-color);
+  color: #fff;
 }
 
 .btn-secondary {
-  background-color: var(--background-secondary);
+  background-color: var(--background-primary);
   border: 1px solid var(--border-color);
+  color: var(--text-color);
+
   &:hover {
-    background-color: var(--background-color);
+    background-color: var(--background-secondary);
   }
 }
 
@@ -52,11 +55,22 @@
   user-select: none;
 
   &:hover {
-    opacity: 0.8;
+    opacity: 0.65;
   }
 }
 
 .btn-destructive {
   background-color: var(--error-color);
   color: white;
+}
+
+// Status color helpers for restaurant CTA
+.btn-status-completed {
+  background-color: var(--order-completed-color);
+  color: var(--text-color);
+}
+
+.btn-status-pending {
+  background-color: var(--order-pending-color);
+  color: var(--text-color);
 }

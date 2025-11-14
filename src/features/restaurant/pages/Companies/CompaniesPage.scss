@@ -1,0 +1,60 @@
+@use "variables" as *;
+
+.search-no-results {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.companies-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.company-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: var(--background-primary);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  box-shadow: var(--shadow-card);
+}
+.company-item:last-child {
+  margin-bottom: 0;
+}
+.company-item:hover {
+  background: var(--overlay-hover);
+}
+.company-item .content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+.company-item .content .name {
+  color: var(--text-color);
+  font-size: 15px;
+  font-weight: 600;
+}
+.company-item .content .site-badge {
+  width: max-content;
+}
+.company-item .chevron {
+  width: 16px;
+  height: 16px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}

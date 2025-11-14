@@ -148,6 +148,7 @@ export const endpoints = {
   getRestaurantOrderDetails: "/getRestaurantOrderDetails",
   getRestaurantInfo: "/getRestaurantInfo",
   setOrderStatus: "/setOrderStatus",
+  getOrderHistoryByUser: "/getOrderHistoryByUser",
 };
 
 // Auth helpers
@@ -774,6 +775,24 @@ export const getRestaurantsOrderList = async (restaurantId, tabId = 0) => {
     throw new Error(
       error.response.data?.message || "Sipariş listesi alınamadı."
     );
+  }
+};
+
+export const fetchUserOrderHistoryByDate = async (year, month, day) => {
+  try {
+    const response = await api.get(endpoints.getOrderHistoryByUser, {
+      params: { year, month, day },
+    });
+    const data = response?.data;
+    if (!data) return [];
+    if (data.error === true) {
+      // 422 veya benzeri durumlarda boş liste dönüyor olabilir
+      return Array.isArray(data.orderList) ? data.orderList : [];
+    }
+    return Array.isArray(data.orderList) ? data.orderList : [];
+  } catch (error) {
+    // Ağ ya da diğer hatalarda boş liste
+    return [];
   }
 };
 

@@ -1,5 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { selectItem } from "@/features/customer/store/customerMenuSlice";
+import Badge from "@/components/common/Badge/Badge";
+import { ReactComponent as CheckIcon } from "@/assets/icons/check.svg";
 import "./ProductCard.scss";
 
 const PLACEHOLDER_IMAGE = "https://placehold.co/150x150?text=Yemek";
@@ -14,7 +16,8 @@ const ProductCard = ({
 }) => {
   const dispatch = useDispatch();
   const isSelected = useSelector(
-    (state) => state.customerMenu.selectedItems[categoryId] === itemId
+    (state) =>
+      state.customerMenu.selectedItems[String(categoryId)] === String(itemId)
   );
   const isOutOfStock = remainingQuantity === 0;
 
@@ -32,22 +35,39 @@ const ProductCard = ({
       className={`product-card ${isSelected ? "product-card--selected" : ""}`}
       disabled={isOutOfStock}
       aria-disabled={isOutOfStock}
-      onClick={() => dispatch(selectItem({ categoryId, itemId }))}
+      aria-pressed={isSelected}
+      onClick={() =>
+        dispatch(
+          selectItem({
+            categoryId: String(categoryId),
+            itemId: String(itemId),
+          })
+        )
+      }
     >
+      {isOutOfStock ? (
+        <div className='product-card__status'>
+          <Badge tone='neutral'>Tükendi</Badge>
+        </div>
+      ) : null}
       <img
         src={image}
         alt={name}
-        className="product-card__image"
-        loading="lazy"
+        className='product-card__image'
+        loading='lazy'
         onError={(e) => {
           e.target.src = PLACEHOLDER_IMAGE;
         }}
       />
-      <div className="product-card__content">
-        <h3 className="product-card__name">{name}</h3>
-        <p className="product-card__price">{formatPrice(price)} ₺</p>
+      <div className='product-card__content'>
+        <h3 className='product-card__name'>{name}</h3>
+        <p className='product-card__price'>{formatPrice(price)} ₺</p>
       </div>
-      {isSelected && <div className="product-card__selected-indicator">✓</div>}
+      {isSelected && !isOutOfStock ? (
+        <div className='product-card__selected-indicator' aria-hidden='true'>
+          <CheckIcon className='product-card__selected-indicator-icon' />
+        </div>
+      ) : null}
     </button>
   );
 };

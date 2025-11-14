@@ -1,177 +1,246 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchMeals,
-  createOrder,
-  clearOrderStatus,
-} from "../../store/customerMenuSlice";
-import CategoryRow from "../../components/CategoryRow/CategoryRow.jsx";
-import GenericModal from "@/components/common/GenericModal/GenericModal.jsx";
-import Loading from "@/components/common/Loading/Loading.jsx";
-import EmptyState from "@/components/common/StateMessage/EmptyState";
-
-import NoticeBanner from "@/components/common/NoticeBanner/NoticeBanner";
-import Button from "@/components/common/Button/Button";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import PageHeader from "@/components/common/PageHeader/PageHeader";
+import EmptyState from "@/components/common/StateMessage/EmptyState";
+import Toast from "@/components/common/Toast/Toast.jsx";
+import MealHistoryCard from "../../components/MealHistoryCard/MealHistoryCard.jsx";
+import OrderActionsModal from "../../components/OrderActionsModal/OrderActionsModal.jsx";
+import DeadlineNotice from "@/components/common/DeadlineNotice/DeadlineNotice.jsx";
+import { fetchUserOrderHistoryByDate } from "@/utils/api";
 import "./HomePage.scss";
 
 const HomePage = () => {
-  const [showBanner, setShowBanner] = useState(true);
-  const dispatch = useDispatch();
-  const {
-    categories,
-    isLoading,
-    error,
-    selectedItems,
-    isOrderLoading,
-    orderError,
-    orderSuccessMessage,
-  } = useSelector((state) => state.customerMenu);
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
 
-  const [showWarningModal, setShowWarningModal] = useState(false);
+  // Build storage key identical to CreateOrderPage for consistency, with user scoping
+  const isCompanyEmp = Number(user?.isCompanyEmployee) === 1;
+  const restaurantId = user ? (isCompanyEmp ? user?.contractedRestaurantId : user?.restaurantId) : null;
+  const companyId = user ? user.companyId : null;
+  const userId = user ? user.id : null;
+  const storageKey =
+    userId && restaurantId && companyId
+      ? `lokapp:lastOrders:${userId}:${restaurantId}:${companyId}`
+      : null;
 
-  const restaurantId = user
-    ? user.isCompanyEmployee === 1
-      ? user.contractedRestaurantId
-      : user.restaurantId
-    : null;
+  const restaurantName =
+    user?.restaurantName || user?.restaurant?.name || user?.contractedRestaurantName;
 
+  const [dineInToday, setDineInToday] = useState([]);
+  const [ordersToday, setOrdersToday] = useState([]);
+  const [toastMessage, setToastMessage] = useState("");
+  const location = useLocation();
+
+  const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const orderCutoffTime =
+    user?.restaurant?.orderCutoffTime ||
+    user?.contractedRestaurantOrderCutoffTime ||
+    "11:00";
+
+  // Local dine-in (QR) mock for today only
   useEffect(() => {
-    if (restaurantId) {
-      dispatch(fetchMeals(restaurantId));
+    if (!storageKey) {
+      setDineInToday([]);
+      return;
     }
-  }, [dispatch, restaurantId]);
+    try {
+      const raw = localStorage.getItem(storageKey);
+      const parsed = raw ? JSON.parse(raw) : [];
+      const list = Array.isArray(parsed) ? parsed : [];
 
+      const todayStr = new Date().toLocaleDateString("tr-TR");
+      const hasDineinToday = list.some((x) => {
+        try {
+          return (
+            x &&
+            x.type === "Restoranda" &&
+            new Date(x.date).toLocaleDateString("tr-TR") === todayStr
+          );
+        } catch (_e) {
+          return false;
+        }
+      });
+
+      let base = list;
+      if (!hasDineinToday && restaurantName) {
+        const now = new Date();
+        const time = now.toLocaleTimeString("tr-TR", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        });
+        const mock = {
+          date: now.toISOString(),
+          type: "Restoranda",
+          restaurant: restaurantName,
+          time,
+          items: [],
+        };
+        const next = [mock, ...list];
+        localStorage.setItem(storageKey, JSON.stringify(next));
+        base = next;
+      }
+
+      const dineInForToday = base.filter((m) => {
+        try {
+          return (
+            m &&
+            m.type === "Restoranda" &&
+            new Date(m.date).toLocaleDateString("tr-TR") === todayStr
+          );
+        } catch (_e) {
+          return false;
+        }
+      });
+
+      setDineInToday(dineInForToday);
+    } catch (_e) {
+      setDineInToday([]);
+    }
+  }, [storageKey, restaurantName]);
+
+  // Fetch today's orders from API
   useEffect(() => {
-    setShowBanner(Boolean(error));
-  }, [error]);
+    let active = true;
+    (async () => {
+      if (!user) {
+        setOrdersToday([]);
+        return;
+      }
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1;
+      const day = now.getDate();
+      const list = await fetchUserOrderHistoryByDate(year, month, day);
+      if (!active) return;
+      if (!Array.isArray(list) || list.length === 0) {
+        setOrdersToday([]);
+        return;
+      }
+      const mapped = list
+        .map((o) => {
+          if (!o || !o.createdAt) return null;
+          const dateIso = new Date(String(o.createdAt).replace(" ", "T")).toISOString();
+          const selectedPairs = {};
+          if (Array.isArray(o.orderMealList)) {
+            o.orderMealList.forEach((it) => {
+              if (it && it.categoryId && it.mealId) {
+                selectedPairs[String(it.categoryId)] = String(it.mealId);
+              }
+            });
+          }
+          const items = Array.isArray(o.orderMealList)
+            ? o.orderMealList.map((it) => it?.mealName).filter(Boolean)
+            : [];
+          return {
+            date: dateIso,
+            type: "Sipariş",
+            restaurant: o.restaurantName || "",
+            time: o.hour || undefined,
+            items,
+            selectedPairs,
+          };
+        })
+        .filter(Boolean);
+      setOrdersToday(mapped);
+    })();
+    return () => {
+      active = false;
+    };
+  }, [user]);
 
-  const isOrderDisabled = Object.keys(selectedItems).length === 0;
-
-  const handleOrder = () => {
-    if (isOrderDisabled) return;
-
-    const missingCategories = categories
-      .filter((cat) => !selectedItems[cat.id])
-      .map((cat) => cat.title);
-
-    if (missingCategories.length > 0) {
-      setShowWarningModal(true);
-    } else {
-      dispatch(createOrder());
+  // Read toast from navigation state (e.g., after successful order/QR), then clear state
+  useEffect(() => {
+    const stateToast = location?.state?.toast;
+    if (stateToast) {
+      setToastMessage(stateToast);
+      // Clear state to avoid duplicate toasts on back/forward
+      try {
+        navigate(location.pathname, { replace: true });
+      } catch (_e) {}
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location?.state]);
 
-  const handleConfirmOrder = () => {
-    setShowWarningModal(false);
-    dispatch(createOrder());
-  };
-
-  const closeStatusModal = () => {
-    dispatch(clearOrderStatus());
-  };
-
-  const renderBody = () => {
-    // Show full-screen spinner while initial data is loading
-    if (isLoading && (!categories || categories.length === 0)) {
-      return <Loading text="Yemekler yükleniyor..." />;
-    }
-
-    if (!categories || categories.length === 0) {
-      return (
-        <EmptyState
-          message="Sipariş listesinde yemek bulunmamaktadır."
-          onRefresh={() => restaurantId && dispatch(fetchMeals(restaurantId))}
-        />
-      );
-    }
-
-    return (
-      <div className="has-order-button">
-        {categories.map((category) => (
-          <CategoryRow
-            key={category.id}
-            categoryId={category.id}
-            title={category.title}
-            items={category.items}
-          />
-        ))}
-
-        {showWarningModal && (
-          <GenericModal
-            isOpen={showWarningModal}
-            onClose={() => setShowWarningModal(false)}
-            title="Eksik Seçimler"
-            primaryButtonText="Devam Et"
-            onPrimaryAction={handleConfirmOrder}
-            secondaryButtonText="Seçimlere Dön"
-          >
-            <p>Aşağıdaki kategorilerden seçim yapmadınız:</p>
-            <ul className="modal-items-list">
-              {categories
-                .filter((cat) => !selectedItems[cat.id])
-                .map((cat) => cat.title)
-                .map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-            </ul>
-            <p>Bu şekilde devam etmek istiyor musunuz?</p>
-          </GenericModal>
-        )}
-
-        {orderSuccessMessage && (
-          <GenericModal
-            isOpen={true}
-            onClose={closeStatusModal}
-            title="Başarılı!"
-            primaryButtonText="Tamam"
-            onPrimaryAction={closeStatusModal}
-          >
-            <p>{orderSuccessMessage}</p>
-          </GenericModal>
-        )}
-
-        {orderError && (
-          <GenericModal
-            isOpen={true}
-            onClose={closeStatusModal}
-            title="Hata!"
-            primaryButtonText="Tamam"
-            onPrimaryAction={closeStatusModal}
-            isError={true}
-          >
-            <p>
-              Siparişiniz oluşturulurken bir hata oluştu: <br />
-              <strong>{orderError}</strong>
-            </p>
-          </GenericModal>
-        )}
-
-        <Button
-          className="order-button"
-          onClick={handleOrder}
-          disabled={isOrderDisabled || isOrderLoading}
-          loading={isOrderLoading}
-        >
-          Siparişi Onayla
-        </Button>
-      </div>
-    );
-  };
+  // Today groups from API (orders) and local (dine-in)
+  const orders = ordersToday || [];
+  const dinein = dineInToday || [];
+  const hasAny = orders.length + dinein.length > 0;
 
   return (
     <>
-      {showBanner && error && (
-        <NoticeBanner
-          message={error}
-          actionText="Yenile"
-          onAction={() => restaurantId && dispatch(fetchMeals(restaurantId))}
-          onClose={() => setShowBanner(false)}
-        />
+      <PageHeader title='Bugün' />
+
+      {hasAny ? (
+        <div className='order-cards-groups'>
+          {(() => {
+            return (
+              <>
+                {orders.length > 0 && (
+                  <section>
+                    <h2 className='group-title'>
+                      Siparişler ({orders.length})
+                    </h2>
+                    <DeadlineNotice className='deadline-notice--spaced'>
+                      Siparişlerinizi {orderCutoffTime}’e kadar düzenleyebilir veya iptal edebilirsiniz.
+                    </DeadlineNotice>
+                    <div className='order-cards-list'>
+                      {orders.map((m, idx) => (
+                        <MealHistoryCard
+                          key={`o-${idx}`}
+                          meal={m}
+                          onClick={() => {
+                            setSelectedOrder(m);
+                            setIsQuickActionsOpen(true);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {dinein.length > 0 && (
+                  <section>
+                    <h2 className='group-title'>Restoranda ({dinein.length})</h2>
+                    <div className='order-cards-list'>
+                      {dinein.map((m, idx) => (
+                        <MealHistoryCard key={`q-${idx}`} meal={m} />
+                      ))}
+                    </div>
+                  </section>
+                )}
+              </>
+            );
+          })()}
+        </div>
+      ) : (
+        <EmptyState message='Bugün için sipariş veya QR kaydınız yok. Kayıtlarınız burada görünecek.' />
       )}
-      <PageHeader title="Sipariş Ekranı" />
-      {renderBody()}
+
+      <OrderActionsModal
+        isOpen={isQuickActionsOpen}
+        onClose={() => {
+          setIsQuickActionsOpen(false);
+          setSelectedOrder(null);
+        }}
+        onRequestEdit={() => {
+          try {
+            const pairs = selectedOrder?.selectedPairs || null;
+            navigate("/orders/edit", {
+              state: { selectedPairs: pairs },
+              replace: false,
+            });
+          } catch (_e) {}
+        }}
+        onRequestCancel={() => {
+          /* iptal akışı backend hazır olunca bağlanacak */
+        }}
+        cutoffTime={orderCutoffTime}
+      />
+
+      <Toast message={toastMessage} onClose={() => setToastMessage("")} />
     </>
   );
 };

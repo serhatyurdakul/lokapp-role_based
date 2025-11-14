@@ -1,0 +1,23 @@
+@use "variables" as *;
+
+@media (max-width: 1024px) {
+  .restaurant-layout .navbar {
+    display: none;
+  }
+  .restaurant-layout .restaurant-bottom-bar {
+    display: block;
+  }
+}
+@media (min-width: 1025px) {
+  .restaurant-layout .restaurant-bottom-bar {
+    display: none;
+  }
+}
+@media (hover: none) and (pointer: coarse) and (min-width: 1025px) {
+  .restaurant-layout .navbar {
+    display: none;
+  }
+  .restaurant-layout .restaurant-bottom-bar {
+    display: block;
+  }
+}

@@ -27,8 +27,8 @@
   display: block;
   width: 100%;
   padding: $spacing-12;
-  border-radius: $border-radius-medium;
-  background-color: var(--background-secondary);
+  border-radius: $border-radius;
+  background-color: var(--background-primary);
   font-size: 1rem;
   transition: $transition;
 
@@ -44,6 +44,37 @@
       border-color: var(--error-color);
     }
   }
+
+  &:disabled {
+    background-color: var(--overlay-light-03);
+    cursor: not-allowed;
+    color: var(--text-secondary);
+  }
+}
+
+.form-input[type="time"] {
+  padding-top: $spacing-8;
+  padding-bottom: $spacing-8;
+  min-height: 44px;
+  line-height: 1.2;
+  appearance: none;
+  -webkit-appearance: none;
+
+  &::-webkit-datetime-edit {
+    display: flex;
+    align-items: center;
+    padding: 0;
+  }
+  &::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+
+  &::-webkit-datetime-edit-hour-field,
+  &::-webkit-datetime-edit-minute-field,
+  &::-webkit-datetime-edit-ampm-field,
+  &::-webkit-datetime-edit-text {
+    padding: 0;
+  }
 }
 
 .toggle-button,
@@ -54,7 +85,8 @@
   transform: translateY(-50%);
   background: none;
   border: none;
-  padding: $spacing-4;
+  padding: $spacing-6;
+  min-height: 40px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -62,11 +94,19 @@
   color: var(--text-secondary);
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
   }
 
   &:hover {
     color: var(--text-color);
   }
+}
+
+// Inline label adornment next to label text (no layout shift)
+.form-group > label .label-adornment {
+  display: inline-flex;
+  align-items: center;
+  margin-left: $spacing-8; // spacing between text and adornment
+  height: 17px; // match current label height to avoid jumps
 }

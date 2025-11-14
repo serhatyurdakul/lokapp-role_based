@@ -223,9 +223,26 @@ export const { clearError, setUser } = authSlice.actions;
 
 export const logout = createAsyncThunk(
   "auth/logout",
-  async (_, { dispatch }) => {
-    setAuthHeaders(null, null);
-    dispatch(authSlice.actions.clearAuth());
+  async (_, { dispatch, getState }) => {
+    try {
+      const state = getState();
+      const userId = state?.auth?.user?.id;
+      if (userId) {
+        try {
+          const keysToRemove = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.startsWith(`lokapp:lastOrders:${userId}:`)) {
+              keysToRemove.push(key);
+            }
+          }
+          keysToRemove.forEach((k) => localStorage.removeItem(k));
+        } catch (_e) {}
+      }
+    } finally {
+      setAuthHeaders(null, null);
+      dispatch(authSlice.actions.clearAuth());
+    }
   }
 );
 

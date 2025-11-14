@@ -9,9 +9,9 @@
   width: 100%;
   padding: $spacing-12;
   border: 1px solid var(--border-color);
-  border-radius: $border-radius-medium;
+  border-radius: $border-radius;
   font-size: 1rem;
-  background-color: var(--background-secondary);
+  background-color: var(--background-primary);
   color: var(--text-color);
   transition: all $transition;
   appearance: none;
@@ -25,16 +25,12 @@
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-    background-color: var(--background-color);
+    background-color: var(--background-secondary);
   }
 
   &.error {
     border-color: var(--error-color);
     border-width: 2px;
-
-    &:focus {
-      border-color: var(--error-color);
-    }
   }
 
   option {

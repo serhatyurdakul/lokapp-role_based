@@ -1,0 +1,42 @@
+@use "variables" as *;
+
+.chips-filter {
+  display: flex;
+  align-items: center;
+  gap: $spacing-8;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: $spacing-4; // scroll bar varsa çakışmayı azaltır
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-8 $spacing-12;
+  min-height: 40px;
+  border-radius: $border-radius-large;
+  border: 1px solid var(--border-color);
+  background: var(--background-primary);
+  color: var(--text-color);
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: $transition;
+
+  &:active {
+    background: var(--overlay-light-1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--overlay-light-2);
+    outline-offset: 2px;
+  }
+
+  &.active {
+    background: var(--badge-delivery-bg);
+    color: var(--badge-delivery-text);
+    border-color: transparent;
+  }
+}

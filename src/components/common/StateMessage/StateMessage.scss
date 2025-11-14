@@ -1,4 +1,4 @@
-@use "../../../styles/variables" as *;
+@use "variables" as *;
 
 .state-message {
   min-height: 50vh;
@@ -7,34 +7,29 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: $spacing-32 $spacing-16;
-
-  &__icon {
-    width: 160px;
-    max-width: 40vw;
-    margin-bottom: $spacing-24;
-    color: var(--text-secondary);
-
-    path {
-      fill: currentColor;
-      stroke: currentColor;
-    }
-  }
-
-  &__message {
-    margin-bottom: $spacing-24;
-    font-size: 1rem;
-    color: var(--text-secondary);
-  }
-
-  &__button {
-    margin-top: $spacing-8;
-  }
-
-  &--error {
-    .state-message__message,
-    .state-message__icon {
-      color: var(--error-color, #e53935);
-    }
-  }
+  padding: 2rem 1rem;
+}
+.state-message__icon {
+  width: 160px;
+  max-width: 40vw;
+  margin-bottom: 1.5rem;
+  color: var(--text-secondary);
+}
+.state-message__icon path {
+  fill: currentColor;
+  stroke: currentColor;
+}
+.state-message__message {
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+.state-message__button {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  min-height: 44px;
+}
+.state-message--error .state-message__message,
+.state-message--error .state-message__icon {
+  color: var(--error-color, #e53935);
 }

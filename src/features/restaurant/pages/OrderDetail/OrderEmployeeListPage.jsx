@@ -1,0 +1,51 @@
+import { useLocation, useParams } from "react-router-dom";
+import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
+import EmployeeMealCard from "@/components/reporting/EmployeeMealCard/EmployeeMealCard";
+import "./OrderEmployeeListPage.scss";
+
+// Not: Bu ekranda sadece 'Sipariş' türündeki kayıtlar listelenir
+const MOCK_EMPLOYEE_MEALS = [
+  {
+    employee: "Ayşe Yılmaz",
+    type: "Sipariş",
+    time: "12:05",
+    items: ["Mercimek Çorbası", "Izgara Köfte", "Pirinç Pilavı"],
+  },
+  {
+    employee: "Zeynep Kaya",
+    type: "Sipariş",
+    time: "12:15",
+    items: ["Ezogelin", "Tavuk Şiş", "Bulgur"],
+  },
+];
+
+const OrderEmployeeListPage = () => {
+  const { companyId } = useParams();
+  const { state } = useLocation();
+  const companyName = state?.companyName || "Firma";
+  const count = MOCK_EMPLOYEE_MEALS.length;
+
+  return (
+    <div className='order-employees-page'>
+      <DetailPageHeader title={companyName} backPath={`/orders/${companyId}`} />
+
+      <h2 className='group-title'>{`Sipariş Verenler (${count})`}</h2>
+
+      <div
+        className='order-cards-list'
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
+          marginTop: "8px",
+        }}
+      >
+        {MOCK_EMPLOYEE_MEALS.map((meal, idx) => (
+          <EmployeeMealCard key={`emp-${idx}`} meal={meal} showType={false} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default OrderEmployeeListPage;

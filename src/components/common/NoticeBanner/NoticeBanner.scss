@@ -1,19 +1,19 @@
-@use "../../../styles/variables" as *;
+@use "variables" as *;
 
 .notice-banner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: fixed;
-  top: calc(64px + $spacing-8);
+  top: calc(64px + 0.5rem);
   left: 0;
   right: 0;
-  margin: 0 $spacing-16;
-  z-index: $z-index-modal + 100;
+  margin: 0 1rem;
+  z-index: 1100;
   background-color: var(--error-color);
   color: #fff;
-  padding: $spacing-8 $spacing-12;
-  border-radius: $border-radius-medium;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
   font-size: 0.875rem;
 }
 
@@ -22,10 +22,6 @@
 }
 
 .notice-banner-action {
-  svg {
-    width: 14px;
-    height: 14px;
-  }
   background: transparent;
   border: none;
   color: inherit;
@@ -34,15 +30,19 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: $spacing-4;
-  margin-right: $spacing-8;
-  padding: $spacing-4 $spacing-8;
+  gap: 0.25rem;
+  margin-right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  min-height: 32px;
   line-height: 1;
-  border-radius: $border-radius-small;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.15);
-  }
+  border-radius: 4px;
+}
+.notice-banner-action svg {
+  width: 14px;
+  height: 14px;
+}
+.notice-banner-action:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .notice-banner-close {
@@ -51,13 +51,14 @@
   color: inherit;
   cursor: pointer;
   line-height: 1;
-  padding: $spacing-4;
+  padding: 0.25rem;
+  min-height: 32px;
+  min-width: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
+}
+.notice-banner-close svg {
+  width: 14px;
+  height: 14px;
 }

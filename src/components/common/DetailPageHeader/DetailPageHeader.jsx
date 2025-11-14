@@ -3,10 +3,23 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as ChevronLeftIcon } from "@/assets/icons/chevron-left.svg";
 import "./DetailPageHeader.scss";
 
-const DetailPageHeader = ({ title, backPath, backText = "Geri", children }) => {
+const DetailPageHeader = ({
+  title,
+  backPath,
+  backText = "Geri",
+  children,
+  showBackText = false,
+  onBack,
+}) => {
   const navigate = useNavigate();
+  const backAriaLabel = !showBackText ? backText : undefined;
 
   const handleBack = () => {
+    if (typeof onBack === "function") {
+      onBack();
+      return;
+    }
+
     // 1) If a specific route is provided, use it
     if (typeof backPath !== "undefined" && backPath !== null) {
       navigate(backPath);
@@ -25,9 +38,13 @@ const DetailPageHeader = ({ title, backPath, backText = "Geri", children }) => {
 
   return (
     <header className='page-header with-back'>
-      <button className='btn btn-nav-back' onClick={handleBack}>
+      <button
+        className='btn btn-nav-back'
+        onClick={handleBack}
+        aria-label={backAriaLabel}
+      >
         <ChevronLeftIcon className='icon' />
-        <span>{backText}</span>
+        <span>{showBackText ? backText : null}</span>
       </button>
       <h1>{title}</h1>
       {children && <div className='detail-page-header-actions'>{children}</div>}

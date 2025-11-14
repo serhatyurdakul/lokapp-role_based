@@ -1,4 +1,4 @@
-@use "../../../styles/variables" as *;
+@use "variables" as *;
 
 .modal-overlay {
   position: fixed;
@@ -6,7 +6,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--overlay-light-2);
+  background-color: var(--overlay-modal);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,67 +16,45 @@
 .modal-content {
   background-color: var(--background-primary);
   border: 1px solid var(--border-color);
-  border-radius: $border-radius;
-  padding: $spacing-16;
+  border-radius: 20px;
+  box-shadow: var(--shadow-modal);
+  padding: 1rem;
   width: 90%;
   max-width: 500px;
   display: flex;
   flex-direction: column;
-
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: $spacing-4 0rem $spacing-16;
-
-    .modal-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--text-color);
-      margin: 0; // Reset h3's default margin
-    }
-
-    .close-btn {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-
-      cursor: pointer;
-      line-height: 0;
-
-      svg {
-        width: 20px;
-        height: 20px;
-        display: block;
-      }
-
-      &:hover {
-        color: var(--text-color);
-      }
-    }
-  }
-
-  .modal-body {
-    p {
-      color: var(--text-secondary);
-      margin-bottom: $spacing-8;
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-
-    label {
-      display: block;
-      font-size: 0.875rem;
-      color: var(--text-secondary);
-      font-weight: 500;
-      margin: 0 0 $spacing-8;
-    }
-
-    h4 {
-      margin-bottom: $spacing-16;
-      font-size: 1.125rem;
-      font-weight: 600;
-    }
-  }
+  position: relative;
+}
+.modal-content .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+.modal-content .modal-header .modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0;
+}
+.modal-content .modal-body > p {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+}
+.modal-content .modal-body > p:last-child {
+  margin-bottom: 0;
+}
+.modal-content .modal-body label {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin: 0 0 0.5rem;
+}
+.modal-content .modal-body h4 {
+  margin-bottom: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 600;
 }

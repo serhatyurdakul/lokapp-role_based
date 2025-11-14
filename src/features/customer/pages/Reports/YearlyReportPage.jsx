@@ -1,0 +1,93 @@
+import { useParams, useNavigate } from "react-router-dom";
+import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
+import CustomDropdown from "@/components/common/CustomDropdown/CustomDropdown";
+import ReportSummaryCard from "@/components/reporting/ReportSummaryCard/ReportSummaryCard";
+import SummaryStatCard from "@/components/reporting/SummaryStatCard/SummaryStatCard";
+import "./YearlyReportPage.scss";
+
+const YearlyReportPage = () => {
+  const { year } = useParams();
+  const navigate = useNavigate();
+
+  // Mock Data
+  const yearlySummary = { total: 250, delivery: 180, dineIn: 70 };
+  const monthlyData = [
+    {
+      month: "Temmuz",
+      monthNumber: "07",
+      summary: { total: 23, delivery: 15, dineIn: 8 },
+    },
+    {
+      month: "Haziran",
+      monthNumber: "06",
+      summary: { total: 19, delivery: 10, dineIn: 9 },
+    },
+    {
+      month: "Mayıs",
+      monthNumber: "05",
+      summary: { total: 30, delivery: 25, dineIn: 5 },
+    },
+    {
+      month: "Nisan",
+      monthNumber: "04",
+      summary: { total: 28, delivery: 20, dineIn: 8 },
+    },
+  ];
+  const availableYears = [
+    { value: "2025", label: "2025" },
+    { value: "2024", label: "2024" },
+  ];
+
+  const handleMonthClick = (monthNumber) => {
+    const monthStr = String(monthNumber).padStart(2, "0");
+    navigate(`/reports/${year}/${monthStr}`);
+  };
+
+  const handleYearChange = (selectedYear) => {
+    navigate(`/reports/${selectedYear}`);
+  };
+
+  return (
+    <>
+      <DetailPageHeader title="Raporlar" />
+
+      <div className="summary-row">
+        <h2 className="summary-title">{year} Özeti</h2>
+        <div className="filter-controls">
+          <CustomDropdown
+            options={availableYears}
+            selectedValue={year}
+            onSelect={handleYearChange}
+          />
+        </div>
+      </div>
+
+      {/* 2. Yearly Summary Cards */}
+      <div className='period-summary'>
+        <div className='summary-grid'>
+          <SummaryStatCard value={yearlySummary.total} label='Toplam Tabldot' variant='total' />
+          <SummaryStatCard value={yearlySummary.delivery} label='Siparişle Tabldot' variant='delivery' />
+          <SummaryStatCard value={yearlySummary.dineIn} label='Restoranda Tabldot' variant='dine-in' />
+        </div>
+      </div>
+
+      {/* 3. Monthly List */}
+      <div className='monthly-list'>
+        <div className='card-stack'>
+          {monthlyData.map((data) => (
+            <ReportSummaryCard
+              key={data.month}
+              title={`${data.month} ${year}`}
+              total={data.summary.total}
+              delivery={data.summary.delivery}
+              dineIn={data.summary.dineIn}
+              onClick={() => handleMonthClick(data.monthNumber)}
+            />
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default YearlyReportPage;

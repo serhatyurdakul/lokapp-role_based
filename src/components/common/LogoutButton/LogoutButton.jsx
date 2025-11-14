@@ -4,8 +4,13 @@ import "./LogoutButton.scss";
 
 const LogoutButton = ({ onClick }) => {
   return (
-    <button type="button" className="logout-button" onClick={onClick} aria-label="Çıkış Yap">
-      <LogoutIcon width={20} height={20} className="icon" />
+    <button
+      type='button'
+      className='logout-button'
+      onClick={onClick}
+      aria-label='Çıkış Yap'
+    >
+      <LogoutIcon width={20} height={20} className='icon' />
       Çıkış Yap
     </button>
   );

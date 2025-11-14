@@ -38,10 +38,6 @@ button {
   padding: 0;
   font: inherit;
   color: inherit;
-
-  &:focus {
-    outline: none;
-  }
 }
 
 img {
@@ -64,9 +60,8 @@ input {
 }
 
 input:focus {
-  outline: none;
   border-color: var(--primary-color);
-  transition: $transition;
+  outline: none;
 }
 
 input::placeholder {
@@ -93,6 +88,12 @@ input[type="number"] {
   display: flex;
   flex-direction: column;
   padding: $spacing-16;
+  // Bottom padding is driven by bottom bar offset (if any) and safe area.
+  // This ensures CTA'sız sayfalarda içerik alt barın altında kalmaz.
+  padding-bottom: calc(
+    var(--bottom-bar-offset, 0px) +
+      max(env(safe-area-inset-bottom), $spacing-16)
+  );
   @include safe-area-padding("horizontal");
 
   &--narrow {
@@ -104,7 +105,36 @@ input[type="number"] {
     padding: 0;
   }
 
-  & > .has-order-button {
-    padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  & > .has-fixed-bottom-cta {
+    // Buffer = CTA height + 16px gap above CTA (safe-area/bar is handled outside)
+    padding-bottom: calc(var(--cta-height, 44px) + $spacing-16);
   }
+}
+
+// Not: Container padding'i bottom bar offset'ini içerir;
+// CTA sayfaları `has-fixed-bottom-cta` ile kendi CTA tamponunu ekleyip üst üste sorunsuz yerleşir.
+
+// Fixed CTA utility, touch/mobile cihazlarda çağrı alanını safe area'nın üzerinde güvenle konumlandırır.
+// Aynı zamanda varsa bottom bar (64px) ile çakışmamasını sağlar.
+.fixed-cta {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  // Keep a deterministic 16px gap to the bottom edge/safe area by default
+  bottom: max(env(safe-area-inset-bottom), $spacing-16);
+  min-height: var(--cta-height, 44px);
+  border-radius: $border-radius-large;
+  z-index: 110;
+}
+
+@media (max-width: 1024px),
+  (hover: none) and (pointer: coarse) and (min-width: 1025px) {
+  .fixed-cta {
+    // Lift CTA by bottom bar height if present; value provided via --bottom-bar-offset
+    bottom: calc(
+      var(--bottom-bar-offset, 0px) +
+        max(env(safe-area-inset-bottom), $spacing-16)
+    );
+  }
+  // Note: CTA buffer is independent of bottom bar; handled above in default rule.
 }

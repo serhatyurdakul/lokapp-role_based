@@ -1,0 +1,23 @@
+@use "variables" as *;
+
+@media (max-width: 1024px) {
+  .customer-layout .navbar {
+    display: none;
+  }
+  .customer-layout .customer-bottom-bar {
+    display: block;
+  }
+}
+@media (min-width: 1025px) {
+  .customer-layout .customer-bottom-bar {
+    display: none;
+  }
+}
+@media (hover: none) and (pointer: coarse) and (min-width: 1025px) {
+  .customer-layout .navbar {
+    display: none;
+  }
+  .customer-layout .customer-bottom-bar {
+    display: block;
+  }
+}

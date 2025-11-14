@@ -8,7 +8,7 @@ import {
   getRestaurantOrderDetails,
   setOrderStatus,
 } from "@/utils/api";
-import { groupOrderItemsByName } from "../utils/groupOrderItemsByName";
+import { groupOrderItemsByName } from "@/features/restaurant/utils/groupOrderItemsByName";
 
 // Map API order list to UI-friendly format
 const mapOrderData = (apiOrderData) => {
