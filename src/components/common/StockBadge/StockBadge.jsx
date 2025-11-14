@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { getStockStatus } from "@/features/restaurant/utils/stockUtils";
 import Badge from "@/components/common/Badge/Badge";

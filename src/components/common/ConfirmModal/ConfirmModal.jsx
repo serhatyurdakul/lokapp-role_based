@@ -17,9 +17,13 @@ const ConfirmModal = ({
   errorMessage = "",
 }) => {
   const primaryClass = variant === "destructive" ? "btn-destructive" : "";
-  const bodyContent = message
-    ? (typeof message === "string" ? <p>{message}</p> : message)
-    : null;
+  const bodyContent = message ? (
+    typeof message === "string" ? (
+      <p>{message}</p>
+    ) : (
+      message
+    )
+  ) : null;
 
   return (
     <GenericModal

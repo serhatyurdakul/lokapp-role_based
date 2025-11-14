@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { ReactComponent as BagIcon } from "@/assets/icons/bag-outline.svg";
 import { ReactComponent as QrCodeIcon } from "@/assets/icons/qr-outline.svg";
