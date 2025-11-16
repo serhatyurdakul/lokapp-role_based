@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Loading from "@/components/common/Loading/Loading";
+import Loading from "@/common/components/Loading/Loading";
 
 /**
  * Kullanıcıyı /reports yolundan mevcut yıl ve ayın

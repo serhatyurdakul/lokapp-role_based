@@ -2,14 +2,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { logout, setUser } from "@/features/auth/store/authSlice";
-import PageHeader from "@/components/common/PageHeader/PageHeader";
+import PageHeader from "@/common/components/PageHeader/PageHeader";
 import MealHistoryCard from "@/features/customer/components/MealHistoryCard/MealHistoryCard";
-import LogoutButton from "@/components/common/LogoutButton/LogoutButton";
+import LogoutButton from "@/common/components/LogoutButton/LogoutButton";
 import { ReactComponent as ChevronRightIcon } from "@/assets/icons/chevron-right.svg";
 import { ReactComponent as CopyIcon } from "@/assets/icons/copy-icon.svg";
-import Toast from "@/components/common/Toast/Toast.jsx";
+import Toast from "@/common/components/Toast/Toast.jsx";
+import ProfileLayout, {
+  ProfileHeader,
+  ProfileSection,
+  ProfileInfoList,
+  ProfileInfoItem,
+  ProfileSettingsList,
+  ProfileSettingsItem,
+} from "@/common/components/ProfileLayout/ProfileLayout";
 import { api } from "@/utils/api";
-import "./ProfilePage.scss";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -91,120 +98,105 @@ const ProfilePage = () => {
     <>
       <PageHeader title='Hesap' />
 
-      <div className='profile-content'>
-        <div className='profile-header'>
-          <div className='profile-avatar'>
-            <span>
-              {user?.name
-                ? user.name.trim().charAt(0).toLocaleUpperCase("tr-TR")
-                : ""}
-            </span>
-          </div>
-          <div className='profile-text'>
-            <h2>{user?.name}</h2>
-            <p className='subtitle'>
-              {user?.email ? (
-                <a href={`mailto:${user.email}`}>{user.email}</a>
-              ) : (
-                "Belirtilmemiş"
-              )}
-            </p>
-          </div>
-        </div>
+      <ProfileLayout>
+        <ProfileHeader
+          avatarText={
+            user?.name
+              ? user.name.trim().charAt(0).toLocaleUpperCase("tr-TR")
+              : ""
+          }
+          title={user?.name || "Belirtilmemiş"}
+          subtitle={
+            user?.email ? (
+              <a href={`mailto:${user.email}`}>{user.email}</a>
+            ) : (
+              "Belirtilmemiş"
+            )
+          }
+        />
 
-        <div className='profile-section'>
-          <h3>Firma Bilgileri</h3>
-          <div className='info-list'>
-            <div className='info-item'>
-              <span className='label'>Firma</span>
-              <span className='value'>
-                {user?.companyName || "Belirtilmemiş"}
-              </span>
-            </div>
-            <div className='info-item'>
-              <span className='label'>Firma Kodu</span>
-              <div className='value-wrapper'>
-                <span className='value'>{companyCode || "Belirtilmemiş"}</span>
+        <ProfileSection title='Firma Bilgileri'>
+          <ProfileInfoList>
+            <ProfileInfoItem label='Firma'>
+              {user?.companyName || "Belirtilmemiş"}
+            </ProfileInfoItem>
+            <ProfileInfoItem label='Firma Kodu'>
+              <div className='profile__valueWrapper'>
+                <span>{companyCode || "Belirtilmemiş"}</span>
                 {companyCode && (
                   <button
                     type='button'
-                    className='copy-button'
+                    className='profile__copyButton'
                     aria-label='Firma kodunu kopyala'
                     title='Kopyala'
                     onClick={handleCopyCode}
                   >
-                    <CopyIcon width={16} height={16} className='icon' />
+                    <CopyIcon className='icon' />
                   </button>
                 )}
               </div>
-            </div>
-            <div className='info-item'>
-              <span className='label'>Anlaşmalı Restoran</span>
-              <span className='value'>
-                {contractedRestaurant || "Belirtilmemiş"}
-              </span>
-            </div>
-          </div>
-        </div>
+            </ProfileInfoItem>
+            <ProfileInfoItem label='Anlaşmalı Restoran'>
+              {contractedRestaurant || "Belirtilmemiş"}
+            </ProfileInfoItem>
+          </ProfileInfoList>
+        </ProfileSection>
 
-        <div className='profile-section'>
-          <h3>Kullanıcı Bilgileri</h3>
-          <div className='info-list'>
-            <div className='info-item'>
-              <span className='label'>Telefon</span>
-              <span className='value'>
-                {user?.phoneNumber ? (
-                  <a href={`tel:${user.phoneNumber}`}>{user.phoneNumber}</a>
-                ) : (
-                  "Belirtilmemiş"
-                )}
-              </span>
-            </div>
-          </div>
-        </div>
+        <ProfileSection title='Kullanıcı Bilgileri'>
+          <ProfileInfoList>
+            <ProfileInfoItem label='Telefon'>
+              {user?.phoneNumber ? (
+                <a href={`tel:${user.phoneNumber}`}>{user.phoneNumber}</a>
+              ) : (
+                "Belirtilmemiş"
+              )}
+            </ProfileInfoItem>
+          </ProfileInfoList>
+        </ProfileSection>
 
-        <div className='profile-section'>
-          <div className='section-header'>
-            <h3>Yemek Geçmişi</h3>
+        <ProfileSection
+          title='Yemek Geçmişi'
+          action={
             <button
-              className='view-all-button'
+              className='profile__viewAllButton'
               onClick={() => navigate("/reports")}
             >
               Tümünü Gör
             </button>
-          </div>
-          <div className='meal-history'>
+          }
+        >
+          <div className='profile__mealHistory'>
             {mealHistory.map((meal, index) => (
               <MealHistoryCard key={index} meal={meal} />
             ))}
           </div>
-        </div>
+        </ProfileSection>
 
-        <div className='profile-section'>
-          <h3>Ayarlar</h3>
-          <div className='settings-list'>
-            <button className='settings-item'>
-              <span>Profili Düzenle</span>
-              <ChevronRightIcon className='icon' />
-            </button>
-            <button className='settings-item'>
-              <span>Bildirim Tercihleri</span>
-              <ChevronRightIcon className='icon' />
-            </button>
-            <button className='settings-item'>
-              <span>Yardım & Destek</span>
-              <ChevronRightIcon className='icon' />
-            </button>
-            <button className='settings-item' onClick={handleFeedbackClick}>
-              <span>Geri Bildirim Gönder</span>
-              <ChevronRightIcon className='icon' />
-            </button>
-          </div>
-        </div>
+        <ProfileSection title='Ayarlar'>
+          <ProfileSettingsList>
+            <ProfileSettingsItem
+              label='Profili Düzenle'
+              icon={<ChevronRightIcon />}
+            />
+            <ProfileSettingsItem
+              label='Bildirim Tercihleri'
+              icon={<ChevronRightIcon />}
+            />
+            <ProfileSettingsItem
+              label='Yardım & Destek'
+              icon={<ChevronRightIcon />}
+            />
+            <ProfileSettingsItem
+              label='Geri Bildirim Gönder'
+              icon={<ChevronRightIcon />}
+              onClick={handleFeedbackClick}
+            />
+          </ProfileSettingsList>
+        </ProfileSection>
 
         <LogoutButton onClick={handleLogout} />
         <Toast message={toastMessage} onClose={() => setToastMessage("")} />
-      </div>
+      </ProfileLayout>
     </>
   );
 };

@@ -1,0 +1,61 @@
+@use "@/styles/variables" as *;
+
+.employee-meal-card {
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-12;
+  background: var(--background-primary);
+  border-radius: $border-radius;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-6;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-color);
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  &__type {
+    font-size: 0.875rem;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  &__time {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  &__headerTime {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-left: auto;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+  }
+
+  &__companyBadge {
+    align-self: flex-start;
+  }
+
+  &__items {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.35;
+  }
+}

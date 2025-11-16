@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
-import Button from "@/components/common/Button/Button";
-import FormSelect from "@/components/common/forms/FormSelect/FormSelect";
-import FormInput from "@/components/common/forms/FormInput/FormInput";
-import ErrorMessage from "@/components/common/forms/ErrorMessage/ErrorMessage";
-import NoticeBanner from "@/components/common/NoticeBanner/NoticeBanner";
-import Toast from "@/components/common/Toast/Toast.jsx";
-import GenericModal from "@/components/common/GenericModal/GenericModal";
-import Badge from "@/components/common/Badge/Badge";
+import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
+import Button from "@/common/components/Button/Button";
+import FormSelect from "@/common/components/forms/FormSelect/FormSelect";
+import FormInput from "@/common/components/forms/FormInput/FormInput";
+import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
+import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
+import Toast from "@/common/components/Toast/Toast.jsx";
+import GenericModal from "@/common/components/GenericModal/GenericModal";
+import Badge from "@/common/components/Badge/Badge";
 import { addRestaurantMeal } from "@/utils/api";
 import {
   fetchRestaurantCategories,
@@ -20,7 +20,6 @@ import useAddMeal from "../../hooks/useAddMeal";
 import StockAlertCard from "../../components/StockAlertCard/StockAlertCard";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
 import "./MenuCreatePage.scss";
-import "../../components/AddMealModal/AddMealModal.scss";
 
 const buildMealLookupKey = (name, categoryId) => {
   const normalizedName = (name || "").trim().toLocaleLowerCase("tr-TR");
@@ -396,7 +395,7 @@ const MenuCreatePage = () => {
       )}
 
       <form
-        className='menu-create-form'
+        className='menu-create-page__form'
         onSubmit={handleSubmit}
         autoComplete='off'
       >
@@ -417,7 +416,7 @@ const MenuCreatePage = () => {
           disabled={isLoading}
         />
 
-        <div className='search-input-container' onKeyDown={handleKeyDown}>
+        <div className='menu-create-page__search' onKeyDown={handleKeyDown}>
           <FormInput
             label='Yemek'
             id='menu-create-meal-input'
@@ -437,7 +436,7 @@ const MenuCreatePage = () => {
           />
 
           <div
-            className='search-results'
+            className='menu-create-page__search-results'
             ref={searchResultsRef}
             style={{
               display:
@@ -448,10 +447,13 @@ const MenuCreatePage = () => {
             {filteredMealOptions.length > 0 ? (
               filteredMealOptions.map((mealOption, index) => {
                 const itemClasses = [
-                  "search-result-item",
-                  mealOption.isDisabled ? "disabled" : "",
-                  mealOption.status ? `status-${mealOption.status}` : "",
-                  index === activeIndex ? "active" : "",
+                  "menu-create-page__search-item",
+                  mealOption.isDisabled
+                    ? "menu-create-page__search-item--disabled"
+                    : "",
+                  index === activeIndex
+                    ? "menu-create-page__search-item--active"
+                    : "",
                 ]
                   .filter(Boolean)
                   .join(" ");
@@ -478,12 +480,12 @@ const MenuCreatePage = () => {
                     aria-disabled={mealOption.isDisabled || undefined}
                     tabIndex={mealOption.isDisabled ? -1 : 0}
                   >
-                    <span className='search-result-item-label'>
+                    <span className='menu-create-page__search-item-label'>
                       {mealOption.name}
                     </span>
                     {statusLabel ? (
                       <Badge
-                        className='search-result-item-badge'
+                        className='menu-create-page__search-item-badge'
                         tone={mealOption.status === "pending" ? "delivery" : "dine-in"}
                       >
                         {statusLabel}
@@ -493,7 +495,10 @@ const MenuCreatePage = () => {
                 );
               })
             ) : (
-              <div className='search-result-item no-match' aria-disabled='true'>
+              <div
+                className='menu-create-page__search-item menu-create-page__search-item--empty'
+                aria-disabled='true'
+              >
                 "{searchQuery}" için arama sonucu bulunamadı.
               </div>
             )}
@@ -515,7 +520,7 @@ const MenuCreatePage = () => {
           onClear={() => setNewStock("")}
         />
 
-        <div className='menu-create-actions'>
+        <div className='menu-create-page__actions'>
           <Button
             type='submit'
             loading={isSubmitting}
@@ -528,23 +533,23 @@ const MenuCreatePage = () => {
       </form>
 
       {groupedPendingMeals.length > 0 && (
-        <div className='menu-create-pending'>
-          <h2 className='menu-create-pending-title'>
+        <div className='menu-create-page__pending'>
+          <h2 className='menu-create-page__pending-title'>
             Menüye Eklenecekler ({pendingMeals.length} çeşit)
           </h2>
           {groupedPendingMeals.map((group) => (
             <div
               key={group.categoryId}
-              className='menu-create-pending-category'
+              className='menu-create-page__pending-category'
             >
-              <h3 className='menu-create-pending-category-title'>
+              <h3 className='menu-create-page__pending-category-title'>
                 {group.categoryName} ({group.meals.length} çeşit)
               </h3>
-              <div className='menu-create-pending-list'>
+              <div className='menu-create-page__pending-list'>
                 {group.meals.map((meal) => (
                   <div
                     key={meal.pendingId}
-                    className='menu-create-pending-item'
+                    className='menu-create-page__pending-item'
                   >
                     <StockAlertCard
                       title={meal.mealName}
@@ -553,7 +558,7 @@ const MenuCreatePage = () => {
                       onClick={() => openPendingMealModal(meal)}
                     />
                     {meal.errorMessage ? (
-                      <span className='menu-create-pending-error'>
+                      <span className='menu-create-page__pending-error'>
                         {meal.errorMessage}
                       </span>
                     ) : null}

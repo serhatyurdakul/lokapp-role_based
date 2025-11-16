@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import AuthLayout from "../../layouts/AuthLayout.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { login, clearError } from "../../store/authSlice";
-import FormInput from "@/components/common/forms/FormInput/FormInput";
-import Button from "@/components/common/Button/Button";
-import ErrorMessage from "@/components/common/forms/ErrorMessage/ErrorMessage";
+import FormInput from "@/common/components/forms/FormInput/FormInput";
+import Button from "@/common/components/Button/Button";
+import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
 import "./LoginPage.scss";
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -79,10 +79,10 @@ const LoginPage = () => {
       <ErrorMessage message={getDisplayError()} />
       <form onSubmit={handleSubmit}>
         <FormInput
-          label="Email"
-          type="email"
-          id="email"
-          name="email"
+          label='Email'
+          type='email'
+          id='email'
+          name='email'
           value={formData.email}
           onChange={handleChange}
           required
@@ -90,16 +90,16 @@ const LoginPage = () => {
           onClear={handleClearEmail}
         />
         <FormInput
-          label="Şifre"
-          type="password"
-          id="password"
-          name="password"
+          label='Şifre'
+          type='password'
+          id='password'
+          name='password'
           value={formData.password}
           onChange={handleChange}
           required
         />
-        <div className="form-actions">
-          <Button type="submit" variant="primary" disabled={authIsLoading}>
+        <div className='form-actions'>
+          <Button type='submit' variant='primary' disabled={authIsLoading}>
             {authIsLoading ? "Giriş yapılıyor..." : "Giriş Yap"}
           </Button>
         </div>

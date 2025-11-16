@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import PageHeader from "@/components/common/PageHeader/PageHeader";
+import PageHeader from "@/common/components/PageHeader/PageHeader";
 import "./QRPage.scss";
 import { ReactComponent as QrIcon } from "@/assets/icons/qr-outline.svg";
 import { useNavigate } from "react-router-dom";

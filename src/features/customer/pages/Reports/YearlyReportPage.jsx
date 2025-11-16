@@ -1,8 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
-import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
-import CustomDropdown from "@/components/common/CustomDropdown/CustomDropdown";
-import ReportSummaryCard from "@/components/reporting/ReportSummaryCard/ReportSummaryCard";
-import SummaryStatCard from "@/components/reporting/SummaryStatCard/SummaryStatCard";
+import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
+import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
+import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard/ReportSummaryCard";
+import SummaryStatCard from "@/common/components/ReportCards/SummaryStatCard/SummaryStatCard";
 import "./YearlyReportPage.scss";
 
 const YearlyReportPage = () => {

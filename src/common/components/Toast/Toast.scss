@@ -1,0 +1,36 @@
+@use "@/styles/variables" as *;
+
+.toast {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 64px + 0.75rem);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: $spacing-12 $spacing-16;
+  background: var(--toast-bg);
+  color: #fff;
+  border-radius: $border-radius;
+  font-size: 14px;
+  z-index: $z-index-modal;
+  pointer-events: none;
+  opacity: 0;
+  animation: fade-in-out 2s forwards;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  max-width: min(520px, 92vw);
+  word-break: break-word;
+}
+
+@keyframes fade-in-out {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

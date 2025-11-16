@@ -2,12 +2,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import FormInput from "@/components/common/forms/FormInput/FormInput";
-import FormSelect from "@/components/common/forms/FormSelect/FormSelect";
-import Button from "@/components/common/Button/Button";
-import ErrorMessage from "@/components/common/forms/ErrorMessage/ErrorMessage";
-import NoticeBanner from "@/components/common/NoticeBanner/NoticeBanner";
-import PageHeader from "@/components/common/PageHeader/PageHeader";
+import FormInput from "@/common/components/forms/FormInput/FormInput";
+import FormSelect from "@/common/components/forms/FormSelect/FormSelect";
+import Button from "@/common/components/Button/Button";
+import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
+import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
+import PageHeader from "@/common/components/PageHeader/PageHeader";
 
 import { register, clearError } from "../../store/authSlice";
 import AuthLayout from "../../layouts/AuthLayout.jsx";

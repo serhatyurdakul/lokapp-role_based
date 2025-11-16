@@ -1,0 +1,74 @@
+@use "@/styles/variables" as *;
+
+.bottom-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 64px;
+  z-index: $z-index-bottom-nav;
+  display: none;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-top: 1px solid var(--border-color);
+  padding-bottom: env(safe-area-inset-bottom);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+
+  &__content {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  &__item {
+    flex: 1;
+    height: 100%;
+    text-decoration: none;
+    color: var(--text-secondary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-2;
+    -webkit-tap-highlight-color: transparent;
+
+    &:hover {
+      color: var(--text-color);
+    }
+
+    &--active {
+      color: var(--text-color);
+
+      .bottom-nav__icon--outline {
+        display: none;
+      }
+
+      .bottom-nav__icon--filled {
+        display: inline-block;
+      }
+    }
+  }
+
+  &__iconWrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+
+    &--filled {
+      display: none;
+    }
+  }
+
+  &__label {
+    font-size: 12px;
+    line-height: 1;
+  }
+}

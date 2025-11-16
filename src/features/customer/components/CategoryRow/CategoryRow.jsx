@@ -8,7 +8,9 @@ import "./CategoryRow.scss";
 
 const CategoryRow = ({ categoryId, title, items }) => {
   const scrollRef = useRef(null);
-  const selectedItems = useSelector((state) => state.customerMenu.selectedItems);
+  const selectedItems = useSelector(
+    (state) => state.customerMenu.selectedItems
+  );
 
   const sortedItems = useMemo(() => {
     if (!Array.isArray(items)) return [];
@@ -47,7 +49,9 @@ const CategoryRow = ({ categoryId, title, items }) => {
 
     lastAutoScrollState.current = { selectedId, signature };
 
-    const index = sortedItems.findIndex((item) => String(item.id) === selectedId);
+    const index = sortedItems.findIndex(
+      (item) => String(item.id) === selectedId
+    );
     if (index < 0) return;
 
     const target = container.children[index];
@@ -86,8 +90,7 @@ const CategoryRow = ({ categoryId, title, items }) => {
     if (firstCard && typeof window !== "undefined") {
       const cardWidth = firstCard.getBoundingClientRect().width;
       const styles = window.getComputedStyle(container);
-      const gapValue =
-        parseFloat(styles.columnGap || styles.gap || "0") || 0;
+      const gapValue = parseFloat(styles.columnGap || styles.gap || "0") || 0;
       scrollStep = cardWidth + gapValue;
     }
 

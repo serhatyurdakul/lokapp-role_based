@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
-import SearchBar from "@/components/common/SearchBar/SearchBar";
-import EmptyState from "@/components/common/StateMessage/EmptyState";
-import EmployeeMealCard from "@/components/reporting/EmployeeMealCard/EmployeeMealCard";
+import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
+import SearchBar from "@/common/components/SearchBar/SearchBar";
+import EmptyState from "@/common/components/StateMessage/EmptyState";
+import EmployeeMealCard from "@/common/components/ReportCards/EmployeeMealCard/EmployeeMealCard";
 import "./QrActivityPage.scss";
 
 const mockQrScans = [
@@ -171,7 +171,7 @@ const QrActivityPage = () => {
           ))}
         </div>
       ) : (
-        <div className='search-no-results'>Aramanıza uygun QR kaydı bulunamadı.</div>
+        <div className='u-empty-state'>Aramanıza uygun kişi veya firma kaydı bulunamadı.</div>
       )}
     </div>
   );

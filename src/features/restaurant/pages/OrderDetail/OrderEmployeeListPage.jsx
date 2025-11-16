@@ -1,6 +1,6 @@
 import { useLocation, useParams } from "react-router-dom";
-import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
-import EmployeeMealCard from "@/components/reporting/EmployeeMealCard/EmployeeMealCard";
+import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
+import EmployeeMealCard from "@/common/components/ReportCards/EmployeeMealCard/EmployeeMealCard";
 import "./OrderEmployeeListPage.scss";
 
 // Not: Bu ekranda sadece 'Sipariş' türündeki kayıtlar listelenir
@@ -29,10 +29,10 @@ const OrderEmployeeListPage = () => {
     <div className='order-employees-page'>
       <DetailPageHeader title={companyName} backPath={`/orders/${companyId}`} />
 
-      <h2 className='group-title'>{`Sipariş Verenler (${count})`}</h2>
+      <h2 className='u-card-group__title'>{`Sipariş Verenler (${count})`}</h2>
 
       <div
-        className='order-cards-list'
+        className='u-card-group__list'
         style={{
           display: "flex",
           flexDirection: "column",

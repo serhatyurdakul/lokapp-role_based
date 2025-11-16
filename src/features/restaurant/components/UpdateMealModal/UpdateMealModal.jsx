@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import GenericModal from "@/components/common/GenericModal/GenericModal";
-import FormInput from "@/components/common/forms/FormInput/FormInput";
-import ErrorMessage from "@/components/common/forms/ErrorMessage/ErrorMessage";
+import GenericModal from "@/common/components/GenericModal/GenericModal";
+import FormInput from "@/common/components/forms/FormInput/FormInput";
+import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
 import useUpdateMeal from "../../hooks/useUpdateMeal";
 import PropTypes from "prop-types";
 import "./UpdateMealModal.scss";

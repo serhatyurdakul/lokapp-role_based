@@ -1,5 +1,5 @@
-import BaseNavbar from "@/components/common/Navbar/BaseNavbar.jsx";
-import ProfileButton from "@/components/common/ProfileButton/ProfileButton.jsx";
+import TopNav from "@/common/components/Navigation/TopNav/TopNav";
+import ProfileButton from "@/common/components/ProfileButton/ProfileButton.jsx";
 import { useSelector } from "react-redux";
 
 const RestaurantNavbar = () => {
@@ -16,7 +16,7 @@ const RestaurantNavbar = () => {
 
   const rightAction = <ProfileButton userInitial={userInitial} />;
 
-  return <BaseNavbar links={links} rightAction={rightAction} />;
+  return <TopNav links={links} rightAction={rightAction} />;
 };
 
 export default RestaurantNavbar;

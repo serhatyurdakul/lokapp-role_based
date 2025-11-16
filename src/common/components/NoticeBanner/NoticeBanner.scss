@@ -1,0 +1,67 @@
+@use "@/styles/variables" as *;
+
+.notice-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: calc(64px + $spacing-8);
+  left: 0;
+  right: 0;
+  margin: 0 $spacing-16;
+  z-index: $z-index-modal + 100;
+  background-color: var(--error-color);
+  color: #fff;
+  padding: $spacing-8 $spacing-12;
+  border-radius: $border-radius-medium;
+  font-size: 0.875rem;
+
+  &-message {
+    flex: 1;
+  }
+
+  &-action {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+    margin-right: $spacing-8;
+    padding: $spacing-4 $spacing-8;
+    min-height: 32px;
+    line-height: 1;
+    border-radius: $border-radius-small;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  &-close {
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    line-height: 1;
+    padding: $spacing-4;
+    min-height: 32px;
+    min-width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import Badge from "@/components/common/Badge/Badge";
+import Badge from "@/common/components/Badge/Badge";
 import "./MealHistoryCard.scss";
 
 const MealHistoryCard = ({ meal, onClick }) => {
@@ -11,29 +11,38 @@ const MealHistoryCard = ({ meal, onClick }) => {
     year: "numeric",
   });
 
-  const isClickable = typeof onClick === 'function';
+  const isClickable = typeof onClick === "function";
 
   return (
     <div
-      className={`meal-item${isClickable ? ' clickable' : ''}`}
+      className={`meal-item${isClickable ? " meal-item--clickable" : ""}`}
       onClick={isClickable ? onClick : undefined}
-      role={isClickable ? 'button' : undefined}
+      role={isClickable ? "button" : undefined}
       tabIndex={isClickable ? 0 : undefined}
-      onKeyDown={isClickable ? (e) => { if (e.key === 'Enter') onClick(); } : undefined}
+      onKeyDown={
+        isClickable
+          ? (e) => {
+              if (e.key === "Enter") onClick();
+            }
+          : undefined
+      }
     >
-      <div className='meal-header'>
-        <div className='meal-date'>
-          <span className='date'>{formattedDate}</span>
-          <span className='time'>{time}</span>
+      <div className='meal-item__header'>
+        <div className='meal-item__date'>
+          <span className='meal-item__dateText'>{formattedDate}</span>
+          <span className='meal-item__time'>{time}</span>
         </div>
-        <Badge className='meal-type' tone={type === "Restoranda" ? "dine-in" : "delivery"}>
+        <Badge
+          className='meal-item__type'
+          tone={type === "Restoranda" ? "dine-in" : "delivery"}
+        >
           {type}
         </Badge>
       </div>
-      <div className='meal-body'>
-        <p className='restaurant'>{restaurant}</p>
+      <div className='meal-item__body'>
+        <p className='meal-item__restaurant'>{restaurant}</p>
         {items && items.length > 0 && (
-          <p className='items'>{items.join(" • ")}</p>
+          <p className='meal-item__items'>{items.join(" • ")}</p>
         )}
       </div>
     </div>

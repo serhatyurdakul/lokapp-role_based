@@ -1,0 +1,74 @@
+@use "@/styles/variables" as *;
+
+.custom-dropdown {
+  position: relative;
+  display: inline-block;
+
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-6;
+    background-color: var(--background-primary);
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
+    padding: $spacing-8 $spacing-12;
+    min-height: 40px;
+    font-size: 1rem;
+    color: var(--text-color);
+    width: 100%;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--overlay-hover);
+    }
+
+    .chevron-icon {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.2s ease-in-out;
+
+      &.open {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  &__list {
+    position: absolute;
+    top: calc(100% + #{$spacing-4});
+    left: 0;
+    right: 0;
+    background-color: var(--background-primary);
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius;
+    list-style: none;
+    z-index: $z-index-dropdown;
+    box-shadow: var(--shadow-elevated);
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
+  &__item {
+    padding: $spacing-8 $spacing-12;
+    font-size: 1rem;
+    color: var(--text-color);
+    cursor: pointer;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+
+    &:hover,
+    &:active {
+      background-color: var(--overlay-hover);
+    }
+
+    &.selected {
+      background-color: var(--overlay-selection-primary);
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--border-subtle);
+    }
+  }
+}

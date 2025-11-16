@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import "./OrderDetailPage.scss";
 import CompanyHeader from "../../components/CompanyHeader/CompanyHeader";
-import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
-import Loading from "@/components/common/Loading/Loading.jsx";
-import ErrorState from "@/components/common/StateMessage/ErrorState";
-import GenericModal from "@/components/common/GenericModal/GenericModal";
+import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
+import Loading from "@/common/components/Loading/Loading.jsx";
+import ErrorState from "@/common/components/StateMessage/ErrorState";
+import GenericModal from "@/common/components/GenericModal/GenericModal";
 import { ReactComponent as CheckIcon } from "@/assets/icons/check.svg";
 import { ReactComponent as ClockIcon } from "@/assets/icons/clock.svg";
-import Button from "@/components/common/Button/Button";
+import Button from "@/common/components/Button/Button";
 import {
   fetchOrderDetails,
   updateOrderStatus,

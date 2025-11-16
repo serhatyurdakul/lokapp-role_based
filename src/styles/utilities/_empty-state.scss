@@ -1,0 +1,8 @@
+@use "@/styles/variables" as *;
+
+.u-empty-state {
+  padding: $spacing-24;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
-import StockBadge from "@/components/common/StockBadge/StockBadge";
-import Badge from "@/components/common/Badge/Badge";
+import StockBadge from "@/common/components/StockBadge/StockBadge";
+import Badge from "@/common/components/Badge/Badge";
 import { getStockStatus } from "../../utils/stockUtils";
 import "./StockAlertCard.scss";
 

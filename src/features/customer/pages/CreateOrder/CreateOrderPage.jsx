@@ -7,16 +7,16 @@ import {
   clearSelections,
 } from "../../store/customerMenuSlice.js";
 import CategoryRow from "../../components/CategoryRow/CategoryRow.jsx";
-import GenericModal from "@/components/common/GenericModal/GenericModal.jsx";
-import Loading from "@/components/common/Loading/Loading.jsx";
-import EmptyState from "@/components/common/StateMessage/EmptyState";
+import GenericModal from "@/common/components/GenericModal/GenericModal.jsx";
+import Loading from "@/common/components/Loading/Loading.jsx";
+import EmptyState from "@/common/components/StateMessage/EmptyState";
 
-import NoticeBanner from "@/components/common/NoticeBanner/NoticeBanner";
-import Button from "@/components/common/Button/Button";
-import PageHeader from "@/components/common/PageHeader/PageHeader";
-import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
-import Toast from "@/components/common/Toast/Toast.jsx";
-import DeadlineNotice from "@/components/common/DeadlineNotice/DeadlineNotice.jsx";
+import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
+import Button from "@/common/components/Button/Button";
+import PageHeader from "@/common/components/PageHeader/PageHeader";
+import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
+import Toast from "@/common/components/Toast/Toast.jsx";
+import DeadlineNotice from "@/common/components/DeadlineNotice/DeadlineNotice.jsx";
 // Removed Home-specific card rendering; CreateOrderPage only handles menu/ordering
 import "./CreateOrderPage.scss";
 import { useNavigate, useLocation } from "react-router-dom";

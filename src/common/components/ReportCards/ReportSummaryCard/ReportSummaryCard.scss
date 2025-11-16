@@ -1,0 +1,59 @@
+@use "@/styles/variables" as *;
+
+.report-summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-12;
+  padding: $spacing-12;
+  background-color: var(--background-primary);
+  border-radius: $border-radius-large;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+
+  &:active {
+    background: var(--overlay-pressed);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .chevron {
+      width: 16px;
+      height: 16px;
+      color: var(--text-secondary);
+    }
+  }
+
+  .card-total {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  .card-details {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-8;
+  }
+
+  .card-site-badge {
+    align-self: flex-start;
+  }
+
+  .card-last-order {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+}

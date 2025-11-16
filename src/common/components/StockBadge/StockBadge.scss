@@ -1,0 +1,7 @@
+@use "@/styles/variables" as *;
+
+.meal-stock-badge-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-4;
+}

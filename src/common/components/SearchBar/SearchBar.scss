@@ -1,0 +1,50 @@
+@use "@/styles/variables" as *;
+
+.search-bar {
+  position: relative;
+
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    left: $spacing-8;
+    transform: translateY(-50%);
+    width: 1rem;
+    height: 1rem;
+    color: var(--text-secondary);
+    pointer-events: none;
+  }
+
+  .clear-button {
+    position: absolute;
+    right: $spacing-8;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: $spacing-6;
+    min-height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover {
+      color: var(--text-color);
+    }
+  }
+
+  input {
+    width: 100%;
+    padding: $spacing-8 $spacing-32 $spacing-8 $spacing-32; // left icon + right clear area
+    border-radius: $border-radius;
+    font-size: 1rem;
+    min-height: 40px;
+    background: var(--background-primary);
+  }
+}

@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
-import CustomDropdown from "@/components/common/CustomDropdown/CustomDropdown";
-import SearchBar from "@/components/common/SearchBar/SearchBar";
-import ReportSummaryCard from "@/components/reporting/ReportSummaryCard/ReportSummaryCard";
+import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
+import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
+import SearchBar from "@/common/components/SearchBar/SearchBar";
+import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard/ReportSummaryCard";
 import "./ReportsPage.scss";
-import SummaryStatCard from "@/components/reporting/SummaryStatCard/SummaryStatCard";
+import SummaryStatCard from "@/common/components/ReportCards/SummaryStatCard/SummaryStatCard";
 
 // Gerçek API verilerine göre oluşturulan mock veriler
 const mockCompanies = [
@@ -264,7 +264,7 @@ const RestaurantReportsPage = () => {
               ))}
             </>
           ) : (
-            <div className='search-no-results'>Arama sonucuna uygun firma bulunamadı.</div>
+            <div className='u-empty-state'>Arama sonucuna uygun firma bulunamadı.</div>
           )}
         </div>
       </div>

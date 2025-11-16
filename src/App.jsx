@@ -34,7 +34,7 @@ import RestaurantQrActivityPage from "./features/restaurant/pages/QrActivity/QrA
 import CustomerLayout from "./features/customer/layouts/CustomerLayout.jsx";
 import RestaurantLayout from "./features/restaurant/layouts/RestaurantLayout.jsx";
 
-import PrivateRoute from "./components/common/PrivateRoute/PrivateRoute.jsx";
+import PrivateRoute from "./common/components/PrivateRoute/PrivateRoute.jsx";
 import { verifyToken, logout } from "./features/auth/store/authSlice";
 
 const RoleBasedLayout = () => {

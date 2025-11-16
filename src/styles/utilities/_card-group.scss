@@ -1,0 +1,19 @@
+@use "@/styles/variables" as *;
+
+.u-card-group__title {
+  margin: 0 0 $spacing-8 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.u-card-group__list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-12;
+}
+
+.u-card-group__grid {
+  display: grid;
+  gap: $spacing-16;
+}

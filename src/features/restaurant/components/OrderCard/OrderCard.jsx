@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { ReactComponent as ChevronRightIcon } from "@/assets/icons/chevron-right.svg";
-import Badge from "@/components/common/Badge/Badge";
+import Badge from "@/common/components/Badge/Badge";
 import "./OrderCard.scss";
 
 const OrderCard = ({ order, onClick }) => {

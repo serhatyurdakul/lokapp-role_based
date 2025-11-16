@@ -9,8 +9,7 @@
 export const MSG_NETWORK_ERROR =
   "Bağlantı hatası. Lütfen internetinizi kontrol edin.";
 
-export const MSG_TIMEOUT_ERROR =
-  "Sunucu yanıt vermedi. Lütfen tekrar deneyin.";
+export const MSG_TIMEOUT_ERROR = "Sunucu yanıt vermedi. Lütfen tekrar deneyin.";
 
 export const MSG_TOKEN_EXPIRED =
   "Oturum süreniz doldu veya oturumunuz başka bir cihazda açıldı. Lütfen tekrar giriş yapın.";

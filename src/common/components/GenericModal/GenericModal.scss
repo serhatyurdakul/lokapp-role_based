@@ -1,0 +1,68 @@
+@use "@/styles/variables" as *;
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--overlay-modal);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: $z-index-modal;
+}
+
+.modal-content {
+  background-color: var(--background-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  box-shadow: var(--shadow-modal);
+  padding: $spacing-16;
+  width: 90%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-12;
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin: 0; // Reset h3's default margin
+    }
+  }
+
+  .modal-body {
+    > p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      line-height: 1.35;
+      margin-bottom: $spacing-8;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      margin: 0 0 $spacing-8;
+    }
+
+    h4 {
+      margin-bottom: $spacing-12;
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+  }
+}

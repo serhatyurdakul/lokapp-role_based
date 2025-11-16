@@ -1,9 +1,9 @@
-import { Link, useLocation } from 'react-router-dom';
-import './AuthLayout.scss';
+import { Link, useLocation } from "react-router-dom";
+import "./AuthLayout.scss";
 
 const AuthLayout = ({ children }) => {
   const location = useLocation();
-  const isLoginPage = location.pathname === '/login';
+  const isLoginPage = location.pathname === "/login";
 
   return (
     <div className='auth-container'>

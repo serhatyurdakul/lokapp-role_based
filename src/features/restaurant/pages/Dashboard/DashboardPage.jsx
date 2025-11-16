@@ -1,18 +1,18 @@
 import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import PageHeader from "@/components/common/PageHeader/PageHeader";
-import Loading from "@/components/common/Loading/Loading.jsx";
-import NoticeBanner from "@/components/common/NoticeBanner/NoticeBanner";
+import PageHeader from "@/common/components/PageHeader/PageHeader";
+import Loading from "@/common/components/Loading/Loading.jsx";
+import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
 import { fetchRestaurantMenuData, selectMenuMealsAndCategories } from "../../store/restaurantMenuSlice";
 import { fetchRestaurantOrders } from "../../store/restaurantOrdersSlice";
 import { getStockStatus } from "../../utils/stockUtils";
-import SummaryStatCard from "@/components/reporting/SummaryStatCard/SummaryStatCard";
+import SummaryStatCard from "@/common/components/ReportCards/SummaryStatCard/SummaryStatCard";
 import { ReactComponent as ChevronRightIcon } from "@/assets/icons/chevron-right.svg";
 import StockAlertCard from "../../components/StockAlertCard/StockAlertCard";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
-import Toast from "@/components/common/Toast/Toast.jsx";
-import CustomDropdown from "@/components/common/CustomDropdown/CustomDropdown";
+import Toast from "@/common/components/Toast/Toast.jsx";
+import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
 import "./DashboardPage.scss";
 
 // Local sentinel value to indicate no category filter applied
@@ -28,7 +28,7 @@ const DashboardPage = () => {
     (state) => state.restaurantOrders || {}
   );
   const { isLoading, error } = useSelector((state) => state.restaurantMenu);
-  const { menuMeals, categoriesForFilterBar } = useSelector(
+  const { menuMeals, menuCategoryOptions } = useSelector(
     selectMenuMealsAndCategories
   );
   const restaurantId = user?.restaurantId;
@@ -232,7 +232,7 @@ const DashboardPage = () => {
           <CustomDropdown
             options={[
               { value: ALL_FILTER, label: "Tüm Kategoriler" },
-              ...categoriesForFilterBar.map((c) => ({
+              ...menuCategoryOptions.map((c) => ({
                 value: String(c.id),
                 label: c.name,
               })),

@@ -132,7 +132,7 @@ export const selectMenuMealsAndCategories = createSelector(
       }))
     );
 
-    const categoriesForFilterBar = [
+    const menuCategoryOptions = [
       ...new Map(
         sortedMenuData.map((item) => [
           item.categoryId,
@@ -141,6 +141,6 @@ export const selectMenuMealsAndCategories = createSelector(
       ).values(),
     ];
 
-    return { menuMeals, categoriesForFilterBar };
+    return { menuMeals, menuCategoryOptions };
   }
 );

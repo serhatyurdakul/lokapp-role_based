@@ -1,8 +1,8 @@
 
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
-import SummaryStatCard from "@/components/reporting/SummaryStatCard/SummaryStatCard";
-import EmployeeMealCard from "@/components/reporting/EmployeeMealCard/EmployeeMealCard";
+import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
+import SummaryStatCard from "@/common/components/ReportCards/SummaryStatCard/SummaryStatCard";
+import EmployeeMealCard from "@/common/components/ReportCards/EmployeeMealCard/EmployeeMealCard";
 import "./CompanyDailyReportPage.scss";
 
 const CompanyDailyReportPage = () => {
@@ -58,33 +58,30 @@ const CompanyDailyReportPage = () => {
   );
 
   return (
-    <>
+    <div className="company-daily-report">
       <DetailPageHeader title="Günlük Rapor" />
 
-      {/* Başlık + geri */}
-      <div className="period-navigation">
-        <h2 className="current-period">
+      <div className="company-daily-report__period-nav">
+        <h2 className="company-daily-report__period-title">
           {companyName} · {formattedDate}
         </h2>
       </div>
 
-      {/* Günlük İstatistikler */}
-      <div className="period-summary">
-        <div className="summary-grid">
+      <div className="company-daily-report__summary">
+        <div className="company-daily-report__summary-grid">
           <SummaryStatCard value={totalMeals} label="Toplam Tabldot" variant="total" />
           <SummaryStatCard value={delivery} label="Siparişle Tabldot" variant="delivery" />
           <SummaryStatCard value={dineIn} label="Restoranda Tabldot" variant="dine-in" />
         </div>
       </div>
 
-      {/* Çalışan Kartları */}
-      <div className="order-cards-groups">
+      <div className="company-daily-report__groups u-card-group__grid">
         {deliveryMeals.length > 0 && (
-          <section>
-            <h2 className="group-title">
+          <section className="company-daily-report__section">
+            <h2 className="u-card-group__title">
               Siparişler ({deliveryMeals.length})
             </h2>
-            <div className="order-cards-list">
+            <div className="company-daily-report__card-list u-card-group__list">
               {deliveryMeals.map((meal, idx) => (
                 <EmployeeMealCard key={`delivery-${idx}`} meal={meal} />
               ))}
@@ -93,9 +90,9 @@ const CompanyDailyReportPage = () => {
         )}
 
         {dineInMeals.length > 0 && (
-          <section>
-            <h2 className="group-title">Restoranda ({dineInMeals.length})</h2>
-            <div className="order-cards-list">
+          <section className="company-daily-report__section">
+            <h2 className="u-card-group__title">Restoranda ({dineInMeals.length})</h2>
+            <div className="company-daily-report__card-list u-card-group__list">
               {dineInMeals.map((meal, idx) => (
                 <EmployeeMealCard key={`dinein-${idx}`} meal={meal} />
               ))}
@@ -103,7 +100,7 @@ const CompanyDailyReportPage = () => {
           </section>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

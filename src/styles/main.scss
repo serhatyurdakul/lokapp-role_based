@@ -3,8 +3,8 @@
 @use "@/styles/breakpoints" as *;
 @use "@/styles/global";
 @use "@/styles/buttons";
-@use "../components/common/Badge/Badge.scss" as *;
-@use "../components/common/Loading/Loading.scss" as *;
+@use "../common/components/Badge/Badge.scss" as *;
+@use "../common/components/Loading/Loading.scss" as *;
 @use "../features/customer/components/CategoryRow/CategoryRow.scss" as *;
 @use "../features/customer/components/ProductCard/ProductCard.scss" as *;
-@use "../components/common/forms/_forms.scss" as *;
+@use "../common/components/forms/_forms.scss" as *;

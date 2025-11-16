@@ -1,7 +1,7 @@
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
-import ReportSummaryCard from "@/components/reporting/ReportSummaryCard/ReportSummaryCard";
-import SummaryStatCard from "@/components/reporting/SummaryStatCard/SummaryStatCard";
+import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
+import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard/ReportSummaryCard";
+import SummaryStatCard from "@/common/components/ReportCards/SummaryStatCard/SummaryStatCard";
 import "./CompanyMonthlyReportPage.scss";
 
 /**

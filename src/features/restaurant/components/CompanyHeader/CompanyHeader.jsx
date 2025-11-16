@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import Badge from "@/components/common/Badge/Badge";
+import Badge from "@/common/components/Badge/Badge";
 import "./CompanyHeader.scss";
 
 const CompanyHeader = ({ companyName, region, totalPeople, status }) => {

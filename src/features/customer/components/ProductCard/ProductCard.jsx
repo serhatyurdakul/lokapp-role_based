@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { selectItem } from "@/features/customer/store/customerMenuSlice";
-import Badge from "@/components/common/Badge/Badge";
+import Badge from "@/common/components/Badge/Badge";
 import { ReactComponent as CheckIcon } from "@/assets/icons/check.svg";
 import "./ProductCard.scss";
 

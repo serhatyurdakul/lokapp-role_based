@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import GenericModal from "@/components/common/GenericModal/GenericModal.jsx";
+import GenericModal from "@/common/components/GenericModal/GenericModal.jsx";
 import "./OrderActionsModal.scss";
 
 const OrderActionsModal = ({

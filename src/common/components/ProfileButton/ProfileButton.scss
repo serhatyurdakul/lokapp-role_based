@@ -1,0 +1,33 @@
+@use "@/styles/variables" as *;
+
+.profile-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: $spacing-16;
+  top: 50%;
+  transform: translateY(-50%);
+  text-decoration: none;
+  border: 2px solid transparent;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+
+  @media (min-width: 768px) {
+    right: $spacing-24;
+  }
+
+  &:hover {
+    background: var(--overlay-hover);
+    border-color: var(--surface-tertiary);
+  }
+
+  .profile-initial {
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 500;
+  }
+}

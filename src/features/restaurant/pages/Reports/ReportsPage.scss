@@ -1,11 +1,5 @@
 @use "@/styles/variables" as *;
-
-.search-no-results {
-  padding: 1.5rem;
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-}
+@use "@/styles/utilities/empty-state";
 
 .reports-content {
   display: flex;

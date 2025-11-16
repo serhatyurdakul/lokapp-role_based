@@ -1,11 +1,12 @@
 @use "@/styles/variables" as *;
 
+
 .registration-wizard {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   background-color: var(--background-primary);
-  border-radius: 16px;
+  border-radius: $border-radius-large;
 }
 
 .registration-progress {
@@ -14,11 +15,11 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
 
-.registration-progress__meta {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+  &__meta {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
 }
 
 .registration-step {
@@ -29,54 +30,52 @@
 
 .registration-step-indicator {
   padding: 0;
-}
 
-.registration-step-indicator ol {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  padding: 0;
-  margin: 0;
-}
+  ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0;
+    margin: 0;
+  }
 
-.registration-step-indicator__item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
 
-.registration-step-indicator__item.is-active {
-  color: var(--text-color);
-  font-weight: 600;
-}
+    &.is-active {
+      color: var(--text-color);
+      font-weight: 600;
+    }
 
-.registration-step-indicator__item.is-completed {
-  color: var(--primary-color);
-}
+    &.is-completed {
+      color: var(--primary-color);
+    }
 
-.registration-step-indicator__index {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 50%;
-  background: var(--background-secondary);
-  border: 1px solid var(--border-color);
-  font-size: 0.85rem;
-  font-weight: 600;
-}
+    &.is-active .registration-step-indicator__index,
+    &.is-completed .registration-step-indicator__index {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+      color: #fff;
+    }
+  }
 
-.registration-step-indicator__item.is-active
-  .registration-step-indicator__index,
-.registration-step-indicator__item.is-completed
-  .registration-step-indicator__index {
-  background: var(--primary-color);
-  border-color: var(--primary-color);
-  color: #fff;
+  &__index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--background-secondary);
+    border: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
 }
 
 .registration-step--success {
@@ -87,26 +86,24 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
 
-.registration-step-header h2 {
-  font-size: 1.375rem;
-  font-weight: 600;
-  color: var(--text-color);
-}
+  h2 {
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--text-color);
+  }
 
-.registration-step-header p {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
+  p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
 }
 
 .registration-card-grid {
   display: grid;
   gap: 1rem;
-}
 
-@media (min-width: 640px) {
-  .registration-card-grid {
+  @media (min-width: 640px) {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 }
@@ -116,79 +113,80 @@
   align-items: flex-start;
   gap: 0.75rem;
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: $border-radius-medium;
   background: var(--background-secondary);
   border: 1px solid var(--border-color);
   transition: all 0.3s ease;
   text-align: left;
   cursor: pointer;
-}
 
-.registration-card:hover,
-.registration-card--active {
-  border-color: var(--primary-color);
-  background: rgba(10, 132, 255, 0.08);
-}
+  &:hover,
+  &--active {
+    border-color: var(--primary-color);
+    background: rgba(10, 132, 255, 0.08);
+  }
 
-.registration-card__content h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-color);
-}
+  &__content {
+    h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
 
-.registration-card__content p {
-  margin: 0;
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.4;
-}
+    p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+  }
 
-.registration-card__cta {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--primary-color);
+  &__cta {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary-color);
+  }
 }
 
 .registration-actions {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-}
 
-.registration-actions .btn {
-  width: 100%;
-}
+  .btn {
+    width: 100%;
+  }
 
-.registration-actions--in-form {
-  margin-top: 0.75rem;
-}
+  &--in-form {
+    margin-top: 0.75rem;
+  }
 
-@media (min-width: 640px) {
-  .registration-actions {
+  @media (min-width: 640px) {
     flex-direction: row;
     justify-content: flex-end;
     gap: 0.75rem;
-  }
-  .registration-actions:not(.registration-actions--start) .btn {
-    width: auto;
-    flex: 1 1 0;
-    min-width: 140px;
-  }
-}
-.registration-actions--start {
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-@media (min-width: 640px) {
-  .registration-actions--start {
-    flex-direction: row;
-    justify-content: flex-start;
-  }
-}
 
-.registration-actions--start .btn {
-  width: 100%;
+    &:not(.registration-actions--start) .btn {
+      width: auto;
+      flex: 1 1 0;
+      min-width: 140px;
+    }
+  }
+
+  &--start {
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    @media (min-width: 640px) {
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
 }
 
 .registration-form-grid {
@@ -209,24 +207,24 @@
 
 .registration-summary-card {
   background: var(--background-secondary);
-  border-radius: 8px;
+  border-radius: $border-radius-medium;
   border: 1px solid var(--border-color);
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   color: var(--text-color);
-}
 
-.registration-summary-card ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-  color: var(--text-secondary);
-  font-size: 0.95rem;
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
 }
 
 .registration-optional-hint {
@@ -240,32 +238,33 @@
   flex-direction: column;
   gap: 0.75rem;
   background: var(--overlay-error-bg);
-  border-radius: 8px;
+  border-radius: $border-radius-medium;
   border: 1px solid var(--border-subtle);
   padding: 1rem;
-}
 
-.registration-error-actions__message {
-  margin: 0;
-  color: var(--error-color);
-  font-weight: 500;
-}
+  &__message {
+    margin: 0;
+    color: var(--error-color);
+    font-weight: 500;
+  }
 
-.registration-error-actions__buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
+  &__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
 
-.registration-error-actions__link {
-  background: none;
-  border: none;
-  padding: 0;
-  color: var(--primary-color);
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-}
-.registration-error-actions__link:hover {
-  text-decoration: underline;
+  &__link {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--primary-color);
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }

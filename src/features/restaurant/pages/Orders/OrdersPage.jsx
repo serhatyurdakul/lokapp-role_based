@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import OrderCard from "../../components/OrderCard/OrderCard";
-import CustomDropdown from "@/components/common/CustomDropdown/CustomDropdown";
-import SearchBar from "@/components/common/SearchBar/SearchBar";
-import PageHeader from "@/components/common/PageHeader/PageHeader";
-import Loading from "@/components/common/Loading/Loading.jsx";
-import EmptyState from "@/components/common/StateMessage/EmptyState";
-import NoticeBanner from "@/components/common/NoticeBanner/NoticeBanner";
+import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
+import SearchBar from "@/common/components/SearchBar/SearchBar";
+import PageHeader from "@/common/components/PageHeader/PageHeader";
+import Loading from "@/common/components/Loading/Loading.jsx";
+import EmptyState from "@/common/components/StateMessage/EmptyState";
+import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
 import {
   fetchRestaurantOrders,
   selectRegionCategories,
@@ -53,7 +53,7 @@ const Orders = () => {
   const allOrders = useSelector(selectAllOrders);
 
   // Map region categories to dropdown options (without adding "Tümü" to options)
-  const regionOptions = useMemo(() => {
+  const regionFilterOptions = useMemo(() => {
     const mapped = (regionCategories || []).map((c) => ({
       value: String(c.id),
       label: c.name,
@@ -90,7 +90,7 @@ const Orders = () => {
     if (pendingCount === 0 && completedCount === 0) {
       if (hasAnyOrders && isFilterActive) {
         return (
-          <div className='search-no-results'>
+          <div className='u-empty-state'>
             Arama sonucuna uygun sipariş bulunamadı.
           </div>
         );
@@ -169,7 +169,7 @@ const Orders = () => {
 
       <div className='order-filters'>
         <CustomDropdown
-          options={regionOptions}
+          options={regionFilterOptions}
           selectedValue={selectedValue}
           onSelect={setSelectedValue}
           placeholder='Sanayi sitesi seçiniz'

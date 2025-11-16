@@ -1,0 +1,38 @@
+@use "@/styles/variables" as *;
+
+.summary-item {
+  background: var(--background-primary);
+  border-radius: $border-radius;
+  padding: $spacing-8;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-4;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-subtle);
+
+  .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    line-height: 1;
+  }
+
+  .label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  &.delivery .value {
+    color: var(--badge-delivery-text);
+  }
+
+  &.dine-in .value {
+    color: var(--badge-dinein-text);
+  }
+
+  &.total .value {
+    color: var(--text-color);
+  }
+}

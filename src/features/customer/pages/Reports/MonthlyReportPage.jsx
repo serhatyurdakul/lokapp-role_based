@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
-import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
+import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
 import MealHistoryCard from "@/features/customer/components/MealHistoryCard/MealHistoryCard";
-import SummaryStatCard from "@/components/reporting/SummaryStatCard/SummaryStatCard";
+import SummaryStatCard from "@/common/components/ReportCards/SummaryStatCard/SummaryStatCard";
 import "./MonthlyReportPage.scss";
 
 const MonthlyReportPage = () => {

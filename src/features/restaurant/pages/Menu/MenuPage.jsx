@@ -2,13 +2,13 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./MenuPage.scss";
-import CustomDropdown from "@/components/common/CustomDropdown/CustomDropdown";
-import SearchBar from "@/components/common/SearchBar/SearchBar";
-import PageHeader from "@/components/common/PageHeader/PageHeader";
-import Loading from "@/components/common/Loading/Loading.jsx";
-import EmptyState from "@/components/common/StateMessage/EmptyState";
-import NoticeBanner from "@/components/common/NoticeBanner/NoticeBanner";
-import Toast from "@/components/common/Toast/Toast.jsx";
+import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
+import SearchBar from "@/common/components/SearchBar/SearchBar";
+import PageHeader from "@/common/components/PageHeader/PageHeader";
+import Loading from "@/common/components/Loading/Loading.jsx";
+import EmptyState from "@/common/components/StateMessage/EmptyState";
+import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
+import Toast from "@/common/components/Toast/Toast.jsx";
 // Local sentinel value to indicate no category filter applied
 const ALL_FILTER = "all";
 import { ReactComponent as AddIcon } from "@/assets/icons/add.svg";
@@ -16,14 +16,14 @@ import { ReactComponent as MoreIcon } from "@/assets/icons/more.svg";
 import { ReactComponent as EditIcon } from "@/assets/icons/edit.svg";
 import { ReactComponent as DeleteIcon } from "@/assets/icons/delete.svg";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
-import ConfirmModal from "@/components/common/ConfirmModal/ConfirmModal.jsx";
+import ConfirmModal from "@/common/components/ConfirmModal/ConfirmModal.jsx";
 import useDeleteMeal from "../../hooks/useDeleteMeal";
 import {
   fetchRestaurantCategories,
   fetchRestaurantMenuData,
   selectMenuMealsAndCategories,
 } from "../../store/restaurantMenuSlice";
-import StockBadge from "@/components/common/StockBadge/StockBadge";
+import StockBadge from "@/common/components/StockBadge/StockBadge";
 
 // Extracted outside component to keep stable reference
 
@@ -114,7 +114,7 @@ const MenuPage = () => {
     return () => document.removeEventListener("click", handleOutsideClick);
   }, []);
 
-  const { menuMeals, categoriesForFilterBar } = useSelector(
+  const { menuMeals, menuCategoryOptions } = useSelector(
     selectMenuMealsAndCategories
   );
 
@@ -122,11 +122,11 @@ const MenuPage = () => {
   useEffect(() => {
     if (
       selectedCategory !== ALL_FILTER &&
-      !categoriesForFilterBar.some((c) => c.id === selectedCategory)
+      !menuCategoryOptions.some((c) => c.id === selectedCategory)
     ) {
       setSelectedCategory(ALL_FILTER);
     }
-  }, [categoriesForFilterBar, selectedCategory]);
+  }, [menuCategoryOptions, selectedCategory]);
 
   // Handle category change
   const handleCategoryChange = (categoryValue) => {
@@ -245,13 +245,13 @@ const MenuPage = () => {
     } else {
       // Show meals only for the selected category
       const categoryName =
-        categoriesForFilterBar.find((cat) => cat.id === selectedCategory)
+        menuCategoryOptions.find((cat) => cat.id === selectedCategory)
           ?.name || "";
 
       // If search yields no results for the selected category, render nothing
       return searchedMeals.length > 0 ? { [categoryName]: searchedMeals } : {};
     }
-  }, [searchedMeals, selectedCategory, categoriesForFilterBar]);
+  }, [searchedMeals, selectedCategory, menuCategoryOptions]);
 
   const hasSearch = searchQuery.trim().length > 0;
 
@@ -269,41 +269,43 @@ const MenuPage = () => {
 
     if (hasSearch && searchedMeals.length === 0) {
       return (
-        <div className='search-no-results'>Arama sonucuna uygun yemek bulunamadı.</div>
+        <div className='u-empty-state'>
+          Arama sonucuna uygun yemek bulunamadı.
+        </div>
       );
     }
 
     // Regular content
     return (
-      <div className='menupage-items-by-category'>
+      <div className='menu-page__sections'>
         {Object.entries(mealsForDisplay).map(([categoryName, meals]) => (
-          <div key={categoryName} className='menupage-category-section'>
-            <h3 className='menupage-category-title'>{categoryName}</h3>
-            <div className='menupage-category-grid'>
+          <div key={categoryName} className='menu-page__category'>
+            <h3 className='menu-page__category-title'>{categoryName}</h3>
+            <div className='menu-page__category-grid'>
               {meals.map((meal) => (
                 <div
                   key={meal.id}
-                  className='menupage-food-card'
+                  className='menu-page__meal-card'
                   onClick={() => handleEdit(meal)}
                 >
-                  <div className='menupage-food-card-image'>
+                  <div className='menu-page__meal-image'>
                     <img
                       src={meal.imageUrl || "https://via.placeholder.com/150"}
                       alt={meal.mealName}
                     />
                   </div>
-                  <div className='menupage-food-card-content'>
-                    <h3 className='menupage-food-card-name'>{meal.mealName}</h3>
-                    <div className='menupage-food-card-stock-info'>
-                      <div className='menupage-food-card-stock-details'>
+                  <div className='menu-page__meal-content'>
+                    <h3 className='menu-page__meal-name'>{meal.mealName}</h3>
+                    <div className='menu-page__meal-stock'>
+                      <div className='menu-page__meal-stock-details'>
                         <StockBadge
                           remaining={meal.currentStock}
                           sold={meal.orderCount}
                         />
                       </div>
-                      <div className='meal-actions-wrapper'>
+                      <div className='menu-page__meal-actions'>
                         <button
-                          className='meal-actions-trigger'
+                          className='menu-page__meal-action-trigger'
                           aria-label='Seçenekler'
                           onClick={(e) => {
                             e.stopPropagation();
@@ -314,11 +316,11 @@ const MenuPage = () => {
                         </button>
                         {openDropdownId === meal.id && (
                           <div
-                            className='meal-actions-dropdown'
+                            className='menu-page__meal-action-dropdown'
                             onClick={(e) => e.stopPropagation()}
                           >
                             <div
-                              className='dropdown-item'
+                              className='menu-page__meal-action-item'
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleDropdownEdit(meal);
@@ -328,7 +330,7 @@ const MenuPage = () => {
                               <span>Düzenle</span>
                             </div>
                             <div
-                              className='dropdown-item delete'
+                              className='menu-page__meal-action-item menu-page__meal-action-item--delete'
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleDropdownDelete(meal);
@@ -352,39 +354,42 @@ const MenuPage = () => {
   };
 
   return (
-    <>
+    <div className='menu-page'>
       {openDropdownId !== null && (
         // Backdrop captures outside clicks so they don't trigger card onClick (edit)
         <div
-          className='meal-actions-backdrop'
+          className='menu-page__action-backdrop'
           onClick={() => setOpenDropdownId(null)}
         />
       )}
       <PageHeader title='Menü'>
-        <button className='add-button' onClick={() => navigate("/menu/new")}>
-          <AddIcon className='icon' />
+        <button
+          className='menu-page__add-button'
+          onClick={() => navigate("/menu/new")}
+        >
+          <AddIcon className='menu-page__add-icon' />
           <span>Yemek Ekle</span>
         </button>
       </PageHeader>
-      <div className='cutoff-info'>
-        <span className='cutoff-info__text'>
+      <div className='menu-page__cutoff'>
+        <span className='menu-page__cutoff-text'>
           Sipariş alımı {orderCutoffTime}’da kapanır.
         </span>
         <button
           type='button'
-          className='cutoff-info__link'
+          className='menu-page__cutoff-link'
           onClick={() => navigate("/settings/order-cutoff")}
         >
           Saati ayarla
         </button>
       </div>
 
-      <div className='menu-filters'>
+      <div className='menu-page__filters'>
         {/** Category dropdown */}
         <CustomDropdown
           options={[
             { value: ALL_FILTER, label: "Tüm Kategoriler" },
-            ...categoriesForFilterBar.map((c) => ({
+            ...menuCategoryOptions.map((c) => ({
               value: String(c.id),
               label: c.name,
             })),
@@ -421,16 +426,16 @@ const MenuPage = () => {
             <>
               <h4>{selectedMealForDelete.mealName}</h4>
               {selectedMealOrderCount > 0 && (
-                <p>
+                <p className='menu-page__delete-warning-text'>
                   Şu anda {selectedMealOrderCount} kişi bu yemeği sipariş etti. Silerseniz mevcut sipariş kayıtlarında görünmeye devam eder.
                 </p>
               )}
-              <p className='menu-delete-warning'>
+              <p className='menu-page__delete-warning'>
                 Bu yemeği silmek istediğinize emin misiniz?
               </p>
             </>
           ) : (
-            <p className='menu-delete-warning'>
+            <p className='menu-page__delete-warning'>
               Bu yemeği silmek istediğinize emin misiniz?
             </p>
           )
@@ -453,7 +458,7 @@ const MenuPage = () => {
       />
 
       <Toast message={toastMessage} onClose={() => setToastMessage("")} />
-    </>
+    </div>
   );
 };
 

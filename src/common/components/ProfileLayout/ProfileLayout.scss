@@ -1,0 +1,224 @@
+@use "@/styles/variables" as *;
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-24;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    padding: $spacing-16;
+    background: var(--background-primary);
+    border-radius: $border-radius-large;
+    text-align: left;
+  }
+
+  &__avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: $spacing-12;
+
+    span {
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-4;
+  }
+
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+  }
+
+  &__subtitle {
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    margin: 0;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover,
+      &:active {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__section {
+    background: var(--background-primary);
+    border-radius: $border-radius-large;
+    padding: $spacing-16;
+  }
+
+  &__sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-16;
+  }
+
+  &__sectionTitle {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  &__sectionAction {
+    display: flex;
+    align-items: center;
+
+    .profile__viewAllButton {
+      color: var(--primary-color);
+      font-size: 0.875rem;
+      font-weight: 500;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__infoList {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__infoItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-8 0;
+    border-bottom: 1px solid var(--surface-tertiary);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__infoLabel {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  &__infoValue {
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: right;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover,
+      &:active {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__valueWrapper {
+    display: flex;
+    align-items: center;
+    gap: $spacing-8;
+  }
+
+  &__copyButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: $spacing-12;
+    margin: -$spacing-12;
+    cursor: pointer;
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      color: var(--text-secondary);
+    }
+
+    &:hover .icon {
+      color: var(--primary-color);
+    }
+  }
+
+  &__settingsList {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__settingsItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: $spacing-8 0;
+    background: none;
+    color: var(--text-color);
+    font-size: 1rem;
+    border: none;
+    border-bottom: 1px solid var(--surface-tertiary);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: var(--overlay-hover);
+    }
+  }
+
+  &__settingsLabel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-2;
+  }
+
+  &__settingsSecondary {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+  }
+
+  &__settingsIcon {
+    color: var(--text-secondary);
+    flex-shrink: 0;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__mealHistory {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-8;
+  }
+}

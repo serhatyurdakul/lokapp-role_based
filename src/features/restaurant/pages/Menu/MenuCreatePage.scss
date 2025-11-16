@@ -1,90 +1,162 @@
-@use "@/styles/variables" as *;
-
 .menu-create-page {
   display: flex;
   flex-direction: column;
-}
 
-.menu-create-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 
-.menu-create-form .form-group label {
-  margin-bottom: 0.375rem;
-}
+    .form-group label {
+      margin-bottom: 0.375rem;
+    }
+  }
 
-.menu-create-actions {
-  display: flex;
-  justify-content: flex-start;
-}
+  &__actions {
+    display: flex;
+    justify-content: flex-start;
 
-.menu-create-actions .btn {
-  width: 100%;
-}
+    .btn {
+      width: 100%;
+    }
+  }
 
-.menu-create-pending {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 1rem;
-}
+  &__pending {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
 
-.menu-create-pending-title {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-color);
-}
+    &-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
 
-.menu-create-pending-category {
-  display: flex;
-  flex-direction: column;
-}
+    &-category {
+      display: flex;
+      flex-direction: column;
+    }
 
-.menu-create-pending-category-title {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-color);
-}
+    &-category-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
 
-.menu-create-pending-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
+    &-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
 
-.menu-create-pending-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-}
+    &-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
 
-.menu-create-pending-error {
-  font-size: 0.8125rem;
-  color: var(--error-color);
-  padding-top: 0.25rem;
-  line-height: 1.3;
-}
+    &-error {
+      font-size: 0.8125rem;
+      color: var(--error-color);
+      padding-top: 0.25rem;
+      line-height: 1.3;
+    }
+  }
 
-.menu-create-page__cta {
-  display: flex;
-  flex-direction: row-reverse;
-  gap: 0.5rem;
-  width: min(480px, 100vw - 2rem);
-}
+  &__cta {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 0.5rem;
+    width: min(480px, 100vw - 2rem);
 
-.menu-create-page__cta .btn {
-  width: 100%;
+    .btn {
+      width: 100%;
+    }
+  }
+
+  &__search {
+    position: relative;
+    width: 100%;
+
+    &-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: var(--background-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1000;
+      margin-top: 0.25rem;
+    }
+
+    &-item {
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      border-bottom: 1px solid var(--border-subtle);
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.875rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &:hover,
+      &--active {
+        background-color: var(--overlay-hover);
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &--empty {
+        color: var(--text-secondary);
+        cursor: default;
+
+        &:hover {
+          background-color: transparent;
+        }
+      }
+
+      &--disabled {
+        cursor: not-allowed;
+        color: var(--text-secondary);
+
+        &:hover {
+          background-color: transparent;
+        }
+      }
+
+      &-label {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &-badge {
+        flex-shrink: 0;
+      }
+    }
+  }
 }
 
 @media screen and (min-width: 768px) {
-  .menu-create-page__cta {
-    flex-direction: row-reverse;
-  }
-  .menu-create-page__cta .btn {
-    width: auto;
-    flex: 1;
+  .menu-create-page {
+    &__cta {
+      flex-direction: row-reverse;
+
+      .btn {
+        width: auto;
+        flex: 1;
+      }
+    }
   }
 }

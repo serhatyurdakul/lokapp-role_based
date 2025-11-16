@@ -99,11 +99,11 @@ const useAddMeal = (
         searchResultsRef.current &&
         searchResultsRef.current.contains(event.target);
 
-      // Keep results open while interacting within the search input container
-      // (e.g., the input itself or its clear button). The container exists in
-      // AddMealModal as a div with class 'search-input-container'.
+      // Keep results open while interacting within the search input section
+      // (e.g., the input itself or its clear button). This area uses the
+      // 'menu-create-page__search' class on MenuCreatePage.
       const clickedInsideSearchContainer = event.target.closest(
-        ".search-input-container"
+        ".menu-create-page__search"
       );
 
       if (!clickedInsideResults && !clickedInsideSearchContainer) {

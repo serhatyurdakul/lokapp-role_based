@@ -12,7 +12,10 @@ export const register = createAsyncThunk(
     try {
       const response = await registerUser(userData);
 
-      if (!response.error && (response.status === 200 || response.status === 201)) {
+      if (
+        !response.error &&
+        (response.status === 200 || response.status === 201)
+      ) {
         // No auto-login after registration; return a success message only.
         return { message: response.message || "Kayıt işlemi başarılı" };
       } else {

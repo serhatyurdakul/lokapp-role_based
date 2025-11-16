@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
-import FormInput from "@/components/common/forms/FormInput/FormInput";
-import Button from "@/components/common/Button/Button";
-import ErrorMessage from "@/components/common/forms/ErrorMessage/ErrorMessage";
-import GenericModal from "@/components/common/GenericModal/GenericModal";
+import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
+import FormInput from "@/common/components/forms/FormInput/FormInput";
+import Button from "@/common/components/Button/Button";
+import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
+import GenericModal from "@/common/components/GenericModal/GenericModal";
 import { setOrderCutoffTime } from "@/features/restaurant/store/restaurantInfoSlice";
 import "./OrderCutoffSettingsPage.scss";
 

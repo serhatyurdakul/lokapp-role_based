@@ -1,0 +1,72 @@
+@use "@/styles/variables" as *;
+
+.navbar {
+  background-color: var(--background-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding: $spacing-12;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: $z-index-header;
+  height: 64px;
+  padding-top: calc($spacing-12 + env(safe-area-inset-top));
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  &__menu {
+    display: flex;
+    align-items: center;
+    background-color: var(--surface-tertiary);
+    border-radius: $border-radius-medium;
+    padding: $spacing-2;
+    width: 240px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+
+    @media (min-width: 768px) {
+      width: 280px;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      bottom: 3px;
+      left: 3px;
+      background: var(--background-primary);
+      border-radius: $spacing-6;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: calc((100% - 6px) / var(--total-links, 2));
+      transform: translateX(calc(100% * var(--active-index, 0)));
+      opacity: 1;
+      visibility: visible;
+    }
+
+    &[style*="--active-index: -1"]::before {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    &-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      position: relative;
+      z-index: 1;
+      padding: $spacing-8 $spacing-12;
+      transition: color 0.2s ease;
+      font-weight: 500;
+
+      &:hover,
+      &.active {
+        color: var(--text-color);
+      }
+    }
+  }
+}

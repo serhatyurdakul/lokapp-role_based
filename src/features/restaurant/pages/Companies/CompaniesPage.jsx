@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DetailPageHeader from "@/components/common/DetailPageHeader/DetailPageHeader";
-import CustomDropdown from "@/components/common/CustomDropdown/CustomDropdown";
-import SearchBar from "@/components/common/SearchBar/SearchBar";
-import Badge from "@/components/common/Badge/Badge";
+import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
+import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
+import SearchBar from "@/common/components/SearchBar/SearchBar";
+import Badge from "@/common/components/Badge/Badge";
 import { ReactComponent as ChevronRightIcon } from "@/assets/icons/chevron-right.svg";
 import "./CompaniesPage.scss";
 
@@ -122,7 +122,7 @@ const CompaniesPage = () => {
           ))}
 
           {filtered.length === 0 && (
-            <div className='search-no-results'>Arama sonucuna uygun firma bulunamadı.</div>
+            <div className='u-empty-state'>Arama sonucuna uygun firma bulunamadı.</div>
           )}
         </div>
       </div>

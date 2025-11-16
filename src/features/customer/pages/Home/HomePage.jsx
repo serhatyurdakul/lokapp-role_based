@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import PageHeader from "@/components/common/PageHeader/PageHeader";
-import EmptyState from "@/components/common/StateMessage/EmptyState";
-import Toast from "@/components/common/Toast/Toast.jsx";
+import PageHeader from "@/common/components/PageHeader/PageHeader";
+import EmptyState from "@/common/components/StateMessage/EmptyState";
+import Toast from "@/common/components/Toast/Toast.jsx";
 import MealHistoryCard from "../../components/MealHistoryCard/MealHistoryCard.jsx";
 import OrderActionsModal from "../../components/OrderActionsModal/OrderActionsModal.jsx";
-import DeadlineNotice from "@/components/common/DeadlineNotice/DeadlineNotice.jsx";
+import DeadlineNotice from "@/common/components/DeadlineNotice/DeadlineNotice.jsx";
 import { fetchUserOrderHistoryByDate } from "@/utils/api";
-import "./HomePage.scss";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -170,53 +169,51 @@ const HomePage = () => {
   const hasAny = orders.length + dinein.length > 0;
 
   return (
-    <>
+    <div>
       <PageHeader title='Bugün' />
 
       {hasAny ? (
-        <div className='order-cards-groups'>
-          {(() => {
-            return (
-              <>
-                {orders.length > 0 && (
-                  <section>
-                    <h2 className='group-title'>
-                      Siparişler ({orders.length})
-                    </h2>
-                    <DeadlineNotice className='deadline-notice--spaced'>
-                      Siparişlerinizi {orderCutoffTime}’e kadar düzenleyebilir veya iptal edebilirsiniz.
-                    </DeadlineNotice>
-                    <div className='order-cards-list'>
-                      {orders.map((m, idx) => (
-                        <MealHistoryCard
-                          key={`o-${idx}`}
-                          meal={m}
-                          onClick={() => {
-                            setSelectedOrder(m);
-                            setIsQuickActionsOpen(true);
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </section>
-                )}
+        <div className='u-card-group__grid'>
+          <>
+            {orders.length > 0 && (
+              <section>
+                <h2 className='u-card-group__title'>
+                  Siparişler ({orders.length})
+                </h2>
+                <DeadlineNotice className='deadline-notice--spaced'>
+                  Siparişlerinizi {orderCutoffTime}’e kadar düzenleyebilir veya iptal edebilirsiniz.
+                </DeadlineNotice>
+                <div className='u-card-group__list'>
+                  {orders.map((m, idx) => (
+                    <MealHistoryCard
+                      key={`o-${idx}`}
+                      meal={m}
+                      onClick={() => {
+                        setSelectedOrder(m);
+                        setIsQuickActionsOpen(true);
+                      }}
+                    />
+                  ))}
+                </div>
+              </section>
+            )}
 
-                {dinein.length > 0 && (
-                  <section>
-                    <h2 className='group-title'>Restoranda ({dinein.length})</h2>
-                    <div className='order-cards-list'>
-                      {dinein.map((m, idx) => (
-                        <MealHistoryCard key={`q-${idx}`} meal={m} />
-                      ))}
-                    </div>
-                  </section>
-                )}
-              </>
-            );
-          })()}
+            {dinein.length > 0 && (
+              <section>
+                <h2 className='u-card-group__title'>Restoranda ({dinein.length})</h2>
+                <div className='u-card-group__list'>
+                  {dinein.map((m, idx) => (
+                    <MealHistoryCard key={`q-${idx}`} meal={m} />
+                  ))}
+                </div>
+              </section>
+            )}
+          </>
         </div>
       ) : (
-        <EmptyState message='Bugün için sipariş veya QR kaydınız yok. Kayıtlarınız burada görünecek.' />
+        <div>
+          <EmptyState message='Bugün için sipariş veya QR kaydınız yok. Kayıtlarınız burada görünecek.' />
+        </div>
       )}
 
       <OrderActionsModal
@@ -241,7 +238,7 @@ const HomePage = () => {
       />
 
       <Toast message={toastMessage} onClose={() => setToastMessage("")} />
-    </>
+    </div>
   );
 };
 

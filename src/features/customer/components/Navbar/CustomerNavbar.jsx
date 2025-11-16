@@ -1,6 +1,5 @@
-import { NavLink } from "react-router-dom";
-import BaseNavbar from "@/components/common/Navbar/BaseNavbar";
-import ProfileButton from "@/components/common/ProfileButton/ProfileButton";
+import TopNav from "@/common/components/Navigation/TopNav/TopNav";
+import ProfileButton from "@/common/components/ProfileButton/ProfileButton";
 import { useSelector } from "react-redux";
 
 const CustomerNavbar = () => {
@@ -17,7 +16,7 @@ const CustomerNavbar = () => {
 
   const rightAction = <ProfileButton userInitial={userInitial} />;
 
-  return <BaseNavbar links={links} rightAction={rightAction} />;
+  return <TopNav links={links} rightAction={rightAction} />;
 };
 
 export default CustomerNavbar;
