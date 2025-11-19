@@ -1,6 +1,6 @@
 @use "@/styles/variables" as *;
 
-.meal-item {
+.meal-card {
   padding: $spacing-12;
   background: var(--background-primary);
   border-radius: $border-radius;
@@ -28,7 +28,7 @@
     gap: $spacing-8;
   }
 
-  &__dateText {
+  &__date-text {
     font-size: 14px;
     font-weight: 500;
     color: var(--text-color);

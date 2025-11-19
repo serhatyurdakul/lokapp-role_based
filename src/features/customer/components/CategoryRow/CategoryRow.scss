@@ -1,6 +1,7 @@
 @use "@/styles/variables" as *;
+@use "@/styles/breakpoints" as *;
 
-.category {
+.category-row {
   margin-bottom: $spacing-16;
   position: relative;
 
@@ -13,7 +14,7 @@
     align-items: center;
     color: var(--text-color);
 
-    @media screen and (min-width: 768px) {
+    @include respond-to("medium") {
       font-size: 1rem;
       height: 1.4rem;
     }
@@ -31,8 +32,8 @@
       display: none;
     }
 
-    @media screen and (min-width: 768px) {
-      margin: 0 2.125rem;
+    @include respond-to("medium") {
+      margin: 0 calc($spacing-32 + $spacing-2);
     }
   }
 
@@ -53,7 +54,7 @@
     transition: background-color 0.3s ease, transform 0.3s ease;
     cursor: pointer;
 
-    .icon {
+    &-icon {
       width: 20px;
       height: 20px;
     }
@@ -75,7 +76,7 @@
       right: 0;
     }
 
-    @media screen and (min-width: 768px) {
+    @include respond-to("medium") {
       display: flex;
     }
   }

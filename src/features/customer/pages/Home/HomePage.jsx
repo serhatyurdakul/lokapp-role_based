@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import PageHeader from "@/common/components/PageHeader/PageHeader";
 import EmptyState from "@/common/components/StateMessage/EmptyState";
 import Toast from "@/common/components/Toast/Toast.jsx";
-import MealHistoryCard from "../../components/MealHistoryCard/MealHistoryCard.jsx";
+import MealCard from "../../components/MealCard/MealCard.jsx";
 import OrderActionsModal from "../../components/OrderActionsModal/OrderActionsModal.jsx";
 import DeadlineNotice from "@/common/components/DeadlineNotice/DeadlineNotice.jsx";
 import { fetchUserOrderHistoryByDate } from "@/utils/api";
@@ -185,7 +185,7 @@ const HomePage = () => {
                 </DeadlineNotice>
                 <div className='u-card-group__list'>
                   {orders.map((m, idx) => (
-                    <MealHistoryCard
+                    <MealCard
                       key={`o-${idx}`}
                       meal={m}
                       onClick={() => {
@@ -203,7 +203,7 @@ const HomePage = () => {
                 <h2 className='u-card-group__title'>Restoranda ({dinein.length})</h2>
                 <div className='u-card-group__list'>
                   {dinein.map((m, idx) => (
-                    <MealHistoryCard key={`q-${idx}`} meal={m} />
+                    <MealCard key={`q-${idx}`} meal={m} />
                   ))}
                 </div>
               </section>

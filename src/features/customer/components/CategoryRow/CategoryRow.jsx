@@ -99,29 +99,29 @@ const CategoryRow = ({ categoryId, title, items }) => {
   };
 
   return (
-    <div className='category'>
-      <h2 className='category__title'>
+    <div className='category-row'>
+      <h2 className='category-row__title'>
         {title}
         {selectedId && (
           <span
-            className='category__status'
+            className='category-row__status'
             role='img'
             aria-label='Bu kategoride bir ürün seçildi'
           >
-            <CheckIcon className='category__status-icon' aria-hidden='true' />
+            <CheckIcon className='category-row__status-icon' aria-hidden='true' />
           </span>
         )}
       </h2>
       <button
-        className='category__nav-button category__nav-button--prev'
+        className='category-row__nav-button category-row__nav-button--prev'
         aria-label='Önceki'
         type='button'
         onMouseDown={(event) => event.preventDefault()}
         onClick={() => handleScroll("left")}
       >
-        <ChevronLeftIcon className='icon' />
+        <ChevronLeftIcon className='category-row__nav-button-icon' />
       </button>
-      <div className='category__items' ref={scrollRef}>
+      <div className='category-row__items' ref={scrollRef}>
         {sortedItems.map((item) => (
           <ProductCard
             key={item.id}
@@ -135,13 +135,13 @@ const CategoryRow = ({ categoryId, title, items }) => {
         ))}
       </div>
       <button
-        className='category__nav-button category__nav-button--next'
+        className='category-row__nav-button category-row__nav-button--next'
         aria-label='Sonraki'
         type='button'
         onMouseDown={(event) => event.preventDefault()}
         onClick={() => handleScroll("right")}
       >
-        <ChevronRightIcon className='icon' />
+        <ChevronRightIcon className='category-row__nav-button-icon' />
       </button>
     </div>
   );

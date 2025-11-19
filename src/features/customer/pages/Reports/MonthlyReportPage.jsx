@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
-import MealHistoryCard from "@/features/customer/components/MealHistoryCard/MealHistoryCard";
+import MealCard from "@/features/customer/components/MealCard/MealCard";
 import SummaryStatCard from "@/common/components/ReportCards/SummaryStatCard/SummaryStatCard";
 import "./MonthlyReportPage.scss";
 
@@ -85,7 +85,7 @@ const MonthlyReportPage = () => {
       {/* Daily Cards */}
       <div className='meal-history'>
         {dailyMealHistory.map((meal, index) => (
-          <MealHistoryCard key={index} meal={meal} />
+          <MealCard key={index} meal={meal} />
         ))}
       </div>
     </>

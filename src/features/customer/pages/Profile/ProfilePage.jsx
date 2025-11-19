@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { logout, setUser } from "@/features/auth/store/authSlice";
 import PageHeader from "@/common/components/PageHeader/PageHeader";
-import MealHistoryCard from "@/features/customer/components/MealHistoryCard/MealHistoryCard";
+import MealCard from "@/features/customer/components/MealCard/MealCard";
 import LogoutButton from "@/common/components/LogoutButton/LogoutButton";
 import { ReactComponent as ChevronRightIcon } from "@/assets/icons/chevron-right.svg";
 import { ReactComponent as CopyIcon } from "@/assets/icons/copy-icon.svg";
@@ -167,7 +167,7 @@ const ProfilePage = () => {
         >
           <div className='profile__mealHistory'>
             {mealHistory.map((meal, index) => (
-              <MealHistoryCard key={index} meal={meal} />
+              <MealCard key={index} meal={meal} />
             ))}
           </div>
         </ProfileSection>
