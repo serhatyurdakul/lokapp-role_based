@@ -45,12 +45,8 @@ const tabs = [
   },
 ];
 
-const CustomerBottomBar = () => (
-  <BottomNav
-    tabs={tabs}
-    className='customer-bottom-bar'
-    ariaLabel='Müşteri alt gezinme'
-  />
+const CustomerBottomBar = ({ className = "" }) => (
+  <BottomNav tabs={tabs} className={className} ariaLabel='Müşteri alt gezinme' />
 );
 
 export default CustomerBottomBar;

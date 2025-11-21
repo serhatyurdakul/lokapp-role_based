@@ -1,23 +1,32 @@
 @use "@/styles/variables" as *;
 
-@media (max-width: 1024px) {
-  .customer-layout .navbar {
-    display: none;
+.customer-layout {
+  @media (max-width: 1024px) {
+    &__navbar {
+      display: none; // Mobilde üst navbar'ı gizle
+    }
+    &__bottom-bar {
+      display: block; // Mobilde alt bar'ı göster
+    }
+    // Container bottom padding is now globally controlled via --bottom-bar-offset
+    // and safe area in src/styles/_global.scss
   }
-  .customer-layout .customer-bottom-bar {
-    display: block;
+
+  @media (min-width: 1025px) {
+    &__bottom-bar {
+      display: none; // Tablet/desktop'ta alt bar'ı gizle
+    }
   }
-}
-@media (min-width: 1025px) {
-  .customer-layout .customer-bottom-bar {
-    display: none;
-  }
-}
-@media (hover: none) and (pointer: coarse) and (min-width: 1025px) {
-  .customer-layout .navbar {
-    display: none;
-  }
-  .customer-layout .customer-bottom-bar {
-    display: block;
+
+  // Dokunmatik odaklı override: geniş dokunmatik cihazlarda (iPad, foldable)
+  // masaüstü eşiğinde dahi alt bar'ı koru, üst navbar'ı gizle
+  @media (hover: none) and (pointer: coarse) and (min-width: 1025px) {
+    &__navbar {
+      display: none;
+    }
+    &__bottom-bar {
+      display: block;
+    }
+    // Container bottom padding is globally controlled; no local padding here
   }
 }

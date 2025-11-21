@@ -1,22 +1,22 @@
 @use "@/styles/variables" as *;
 
 .update-meal__tertiary {
-  margin-top: 0.5rem;
+  margin-top: $spacing-8;
 }
 
 .update-meal__link {
   color: var(--primary-color);
   background: none;
   border: none;
-  padding: 0;
+  padding: 0; // keep left alignment flush with other content
   font: inherit;
   font-size: 0.9375rem;
   font-weight: 500;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  min-height: 36px;
-  border-radius: 4px;
+  min-height: 36px; // compact tertiary action in modal
+  border-radius: $border-radius-small;
 }
 .update-meal__link:active {
   background: var(--overlay-pressed);
@@ -29,6 +29,8 @@
   background: var(--overlay-pressed);
 }
 
+// Reduce the vertical gap before action buttons only in this modal,
+// to avoid excessive whitespace once the tertiary link has 44px height.
 .modal-content:has(.update-meal__tertiary) > .form-actions {
-  margin-top: 0.75rem;
+  margin-top: $spacing-12;
 }

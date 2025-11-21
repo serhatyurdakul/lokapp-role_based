@@ -2,21 +2,21 @@
 
 .company-header {
   background-color: var(--background-primary);
-  border-radius: 16px;
-  padding: 1rem;
+  border-radius: $border-radius-large;
+  padding: $spacing-16;
   border: 1px solid var(--border-color);
-  margin-bottom: 1rem;
+  margin-bottom: $spacing-16;
 }
 .company-header .company-info {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: $spacing-8;
 }
 .company-header .company-info .company-title-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: $spacing-12;
 }
 .company-header .company-info .company-title-row .company-name {
   font-size: 17px;

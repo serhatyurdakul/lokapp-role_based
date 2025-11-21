@@ -48,13 +48,13 @@ const OrderActionsModal = ({
       dialogRole={dialogRole}
     >
       {showCancelConfirm ? (
-        <div className='order-actions-content'>
+        <div className='order-actions__content'>
           <p className='order-actions__note'>
             Bu siparişi iptal etmek istediğinize emin misiniz?
           </p>
         </div>
       ) : (
-        <div className='order-actions-content'>
+        <div className='order-actions__content'>
           <p className='order-actions__note'>
             Siparişlerinizi {cutoffTime}’e kadar düzenleyebilir veya iptal edebilirsiniz.
           </p>

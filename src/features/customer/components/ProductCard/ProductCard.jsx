@@ -47,7 +47,7 @@ const ProductCard = ({
     >
       {isOutOfStock ? (
         <div className='product-card__status'>
-          <Badge tone='neutral'>Tükendi</Badge>
+          <Badge tone='out-of-stock'>Tükendi</Badge>
         </div>
       ) : null}
       <img
@@ -55,8 +55,12 @@ const ProductCard = ({
         alt={name}
         className='product-card__image'
         loading='lazy'
-        onError={(e) => {
-          e.target.src = PLACEHOLDER_IMAGE;
+        onError={(event) => {
+          const target = event?.target;
+          if (!target) return;
+          // Prevent loops if fallback also fails.
+          target.onerror = null;
+          target.src = PLACEHOLDER_IMAGE;
         }}
       />
       <div className='product-card__content'>

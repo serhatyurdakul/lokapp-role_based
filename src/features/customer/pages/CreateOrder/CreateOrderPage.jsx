@@ -95,7 +95,7 @@ const CreateOrderPage = () => {
       setShouldClearOnUnmount(false); // order fulfilled clears selections in slice
       navigate("/", { state: { toast: orderSuccessMessage }, replace: true });
     } catch (_e) {}
-  }, [orderSuccessMessage, dispatch]);
+  }, [orderSuccessMessage, dispatch, navigate]);
 
   // Clear temporary selections when leaving the page (Back = Vazgeç)
   // No ref needed; cleanup runs only on unmount
@@ -192,12 +192,14 @@ const CreateOrderPage = () => {
             secondaryButtonText='Seçimlere Dön'
           >
             <p>Aşağıdaki kategorilerden seçim yapmadınız:</p>
-            <ul className='modal-items-list'>
+            <ul className='create-order__items-list'>
               {categories
                 .filter((cat) => !selectedItems[cat.id])
                 .map((cat) => cat.title)
-                .map((item, index) => (
-                  <li key={index}>{item}</li>
+                .map((item) => (
+                  <li key={item} className='create-order__items-list-item'>
+                    {item}
+                  </li>
                 ))}
             </ul>
             <p>Bu şekilde devam etmek istiyor musunuz?</p>
@@ -213,11 +215,13 @@ const CreateOrderPage = () => {
             onPrimaryAction={handleSubmitOrder}
             secondaryButtonText='Vazgeç'
           >
-            <ul className='modal-items-list'>
+            <ul className='create-order__items-list'>
               {buildSelectedItemsList().map((x, idx) => (
-                <li key={idx} className='modal-item'>
-                  <span className='modal-item__label'>{x.categoryTitle}</span>
-                  <span className='modal-item__value'>{x.name}</span>
+                <li key={idx} className='create-order__items-list-item'>
+                  <span className='create-order__item-label'>
+                    {x.categoryTitle}
+                  </span>
+                  <span className='create-order__item-value'>{x.name}</span>
                 </li>
               ))}
             </ul>
@@ -240,7 +244,7 @@ const CreateOrderPage = () => {
         )}
 
         {isEditMode ? (
-          <div className='order-page__cta fixed-cta'>
+          <div className='create-order__cta fixed-cta'>
             <Button
               type='button'
               onClick={handleOrder}
@@ -289,7 +293,7 @@ const CreateOrderPage = () => {
   };
 
   return (
-    <>
+    <div className='create-order'>
       {showBanner && error && (
         <NoticeBanner
           message={error}
@@ -355,7 +359,7 @@ const CreateOrderPage = () => {
       )}
 
       <Toast message={toastMessage} onClose={() => setToastMessage("")} />
-    </>
+    </div>
   );
 };
 

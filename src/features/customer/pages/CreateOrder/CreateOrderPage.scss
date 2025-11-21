@@ -1,46 +1,54 @@
 @use "@/styles/variables" as *;
 
-.has-fixed-bottom-cta .menu-content > .category:last-child {
-  margin-bottom: 0;
+.create-order {
+  // Positioning and offsets are handled by the global `.fixed-cta` utility.
+  .has-fixed-bottom-cta .menu-content > .category-row:last-child {
+    margin-bottom: 0;
+  }
+
+  &__items-list {
+    list-style: none;
+    padding-left: 0;
+
+    &-item {
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: $spacing-12;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__item-label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: $spacing-4;
+  }
+
+  &__item-value {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  // Edit-mode CTA container: keep within same width rules as restaurant task page
+  &__cta {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: $spacing-8;
+    width: min(480px, calc(100vw - 2 * $spacing-16));
+
+    .btn {
+      width: 100%;
+    }
+  }
 }
 
-.modal-items-list {
-  list-style: none;
-  padding-left: 0;
-}
-.modal-items-list li {
-  font-size: 1rem;
-  font-weight: 500;
-  margin-bottom: 0.75rem;
-}
-.modal-items-list li:last-child {
-  margin-bottom: 0;
-}
-.modal-items-list .modal-item__label {
-  display: block;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  margin-bottom: 0.25rem;
-}
-.modal-items-list .modal-item__value {
-  display: block;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-color);
-}
-
-.order-page__cta {
-  display: flex;
-  flex-direction: row-reverse;
-  gap: 0.5rem;
-  width: min(480px, 100vw - 2rem);
-}
-
-.order-page__cta .btn {
-  width: 100%;
-}
-
-.modal-body .modal-items-list + p {
-  margin-top: 0.75rem;
+.modal-body .create-order__items-list + p {
+  margin-top: $spacing-12;
 }

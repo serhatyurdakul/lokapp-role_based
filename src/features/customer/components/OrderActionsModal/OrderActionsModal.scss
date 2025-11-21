@@ -1,32 +1,35 @@
 @use "@/styles/variables" as *;
 
-.order-actions-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: flex-start;
-}
+.order-actions {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-8; // align spacing with restaurant tertiary actions
+    align-items: flex-start;
+  }
 
-.order-actions__note {
-  color: var(--text-secondary);
-  margin: 0;
-}
+  &__note {
+    color: var(--text-secondary);
+    margin: 0;
+  }
 
-.order-actions__link {
-  display: inline-flex;
-  align-items: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  min-height: 36px;
-  border-radius: 4px;
-  align-self: flex-start;
-}
-.order-actions__link:active {
-  background: var(--overlay-pressed);
-}
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    min-height: 36px;
+    border-radius: $border-radius-small;
+    align-self: flex-start;
 
-.order-actions__link--destructive {
-  color: var(--error-color);
+    &:active {
+      background: var(--overlay-pressed);
+    }
+
+    &--destructive {
+      color: var(--error-color);
+    }
+  }
 }

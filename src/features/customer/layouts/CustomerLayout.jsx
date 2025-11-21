@@ -12,11 +12,13 @@ const CustomerLayout = () => {
       className='layout customer-layout'
       style={{ "--bottom-bar-offset": bottomBarOffset }}
     >
-      {!hideBars && <CustomerNavbar />}
+      {!hideBars && <CustomerNavbar className='customer-layout__navbar' />}
       <main className='container'>
         <Outlet />
       </main>
-      {!hideBars && <CustomerBottomBar />}
+      {!hideBars && (
+        <CustomerBottomBar className='customer-layout__bottom-bar' />
+      )}
     </div>
   );
 };

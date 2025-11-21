@@ -7,7 +7,7 @@
 .order-cutoff-page__content {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: $spacing-16;
 }
 .order-cutoff-page__lead {
   font-size: 0.9375rem;
@@ -17,7 +17,7 @@
 .order-cutoff-page__form {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: $spacing-8;
 }
 .order-cutoff-page__helper {
   font-size: 0.8125rem;
@@ -27,7 +27,7 @@
 .order-cutoff-page__cta {
   display: flex;
   flex-direction: row-reverse;
-  gap: 0.5rem;
+  gap: $spacing-8;
   width: min(480px, 100vw - 2rem);
 }
 .order-cutoff-page__cta .btn {

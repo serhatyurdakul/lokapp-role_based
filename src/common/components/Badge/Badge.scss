@@ -85,4 +85,9 @@
     background-color: var(--badge-completed-bg);
     color: var(--badge-completed-text);
   }
+
+  &--tone-out-of-stock {
+    background-color: var(--badge-outofstock-bg);
+    color: var(--badge-outofstock-text);
+  }
 }

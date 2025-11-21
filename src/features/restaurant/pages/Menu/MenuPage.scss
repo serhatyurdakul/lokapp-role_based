@@ -2,12 +2,11 @@
 @use "@/styles/utilities/empty-state";
 
 .menu-page {
-
   &__cutoff {
     display: flex;
     align-items: center;
-    gap: 0.375rem;
-    margin-bottom: 1rem;
+    gap: $spacing-6;
+    margin-bottom: $spacing-16;
     color: var(--text-secondary);
 
     &-text {
@@ -31,10 +30,10 @@
   }
 
   &__add-button {
-    padding: 0.5rem 0.75rem;
+    padding: $spacing-8 $spacing-12;
     background-color: var(--primary-color);
     color: #fff;
-    border-radius: 12px;
+    border-radius: $border-radius;
     font-size: 1rem;
     font-weight: 500;
     display: flex;
@@ -63,24 +62,24 @@
   &__filters {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    gap: $spacing-8;
+    margin-bottom: $spacing-16;
   }
 
   &__sections {
     display: grid;
-    gap: 1.5rem;
+    gap: $spacing-24;
   }
 
   &__category {
     background-color: var(--background-primary);
     border-radius: $border-radius-large;
-    padding: 1rem;
+    padding: $spacing-16;
 
     &-title {
       font-size: 1.0625rem;
       font-weight: 600;
-      margin-bottom: 0.75rem;
+      margin-bottom: $spacing-12;
     }
 
     &-grid {
@@ -104,7 +103,7 @@
 
   &__meal-card {
     background-color: var(--background-primary);
-    border-radius: 12px;
+    border-radius: $border-radius;
     overflow: visible;
     cursor: pointer;
     border: 1px solid var(--border-color);
@@ -127,8 +126,8 @@
   }
 
   &__meal-image {
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
     width: 100%;
     aspect-ratio: 1;
     height: auto;
@@ -142,7 +141,7 @@
   }
 
   &__meal-content {
-    padding: 0.5rem 0.5rem 0.75rem;
+    padding: $spacing-8 $spacing-8 $spacing-12;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -163,7 +162,7 @@
   &__meal-stock {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: $spacing-8;
     margin-top: auto;
     padding-right: 0;
   }
@@ -176,8 +175,8 @@
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      gap: 0.5rem;
-      margin-top: 0.375rem;
+      gap: $spacing-8;
+      margin-top: $spacing-6;
 
       .badge {
         width: 100%;
@@ -199,7 +198,7 @@
     justify-content: center;
     width: 44px;
     height: 44px;
-    border-radius: 12px;
+    border-radius: $border-radius;
     background: transparent;
     color: var(--text-color);
     cursor: pointer;
@@ -221,7 +220,7 @@
     margin-top: 0;
     background: var(--background-secondary);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: $border-radius;
     box-shadow: var(--shadow-elevated);
     z-index: 1000;
     max-height: 240px;
@@ -231,8 +230,8 @@
   &__meal-action-item {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem;
+    gap: $spacing-8;
+    padding: $spacing-12;
     min-height: 44px;
     font-size: 0.875rem;
     font-weight: 500;
@@ -272,7 +271,7 @@
   &__delete-warning {
     color: var(--error-color);
     font-weight: 600;
-    margin-top: 0.5rem;
+    margin-top: $spacing-8;
   }
 
   &__delete-warning-text {

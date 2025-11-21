@@ -13,18 +13,18 @@
   color: var(--text-color);
   font-size: 0.9375rem;
   font-weight: 500;
-  margin-bottom: 0.5rem;
+  margin-bottom: $spacing-8;
 }
 
 .qr-activity-search {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  gap:  $spacing-8;
+  margin-bottom: $spacing-12;
 }
 
 .qr-activity-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap:  $spacing-12;
 }

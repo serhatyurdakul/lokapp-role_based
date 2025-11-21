@@ -65,6 +65,8 @@ $z-index-bottom-nav: 900;
   --badge-pending-text: #c14c00;
   --badge-completed-bg: #ebf7ec;
   --badge-completed-text: #1b8130;
+  --badge-outofstock-bg: #ffffff;
+  --badge-outofstock-text: var(--text-color);
 
   // Overlays & feedback
   --overlay-hover: rgba(28, 28, 30, 0.04);

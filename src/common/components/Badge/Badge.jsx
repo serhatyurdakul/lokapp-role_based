@@ -10,6 +10,7 @@ const toneClassMap = {
   error: "badge--tone-error",
   pending: "badge--tone-pending",
   completed: "badge--tone-completed",
+  "out-of-stock": "badge--tone-out-of-stock",
 };
 
 const Badge = ({
@@ -64,6 +65,7 @@ Badge.propTypes = {
     "error",
     "pending",
     "completed",
+    "out-of-stock",
   ]),
   size: PropTypes.oneOf(["default", "compact"]),
   icon: PropTypes.node,

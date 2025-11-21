@@ -1,7 +1,8 @@
 @use "@/styles/variables" as *;
 
+// Period Navigation
 .period-navigation {
-  margin-bottom: 0.75rem;
+  margin-bottom: $spacing-12;
 }
 .period-navigation .current-period {
   display: flex;
@@ -13,31 +14,34 @@
   margin: 0;
 }
 .period-navigation .current-period .period-action {
-  padding: 0.5rem 1rem;
-  border-radius: 12px;
+  padding: $spacing-8 $spacing-16;
+  border-radius: $border-radius;
   border: 1px solid var(--primary-color);
   background-color: var(--background-primary);
   color: var(--primary-color);
   font-size: 0.875rem;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: $transition;
 }
+
 .period-navigation .current-period .period-action:hover {
   background-color: var(--primary-color);
   color: white;
 }
 
+// Period Summary
 .period-summary {
-  margin-bottom: 0.75rem;
+  margin-bottom: $spacing-12;
 }
 .period-summary .summary-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
+  gap: $spacing-12;
 }
 
+// Meal History - using existing styles from MealHistoryCard
 .meal-history {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: $spacing-12;
 }

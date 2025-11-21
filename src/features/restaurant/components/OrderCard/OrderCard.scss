@@ -3,8 +3,8 @@
 .order-card {
   background-color: var(--background-primary);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 0.75rem;
+  border-radius: $border-radius;
+  padding: $spacing-12;
   box-shadow: var(--shadow-card);
   cursor: pointer;
   position: relative;
@@ -34,13 +34,13 @@
 .order-card .order-header {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  gap: $spacing-8;
+  margin-bottom: $spacing-12;
 }
 .order-card .order-header .order-header__top {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: $spacing-8;
 }
 .order-card .order-header .order-region {
   align-self: flex-start;

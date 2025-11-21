@@ -1,10 +1,11 @@
 @use "@/styles/variables" as *;
 
 .product-card {
-  flex: 0 0 calc((100% - 4 * 0.5rem) / 3);
+  // 360px mobilde 2 kart + üçüncüden parça görünümü için min/max dengesi.
+  flex: 0 0 calc((100% - 4 * #{$spacing-8}) / 3);
   height: auto;
   background: var(--background-primary);
-  border-radius: 12px;
+  border-radius: $border-radius;
   padding: 0;
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow-card);
@@ -12,109 +13,102 @@
   flex-direction: column;
   align-items: stretch;
   text-align: left;
-  scroll-snap-align: start;
   overflow: hidden;
   cursor: pointer;
   position: relative;
-  transition: all 0.3s ease;
+  transition: $transition;
   min-width: 9rem;
   max-width: 11.5rem;
-}
-.product-card:not([disabled]):active {
-  background: var(--overlay-pressed);
-}
-@media screen and (min-width: 768px) {
-  .product-card {
-    flex: 0 0 calc((100% - 4 * 0.5rem) / 3);
-    max-width: 12.5rem;
+
+  &:not([disabled]):active {
+    background: var(--overlay-pressed);
   }
-}
-@media screen and (min-width: 992px) {
-  .product-card {
-    flex: 0 0 calc((100% - 0.75rem) / 4);
+
+  &__image {
+    width: 100%;
+    aspect-ratio: 1;
+    background-color: var(--background-secondary);
+    object-fit: cover;
+    transition: $transition;
   }
-}
-.product-card__image {
-  width: 100%;
-  aspect-ratio: 1;
-  background-color: var(--background-secondary);
-  object-fit: cover;
-  transition: all 0.3s ease;
-}
-.product-card__content {
-  width: 100%;
-  padding: 0.5rem 0.5rem 0.75rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  background: var(--background-primary);
-}
-.product-card__name {
-  font-weight: 600;
-  font-size: 0.875rem;
-  line-height: 1.35;
-  min-height: 2.3625rem;
-  color: var(--text-color);
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.product-card__price {
-  display: none;
-}
-.product-card__status {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  pointer-events: none;
-  z-index: 1;
-}
-.product-card__status .badge {
-  background-color: #ffffff;
-  color: var(--text-color);
-}
-.product-card--selected {
-  border-color: var(--border-color);
-  box-shadow: var(--shadow-card), var(--shadow-selection-ring);
-}
-.product-card__selected-indicator {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--primary-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-}
-.product-card__selected-indicator-icon {
-  width: 14px;
-  height: 14px;
-  color: currentColor;
-}
 
-.product-card[disabled] {
-  pointer-events: none;
-  cursor: not-allowed;
-  opacity: 1;
-}
+  &__content {
+    width: 100%;
+    padding: $spacing-8 $spacing-8 $spacing-12;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background: var(--background-primary);
+  }
 
-.product-card[disabled] .product-card__image {
-  opacity: 0.6;
-}
+  &__name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.35;
+    min-height: 2.3625rem;
+    color: var(--text-color);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-.product-card[disabled] .product-card__status {
-  opacity: 1;
-}
+  &__price {
+    display: none;
+  }
 
-.product-card[disabled] .product-card__name,
-.product-card[disabled] .product-card__price {
-  opacity: 1;
-  color: var(--text-secondary);
+  &__status {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &--selected {
+    border-color: var(--border-color);
+    box-shadow: var(--shadow-card), var(--shadow-selection-ring);
+  }
+
+  &__selected-indicator {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+
+  &__selected-indicator-icon {
+    width: 14px;
+    height: 14px;
+    color: currentColor;
+  }
+
+  &[disabled] {
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 1;
+
+    .product-card__image {
+      opacity: 0.6;
+    }
+
+    .product-card__status {
+      opacity: 1;
+    }
+
+    .product-card__name,
+    .product-card__price {
+      opacity: 1;
+      color: var(--text-secondary);
+    }
+  }
 }

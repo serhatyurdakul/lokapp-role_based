@@ -2,7 +2,7 @@ import TopNav from "@/common/components/Navigation/TopNav/TopNav";
 import ProfileButton from "@/common/components/ProfileButton/ProfileButton";
 import { useSelector } from "react-redux";
 
-const CustomerNavbar = () => {
+const CustomerNavbar = ({ className }) => {
   const { user } = useSelector((state) => state.auth);
 
   const userInitial = user?.name
@@ -16,7 +16,7 @@ const CustomerNavbar = () => {
 
   const rightAction = <ProfileButton userInitial={userInitial} />;
 
-  return <TopNav links={links} rightAction={rightAction} />;
+  return <TopNav links={links} rightAction={rightAction} className={className} />;
 };
 
 export default CustomerNavbar;
