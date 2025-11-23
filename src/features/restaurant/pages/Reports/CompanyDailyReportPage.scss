@@ -1,21 +1,17 @@
 @use "@/styles/variables" as *;
-@use "@/styles/utilities/card-group";
 
 .company-daily-report {
   display: flex;
   flex-direction: column;
-  gap: $spacing-16;
 
   &__period-nav {
     margin-bottom: $spacing-12;
   }
 
   &__period-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     font-size: 1.125rem;
     font-weight: 600;
+    margin: 0;
     color: var(--text-color);
   }
 
@@ -23,23 +19,19 @@
     margin-bottom: $spacing-12;
   }
 
-  &__summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: $spacing-12;
-  }
-
   &__groups {
-    width: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   &__section {
     display: flex;
     flex-direction: column;
-    gap: $spacing-12;
   }
 
   &__card-list {
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-12;
   }
 }

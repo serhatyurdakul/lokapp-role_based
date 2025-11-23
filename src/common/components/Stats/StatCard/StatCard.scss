@@ -10,6 +10,7 @@
   gap: $spacing-4;
   border: 1px solid var(--border-subtle);
   box-shadow: var(--shadow-subtle);
+  max-width: 100%;
 
   .value {
     font-size: 1.5rem;
@@ -22,6 +23,7 @@
     font-size: 0.8125rem;
     font-weight: 500;
     color: var(--text-secondary);
+    line-height: 1.35;
   }
 
   &.delivery .value {

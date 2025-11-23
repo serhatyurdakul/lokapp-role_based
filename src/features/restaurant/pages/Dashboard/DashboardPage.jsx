@@ -7,7 +7,8 @@ import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
 import { fetchRestaurantMenuData, selectMenuMealsAndCategories } from "../../store/restaurantMenuSlice";
 import { fetchRestaurantOrders } from "../../store/restaurantOrdersSlice";
 import { getStockStatus } from "../../utils/stockUtils";
-import SummaryStatCard from "@/common/components/ReportCards/SummaryStatCard/SummaryStatCard";
+import StatCard from "@/common/components/Stats/StatCard/StatCard";
+import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import { ReactComponent as ChevronRightIcon } from "@/assets/icons/chevron-right.svg";
 import StockAlertCard from "../../components/StockAlertCard/StockAlertCard";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
@@ -198,28 +199,28 @@ const DashboardPage = () => {
       {/* Daily summary cards */}
       <div className='dashboard-summary'>
         <p className='summary-context'>Günün Özeti</p>
-        <div className='summary-grid'>
-          <SummaryStatCard
+        <StatsGrid>
+          <StatCard
             value={summaryStats.totalMealsToday}
             label='Toplam Tabldot'
             variant='total'
           />
-          <SummaryStatCard
+          <StatCard
             value={summaryStats.deliveryMealsToday}
             label='Siparişle Tabldot'
             variant='delivery'
           />
-          <SummaryStatCard
+          <StatCard
             value={summaryStats.dineInMealsToday}
             label='Restoranda Tabldot'
             variant='dine-in'
           />
-          <SummaryStatCard
+          <StatCard
             value={summaryStats.companyCountToday}
             label='Firma'
             variant='companies'
           />
-        </div>
+        </StatsGrid>
       </div>
 
       <div className='stock-alerts'>

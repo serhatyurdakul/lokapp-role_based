@@ -70,12 +70,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: $spacing-16;
+    margin-bottom: $spacing-12;
   }
 
   &__sectionTitle {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.0625rem;
     font-weight: 600;
     color: var(--text-color);
   }

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import PageHeader from "@/common/components/PageHeader/PageHeader";
-import "./QRPage.scss";
-import { ReactComponent as QrIcon } from "@/assets/icons/qr-outline.svg";
 import { useNavigate } from "react-router-dom";
+import PageHeader from "@/common/components/PageHeader/PageHeader";
+import { ReactComponent as QrIcon } from "@/assets/icons/qr-outline.svg";
+import "./QrPage.scss";
 
 const QRPage = () => {
   const [scanStatus, setScanStatus] = useState("waiting"); // waiting, scanning, success, error
@@ -56,40 +56,40 @@ const QRPage = () => {
   }, [scanStatus, storageKey, restaurantName, navigate]);
 
   return (
-    <div>
+    <div className='qr-page'>
       <PageHeader title='QR Okut' />
 
-      <div className='qr-content'>
-        <div className='qr-steps'>
-          <div className='step'>
-            <span className='step-number'>1</span>
+      <div className='qr-page__content'>
+        <div className='qr-page__steps'>
+          <div className='qr-page__step'>
+            <span className='qr-page__step-number'>1</span>
             <p>QR kodu kameraya gösterin</p>
           </div>
-          <div className='step'>
-            <span className='step-number'>2</span>
+          <div className='qr-page__step'>
+            <span className='qr-page__step-number'>2</span>
             <p>Onay mesajını bekleyin</p>
           </div>
         </div>
 
-        <div className={`qr-scanner-container ${scanStatus}`}>
-          <div className='qr-scanner'>
+        <div className={`qr-page__scanner-container ${scanStatus}`}>
+          <div className='qr-page__scanner'>
             {/* TODO: QR scanner component goes here */}
-            <div className='qr-placeholder'>
+            <div className='qr-page__placeholder'>
               <QrIcon />
               <p>QR Tarayıcı Hazırlanıyor...</p>
             </div>
           </div>
 
-          <div className='scan-status'>
+          <div className='qr-page__status' role='status' aria-live='polite'>
             {scanStatus === "waiting" && (
-              <p className='status-message'>Kamera hazırlanıyor...</p>
+              <p className='qr-page__status-message'>Kamera hazırlanıyor...</p>
             )}
             {scanStatus === "scanning" && (
-              <p className='status-message'>QR kodu taranıyor...</p>
+              <p className='qr-page__status-message'>QR kodu taranıyor...</p>
             )}
             {scanStatus === "success" && (
-              <div className='status-success'>
-                <svg viewBox='0 0 24 24' width='24' height='24'>
+              <div className='qr-page__status-success'>
+                <svg viewBox='0 0 24 24' width='24' height='24' aria-hidden='true'>
                   <path
                     d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'
                     fill='currentColor'
@@ -99,8 +99,8 @@ const QRPage = () => {
               </div>
             )}
             {scanStatus === "error" && (
-              <div className='status-error'>
-                <svg viewBox='0 0 24 24' width='24' height='24'>
+              <div className='qr-page__status-error'>
+                <svg viewBox='0 0 24 24' width='24' height='24' aria-hidden='true'>
                   <path
                     d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z'
                     fill='currentColor'

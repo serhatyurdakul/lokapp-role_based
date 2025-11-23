@@ -1,122 +1,135 @@
 @use "@/styles/variables" as *;
 
-.qr-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: $spacing-24;
-  max-width: 480px;
-  margin: 0 auto;
-  width: 100%;
-}
+.qr-page {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-24;
+    max-width: 480px;
+    margin: 0 auto;
+    width: 100%;
+  }
 
-.qr-steps {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-16;
-  background: var(--background-primary);
-  padding: $spacing-16;
-  border-radius: $border-radius-large;
-  width: 100%;
-}
-.qr-steps .step {
-  display: flex;
-  align-items: center;
-  gap: $spacing-12;
-}
-.qr-steps .step .step-number {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--primary-color);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-.qr-steps .step p {
-  margin: 0;
-  font-size: 0.875rem;
-  color: var(--text-color);
-}
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-16;
+    background: var(--background-primary);
+    padding: $spacing-16;
+    border-radius: $border-radius-large;
+    width: 100%;
+  }
 
-.qr-scanner-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-16;
-  align-items: center;
-}
-.qr-scanner-container.success .qr-scanner {
-  border-color: var(--success-color);
-}
-.qr-scanner-container.error .qr-scanner {
-  border-color: var(--error-color);
-}
+  &__step {
+    display: flex;
+    align-items: center;
+    gap: $spacing-12;
+  }
 
-.qr-scanner {
-  width: 100%;
-  max-width: 300px;
-  aspect-ratio: 1;
-  background: var(--background-primary);
-  border-radius: $border-radius-large;
-  overflow: hidden;
-  position: relative;
-  border: 2px solid transparent;
-  transition: border-color 0.3s ease;
-}
+  &__step-number {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
 
-.qr-placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: $spacing-16;
-  color: var(--text-secondary);
-}
-.qr-placeholder svg {
-  width: 48px;
-  height: 48px;
-  opacity: 0.5;
-}
-.qr-placeholder p {
-  font-size: 0.875rem;
-  margin: 0;
-}
+  &__step p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-color);
+  }
 
-.scan-status {
-  text-align: center;
-  min-height: 48px;
-}
-.scan-status .status-message {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  margin: 0;
-}
-.scan-status .status-success,
-.scan-status .status-error {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: $spacing-8;
-}
-.scan-status .status-success svg,
-.scan-status .status-error svg {
-  width: 20px;
-  height: 20px;
-}
-.scan-status .status-success p,
-.scan-status .status-error p {
-  margin: 0;
-  font-size: 0.875rem;
-}
-.scan-status .status-success {
-  color: var(--success-color);
-}
-.scan-status .status-error {
-  color: var(--error-color);
+  &__scanner-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-16;
+    align-items: center;
+
+    &.success .qr-page__scanner {
+      border-color: var(--success-color);
+    }
+
+    &.error .qr-page__scanner {
+      border-color: var(--error-color);
+    }
+  }
+
+  &__scanner {
+    width: 100%;
+    max-width: 300px;
+    aspect-ratio: 1;
+    background: var(--background-primary);
+    border-radius: $border-radius-large;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+
+  &__placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-16;
+    color: var(--text-secondary);
+
+    svg {
+      width: 48px;
+      height: 48px;
+      opacity: 0.5;
+    }
+
+    p {
+      font-size: 0.875rem;
+      margin: 0;
+    }
+  }
+
+  &__status {
+    text-align: center;
+    min-height: 48px;
+  }
+
+  &__status-message {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  &__status-success,
+  &__status-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-8;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.875rem;
+    }
+  }
+
+  &__status-success {
+    color: var(--success-color);
+  }
+
+  &__status-error {
+    color: var(--error-color);
+  }
 }

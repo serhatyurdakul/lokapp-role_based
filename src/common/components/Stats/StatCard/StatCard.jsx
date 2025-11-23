@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
-import "./SummaryStatCard.scss";
+import "./StatCard.scss";
 
-const SummaryStatCard = ({ value, label, variant = "" }) => {
+const StatCard = ({ value, label, variant = "" }) => {
   const className = variant ? `summary-item ${variant}` : "summary-item";
   return (
     <div className={className}>
@@ -11,10 +11,10 @@ const SummaryStatCard = ({ value, label, variant = "" }) => {
   );
 };
 
-SummaryStatCard.propTypes = {
+StatCard.propTypes = {
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   label: PropTypes.string.isRequired,
   variant: PropTypes.string,
 };
 
-export default SummaryStatCard;
+export default StatCard;

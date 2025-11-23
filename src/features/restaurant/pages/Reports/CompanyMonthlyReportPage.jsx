@@ -1,7 +1,8 @@
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
 import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard/ReportSummaryCard";
-import SummaryStatCard from "@/common/components/ReportCards/SummaryStatCard/SummaryStatCard";
+import StatCard from "@/common/components/Stats/StatCard/StatCard";
+import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import "./CompanyMonthlyReportPage.scss";
 
 /**
@@ -55,11 +56,11 @@ const CompanyMonthlyReportPage = () => {
 
       {/* Aylık İstatistikler */}
       <div className="period-summary">
-        <div className="summary-grid">
-          <SummaryStatCard value={monthSummary.total} label="Toplam Tabldot" variant="total" />
-          <SummaryStatCard value={monthSummary.delivery} label="Siparişle Tabldot" variant="delivery" />
-          <SummaryStatCard value={monthSummary.dineIn} label="Restoranda Tabldot" variant="dine-in" />
-        </div>
+        <StatsGrid>
+          <StatCard value={monthSummary.total} label="Toplam Tabldot" variant="total" />
+          <StatCard value={monthSummary.delivery} label="Siparişle Tabldot" variant="delivery" />
+          <StatCard value={monthSummary.dineIn} label="Restoranda Tabldot" variant="dine-in" />
+        </StatsGrid>
       </div>
 
       {/* Günlük Kartlar */}

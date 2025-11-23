@@ -2,7 +2,8 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
 import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
 import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard/ReportSummaryCard";
-import SummaryStatCard from "@/common/components/ReportCards/SummaryStatCard/SummaryStatCard";
+import StatCard from "@/common/components/Stats/StatCard/StatCard";
+import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import "./CompanyYearlyReportPage.scss";
 
 /**
@@ -88,23 +89,23 @@ const CompanyYearlyReportPage = () => {
 
       {/* Yıllık Özet Kartları */}
       <div className="period-summary">
-        <div className="summary-grid">
-          <SummaryStatCard
+        <StatsGrid>
+          <StatCard
             value={yearlySummary.total}
             label="Toplam Tabldot"
             variant="total"
           />
-          <SummaryStatCard
+          <StatCard
             value={yearlySummary.delivery}
             label="Siparişle Tabldot"
             variant="delivery"
           />
-          <SummaryStatCard
+          <StatCard
             value={yearlySummary.dineIn}
             label="Restoranda Tabldot"
             variant="dine-in"
           />
-        </div>
+        </StatsGrid>
       </div>
 
       {/* Aylık Liste */}

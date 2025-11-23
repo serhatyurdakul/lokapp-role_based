@@ -1,7 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
 import MealCard from "@/features/customer/components/MealCard/MealCard";
-import SummaryStatCard from "@/common/components/ReportCards/SummaryStatCard/SummaryStatCard";
+import StatCard from "@/common/components/Stats/StatCard/StatCard";
+import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import "./MonthlyReportPage.scss";
 
 const MonthlyReportPage = () => {
@@ -75,11 +76,11 @@ const MonthlyReportPage = () => {
 
       {/* Period Summary */}
       <div className='period-summary'>
-        <div className='summary-grid'>
-          <SummaryStatCard value={23} label='Toplam Tabldot' variant='total' />
-          <SummaryStatCard value={15} label='Siparişle Tabldot' variant='delivery' />
-          <SummaryStatCard value={8} label='Restoranda Tabldot' variant='dine-in' />
-        </div>
+        <StatsGrid>
+          <StatCard value={23} label='Toplam Tabldot' variant='total' />
+          <StatCard value={15} label='Siparişle Tabldot' variant='delivery' />
+          <StatCard value={8} label='Restoranda Tabldot' variant='dine-in' />
+        </StatsGrid>
       </div>
 
       {/* Daily Cards */}

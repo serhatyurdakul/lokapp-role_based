@@ -1,0 +1,20 @@
+@use "@/styles/variables" as *;
+@use "@/styles/breakpoints" as *;
+
+.stats-grid {
+  display: grid;
+  gap: $spacing-8;
+  grid-template-columns: repeat(var(--mobile-columns, 3), minmax(0, 1fr));
+
+  @include respond-to("small") {
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  }
+}
+
+.stats-grid--two-column {
+  --mobile-columns: 2;
+}
+
+.stats-grid--has-odd-last > *:last-child {
+  grid-column: 1 / -1;
+}

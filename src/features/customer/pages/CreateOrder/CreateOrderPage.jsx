@@ -153,6 +153,8 @@ const CreateOrderPage = () => {
     dispatch(createOrder());
   };
 
+  const hasMenu = Array.isArray(categories) && categories.length > 0;
+
   const renderBody = () => {
     // Show full-screen spinner while initial data is loading
     if (isLoading && (!categories || categories.length === 0)) {
@@ -293,7 +295,7 @@ const CreateOrderPage = () => {
   };
 
   return (
-    <div className='create-order'>
+    <div className='create-order has-fixed-bottom-cta'>
       {showBanner && error && (
         <NoticeBanner
           message={error}
@@ -324,16 +326,20 @@ const CreateOrderPage = () => {
               }
             }}
           />
-          <DeadlineNotice className='deadline-notice--spaced'>
-            Siparişlerinizi {orderCutoffTime}’e kadar düzenleyebilirsiniz.
-          </DeadlineNotice>
+          {!isLoading && hasMenu && (
+            <DeadlineNotice className='deadline-notice--spaced'>
+              Siparişlerinizi {orderCutoffTime}’e kadar düzenleyebilirsiniz.
+            </DeadlineNotice>
+          )}
         </>
       ) : (
         <>
           <PageHeader title='Sipariş Oluştur' />
-          <DeadlineNotice className='deadline-notice--spaced'>
-            Siparişinizi {orderCutoffTime}’e kadar verebilirsiniz.
-          </DeadlineNotice>
+          {!isLoading && hasMenu && (
+            <DeadlineNotice className='deadline-notice--spaced'>
+              Siparişinizi {orderCutoffTime}’e kadar verebilirsiniz.
+            </DeadlineNotice>
+          )}
         </>
       )}
       {renderBody()}

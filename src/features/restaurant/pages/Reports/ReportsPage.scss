@@ -30,17 +30,6 @@
   margin: 0 0 $spacing-6;
 }
 
-.reports-summary .summary-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: $spacing-8;
-}
-@media (min-width: 768px) {
-  .reports-summary .summary-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
 .site-dropdown .site-filter {
   width: 100%;
 }

@@ -115,16 +115,6 @@
 .dashboard-summary {
   margin-bottom: $spacing-24;
 }
-.dashboard-summary .summary-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: $spacing-8;
-}
-@media (min-width: 768px) {
-  .dashboard-summary .summary-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
 .dashboard-summary .summary-context {
   font-size: 0.75rem;
   font-weight: 600;

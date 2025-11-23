@@ -58,12 +58,12 @@
   background-color: var(--background-primary);
   border: none;
   border-radius: $border-radius-large;
-  padding: $spacing-12;
+  padding: $spacing-16;
 }
 .orders-by-region .region-title {
   font-size: 1.0625rem;
   font-weight: 600;
-  margin-bottom: $spacing-8;
+  margin-bottom: $spacing-12;
   color: var(--text-color);
 }
 .orders-by-region .orders-region-grid {

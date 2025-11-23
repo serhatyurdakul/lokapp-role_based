@@ -4,8 +4,9 @@ import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHea
 import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
 import SearchBar from "@/common/components/SearchBar/SearchBar";
 import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard/ReportSummaryCard";
+import StatCard from "@/common/components/Stats/StatCard/StatCard";
+import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import "./ReportsPage.scss";
-import SummaryStatCard from "@/common/components/ReportCards/SummaryStatCard/SummaryStatCard";
 
 // Gerçek API verilerine göre oluşturulan mock veriler
 const mockCompanies = [
@@ -210,28 +211,28 @@ const RestaurantReportsPage = () => {
             </div>
           </div>
           <p className='summary-context'>{summaryContext}</p>
-          <div className='summary-grid'>
-            <SummaryStatCard
+          <StatsGrid>
+            <StatCard
               value={monthlySummary.totalMeals}
               label='Toplam Tabldot'
               variant='total'
             />
-            <SummaryStatCard
+            <StatCard
               value={monthlySummary.delivery}
               label='Siparişle Tabldot'
               variant='delivery'
             />
-            <SummaryStatCard
+            <StatCard
               value={monthlySummary.dineIn}
               label='Restoranda Tabldot'
               variant='dine-in'
             />
-            <SummaryStatCard
+            <StatCard
               value={monthlySummary.companyCount}
               label='Firma'
               variant='companies'
             />
-          </div>
+          </StatsGrid>
         </div>
         <div className='search-bar-container'>
           <SearchBar

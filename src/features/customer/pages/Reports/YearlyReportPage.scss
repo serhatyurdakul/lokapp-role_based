@@ -29,12 +29,6 @@
 .period-summary {
   margin-bottom: $spacing-12;
 }
-.period-summary .summary-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: $spacing-12;
-  /* .summary-item styles moved to SummaryStatCard.scss */
-}
 
 .monthly-list .card-stack {
   display: flex;

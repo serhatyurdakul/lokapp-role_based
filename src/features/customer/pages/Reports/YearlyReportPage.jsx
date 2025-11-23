@@ -2,7 +2,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
 import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
 import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard/ReportSummaryCard";
-import SummaryStatCard from "@/common/components/ReportCards/SummaryStatCard/SummaryStatCard";
+import StatCard from "@/common/components/Stats/StatCard/StatCard";
+import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import "./YearlyReportPage.scss";
 
 const YearlyReportPage = () => {
@@ -64,11 +65,11 @@ const YearlyReportPage = () => {
 
       {/* 2. Yearly Summary Cards */}
       <div className='period-summary'>
-        <div className='summary-grid'>
-          <SummaryStatCard value={yearlySummary.total} label='Toplam Tabldot' variant='total' />
-          <SummaryStatCard value={yearlySummary.delivery} label='Siparişle Tabldot' variant='delivery' />
-          <SummaryStatCard value={yearlySummary.dineIn} label='Restoranda Tabldot' variant='dine-in' />
-        </div>
+        <StatsGrid>
+          <StatCard value={yearlySummary.total} label='Toplam Tabldot' variant='total' />
+          <StatCard value={yearlySummary.delivery} label='Siparişle Tabldot' variant='delivery' />
+          <StatCard value={yearlySummary.dineIn} label='Restoranda Tabldot' variant='dine-in' />
+        </StatsGrid>
       </div>
 
       {/* 3. Monthly List */}

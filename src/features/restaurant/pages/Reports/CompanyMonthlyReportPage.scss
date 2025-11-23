@@ -16,12 +16,6 @@
   margin-bottom: $spacing-12;
 }
 
-.period-summary .summary-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: $spacing-12;
-}
-
 .daily-list .card-stack {
   display: flex;
   flex-direction: column;

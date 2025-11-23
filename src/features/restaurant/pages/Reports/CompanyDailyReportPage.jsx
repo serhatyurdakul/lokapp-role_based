@@ -1,7 +1,8 @@
 
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
-import SummaryStatCard from "@/common/components/ReportCards/SummaryStatCard/SummaryStatCard";
+import StatCard from "@/common/components/Stats/StatCard/StatCard";
+import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import EmployeeMealCard from "@/common/components/ReportCards/EmployeeMealCard/EmployeeMealCard";
 import "./CompanyDailyReportPage.scss";
 
@@ -68,11 +69,11 @@ const CompanyDailyReportPage = () => {
       </div>
 
       <div className="company-daily-report__summary">
-        <div className="company-daily-report__summary-grid">
-          <SummaryStatCard value={totalMeals} label="Toplam Tabldot" variant="total" />
-          <SummaryStatCard value={delivery} label="Siparişle Tabldot" variant="delivery" />
-          <SummaryStatCard value={dineIn} label="Restoranda Tabldot" variant="dine-in" />
-        </div>
+        <StatsGrid className="company-daily-report__summary-grid">
+          <StatCard value={totalMeals} label="Toplam Tabldot" variant="total" />
+          <StatCard value={delivery} label="Siparişle Tabldot" variant="delivery" />
+          <StatCard value={dineIn} label="Restoranda Tabldot" variant="dine-in" />
+        </StatsGrid>
       </div>
 
       <div className="company-daily-report__groups u-card-group__grid">

@@ -140,6 +140,7 @@ const useAddMeal = (
     setSelectedMeal(null);
     setFilteredMealOptions([]);
     setMealExistsError("");
+    setNewStock("");
   };
 
   const handleMealOptionSearchChange = (e) => {
