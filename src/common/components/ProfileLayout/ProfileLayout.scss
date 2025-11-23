@@ -34,7 +34,7 @@
   &__text {
     display: flex;
     flex-direction: column;
-    gap: $spacing-4;
+    gap: $spacing-6;
   }
 
   &__title {
@@ -46,7 +46,7 @@
 
   &__subtitle {
     color: var(--text-secondary);
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     margin: 0;
 
     a {
