@@ -3,6 +3,7 @@ import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHea
 import MealCard from "@/features/customer/components/MealCard/MealCard";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
+import { ReactComponent as ArrowRightIcon } from "@/assets/icons/arrow-right.svg";
 import "./MonthlyReportPage.scss";
 
 const MonthlyReportPage = () => {
@@ -65,13 +66,14 @@ const MonthlyReportPage = () => {
       <div className='period-navigation'>
         <h2 className='current-period'>
           {currentMonthName} {year}
-          <button
-            className='period-action'
-            onClick={() => navigate(`/reports/${year}`)}
-          >
-            Tüm Aylar →
-          </button>
         </h2>
+        <button
+          className='period-action'
+          onClick={() => navigate(`/reports/${year}`)}
+        >
+          Tüm Aylar
+          <ArrowRightIcon aria-hidden='true' />
+        </button>
       </div>
 
       {/* Period Summary */}

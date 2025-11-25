@@ -55,6 +55,8 @@ const QRPage = () => {
     } catch (_e) {}
   }, [scanStatus, storageKey, restaurantName, navigate]);
 
+  const scannerStatusClass = scanStatus ? `qr-page__scanner-container--${scanStatus}` : "";
+
   return (
     <div className='qr-page'>
       <PageHeader title='QR Okut' />
@@ -63,15 +65,15 @@ const QRPage = () => {
         <div className='qr-page__steps'>
           <div className='qr-page__step'>
             <span className='qr-page__step-number'>1</span>
-            <p>QR kodu kameraya gösterin</p>
+            <p className='qr-page__step-text'>QR kodu kameraya gösterin</p>
           </div>
           <div className='qr-page__step'>
             <span className='qr-page__step-number'>2</span>
-            <p>Onay mesajını bekleyin</p>
+            <p className='qr-page__step-text'>Onay mesajını bekleyin</p>
           </div>
         </div>
 
-        <div className={`qr-page__scanner-container ${scanStatus}`}>
+        <div className={`qr-page__scanner-container ${scannerStatusClass}`}>
           <div className='qr-page__scanner'>
             {/* TODO: QR scanner component goes here */}
             <div className='qr-page__placeholder'>
@@ -88,7 +90,7 @@ const QRPage = () => {
               <p className='qr-page__status-message'>QR kodu taranıyor...</p>
             )}
             {scanStatus === "success" && (
-              <div className='qr-page__status-success'>
+              <div className='qr-page__status-result qr-page__status-result--success'>
                 <svg viewBox='0 0 24 24' width='24' height='24' aria-hidden='true'>
                   <path
                     d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z'
@@ -99,7 +101,7 @@ const QRPage = () => {
               </div>
             )}
             {scanStatus === "error" && (
-              <div className='qr-page__status-error'>
+              <div className='qr-page__status-result qr-page__status-result--error'>
                 <svg viewBox='0 0 24 24' width='24' height='24' aria-hidden='true'>
                   <path
                     d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z'
