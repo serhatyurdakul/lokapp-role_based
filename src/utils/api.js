@@ -27,31 +27,24 @@ export const api = axios.create({
 // Axios auth interceptors
 // Logs out if token is invalid or used elsewhere
 
-// Helper to dispatch logout via dynamic import (avoids circular deps)
-const triggerGlobalLogout = async () => {
-  try {
-    const [{ store }, { logout }] = await Promise.all([
-      import("@/store"),
-      import("@/features/auth/store/authSlice"),
-    ]);
-    store.dispatch(logout());
-  } catch (err) {
-    logger.error("triggerGlobalLogout error:", err);
-  }
+// Logout handler is injected from the store to avoid circular imports.
+let logoutHandler = null;
+export const setLogoutHandler = (fn) => {
+  logoutHandler = typeof fn === "function" ? fn : null;
 };
 
 // Axios response & error interceptor
 api.interceptors.response.use(
   (response) => {
     if (response?.data?.tokenError === true) {
-      triggerGlobalLogout();
+      logoutHandler?.();
     }
     return response;
   },
   (error) => {
     // 401 → invalid session
     if (error?.response?.status === 401) {
-      triggerGlobalLogout();
+      logoutHandler?.();
     }
 
     // Network error / CORS issue

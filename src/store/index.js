@@ -4,6 +4,7 @@ import customerMenuReducer from "@/features/customer/store/customerMenuSlice";
 import restaurantMenuReducer from "@/features/restaurant/store/restaurantMenuSlice";
 import restaurantOrdersReducer from "@/features/restaurant/store/restaurantOrdersSlice";
 import restaurantInfoReducer from "@/features/restaurant/store/restaurantInfoSlice";
+import { setLogoutHandler } from "@/utils/api";
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -25,3 +26,6 @@ const rootReducer = (state, action) => {
 export const store = configureStore({
   reducer: rootReducer,
 });
+
+// Inject global logout handler for API interceptors (avoids circular imports).
+setLogoutHandler(() => store.dispatch(logout()));
