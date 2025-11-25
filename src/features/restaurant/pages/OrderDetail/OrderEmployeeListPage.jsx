@@ -31,15 +31,7 @@ const OrderEmployeeListPage = () => {
 
       <h2 className='u-card-group__title'>{`Sipariş Verenler (${count})`}</h2>
 
-      <div
-        className='u-card-group__list'
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "12px",
-          marginTop: "8px",
-        }}
-      >
+      <div className='u-card-group__list'>
         {MOCK_EMPLOYEE_MEALS.map((meal, idx) => (
           <EmployeeMealCard key={`emp-${idx}`} meal={meal} showType={false} />
         ))}

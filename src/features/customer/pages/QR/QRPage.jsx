@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "@/common/components/PageHeader/PageHeader";
 import { ReactComponent as QrIcon } from "@/assets/icons/qr-outline.svg";
-import "./QrPage.scss";
+import "./QRPage.scss";
 
 const QRPage = () => {
   const [scanStatus, setScanStatus] = useState("waiting"); // waiting, scanning, success, error
