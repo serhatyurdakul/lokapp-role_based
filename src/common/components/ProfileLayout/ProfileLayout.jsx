@@ -8,7 +8,7 @@ const ProfileLayout = ({ children, className = "" }) => (
 const ProfileHeader = ({ avatarText, title, subtitle, children }) => (
   <div className='profile__header'>
     <div className='profile__avatar'>
-      <span>{avatarText}</span>
+      <span className='profile__avatar-text'>{avatarText}</span>
     </div>
     <div className='profile__text'>
       <h2 className='profile__title'>{title}</h2>
