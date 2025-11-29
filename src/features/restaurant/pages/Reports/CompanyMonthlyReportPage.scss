@@ -1,20 +1,5 @@
 @use "@/styles/variables" as *;
-
-.period-navigation {
-  margin-bottom: $spacing-12;
-}
-
-.period-navigation .current-period {
-  font-size: 1.125rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: $spacing-4;
-}
-
-.period-summary {
-  margin-bottom: $spacing-12;
-}
+@use "@/styles/utilities/stats-block";
 
 .daily-list .card-stack {
   display: flex;

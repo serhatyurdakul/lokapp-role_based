@@ -1,4 +1,5 @@
 @use "@/styles/variables" as *;
+@use "@/styles/utilities/section-labels";
 
 .cutoff-info {
   display: flex;
@@ -114,14 +115,6 @@
 
 .dashboard-summary {
   margin-bottom: $spacing-24;
-}
-.dashboard-summary .summary-context {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  margin-bottom: $spacing-6;
 }
 
 .dashboard-filters {

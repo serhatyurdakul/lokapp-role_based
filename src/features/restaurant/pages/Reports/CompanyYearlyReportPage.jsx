@@ -4,6 +4,7 @@ import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
 import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard/ReportSummaryCard";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
+import ReportHeader from "@/common/components/ReportHeader/ReportHeader";
 import "./CompanyYearlyReportPage.scss";
 
 /**
@@ -76,19 +77,16 @@ const CompanyYearlyReportPage = () => {
       <DetailPageHeader title="Raporlar" />
 
       {/* Başlık + Yıl seçici */}
-      <div className="summary-row">
-        <h2 className="summary-title">{companyName}</h2>
-        <div className="filter-controls">
-          <CustomDropdown
-            options={availableYears}
-            selectedValue={year}
-            onSelect={handleYearChange}
-          />
-        </div>
-      </div>
+      <ReportHeader title={companyName}>
+        <CustomDropdown
+          options={availableYears}
+          selectedValue={year}
+          onSelect={handleYearChange}
+        />
+      </ReportHeader>
 
       {/* Yıllık Özet Kartları */}
-      <div className="period-summary">
+      <div className="u-stats-block">
         <StatsGrid>
           <StatCard
             value={yearlySummary.total}

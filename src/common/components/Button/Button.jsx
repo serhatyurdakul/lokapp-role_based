@@ -33,7 +33,7 @@ Button.propTypes = {
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func,
   type: PropTypes.oneOf(["button", "submit", "reset"]),
-  variant: PropTypes.oneOf(["primary", "secondary"]),
+  variant: PropTypes.oneOf(["primary", "secondary", "outline-primary"]),
   disabled: PropTypes.bool,
   className: PropTypes.string,
   loading: PropTypes.bool,

@@ -210,13 +210,14 @@ const RestaurantReportsPage = () => {
               />
             </div>
           </div>
-          <p className='summary-context'>{summaryContext}</p>
-          <StatsGrid>
-            <StatCard
-              value={monthlySummary.totalMeals}
-              label='Toplam Tabldot'
-              variant='total'
-            />
+          <p className='u-context-meta'>{summaryContext}</p>
+          <div className='u-stats-block'>
+            <StatsGrid>
+              <StatCard
+                value={monthlySummary.totalMeals}
+                label='Toplam Tabldot'
+                variant='total'
+              />
             <StatCard
               value={monthlySummary.delivery}
               label='Siparişle Tabldot'
@@ -227,12 +228,13 @@ const RestaurantReportsPage = () => {
               label='Restoranda Tabldot'
               variant='dine-in'
             />
-            <StatCard
-              value={monthlySummary.companyCount}
-              label='Firma'
-              variant='companies'
-            />
-          </StatsGrid>
+              <StatCard
+                value={monthlySummary.companyCount}
+                label='Firma'
+                variant='companies'
+              />
+            </StatsGrid>
+          </div>
         </div>
         <div className='search-bar-container'>
           <SearchBar

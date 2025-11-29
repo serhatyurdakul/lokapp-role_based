@@ -1,32 +1,5 @@
 @use "@/styles/variables" as *;
-
-// YearlyReportPage.scss içeriğinin birebir kopyası.
-// Stil tutarlılığı adına class isimleri değiştirilmemiştir.
-
-.summary-row {
-  display: flex;
-  align-items: center;
-  gap: $spacing-2;
-  flex-wrap: wrap;
-  margin-bottom: $spacing-12;
-}
-
-.summary-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 0;
-  color: var(--text-color);
-}
-
-.summary-row .filter-controls {
-  margin-left: auto;
-  display: flex;
-  gap: $spacing-4;
-}
-
-.period-summary {
-  margin-bottom: $spacing-12;
-}
+@use "@/styles/utilities/stats-block";
 
 .monthly-list .card-stack {
   display: flex;

@@ -1,49 +1,5 @@
 @use "@/styles/variables" as *;
-
-// Period Navigation
-.period-navigation {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $spacing-8;
-  margin-bottom: $spacing-12;
-}
-.period-navigation .current-period {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--text-color);
-  margin: 0;
-}
-.period-navigation .period-action {
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-4;
-  padding: $spacing-8 $spacing-16;
-  border-radius: $border-radius;
-  border: 1px solid var(--primary-color);
-  background-color: var(--background-primary);
-  color: var(--primary-color);
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1;
-  transition: $transition;
-
-  svg {
-    display: block;
-    width: 18px;
-    height: 18px;
-  }
-}
-
-.period-navigation .period-action:hover {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-// Period Summary
-.period-summary {
-  margin-bottom: $spacing-12;
-}
+@use "@/styles/utilities/stats-block";
 
 // Meal History - using existing styles from MealHistoryCard
 .meal-history {

@@ -1,0 +1,30 @@
+@use "@/styles/variables" as *;
+
+.report-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-8;
+  margin-bottom: $spacing-12;
+  min-height: 40px;
+
+  &--start {
+    justify-content: flex-start;
+  }
+
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-8;
+  }
+}

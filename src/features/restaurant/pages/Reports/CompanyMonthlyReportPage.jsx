@@ -3,6 +3,7 @@ import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHea
 import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard/ReportSummaryCard";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
+import ReportHeader from "@/common/components/ReportHeader/ReportHeader";
 import "./CompanyMonthlyReportPage.scss";
 
 /**
@@ -48,14 +49,10 @@ const CompanyMonthlyReportPage = () => {
       <DetailPageHeader title="Aylık Rapor" />
 
       {/* Period Navigation */}
-      <div className="period-navigation">
-        <h2 className="current-period">
-          {companyName} · {monthName} {year}
-        </h2>
-      </div>
+      <ReportHeader title={`${companyName} · ${monthName} ${year}`} align="start" />
 
       {/* Aylık İstatistikler */}
-      <div className="period-summary">
+      <div className="u-stats-block">
         <StatsGrid>
           <StatCard value={monthSummary.total} label="Toplam Tabldot" variant="total" />
           <StatCard value={monthSummary.delivery} label="Siparişle Tabldot" variant="delivery" />

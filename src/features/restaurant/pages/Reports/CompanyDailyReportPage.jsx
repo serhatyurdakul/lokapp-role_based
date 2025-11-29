@@ -1,14 +1,14 @@
 
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import EmployeeMealCard from "@/common/components/ReportCards/EmployeeMealCard/EmployeeMealCard";
+import ReportHeader from "@/common/components/ReportHeader/ReportHeader";
 import "./CompanyDailyReportPage.scss";
 
 const CompanyDailyReportPage = () => {
   const { companyId, year, month, day } = useParams();
-  const navigate = useNavigate();
   const { state } = useLocation();
   const companyName = state?.companyName || "Firma";
 
@@ -62,11 +62,7 @@ const CompanyDailyReportPage = () => {
     <div className="company-daily-report">
       <DetailPageHeader title="Günlük Rapor" />
 
-      <div className="company-daily-report__period-nav">
-        <h2 className="company-daily-report__period-title">
-          {companyName} · {formattedDate}
-        </h2>
-      </div>
+      <ReportHeader title={`${companyName} · ${formattedDate}`} align="start" />
 
       <div className="company-daily-report__summary">
         <StatsGrid className="company-daily-report__summary-grid">

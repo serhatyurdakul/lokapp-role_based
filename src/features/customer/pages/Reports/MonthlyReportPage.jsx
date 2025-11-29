@@ -3,6 +3,8 @@ import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHea
 import MealCard from "@/features/customer/components/MealCard/MealCard";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
+import Button from "@/common/components/Button/Button";
+import ReportHeader from "@/common/components/ReportHeader/ReportHeader";
 import { ReactComponent as ArrowRightIcon } from "@/assets/icons/arrow-right.svg";
 import "./MonthlyReportPage.scss";
 
@@ -63,21 +65,19 @@ const MonthlyReportPage = () => {
       <DetailPageHeader title='Yemek Geçmişi' />
 
       {/* Period Navigation */}
-      <div className='period-navigation'>
-        <h2 className='current-period'>
-          {currentMonthName} {year}
-        </h2>
-        <button
-          className='period-action'
+      <ReportHeader title={`${currentMonthName} ${year}`}>
+        <Button
+          variant='outline-primary'
+          className='btn-with-icon'
           onClick={() => navigate(`/reports/${year}`)}
         >
           Tüm Aylar
           <ArrowRightIcon aria-hidden='true' />
-        </button>
-      </div>
+        </Button>
+      </ReportHeader>
 
       {/* Period Summary */}
-      <div className='period-summary'>
+      <div className='u-stats-block'>
         <StatsGrid>
           <StatCard value={23} label='Toplam Tabldot' variant='total' />
           <StatCard value={15} label='Siparişle Tabldot' variant='delivery' />

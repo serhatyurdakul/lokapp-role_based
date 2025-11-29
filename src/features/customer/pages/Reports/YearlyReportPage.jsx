@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
 import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
+import ReportHeader from "@/common/components/ReportHeader/ReportHeader";
 import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard/ReportSummaryCard";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
@@ -52,19 +53,16 @@ const YearlyReportPage = () => {
     <>
       <DetailPageHeader title="Raporlar" />
 
-      <div className="summary-row">
-        <h2 className="summary-title">{year} Özeti</h2>
-        <div className="filter-controls">
-          <CustomDropdown
-            options={availableYears}
-            selectedValue={year}
-            onSelect={handleYearChange}
-          />
-        </div>
-      </div>
+      <ReportHeader title={`${year} Özeti`}>
+        <CustomDropdown
+          options={availableYears}
+          selectedValue={year}
+          onSelect={handleYearChange}
+        />
+      </ReportHeader>
 
       {/* 2. Yearly Summary Cards */}
-      <div className='period-summary'>
+      <div className='u-stats-block'>
         <StatsGrid>
           <StatCard value={yearlySummary.total} label='Toplam Tabldot' variant='total' />
           <StatCard value={yearlySummary.delivery} label='Siparişle Tabldot' variant='delivery' />

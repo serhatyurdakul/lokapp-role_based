@@ -198,7 +198,7 @@ const DashboardPage = () => {
 
       {/* Daily summary cards */}
       <div className='dashboard-summary'>
-        <p className='summary-context'>Günün Özeti</p>
+        <p className='u-section-label'>Günün Özeti</p>
         <StatsGrid>
           <StatCard
             value={summaryStats.totalMealsToday}
