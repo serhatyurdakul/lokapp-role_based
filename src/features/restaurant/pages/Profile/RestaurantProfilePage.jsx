@@ -119,11 +119,11 @@ const RestaurantProfilePage = () => {
                 "Belirtilmemiş"}
             </ProfileInfoItem>
             <ProfileInfoItem label='Restoran Kodu'>
-              <div className='profile__valueWrapper'>
+              <div className='profile__value-wrapper'>
                 <span>{codeValue || "Belirtilmemiş"}</span>
                 <button
                   type='button'
-                  className='profile__copyButton'
+                  className='profile__copy-button'
                   aria-label='Restoran kodunu kopyala'
                   title='Kopyala'
                   onClick={handleCopyCode}

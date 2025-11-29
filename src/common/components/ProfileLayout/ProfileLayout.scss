@@ -67,25 +67,25 @@
     padding: $spacing-16;
   }
 
-  &__sectionHeader {
+  &__section-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: $spacing-12;
   }
 
-  &__sectionTitle {
+  &__section-title {
     margin: 0;
     font-size: 1.0625rem;
     font-weight: 600;
     color: var(--text-color);
   }
 
-  &__sectionAction {
+  &__section-action {
     display: flex;
     align-items: center;
 
-    .profile__viewAllButton {
+    .profile__view-all-button {
       color: var(--primary-color);
       font-size: 0.875rem;
       font-weight: 500;
@@ -100,12 +100,12 @@
     }
   }
 
-  &__infoList {
+  &__info-list {
     display: flex;
     flex-direction: column;
   }
 
-  &__infoItem {
+  &__info-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -117,12 +117,12 @@
     }
   }
 
-  &__infoLabel {
+  &__info-label {
     color: var(--text-secondary);
     font-size: 0.875rem;
   }
 
-  &__infoValue {
+  &__info-value {
     color: var(--text-color);
     font-size: 1rem;
     font-weight: 500;
@@ -139,13 +139,13 @@
     }
   }
 
-  &__valueWrapper {
+  &__value-wrapper {
     display: flex;
     align-items: center;
     gap: $spacing-8;
   }
 
-  &__copyButton {
+  &__copy-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -166,12 +166,12 @@
     }
   }
 
-  &__settingsList {
+  &__settings-list {
     display: flex;
     flex-direction: column;
   }
 
-  &__settingsItem {
+  &__settings-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -195,19 +195,19 @@
     }
   }
 
-  &__settingsLabel {
+  &__settings-label {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: $spacing-2;
   }
 
-  &__settingsSecondary {
+  &__settings-secondary {
     font-size: 0.8125rem;
     color: var(--text-secondary);
   }
 
-  &__settingsIcon {
+  &__settings-icon {
     color: var(--text-secondary);
     flex-shrink: 0;
 

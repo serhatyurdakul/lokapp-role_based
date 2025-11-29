@@ -18,7 +18,7 @@ import ProfileLayout, {
 } from "@/common/components/ProfileLayout/ProfileLayout";
 import { api } from "@/utils/api";
 
-const ProfilePage = () => {
+const CustomerProfilePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -121,12 +121,12 @@ const ProfilePage = () => {
               {user?.companyName || "Belirtilmemiş"}
             </ProfileInfoItem>
             <ProfileInfoItem label='Firma Kodu'>
-              <div className='profile__valueWrapper'>
+              <div className='profile__value-wrapper'>
                 <span>{companyCode || "Belirtilmemiş"}</span>
                 {companyCode && (
                   <button
                     type='button'
-                    className='profile__copyButton'
+                    className='profile__copy-button'
                     aria-label='Firma kodunu kopyala'
                     title='Kopyala'
                     onClick={handleCopyCode}
@@ -158,7 +158,7 @@ const ProfilePage = () => {
           title='Yemek Geçmişi'
           action={
             <button
-              className='profile__viewAllButton'
+              className='profile__view-all-button'
               onClick={() => navigate("/reports")}
             >
               Tümünü Gör
@@ -201,4 +201,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default CustomerProfilePage;

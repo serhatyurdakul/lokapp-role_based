@@ -21,9 +21,9 @@ const ProfileHeader = ({ avatarText, title, subtitle, children }) => (
 const ProfileSection = ({ title, action, children }) => (
   <section className='profile__section'>
     {(title || action) && (
-      <div className='profile__sectionHeader'>
-        {title && <h3 className='profile__sectionTitle'>{title}</h3>}
-        {action && <div className='profile__sectionAction'>{action}</div>}
+      <div className='profile__section-header'>
+        {title && <h3 className='profile__section-title'>{title}</h3>}
+        {action && <div className='profile__section-action'>{action}</div>}
       </div>
     )}
     {children}
@@ -31,28 +31,28 @@ const ProfileSection = ({ title, action, children }) => (
 );
 
 const ProfileInfoList = ({ children }) => (
-  <div className='profile__infoList'>{children}</div>
+  <div className='profile__info-list'>{children}</div>
 );
 
 const ProfileInfoItem = ({ label, children }) => (
-  <div className='profile__infoItem'>
-    <span className='profile__infoLabel'>{label}</span>
-    <div className='profile__infoValue'>{children}</div>
+  <div className='profile__info-item'>
+    <span className='profile__info-label'>{label}</span>
+    <div className='profile__info-value'>{children}</div>
   </div>
 );
 
 const ProfileSettingsList = ({ children }) => (
-  <div className='profile__settingsList'>{children}</div>
+  <div className='profile__settings-list'>{children}</div>
 );
 
 const ProfileSettingsItem = ({ label, secondary, icon, children, ...props }) => (
-  <button className='profile__settingsItem' type='button' {...props}>
-    <span className='profile__settingsLabel'>
+  <button className='profile__settings-item' type='button' {...props}>
+    <span className='profile__settings-label'>
       {label}
-      {secondary && <span className='profile__settingsSecondary'>{secondary}</span>}
+      {secondary && <span className='profile__settings-secondary'>{secondary}</span>}
     </span>
     {(icon || children) && (
-      <span className='profile__settingsIcon'>{icon || children}</span>
+      <span className='profile__settings-icon'>{icon || children}</span>
     )}
   </button>
 );
