@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
 import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
-import ReportHeader from "@/common/components/ReportHeader/ReportHeader";
+import ReportSectionHeader from "@/common/components/ReportSectionHeader/ReportSectionHeader";
 import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard/ReportSummaryCard";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
@@ -53,13 +53,13 @@ const YearlyReportPage = () => {
     <>
       <DetailPageHeader title="Raporlar" />
 
-      <ReportHeader title={`${year} Özeti`}>
+      <ReportSectionHeader title={`${year} Özeti`}>
         <CustomDropdown
           options={availableYears}
           selectedValue={year}
           onSelect={handleYearChange}
         />
-      </ReportHeader>
+      </ReportSectionHeader>
 
       {/* 2. Yearly Summary Cards */}
       <div className='u-stats-block'>
@@ -71,19 +71,17 @@ const YearlyReportPage = () => {
       </div>
 
       {/* 3. Monthly List */}
-      <div className='monthly-list'>
-        <div className='card-stack'>
-          {monthlyData.map((data) => (
-            <ReportSummaryCard
-              key={data.month}
-              title={`${data.month} ${year}`}
-              total={data.summary.total}
-              delivery={data.summary.delivery}
-              dineIn={data.summary.dineIn}
-              onClick={() => handleMonthClick(data.monthNumber)}
-            />
-          ))}
-        </div>
+      <div className='u-card-group__list'>
+        {monthlyData.map((data) => (
+          <ReportSummaryCard
+            key={data.month}
+            title={`${data.month} ${year}`}
+            total={data.summary.total}
+            delivery={data.summary.delivery}
+            dineIn={data.summary.dineIn}
+            onClick={() => handleMonthClick(data.monthNumber)}
+          />
+        ))}
       </div>
     </>
   );

@@ -1,0 +1,8 @@
+@use "@/styles/variables" as *;
+
+.u-context-meta {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0 0 $spacing-6 0;
+}

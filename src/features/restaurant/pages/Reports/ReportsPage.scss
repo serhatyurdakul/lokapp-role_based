@@ -1,7 +1,7 @@
 @use "@/styles/variables" as *;
 @use "@/styles/utilities/empty-state";
 @use "@/styles/utilities/stats-block";
-@use "@/styles/utilities/section-labels";
+@use "@/styles/utilities/context-meta";
 
 .reports-content {
   display: flex;

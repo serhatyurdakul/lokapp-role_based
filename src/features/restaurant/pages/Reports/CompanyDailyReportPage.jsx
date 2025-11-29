@@ -4,7 +4,7 @@ import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHea
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import EmployeeMealCard from "@/common/components/ReportCards/EmployeeMealCard/EmployeeMealCard";
-import ReportHeader from "@/common/components/ReportHeader/ReportHeader";
+import ReportSectionHeader from "@/common/components/ReportSectionHeader/ReportSectionHeader";
 import "./CompanyDailyReportPage.scss";
 
 const CompanyDailyReportPage = () => {
@@ -59,26 +59,26 @@ const CompanyDailyReportPage = () => {
   );
 
   return (
-    <div className="company-daily-report">
+    <div>
       <DetailPageHeader title="Günlük Rapor" />
 
-      <ReportHeader title={`${companyName} · ${formattedDate}`} align="start" />
+      <ReportSectionHeader title={`${companyName} · ${formattedDate}`} align="start" />
 
-      <div className="company-daily-report__summary">
-        <StatsGrid className="company-daily-report__summary-grid">
+      <div className="u-stats-block">
+        <StatsGrid>
           <StatCard value={totalMeals} label="Toplam Tabldot" variant="total" />
           <StatCard value={delivery} label="Siparişle Tabldot" variant="delivery" />
           <StatCard value={dineIn} label="Restoranda Tabldot" variant="dine-in" />
         </StatsGrid>
       </div>
 
-      <div className="company-daily-report__groups u-card-group__grid">
+      <div className="u-card-group__grid">
         {deliveryMeals.length > 0 && (
-          <section className="company-daily-report__section">
+          <section>
             <h2 className="u-card-group__title">
               Siparişler ({deliveryMeals.length})
             </h2>
-            <div className="company-daily-report__card-list u-card-group__list">
+            <div className="u-card-group__list">
               {deliveryMeals.map((meal, idx) => (
                 <EmployeeMealCard key={`delivery-${idx}`} meal={meal} />
               ))}
@@ -87,9 +87,9 @@ const CompanyDailyReportPage = () => {
         )}
 
         {dineInMeals.length > 0 && (
-          <section className="company-daily-report__section">
+          <section>
             <h2 className="u-card-group__title">Restoranda ({dineInMeals.length})</h2>
-            <div className="company-daily-report__card-list u-card-group__list">
+            <div className="u-card-group__list">
               {dineInMeals.map((meal, idx) => (
                 <EmployeeMealCard key={`dinein-${idx}`} meal={meal} />
               ))}

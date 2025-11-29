@@ -4,7 +4,7 @@ import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
 import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard/ReportSummaryCard";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
-import ReportHeader from "@/common/components/ReportHeader/ReportHeader";
+import ReportSectionHeader from "@/common/components/ReportSectionHeader/ReportSectionHeader";
 import "./CompanyYearlyReportPage.scss";
 
 /**
@@ -77,13 +77,13 @@ const CompanyYearlyReportPage = () => {
       <DetailPageHeader title="Raporlar" />
 
       {/* Başlık + Yıl seçici */}
-      <ReportHeader title={companyName}>
+      <ReportSectionHeader title={companyName}>
         <CustomDropdown
           options={availableYears}
           selectedValue={year}
           onSelect={handleYearChange}
         />
-      </ReportHeader>
+      </ReportSectionHeader>
 
       {/* Yıllık Özet Kartları */}
       <div className="u-stats-block">
@@ -107,24 +107,22 @@ const CompanyYearlyReportPage = () => {
       </div>
 
       {/* Aylık Liste */}
-      <div className="monthly-list">
-        <div className="card-stack">
-          {monthlyData.map((data) => (
-            <ReportSummaryCard
-              key={data.monthNumber}
-              title={`${data.month} ${year}`}
-              total={data.summary.total}
-              delivery={data.summary.delivery}
-              dineIn={data.summary.dineIn}
-              onClick={() =>
-                navigate(
-                  `/restaurant/reports/${companyId}/${year}/${data.monthNumber}`,
-                  { state: { companyName } }
-                )
-              }
-            />
-          ))}
-        </div>
+      <div className="u-card-group__list">
+        {monthlyData.map((data) => (
+          <ReportSummaryCard
+            key={data.monthNumber}
+            title={`${data.month} ${year}`}
+            total={data.summary.total}
+            delivery={data.summary.delivery}
+            dineIn={data.summary.dineIn}
+            onClick={() =>
+              navigate(
+                `/restaurant/reports/${companyId}/${year}/${data.monthNumber}`,
+                { state: { companyName } }
+              )
+            }
+          />
+        ))}
       </div>
     </>
   );

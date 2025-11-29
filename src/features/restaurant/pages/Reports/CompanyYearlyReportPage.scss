@@ -1,8 +1,2 @@
-@use "@/styles/variables" as *;
 @use "@/styles/utilities/stats-block";
-
-.monthly-list .card-stack {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-12;
-}
+@use "@/styles/utilities/card-group";

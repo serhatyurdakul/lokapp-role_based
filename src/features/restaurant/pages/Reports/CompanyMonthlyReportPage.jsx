@@ -3,7 +3,7 @@ import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHea
 import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard/ReportSummaryCard";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
-import ReportHeader from "@/common/components/ReportHeader/ReportHeader";
+import ReportSectionHeader from "@/common/components/ReportSectionHeader/ReportSectionHeader";
 import "./CompanyMonthlyReportPage.scss";
 
 /**
@@ -49,7 +49,7 @@ const CompanyMonthlyReportPage = () => {
       <DetailPageHeader title="Aylık Rapor" />
 
       {/* Period Navigation */}
-      <ReportHeader title={`${companyName} · ${monthName} ${year}`} align="start" />
+      <ReportSectionHeader title={`${companyName} · ${monthName} ${year}`} align="start" />
 
       {/* Aylık İstatistikler */}
       <div className="u-stats-block">
@@ -61,24 +61,22 @@ const CompanyMonthlyReportPage = () => {
       </div>
 
       {/* Günlük Kartlar */}
-      <div className="daily-list">
-        <div className="card-stack">
-          {dailyData.map((day) => (
-            <ReportSummaryCard
-              key={day.dateStr}
-              title={day.dateStr}
-              total={day.summary.total}
-              delivery={day.summary.delivery}
-              dineIn={day.summary.dineIn}
-              onClick={() =>
-                navigate(
-                  `/restaurant/reports/${companyId}/${year}/${month}/${String(31 - dailyData.indexOf(day)).padStart(2, "0")}`,
-                  { state: { companyName } }
-                )
-              }
-            />
-          ))}
-        </div>
+      <div className="u-card-group__grid">
+        {dailyData.map((day) => (
+          <ReportSummaryCard
+            key={day.dateStr}
+            title={day.dateStr}
+            total={day.summary.total}
+            delivery={day.summary.delivery}
+            dineIn={day.summary.dineIn}
+            onClick={() =>
+              navigate(
+                `/restaurant/reports/${companyId}/${year}/${month}/${String(31 - dailyData.indexOf(day)).padStart(2, "0")}`,
+                { state: { companyName } }
+              )
+            }
+          />
+        ))}
       </div>
     </>
   );

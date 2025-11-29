@@ -4,7 +4,7 @@ import MealCard from "@/features/customer/components/MealCard/MealCard";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import Button from "@/common/components/Button/Button";
-import ReportHeader from "@/common/components/ReportHeader/ReportHeader";
+import ReportSectionHeader from "@/common/components/ReportSectionHeader/ReportSectionHeader";
 import { ReactComponent as ArrowRightIcon } from "@/assets/icons/arrow-right.svg";
 import "./MonthlyReportPage.scss";
 
@@ -65,7 +65,7 @@ const MonthlyReportPage = () => {
       <DetailPageHeader title='Yemek Geçmişi' />
 
       {/* Period Navigation */}
-      <ReportHeader title={`${currentMonthName} ${year}`}>
+      <ReportSectionHeader title={`${currentMonthName} ${year}`}>
         <Button
           variant='outline-primary'
           className='btn-with-icon'
@@ -74,7 +74,7 @@ const MonthlyReportPage = () => {
           Tüm Aylar
           <ArrowRightIcon aria-hidden='true' />
         </Button>
-      </ReportHeader>
+      </ReportSectionHeader>
 
       {/* Period Summary */}
       <div className='u-stats-block'>
@@ -86,7 +86,7 @@ const MonthlyReportPage = () => {
       </div>
 
       {/* Daily Cards */}
-      <div className='meal-history'>
+      <div className='u-card-group__list'>
         {dailyMealHistory.map((meal, index) => (
           <MealCard key={index} meal={meal} />
         ))}

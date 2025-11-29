@@ -165,7 +165,7 @@ const ProfilePage = () => {
             </button>
           }
         >
-          <div className='profile__mealHistory'>
+          <div className='u-card-group__list'>
             {mealHistory.map((meal, index) => (
               <MealCard key={index} meal={meal} />
             ))}
