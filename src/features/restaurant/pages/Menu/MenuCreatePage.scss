@@ -26,31 +26,36 @@
   &__pending {
     display: flex;
     flex-direction: column;
-    gap: $spacing-12;
     margin-top: $spacing-16;
 
     &-title {
-      font-size: 1rem;
+      font-size: 1.125rem;
       font-weight: 600;
       color: var(--text-color);
+      margin-bottom: $spacing-12;
     }
 
     &-category {
       display: flex;
       flex-direction: column;
+      margin-bottom: $spacing-16;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
     &-category-title {
-      font-size: 0.875rem;
+      font-size: 1rem;
       font-weight: 600;
       color: var(--text-color);
+      margin-bottom: $spacing-12;
     }
 
     &-list {
       display: flex;
       flex-direction: column;
-      gap: $spacing-8;
-      margin-top: $spacing-8;
+      gap: $spacing-12;
     }
 
     &-item {
