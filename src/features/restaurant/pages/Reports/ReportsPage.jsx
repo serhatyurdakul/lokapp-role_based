@@ -184,11 +184,11 @@ const RestaurantReportsPage = () => {
   return (
     <>
       <DetailPageHeader title='Firma Raporları' />
-      <div className='reports-content'>
+      <div className='reports'>
         {/* Aylık Özet İstatistikler */}
-        <div className='reports-summary'>
-          <div className='summary-controls'>
-            <div className='period-dropdowns'>
+        <div className='reports__summary'>
+          <div className='reports__controls'>
+            <div className='reports__periods'>
               <CustomDropdown
                 options={monthOptions}
                 selectedValue={selectedMonth}
@@ -200,9 +200,9 @@ const RestaurantReportsPage = () => {
                 onSelect={setSelectedYear}
               />
             </div>
-            <div className='site-dropdown'>
+            <div className='reports__site-dropdown'>
               <CustomDropdown
-                className='site-filter'
+                className='reports__site-filter'
                 options={siteOptions}
                 selectedValue={selectedSite}
                 onSelect={setSelectedSite}
@@ -236,7 +236,7 @@ const RestaurantReportsPage = () => {
             </StatsGrid>
           </div>
         </div>
-        <div className='search-bar-container'>
+        <div className='reports__search'>
           <SearchBar
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -246,7 +246,7 @@ const RestaurantReportsPage = () => {
         </div>
 
         {/* Firma Listesi */}
-        <div className='reports-list'>
+        <div className='u-card-group__list'>
           {activeCompanies.length > 0 ? (
             <>
               {activeCompanies.map((company) => (

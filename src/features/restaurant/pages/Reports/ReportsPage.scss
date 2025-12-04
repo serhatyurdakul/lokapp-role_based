@@ -1,43 +1,43 @@
 @use "@/styles/variables" as *;
+@use "@/styles/utilities/card-group";
 @use "@/styles/utilities/empty-state";
 @use "@/styles/utilities/stats-block";
 @use "@/styles/utilities/context-meta";
 
-.reports-content {
+.reports {
   display: flex;
   flex-direction: column;
 }
 
-.summary-controls {
+.reports__summary {
+  display: flex;
+  flex-direction: column;
+}
+
+.reports__controls {
   display: flex;
   flex-direction: column;
   gap: $spacing-8;
   margin-bottom: $spacing-12;
 }
 
-.period-dropdowns {
+.reports__periods {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: $spacing-8;
 }
 
-.site-dropdown {
+.reports__site-dropdown {
   width: 100%;
 }
 
-.site-dropdown .site-filter {
+.reports__site-filter {
   width: 100%;
 }
 
-.search-bar-container {
+.reports__search {
   width: 100%;
   grid-column: 1/-1;
   margin-top: 0;
   margin-bottom: $spacing-12;
-}
-
-.reports-list {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-12;
 }
