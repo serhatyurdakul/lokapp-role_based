@@ -12,6 +12,7 @@
   white-space: nowrap;
   background-color: var(--surface-tertiary);
   color: var(--text-secondary);
+  flex-shrink: 0;
 
   &__icon {
     display: inline-flex;

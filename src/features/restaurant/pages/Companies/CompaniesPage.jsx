@@ -113,16 +113,16 @@ const CompaniesPage = () => {
             >
               <div className='content'>
                 <span className='name'>{c.companyName}</span>
-                <Badge className='site-badge' tone='neutral'>
-                  {c.siteName}
-                </Badge>
+                <Badge tone='neutral'>{c.siteName}</Badge>
               </div>
               <ChevronRightIcon className='chevron' />
             </button>
           ))}
 
           {filtered.length === 0 && (
-            <div className='u-empty-state'>Arama sonucuna uygun firma bulunamadı.</div>
+            <div className='u-empty-state'>
+              Arama sonucuna uygun firma bulunamadı.
+            </div>
           )}
         </div>
       </div>

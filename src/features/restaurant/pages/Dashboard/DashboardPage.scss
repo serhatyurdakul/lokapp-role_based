@@ -1,5 +1,6 @@
 @use "@/styles/variables" as *;
 @use "@/styles/utilities/section-label";
+@use "@/styles/utilities/empty-state";
 
 .cutoff-info {
   display: flex;
@@ -140,13 +141,4 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: $spacing-12;
-}
-.stock-alerts .no-alerts {
-  grid-column: 1/-1;
-  background: var(--background-secondary);
-  border-radius: $border-radius;
-  padding: $spacing-24;
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: 0.875rem;
 }

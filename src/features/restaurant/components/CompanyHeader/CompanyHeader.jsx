@@ -5,18 +5,18 @@ import "./CompanyHeader.scss";
 const CompanyHeader = ({ companyName, region, totalPeople, status }) => {
   return (
     <div className='company-header'>
-      <div className='company-info'>
-        <div className='company-title-row'>
-          <h2 className='company-name'>{companyName}</h2>
+      <div className='company-header__info'>
+        <div className='company-header__title-row'>
+          <h2 className='company-header__name'>{companyName}</h2>
           <Badge
-            className='status-badge'
+            className='company-header__badge'
             tone={status === "pending" ? "pending" : "completed"}
           >
             {status === "pending" ? "Bekliyor" : "Tamamlandı"}
           </Badge>
         </div>
-        <div className='company-meta'>
-          <span className='meta-text'>
+        <div className='company-header__meta'>
+          <span className='company-header__meta-text'>
             {region} • {totalPeople} kişilik
           </span>
         </div>

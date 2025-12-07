@@ -44,7 +44,6 @@
 }
 .order-card .order-header .order-region {
   align-self: flex-start;
-  flex-shrink: 0;
 }
 .order-card .order-header h3 {
   margin: 0;
@@ -74,6 +73,4 @@
   color: var(--text-secondary);
   font-size: 0.875rem;
 }
-.order-card .order-meta .order-status {
-  flex-shrink: 0;
-}
+

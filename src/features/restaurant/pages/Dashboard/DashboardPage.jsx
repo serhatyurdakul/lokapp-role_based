@@ -260,7 +260,7 @@ const DashboardPage = () => {
               />
             ))}
           {!isLoading && mealsByRemainingAsc.length === 0 && (
-            <div className='no-alerts'>
+            <div className='u-empty-state'>
               <p>Kritik porsiyon durumu bulunmuyor</p>
             </div>
           )}

@@ -39,10 +39,6 @@
     color: var(--text-secondary);
   }
 
-  &__type {
-    flex-shrink: 0;
-  }
-
   &__body {
     display: flex;
     flex-direction: column;

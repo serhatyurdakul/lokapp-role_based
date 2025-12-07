@@ -7,28 +7,29 @@
   border: 1px solid var(--border-color);
   margin-bottom: $spacing-16;
 }
-.company-header .company-info {
+
+.company-header__info {
   display: flex;
   flex-direction: column;
   gap: $spacing-8;
 }
-.company-header .company-info .company-title-row {
+
+.company-header__title-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: $spacing-12;
 }
-.company-header .company-info .company-title-row .company-name {
+
+.company-header__name {
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--text-color);
   margin: 0;
   flex: 1;
 }
-.company-header .company-info .company-title-row .status-badge {
-  flex-shrink: 0;
-}
-.company-header .company-info .company-meta .meta-text {
+
+.company-header__meta-text {
   font-size: 0.875rem;
   color: var(--text-secondary);
   line-height: 1.4;
