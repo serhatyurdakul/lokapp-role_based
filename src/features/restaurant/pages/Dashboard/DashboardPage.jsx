@@ -10,7 +10,7 @@ import { getStockStatus } from "../../utils/stockUtils";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import { ReactComponent as ChevronRightIcon } from "@/assets/icons/chevron-right.svg";
-import StockAlertCard from "../../components/StockAlertCard/StockAlertCard";
+import PortionCard from "../../components/PortionCard/PortionCard";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
 import Toast from "@/common/components/Toast/Toast.jsx";
 import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
@@ -250,7 +250,7 @@ const DashboardPage = () => {
           )}
           {mealsByRemainingAsc.length > 0 &&
             mealsByRemainingAsc.map((meal) => (
-              <StockAlertCard
+              <PortionCard
                 key={meal.id}
                 title={meal.mealName}
                 remaining={meal.currentStock}

@@ -1,0 +1,43 @@
+@use "@/styles/variables" as *;
+
+.portion-card {
+  background-color: var(--background-primary);
+  padding: $spacing-12 10px;
+  border-radius: $border-radius;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--background-primary);
+  }
+
+  &:active {
+    background: var(--overlay-pressed);
+  }
+
+  &--critical {
+    border-color: var(--error-color);
+  }
+
+  &--warning {
+    border-color: var(--warning-color);
+  }
+
+  &__header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: $spacing-4;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+}

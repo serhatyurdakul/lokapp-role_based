@@ -9,68 +9,80 @@
   cursor: pointer;
   position: relative;
   overflow: hidden;
-}
-.order-card:active {
-  background: var(--overlay-pressed);
-}
-.order-card.completed::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: var(--order-completed-color);
-}
-.order-card.pending::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: var(--order-pending-color);
-}
-.order-card .order-header {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-8;
-  margin-bottom: $spacing-12;
-}
-.order-card .order-header .order-header__top {
-  display: flex;
-  align-items: center;
-  gap: $spacing-8;
-}
-.order-card .order-header .order-region {
-  align-self: flex-start;
-}
-.order-card .order-header h3 {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 600;
-  flex: 1;
-  min-width: 0;
-  color: var(--text-color);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.order-card .order-header .chevron {
-  width: 16px;
-  height: 16px;
-  color: var(--text-secondary);
-  flex-shrink: 0;
-}
-.order-card .order-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.order-card .order-meta .order-items {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-}
 
+  &:active {
+    background: var(--overlay-pressed);
+  }
+
+  &--completed::before,
+  &--pending::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+  }
+
+  &--completed::before {
+    background: var(--order-completed-color);
+  }
+
+  &--pending::before {
+    background: var(--order-pending-color);
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-8;
+    margin-bottom: $spacing-12;
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: $spacing-8;
+  }
+
+  &__region {
+    align-self: flex-start;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    flex: 1;
+    min-width: 0;
+    color: var(--text-color);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__chevron {
+    width: 16px;
+    height: 16px;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+
+  &__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__items {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  &__status {
+    flex-shrink: 0;
+  }
+}

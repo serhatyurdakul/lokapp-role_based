@@ -2,23 +2,25 @@ import PropTypes from "prop-types";
 import StockBadge from "@/common/components/StockBadge/StockBadge";
 import Badge from "@/common/components/Badge/Badge";
 import { getStockStatus } from "../../utils/stockUtils";
-import "./StockAlertCard.scss";
+import "./PortionCard.scss";
 
-const StockAlertCard = ({
+const PortionCard = ({
   title,
   remaining,
   sold,
   status,
   onClick,
-  variant = "alert",
+  variant = "status",
   added,
 }) => {
   const isInteractive = typeof onClick === "function";
+  const resolvedStatus =
+    variant === "status" ? status ?? getStockStatus(remaining ?? 0) : "";
   const statusClass =
-    variant === "alert" ? status ?? getStockStatus(remaining ?? 0) : "";
-  const cardClassName = `alert-card ${statusClass} ${
-    isInteractive ? "interactive" : ""
-  }`.trim();
+    resolvedStatus && ["critical", "warning"].includes(resolvedStatus)
+      ? `portion-card--${resolvedStatus}`
+      : "";
+  const cardClassName = ["portion-card", statusClass].filter(Boolean).join(" ");
 
   return (
     <div
@@ -34,28 +36,26 @@ const StockAlertCard = ({
         }
       }}
     >
-      <div className='alert-header'>
-        <h4>{title}</h4>
-        {variant === "alert" ? (
+      <div className='portion-card__header'>
+        <h4 className='portion-card__title'>{title}</h4>
+        {variant === "status" ? (
           <StockBadge remaining={remaining ?? 0} sold={sold ?? 0} />
         ) : added !== undefined ? (
-          <Badge className='added-chip' tone='delivery'>
-            Eklenecek {Number(added) || 0}
-          </Badge>
+          <Badge tone='delivery'>Eklenecek {Number(added) || 0}</Badge>
         ) : null}
       </div>
     </div>
   );
 };
 
-StockAlertCard.propTypes = {
+PortionCard.propTypes = {
   title: PropTypes.string.isRequired,
   remaining: PropTypes.number,
   sold: PropTypes.number,
   status: PropTypes.string,
   onClick: PropTypes.func,
-  variant: PropTypes.oneOf(["alert", "summary"]),
+  variant: PropTypes.oneOf(["status", "pending"]),
   added: PropTypes.number,
 };
 
-export default StockAlertCard;
+export default PortionCard;

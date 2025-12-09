@@ -17,7 +17,7 @@ import {
   selectMenuMealsAndCategories,
 } from "../../store/restaurantMenuSlice";
 import useAddMeal from "../../hooks/useAddMeal";
-import StockAlertCard from "../../components/StockAlertCard/StockAlertCard";
+import PortionCard from "../../components/PortionCard/PortionCard";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
 import "./MenuCreatePage.scss";
 
@@ -425,7 +425,9 @@ const MenuCreatePage = () => {
             value={searchQuery}
             onChange={handleSearchChange}
             placeholder={
-              isLoadingMealOptions ? "Yemekler yükleniyor..." : "Yemek adı arayın"
+              isLoadingMealOptions
+                ? "Yemekler yükleniyor..."
+                : "Yemek adı arayın"
             }
             required
             isClearable={true}
@@ -486,7 +488,11 @@ const MenuCreatePage = () => {
                     {statusLabel ? (
                       <Badge
                         className='menu-create-page__search-item-badge'
-                        tone={mealOption.status === "pending" ? "delivery" : "dine-in"}
+                        tone={
+                          mealOption.status === "pending"
+                            ? "delivery"
+                            : "dine-in"
+                        }
                       >
                         {statusLabel}
                       </Badge>
@@ -551,9 +557,9 @@ const MenuCreatePage = () => {
                     key={meal.pendingId}
                     className='menu-create-page__pending-item'
                   >
-                    <StockAlertCard
+                    <PortionCard
                       title={meal.mealName}
-                      variant='summary'
+                      variant='pending'
                       added={meal.quantity ?? 0}
                       onClick={() => openPendingMealModal(meal)}
                     />
