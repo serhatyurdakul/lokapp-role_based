@@ -4,9 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 import PageHeader from "@/common/components/PageHeader/PageHeader";
 import Loading from "@/common/components/Loading/Loading.jsx";
 import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
-import { fetchRestaurantMenuData, selectMenuMealsAndCategories } from "../../store/restaurantMenuSlice";
+import {
+  fetchRestaurantMenuData,
+  selectMenuMealsAndCategories,
+} from "../../store/restaurantMenuSlice";
 import { fetchRestaurantOrders } from "../../store/restaurantOrdersSlice";
-import { getStockStatus } from "../../utils/stockUtils";
+import { getPortionStatus } from "../../utils/portionUtils";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import { ReactComponent as ChevronRightIcon } from "@/assets/icons/chevron-right.svg";
@@ -84,7 +87,7 @@ const DashboardPage = () => {
           ? meal.currentStock
           : meal.remainingQuantity ?? 0,
       quantity: typeof meal.quantity === "number" ? meal.quantity : 0,
-      status: getStockStatus(
+      status: getPortionStatus(
         typeof meal.currentStock === "number"
           ? meal.currentStock
           : meal.remainingQuantity ?? 0
@@ -123,7 +126,8 @@ const DashboardPage = () => {
 
   const pendingOrdersCount = useMemo(() => {
     if (!Array.isArray(restaurantOrders)) return 0;
-    return restaurantOrders.filter((order) => order.status === "pending").length;
+    return restaurantOrders.filter((order) => order.status === "pending")
+      .length;
   }, [restaurantOrders]);
 
   const summaryStats = useMemo(
@@ -163,7 +167,6 @@ const DashboardPage = () => {
         />
       )}
 
-
       <div className='dashboard-quick-cards'>
         <button
           type='button'
@@ -176,7 +179,10 @@ const DashboardPage = () => {
               <span className='quick-card-count'>{pendingOrdersCount}</span>
               <span className='quick-card-unit'>firma</span>
             </div>
-            <ChevronRightIcon className='quick-card-chevron' aria-hidden='true' />
+            <ChevronRightIcon
+              className='quick-card-chevron'
+              aria-hidden='true'
+            />
           </div>
         </button>
 
@@ -191,7 +197,10 @@ const DashboardPage = () => {
               <span className='quick-card-count'>{qrScansToday}</span>
               <span className='quick-card-unit'>kişi</span>
             </div>
-            <ChevronRightIcon className='quick-card-chevron' aria-hidden='true' />
+            <ChevronRightIcon
+              className='quick-card-chevron'
+              aria-hidden='true'
+            />
           </div>
         </button>
       </div>

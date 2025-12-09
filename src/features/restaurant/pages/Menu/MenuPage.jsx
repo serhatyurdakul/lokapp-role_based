@@ -23,7 +23,7 @@ import {
   fetchRestaurantMenuData,
   selectMenuMealsAndCategories,
 } from "../../store/restaurantMenuSlice";
-import StockBadge from "@/common/components/StockBadge/StockBadge";
+import PortionBadge from "@/common/components/PortionBadge/PortionBadge";
 
 // Extracted outside component to keep stable reference
 
@@ -53,10 +53,7 @@ const MenuPage = () => {
 
   const { user } = useSelector((state) => state.auth);
   const { info: restaurantInfo } = useSelector((state) => state.restaurantInfo);
-  const {
-    isLoading,
-    error,
-  } = useSelector((state) => state.restaurantMenu);
+  const { isLoading, error } = useSelector((state) => state.restaurantMenu);
   const restaurantId = user?.restaurantId;
   const orderCutoffTime =
     restaurantInfo?.orderCutoffTime ||
@@ -245,8 +242,8 @@ const MenuPage = () => {
     } else {
       // Show meals only for the selected category
       const categoryName =
-        menuCategoryOptions.find((cat) => cat.id === selectedCategory)
-          ?.name || "";
+        menuCategoryOptions.find((cat) => cat.id === selectedCategory)?.name ||
+        "";
 
       // If search yields no results for the selected category, render nothing
       return searchedMeals.length > 0 ? { [categoryName]: searchedMeals } : {};
@@ -298,7 +295,7 @@ const MenuPage = () => {
                     <h3 className='menu-page__meal-name'>{meal.mealName}</h3>
                     <div className='menu-page__meal-stock'>
                       <div className='menu-page__meal-stock-details'>
-                        <StockBadge
+                        <PortionBadge
                           remaining={meal.currentStock}
                           sold={meal.orderCount}
                         />
@@ -427,7 +424,8 @@ const MenuPage = () => {
               <h4>{selectedMealForDelete.mealName}</h4>
               {selectedMealOrderCount > 0 && (
                 <p className='menu-page__delete-warning-text'>
-                  Şu anda {selectedMealOrderCount} kişi bu yemeği sipariş etti. Silerseniz mevcut sipariş kayıtlarında görünmeye devam eder.
+                  Şu anda {selectedMealOrderCount} kişi bu yemeği sipariş etti.
+                  Silerseniz mevcut sipariş kayıtlarında görünmeye devam eder.
                 </p>
               )}
               <p className='menu-page__delete-warning'>

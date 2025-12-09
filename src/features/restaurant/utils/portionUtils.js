@@ -1,4 +1,4 @@
-export const getStockStatus = (currentStock) => {
+export const getPortionStatus = (currentStock) => {
   if (currentStock === 0) {
     return "depleted";
   }
