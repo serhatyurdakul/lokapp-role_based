@@ -159,7 +159,7 @@
     min-height: 2.3625rem;
   }
 
-  &__meal-stock {
+  &__meal-portion {
     display: flex;
     flex-direction: column;
     gap: $spacing-8;
@@ -167,7 +167,7 @@
     padding-right: 0;
   }
 
-  &__meal-stock-details {
+  &__meal-portion-details {
     flex: 1;
     max-width: 100%;
 

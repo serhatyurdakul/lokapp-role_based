@@ -34,7 +34,7 @@ const useAddMeal = (
   const [showSearchResults, setShowSearchResults] = useState(false);
   const searchResultsRef = useRef(null);
   const [selectedCategoryInModal, setSelectedCategoryInModal] = useState("");
-  const [newStock, setNewStock] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [mealOptions, setMealOptions] = useState([]);
@@ -120,7 +120,7 @@ const useAddMeal = (
   // Reset all form-related state
   const resetFormStates = () => {
     setSearchQuery("");
-    setNewStock("");
+    setQuantity("");
     setShowSearchResults(false);
     setSelectedMeal(null);
     setFilteredMealOptions([]);
@@ -140,7 +140,7 @@ const useAddMeal = (
     setSelectedMeal(null);
     setFilteredMealOptions([]);
     setMealExistsError("");
-    setNewStock("");
+    setQuantity("");
   };
 
   const handleMealOptionSearchChange = (e) => {
@@ -244,8 +244,8 @@ const useAddMeal = (
       return;
     }
 
-    const stockValue = parseInt(newStock, 10);
-    if (isNaN(stockValue) || stockValue <= 0) {
+    const quantityValue = parseInt(quantity, 10);
+    if (isNaN(quantityValue) || quantityValue <= 0) {
       return;
     }
 
@@ -255,7 +255,7 @@ const useAddMeal = (
 
     const mealToAdd = {
       mealMenuId: selectedMeal.id.toString(),
-      quantity: stockValue.toString(),
+      quantity: quantityValue.toString(),
       restaurantId: restaurantId.toString(),
     };
 
@@ -264,7 +264,7 @@ const useAddMeal = (
       if (typeof submitHandler === "function") {
         const result = await submitHandler({
           selectedMeal,
-          stockValue,
+          quantityValue,
           selectedCategoryId: selectedCategoryInModal,
           payload: mealToAdd,
         });
@@ -296,11 +296,11 @@ const useAddMeal = (
   };
 
   // Derive disabled state for the primary button
-  const stockValue = Number(newStock);
-  const isStockInvalid =
-    newStock.trim() === "" || isNaN(stockValue) || stockValue <= 0;
+  const quantityValue = Number(quantity);
+  const isQuantityInvalid =
+    quantity.trim() === "" || isNaN(quantityValue) || quantityValue <= 0;
 
-  const isButtonDisabledDueToFields = !selectedMeal || isStockInvalid;
+  const isButtonDisabledDueToFields = !selectedMeal || isQuantityInvalid;
   const finalIsPrimaryButtonDisabled =
     isSubmitting || isButtonDisabledDueToFields;
 
@@ -309,14 +309,14 @@ const useAddMeal = (
     showSearchResults,
     searchResultsRef,
     selectedCategoryInModal,
-    newStock,
+    quantity,
     selectedMeal,
     isSubmitting,
     filteredMealOptions,
     isLoadingMealOptions,
     mealExistsError,
     finalIsPrimaryButtonDisabled,
-    setNewStock,
+    setQuantity,
     handleModalCategoryChange,
     handleMealOptionSearchChange,
     handleSelectMealOption,

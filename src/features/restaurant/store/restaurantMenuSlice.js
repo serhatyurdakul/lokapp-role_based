@@ -117,6 +117,24 @@ const sortMenuData = (menuData) => {
 
 const selectMenuData = (state) => state.restaurantMenu.menuData;
 
+const mapApiMealToUi = (meal) => ({
+  ...meal,
+  remainingQuantity:
+    typeof meal.remainingQuantity === "number"
+      ? meal.remainingQuantity
+      : Number(meal.remainingQuantity) || 0,
+  quantity:
+    typeof meal.quantity === "number"
+      ? meal.quantity
+      : Number(meal.quantity) || 0,
+  orderedQuantity:
+    typeof meal.orderCount === "number"
+      ? meal.orderCount
+      : Number(meal.orderCount) || 0,
+  mealName: meal.name || meal.mealName || "",
+  imageUrl: meal.photoUrl || meal.imageUrl,
+});
+
 // Flattened meals list and categories for FilterBar
 export const selectMenuMealsAndCategories = createSelector(
   [selectMenuData],
@@ -124,12 +142,7 @@ export const selectMenuMealsAndCategories = createSelector(
     const sortedMenuData = sortMenuData(menuData);
 
     const menuMeals = sortedMenuData.flatMap((categoryGroup) =>
-      (categoryGroup.meals || []).map((meal) => ({
-        ...meal,
-        currentStock: meal.remainingQuantity,
-        mealName: meal.name,
-        imageUrl: meal.photoUrl,
-      }))
+      (categoryGroup.meals || []).map(mapApiMealToUi)
     );
 
     const menuCategoryOptions = [

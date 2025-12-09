@@ -82,19 +82,12 @@ const DashboardPage = () => {
     const mapped = filtered.map((meal) => ({
       ...meal,
       mealName: meal.mealName || meal.name || "",
-      currentStock:
-        typeof meal.currentStock === "number"
-          ? meal.currentStock
-          : meal.remainingQuantity ?? 0,
-      quantity: typeof meal.quantity === "number" ? meal.quantity : 0,
-      status: getPortionStatus(
-        typeof meal.currentStock === "number"
-          ? meal.currentStock
-          : meal.remainingQuantity ?? 0
-      ),
+      remainingQuantity: meal.remainingQuantity ?? 0,
+      quantity: meal.quantity ?? 0,
+      status: getPortionStatus(meal.remainingQuantity ?? 0),
     }));
 
-    mapped.sort((a, b) => a.currentStock - b.currentStock);
+    mapped.sort((a, b) => a.remainingQuantity - b.remainingQuantity);
     return mapped;
   }, [menuMeals, selectedCategory]);
 
@@ -107,8 +100,8 @@ const DashboardPage = () => {
       id: meal.id,
       mealName: meal.mealName || meal.name || "",
       quantity:
-        typeof meal.currentStock === "number"
-          ? meal.currentStock
+        typeof meal.remainingQuantity === "number"
+          ? meal.remainingQuantity
           : meal.remainingQuantity ?? meal.quantity ?? 0,
     });
     setIsUpdateModalOpen(true);
@@ -232,7 +225,7 @@ const DashboardPage = () => {
         </StatsGrid>
       </div>
 
-      <div className='stock-alerts'>
+      <div className='portion-section'>
         <div className='dashboard-section-header'>
           <h2>Kalan Porsiyonlar</h2>
         </div>
@@ -253,7 +246,7 @@ const DashboardPage = () => {
           />
         </div>
 
-        <div className='alert-cards'>
+        <div className='portion-cards'>
           {isLoading && mealsByRemainingAsc.length === 0 && (
             <Loading text='Kalan porsiyonlar yükleniyor...' />
           )}
@@ -262,7 +255,7 @@ const DashboardPage = () => {
               <PortionCard
                 key={meal.id}
                 title={meal.mealName}
-                remaining={meal.currentStock}
+                remaining={meal.remainingQuantity}
                 sold={meal.orderCount}
                 status={meal.status}
                 onClick={() => handleOpenUpdateModal(meal)}

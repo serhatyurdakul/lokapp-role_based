@@ -125,7 +125,7 @@ const MenuCreatePage = () => {
   }, [error]);
 
   const handlePendingSubmit = useCallback(
-    ({ selectedMeal, stockValue, selectedCategoryId }) => {
+    ({ selectedMeal, quantity: quantityValue, selectedCategoryId }) => {
       if (pendingMeals.some((item) => item.mealMenuId === selectedMeal.id)) {
         throw new Error("Bu yemek ekleme listesinde zaten mevcut.");
       }
@@ -138,7 +138,7 @@ const MenuCreatePage = () => {
         pendingId: `${selectedMeal.id}-${Date.now()}`,
         mealMenuId: selectedMeal.id,
         mealName: selectedMeal.mealName,
-        quantity: stockValue,
+        quantity: quantityValue,
         categoryId: selectedCategoryId,
         categoryName: category?.name || "Diğer",
       };
@@ -156,13 +156,13 @@ const MenuCreatePage = () => {
     searchResultsRef,
     selectedCategoryInModal,
     selectedMeal,
-    newStock,
+    quantity,
     isSubmitting,
     filteredMealOptions,
     isLoadingMealOptions,
     mealExistsError,
     finalIsPrimaryButtonDisabled,
-    setNewStock,
+    setQuantity,
     handleModalCategoryChange,
     handleMealOptionSearchChange,
     handleSelectMealOption,
@@ -200,7 +200,7 @@ const MenuCreatePage = () => {
 
   useEffect(() => {
     if (selectedMeal) {
-      document.getElementById("menu-create-stock-input")?.focus();
+      document.getElementById("menu-create-quantity-input")?.focus();
     }
   }, [selectedMeal]);
 
@@ -244,8 +244,8 @@ const MenuCreatePage = () => {
     handleClearMealOptionSearch();
   };
 
-  const handleStockInputChange = (event) => {
-    setNewStock(event.target.value);
+  const handleQuantityInputChange = (event) => {
+    setQuantity(event.target.value);
   };
 
   const handleSubmit = async (event) => {
@@ -513,17 +513,17 @@ const MenuCreatePage = () => {
 
         <FormInput
           label='Porsiyon Sayısı'
-          id='menu-create-stock-input'
-          name='stock'
+          id='menu-create-quantity-input'
+          name='quantity'
           type='number'
-          value={newStock}
-          onChange={handleStockInputChange}
+          value={quantity}
+          onChange={handleQuantityInputChange}
           placeholder='Örneğin: 50'
           min='0'
           inputMode='numeric'
           required
           isClearable={true}
-          onClear={() => setNewStock("")}
+          onClear={() => setQuantity("")}
         />
 
         <div className='menu-create-page__actions'>

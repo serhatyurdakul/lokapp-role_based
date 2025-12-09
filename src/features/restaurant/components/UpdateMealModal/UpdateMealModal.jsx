@@ -19,12 +19,12 @@ const UpdateMealModal = ({
   const isPendingMode = mode === "pending";
 
   const {
-    newStock,
+    quantity,
     isSubmitting,
     error,
     isSubmitDisabled,
-    handleStockChange,
-    handleClearStock,
+    handleQuantityChange,
+    handleClearQuantity,
     markSoldOut,
     handleUpdateMeal,
   } = useUpdateMeal(
@@ -76,7 +76,7 @@ const UpdateMealModal = ({
   };
 
   const labelText = isPendingMode ? "Porsiyon Sayısı" : "Kalan Porsiyon Sayısı";
-  const quantityValue = isPendingMode ? pendingQuantity : newStock;
+  const quantityValue = isPendingMode ? pendingQuantity : quantity;
   const primaryDisabled = isPendingMode
     ? pendingQuantity.trim() === "" || Number.isNaN(Number(pendingQuantity)) || Number(pendingQuantity) < 0
     : isSubmitDisabled;
@@ -101,15 +101,17 @@ const UpdateMealModal = ({
           label={labelText}
           placeholder='Örneğin: 50'
           type='number'
-          id='newStockModalInput'
-          name='newStock'
+          id='quantityModalInput'
+          name='quantity'
           value={quantityValue}
-          onChange={isPendingMode ? handlePendingQuantityChange : handleStockChange}
+          onChange={
+            isPendingMode ? handlePendingQuantityChange : handleQuantityChange
+          }
           min='0'
           inputMode='numeric'
           required
           isClearable={true}
-          onClear={isPendingMode ? handlePendingClear : handleClearStock}
+          onClear={isPendingMode ? handlePendingClear : handleClearQuantity}
         />
         <div className={`update-meal__tertiary ${
           isPendingMode ? "update-meal__tertiary--pending" : ""

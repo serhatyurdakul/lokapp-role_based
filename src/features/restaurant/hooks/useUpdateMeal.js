@@ -10,33 +10,33 @@ const useUpdateMeal = (
   options = {}
 ) => {
   const { autoCloseOnSuccess = true, enabled = true } = options;
-  const [newStock, setNewStock] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  // Prefill stock and clear error when the modal opens
+  // Prefill quantity and clear error when the modal opens
   useEffect(() => {
     if (!enabled) {
       return;
     }
     if (isOpen && selectedMeal) {
-      setNewStock(selectedMeal.quantity?.toString() || "");
+      setQuantity(selectedMeal.quantity?.toString() || "");
       setError("");
     }
   }, [enabled, isOpen, selectedMeal]);
 
-  const handleStockChange = (e) => {
-    setNewStock(e.target.value);
+  const handleQuantityChange = (e) => {
+    setQuantity(e.target.value);
     setError("");
   };
 
-  const handleClearStock = () => {
-    setNewStock("");
+  const handleClearQuantity = () => {
+    setQuantity("");
     setError("");
   };
 
   const markSoldOut = () => {
-    setNewStock("0");
+    setQuantity("0");
     setError("");
   };
 
@@ -52,8 +52,8 @@ const useUpdateMeal = (
       return;
     }
 
-    const stockValue = parseInt(newStock, 10);
-    if (isNaN(stockValue) || stockValue < 0) {
+    const quantityValue = parseInt(quantity, 10);
+    if (isNaN(quantityValue) || quantityValue < 0) {
       setError("Geçerli bir porsiyon sayısı girin.");
       return;
     }
@@ -65,7 +65,7 @@ const useUpdateMeal = (
 
     const updateData = {
       mealId: selectedMeal.id.toString(),
-      quantity: stockValue.toString(),
+      quantity: quantityValue.toString(),
       restaurantId: restaurantId.toString(),
     };
 
@@ -86,20 +86,20 @@ const useUpdateMeal = (
     return null;
   };
 
-  const stockValue = Number(newStock);
-  const isStockInvalid =
-    newStock.trim() === "" || isNaN(stockValue) || stockValue < 0;
+  const quantityValue = Number(quantity);
+  const isQuantityInvalid =
+    quantity.trim() === "" || isNaN(quantityValue) || quantityValue < 0;
   const isSubmitDisabled =
-    !enabled || isSubmitting || isStockInvalid || !selectedMeal;
+    !enabled || isSubmitting || isQuantityInvalid || !selectedMeal;
 
   return {
-    newStock,
+    quantity,
     isSubmitting,
     error,
     isSubmitDisabled,
 
-    handleStockChange,
-    handleClearStock,
+    handleQuantityChange,
+    handleClearQuantity,
     markSoldOut,
     handleUpdateMeal,
   };

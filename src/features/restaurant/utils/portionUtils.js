@@ -1,11 +1,11 @@
-export const getPortionStatus = (currentStock) => {
-  if (currentStock === 0) {
+export const getPortionStatus = (remainingQuantity) => {
+  if (remainingQuantity === 0) {
     return "depleted";
   }
-  if (currentStock <= 15) {
+  if (remainingQuantity <= 15) {
     return "critical";
   }
-  if (currentStock <= 35) {
+  if (remainingQuantity <= 35) {
     return "warning";
   }
   return "good";

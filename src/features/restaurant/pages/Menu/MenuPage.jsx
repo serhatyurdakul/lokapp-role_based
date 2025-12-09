@@ -293,10 +293,10 @@ const MenuPage = () => {
                   </div>
                   <div className='menu-page__meal-content'>
                     <h3 className='menu-page__meal-name'>{meal.mealName}</h3>
-                    <div className='menu-page__meal-stock'>
-                      <div className='menu-page__meal-stock-details'>
+                    <div className='menu-page__meal-portion'>
+                      <div className='menu-page__meal-portion-details'>
                         <PortionBadge
-                          remaining={meal.currentStock}
+                        remaining={meal.remainingQuantity}
                           sold={meal.orderCount}
                         />
                       </div>
