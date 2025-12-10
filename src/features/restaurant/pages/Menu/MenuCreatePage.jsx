@@ -156,7 +156,7 @@ const MenuCreatePage = () => {
     searchResultsRef,
     selectedCategoryInModal,
     selectedMeal,
-    quantity: quantityInput,
+    quantityInput,
     isSubmitting,
     filteredMealOptions,
     isLoadingMealOptions,
