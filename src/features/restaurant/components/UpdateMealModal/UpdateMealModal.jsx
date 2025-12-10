@@ -78,9 +78,13 @@ const UpdateMealModal = ({
   const labelText = isPendingMode ? "Porsiyon Sayısı" : "Kalan Porsiyon Sayısı";
   const quantityValue = isPendingMode ? pendingQuantity : quantity;
   const primaryDisabled = isPendingMode
-    ? pendingQuantity.trim() === "" || Number.isNaN(Number(pendingQuantity)) || Number(pendingQuantity) < 0
+    ? pendingQuantity.trim() === "" ||
+      Number.isNaN(Number(pendingQuantity)) ||
+      Number(pendingQuantity) < 0
     : isSubmitDisabled;
-  const primaryAction = isPendingMode ? handlePendingUpdateSubmit : handleUpdateMeal;
+  const primaryAction = isPendingMode
+    ? handlePendingUpdateSubmit
+    : handleUpdateMeal;
   const errorMessage = isPendingMode ? pendingError : error;
 
   return (
@@ -88,7 +92,13 @@ const UpdateMealModal = ({
       isOpen={isOpen}
       onClose={onClose}
       title='Porsiyon Güncelle'
-      primaryButtonText={isPendingMode ? "Güncelle" : isSubmitting ? "Güncelleniyor..." : "Güncelle"}
+      primaryButtonText={
+        isPendingMode
+          ? "Güncelle"
+          : isSubmitting
+          ? "Güncelleniyor..."
+          : "Güncelle"
+      }
       onPrimaryAction={primaryAction}
       isPrimaryButtonDisabled={primaryDisabled}
       secondaryButtonText='İptal'
@@ -113,16 +123,13 @@ const UpdateMealModal = ({
           isClearable={true}
           onClear={isPendingMode ? handlePendingClear : handleClearQuantity}
         />
-        <div className={`update-meal__tertiary ${
-          isPendingMode ? "update-meal__tertiary--pending" : ""
-        }`}
-        >
+        <div className='update-meal-modal__tertiary'>
           <button
             type='button'
             onClick={isPendingMode ? handlePendingRemoveClick : markSoldOut}
-            aria-label={isPendingMode ? 'Listeden kaldır' : 'Tükendi yap'}
-            className={`update-meal__link ${
-              isPendingMode ? "update-meal__link--destructive" : ""
+            aria-label={isPendingMode ? "Listeden kaldır" : "Tükendi yap"}
+            className={`update-meal-modal__link ${
+              isPendingMode ? "update-meal-modal__link--destructive" : ""
             }`}
           >
             {isPendingMode ? "Listeden kaldır" : "Tükendi yap"}

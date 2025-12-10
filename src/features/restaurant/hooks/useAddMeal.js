@@ -264,7 +264,7 @@ const useAddMeal = (
       if (typeof submitHandler === "function") {
         const result = await submitHandler({
           selectedMeal,
-          quantityValue,
+          quantity: quantityValue,
           selectedCategoryId: selectedCategoryInModal,
           payload: mealToAdd,
         });
