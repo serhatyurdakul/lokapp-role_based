@@ -19,7 +19,7 @@ const UpdateMealModal = ({
   const isPendingMode = mode === "pending";
 
   const {
-    quantity,
+    quantityInput,
     isSubmitting,
     error,
     isSubmitDisabled,
@@ -76,7 +76,7 @@ const UpdateMealModal = ({
   };
 
   const labelText = isPendingMode ? "Porsiyon Sayısı" : "Kalan Porsiyon Sayısı";
-  const quantityValue = isPendingMode ? pendingQuantity : quantity;
+  const quantityValue = isPendingMode ? pendingQuantity : quantityInput;
   const primaryDisabled = isPendingMode
     ? pendingQuantity.trim() === "" ||
       Number.isNaN(Number(pendingQuantity)) ||

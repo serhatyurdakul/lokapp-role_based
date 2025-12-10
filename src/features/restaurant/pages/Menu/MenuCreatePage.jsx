@@ -156,13 +156,13 @@ const MenuCreatePage = () => {
     searchResultsRef,
     selectedCategoryInModal,
     selectedMeal,
-    quantity,
+    quantity: quantityInput,
     isSubmitting,
     filteredMealOptions,
     isLoadingMealOptions,
     mealExistsError,
     finalIsPrimaryButtonDisabled,
-    setQuantity,
+    setQuantityInput,
     handleModalCategoryChange,
     handleMealOptionSearchChange,
     handleSelectMealOption,
@@ -245,7 +245,7 @@ const MenuCreatePage = () => {
   };
 
   const handleQuantityInputChange = (event) => {
-    setQuantity(event.target.value);
+    setQuantityInput(event.target.value);
   };
 
   const handleSubmit = async (event) => {
@@ -516,14 +516,14 @@ const MenuCreatePage = () => {
           id='menu-create-quantity-input'
           name='quantity'
           type='number'
-          value={quantity}
+          value={quantityInput}
           onChange={handleQuantityInputChange}
           placeholder='Örneğin: 50'
           min='0'
           inputMode='numeric'
           required
           isClearable={true}
-          onClear={() => setQuantity("")}
+          onClear={() => setQuantityInput("")}
         />
 
         <div className='menu-create-page__actions'>

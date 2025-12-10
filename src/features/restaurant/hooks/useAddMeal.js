@@ -34,7 +34,7 @@ const useAddMeal = (
   const [showSearchResults, setShowSearchResults] = useState(false);
   const searchResultsRef = useRef(null);
   const [selectedCategoryInModal, setSelectedCategoryInModal] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [quantityInput, setQuantityInput] = useState("");
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [mealOptions, setMealOptions] = useState([]);
@@ -120,7 +120,7 @@ const useAddMeal = (
   // Reset all form-related state
   const resetFormStates = () => {
     setSearchQuery("");
-    setQuantity("");
+    setQuantityInput("");
     setShowSearchResults(false);
     setSelectedMeal(null);
     setFilteredMealOptions([]);
@@ -140,7 +140,7 @@ const useAddMeal = (
     setSelectedMeal(null);
     setFilteredMealOptions([]);
     setMealExistsError("");
-    setQuantity("");
+    setQuantityInput("");
   };
 
   const handleMealOptionSearchChange = (e) => {
@@ -244,7 +244,7 @@ const useAddMeal = (
       return;
     }
 
-    const quantityValue = parseInt(quantity, 10);
+    const quantityValue = parseInt(quantityInput, 10);
     if (isNaN(quantityValue) || quantityValue <= 0) {
       return;
     }
@@ -296,9 +296,9 @@ const useAddMeal = (
   };
 
   // Derive disabled state for the primary button
-  const quantityValue = Number(quantity);
+  const quantityValue = Number(quantityInput);
   const isQuantityInvalid =
-    quantity.trim() === "" || isNaN(quantityValue) || quantityValue <= 0;
+    quantityInput.trim() === "" || isNaN(quantityValue) || quantityValue <= 0;
 
   const isButtonDisabledDueToFields = !selectedMeal || isQuantityInvalid;
   const finalIsPrimaryButtonDisabled =
@@ -309,14 +309,14 @@ const useAddMeal = (
     showSearchResults,
     searchResultsRef,
     selectedCategoryInModal,
-    quantity,
+    quantityInput,
     selectedMeal,
     isSubmitting,
     filteredMealOptions,
     isLoadingMealOptions,
     mealExistsError,
     finalIsPrimaryButtonDisabled,
-    setQuantity,
+    setQuantityInput,
     handleModalCategoryChange,
     handleMealOptionSearchChange,
     handleSelectMealOption,

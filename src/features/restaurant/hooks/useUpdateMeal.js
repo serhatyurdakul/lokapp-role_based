@@ -10,7 +10,7 @@ const useUpdateMeal = (
   options = {}
 ) => {
   const { autoCloseOnSuccess = true, enabled = true } = options;
-  const [quantity, setQuantity] = useState("");
+  const [quantityInput, setQuantityInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -20,23 +20,23 @@ const useUpdateMeal = (
       return;
     }
     if (isOpen && selectedMeal) {
-      setQuantity(selectedMeal.quantity?.toString() || "");
+      setQuantityInput(selectedMeal.quantity?.toString() || "");
       setError("");
     }
   }, [enabled, isOpen, selectedMeal]);
 
   const handleQuantityChange = (e) => {
-    setQuantity(e.target.value);
+    setQuantityInput(e.target.value);
     setError("");
   };
 
   const handleClearQuantity = () => {
-    setQuantity("");
+    setQuantityInput("");
     setError("");
   };
 
   const markSoldOut = () => {
-    setQuantity("0");
+    setQuantityInput("0");
     setError("");
   };
 
@@ -52,7 +52,7 @@ const useUpdateMeal = (
       return;
     }
 
-    const quantityValue = parseInt(quantity, 10);
+    const quantityValue = parseInt(quantityInput, 10);
     if (isNaN(quantityValue) || quantityValue < 0) {
       setError("Geçerli bir porsiyon sayısı girin.");
       return;
@@ -86,14 +86,14 @@ const useUpdateMeal = (
     return null;
   };
 
-  const quantityValue = Number(quantity);
+  const quantityValue = Number(quantityInput);
   const isQuantityInvalid =
-    quantity.trim() === "" || isNaN(quantityValue) || quantityValue < 0;
+    quantityInput.trim() === "" || isNaN(quantityValue) || quantityValue < 0;
   const isSubmitDisabled =
     !enabled || isSubmitting || isQuantityInvalid || !selectedMeal;
 
   return {
-    quantity,
+    quantityInput,
     isSubmitting,
     error,
     isSubmitDisabled,
