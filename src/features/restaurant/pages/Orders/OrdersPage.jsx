@@ -169,20 +169,20 @@ const Orders = () => {
       <PageHeader title='Siparişler' />
 
       {hasAnyOrders && (
-        <div className='order-filters'>
-          <CustomDropdown
-            options={regionFilterOptions}
-            selectedValue={selectedValue}
-            onSelect={setSelectedValue}
-            placeholder='Sanayi sitesi seçiniz'
-          />
-          <SearchBar
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onClear={() => setSearchQuery("")}
-            placeholder='Firma Ara...'
-          />
-        </div>
+      <div className='order-filters'>
+        <CustomDropdown
+          options={regionFilterOptions}
+          selectedValue={selectedValue}
+          onSelect={setSelectedValue}
+          placeholder='Sanayi sitesi seçiniz'
+        />
+        <SearchBar
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onClear={() => setSearchQuery("")}
+          placeholder='Firma Ara...'
+        />
+      </div>
       )}
 
       {showBanner && error && (

@@ -12,17 +12,17 @@ import { fetchRestaurantOrders } from "../../store/restaurantOrdersSlice";
 import { getPortionStatus } from "../../utils/portionUtils";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
-import { ReactComponent as ChevronRightIcon } from "@/assets/icons/chevron-right.svg";
 import PortionCard from "../../components/PortionCard/PortionCard";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
 import Toast from "@/common/components/Toast/Toast.jsx";
 import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
-import "./DashboardPage.scss";
+import ActionCard from "../../components/ActionCard/ActionCard";
+import "./TodayPage.scss";
 
 // Local sentinel value to indicate no category filter applied
 const ALL_FILTER = "all";
 
-const DashboardPage = () => {
+const TodayPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -148,15 +148,15 @@ const DashboardPage = () => {
   const qrScansToday = 0;
 
   return (
-    <div className='dashboard-content'>
+    <div className='today-page'>
       <PageHeader title='Bugün' />
-      <div className='cutoff-info'>
-        <span className='cutoff-info__text'>
+      <div className='today-page__cutoff'>
+        <span className='today-page__cutoff-text'>
           Sipariş alımı {orderCutoffTime}’da kapanır.
         </span>
         <button
           type='button'
-          className='cutoff-info__link'
+          className='today-page__cutoff-link'
           onClick={() => navigate("/settings/order-cutoff")}
         >
           Saati ayarla
@@ -171,46 +171,24 @@ const DashboardPage = () => {
         />
       )}
 
-      <div className='dashboard-quick-cards'>
-        <button
-          type='button'
-          className='quick-card pending-card'
+      <div className='today-page__action-cards'>
+        <ActionCard
+          variant='pending'
+          title='Bekleyen Siparişler'
+          value={pendingOrdersCount}
+          unit='firma'
           onClick={() => navigate("/orders")}
-        >
-          <span className='quick-card-title'>Bekleyen Siparişler</span>
-          <div className='quick-card-footer'>
-            <div className='quick-card-metric'>
-              <span className='quick-card-count'>{pendingOrdersCount}</span>
-              <span className='quick-card-unit'>firma</span>
-            </div>
-            <ChevronRightIcon
-              className='quick-card-chevron'
-              aria-hidden='true'
-            />
-          </div>
-        </button>
-
-        <button
-          type='button'
-          className='quick-card qr-card'
+        />
+        <ActionCard
+          title='QR Okutanlar'
+          value={qrScansToday}
+          unit='kişi'
           onClick={() => navigate("/qr-activity")}
-        >
-          <span className='quick-card-title'>QR Okutanlar</span>
-          <div className='quick-card-footer'>
-            <div className='quick-card-metric'>
-              <span className='quick-card-count'>{qrScansToday}</span>
-              <span className='quick-card-unit'>kişi</span>
-            </div>
-            <ChevronRightIcon
-              className='quick-card-chevron'
-              aria-hidden='true'
-            />
-          </div>
-        </button>
+        />
       </div>
 
       {/* Daily summary cards */}
-      <div className='dashboard-summary'>
+      <div className='today-page__summary'>
         <p className='u-section-label'>Günün Özeti</p>
         <StatsGrid>
           <StatCard
@@ -236,14 +214,14 @@ const DashboardPage = () => {
         </StatsGrid>
       </div>
 
-      <div className='portion-section'>
-        <div className='dashboard-section-header'>
+      <div className='today-page__portion-section'>
+        <div className='today-page__section-header'>
           <h2>Kalan Porsiyonlar</h2>
         </div>
 
         {/* Kategori filtresi — bölüm başlığının hemen altında */}
         {hasAnyMeals && (
-          <div className='dashboard-filters'>
+          <div className='today-page__filters'>
             <CustomDropdown
               options={[
                 { value: ALL_FILTER, label: "Tüm Kategoriler" },
@@ -259,7 +237,7 @@ const DashboardPage = () => {
           </div>
         )}
 
-        <div className='portion-cards'>
+        <div className='today-page__portion-list'>
           {isLoading && mealsByRemainingAsc.length === 0 && (
             <Loading text='Kalan porsiyonlar yükleniyor...' />
           )}
@@ -296,4 +274,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default TodayPage;

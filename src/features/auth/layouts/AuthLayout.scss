@@ -9,39 +9,39 @@
   background-color: var(--background-color);
 
   &__box {
-    width: 100%;
-    max-width: 400px;
-    padding: $spacing-16;
-    background-color: var(--background-primary);
-    border-radius: $border-radius;
+  width: 100%;
+  max-width: 400px;
+  padding: $spacing-16;
+  background-color: var(--background-primary);
+  border-radius: $border-radius;
 
-    h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: $spacing-24;
-      text-align: center;
-      color: var(--text-color);
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: $spacing-24;
+    text-align: center;
+    color: var(--text-color);
 
-      @media (max-width: 576px) {
-        font-size: 1.25rem;
-        margin-bottom: $spacing-16;
-      }
+    @media (max-width: 576px) {
+      font-size: 1.25rem;
+      margin-bottom: $spacing-16;
     }
   }
+}
 
   &__link {
-    text-align: center;
-    margin-top: $spacing-16;
-    color: var(--text-secondary);
-    font-size: 0.875rem;
+  text-align: center;
+  margin-top: $spacing-16;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
 
-    a {
-      color: var(--primary-color);
-      font-weight: 500;
-      text-decoration: none;
+  a {
+    color: var(--primary-color);
+    font-weight: 500;
+    text-decoration: none;
 
-      &:hover {
-        text-decoration: underline;
+    &:hover {
+      text-decoration: underline;
       }
     }
   }

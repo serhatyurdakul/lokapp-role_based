@@ -13,7 +13,7 @@ import CustomerHomePage from "./features/customer/pages/Home/HomePage.jsx";
 import CreateOrderPage from "./features/customer/pages/CreateOrder/CreateOrderPage.jsx";
 import CustomerProfilePage from "./features/customer/pages/Profile/CustomerProfilePage.jsx";
 import CustomerQRPage from "./features/customer/pages/QR/QRPage.jsx";
-import RestaurantDashboardPage from "./features/restaurant/pages/Dashboard/DashboardPage.jsx";
+import RestaurantTodayPage from "./features/restaurant/pages/Today/TodayPage.jsx";
 import RestaurantProfilePage from "./features/restaurant/pages/Profile/RestaurantProfilePage.jsx";
 import RestaurantMenuPage from "./features/restaurant/pages/Menu/MenuPage.jsx";
 import RestaurantOrdersPage from "./features/restaurant/pages/Orders/OrdersPage.jsx";
@@ -133,7 +133,7 @@ function App() {
             element={
               <RoleRenderer
                 customerComponent={<CustomerHomePage />}
-                restaurantComponent={<RestaurantDashboardPage />}
+                restaurantComponent={<RestaurantTodayPage />}
               />
             }
           />
