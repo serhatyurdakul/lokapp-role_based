@@ -82,10 +82,10 @@ const CompaniesPage = () => {
     <>
       <DetailPageHeader title='Tüm Firmalar' />
 
-      <div className='companies-content'>
-        <div className='filters'>
+      <div className='companies-page'>
+        <div className='companies-page__filters'>
           <CustomDropdown
-            className='site-filter'
+            className='companies-page__site-dropdown'
             options={siteOptions}
             selectedValue={selectedSite}
             onSelect={setSelectedSite}
@@ -99,11 +99,11 @@ const CompaniesPage = () => {
           />
         </div>
 
-        <div className='companies-list' role='list'>
+        <div className='companies-page__list' role='list'>
           {filtered.map((c) => (
             <button
               key={c.id}
-              className='company-item'
+              className='companies-page__item'
               type='button'
               onClick={() =>
                 navigate(`/restaurant/reports/${c.id}/${currentYear}`, {
@@ -111,11 +111,11 @@ const CompaniesPage = () => {
                 })
               }
             >
-              <div className='content'>
-                <span className='name'>{c.companyName}</span>
+              <div className='companies-page__item-content'>
+                <span className='companies-page__item-name'>{c.companyName}</span>
                 <Badge tone='neutral'>{c.siteName}</Badge>
               </div>
-              <ChevronRightIcon className='chevron' />
+              <ChevronRightIcon className='companies-page__item-chevron' />
             </button>
           ))}
 
