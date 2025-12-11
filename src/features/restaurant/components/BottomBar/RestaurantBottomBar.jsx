@@ -46,10 +46,10 @@ const tabs = [
   },
 ];
 
-const RestaurantBottomBar = () => (
+const RestaurantBottomBar = ({ className = "" }) => (
   <BottomNav
     tabs={tabs}
-    className='restaurant-bottom-bar'
+    className={className}
     ariaLabel='Restoran alt gezinme'
   />
 );

@@ -6,10 +6,10 @@ const AuthLayout = ({ children }) => {
   const isLoginPage = location.pathname === "/login";
 
   return (
-    <div className='auth-container'>
-      <div className='auth-box'>
+    <div className='auth-layout'>
+      <div className='auth-layout__box'>
         {children}
-        <p className='auth-link'>
+        <p className='auth-layout__link'>
           {isLoginPage ? (
             <>
               Hesabınız yok mu? <Link to='/register'>Kayıt Ol</Link>

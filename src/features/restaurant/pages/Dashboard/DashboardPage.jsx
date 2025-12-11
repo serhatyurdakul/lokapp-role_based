@@ -276,7 +276,8 @@ const DashboardPage = () => {
             ))}
           {!isLoading && mealsByRemainingAsc.length === 0 && (
             <div className='u-empty-state'>
-              <p>Henüz yemek eklemediniz</p>
+              <p>Henüz yemek eklemediniz.</p>
+              <p>Menü sayfasından yemek ekleyebilirsiniz.</p>
             </div>
           )}
         </div>

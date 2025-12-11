@@ -15,11 +15,15 @@ const RestaurantLayout = () => {
       className='layout restaurant-layout'
       style={{ "--bottom-bar-offset": bottomBarOffset }}
     >
-      {!hideNavbar && <RestaurantNavbar />}
+      {!hideNavbar && (
+        <RestaurantNavbar className='restaurant-layout__navbar' />
+      )}
       <main className='container'>
         <Outlet />
       </main>
-      {!hideBottomBar && <RestaurantBottomBar />}
+      {!hideBottomBar && (
+        <RestaurantBottomBar className='restaurant-layout__bottom-bar' />
+      )}
     </div>
   );
 };

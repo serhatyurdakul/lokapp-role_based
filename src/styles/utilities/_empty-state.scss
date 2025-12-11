@@ -5,4 +5,8 @@
   text-align: center;
   color: var(--text-secondary);
   font-size: 0.875rem;
+
+  p + p {
+    margin-top: $spacing-4;
+  }
 }
