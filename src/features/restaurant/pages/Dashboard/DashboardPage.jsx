@@ -71,14 +71,24 @@ const DashboardPage = () => {
   // Apply category filter (if any) and sort by remaining quantity (ascending)
   const [selectedCategory, setSelectedCategory] = useState(ALL_FILTER);
 
+  // Seçili kategori artık mevcut değilse ALL'a döndür
+  useEffect(() => {
+    if (
+      selectedCategory !== ALL_FILTER &&
+      !menuCategoryOptions.some((c) => c.id === selectedCategory)
+    ) {
+      setSelectedCategory(ALL_FILTER);
+    }
+  }, [menuCategoryOptions, selectedCategory]);
+
   const mealsByRemainingAsc = useMemo(() => {
     const baseMeals = Array.isArray(menuMeals) ? menuMeals : [];
     const filtered =
       selectedCategory === ALL_FILTER
         ? baseMeals
         : baseMeals.filter(
-          (meal) => String(meal.categoryId) === String(selectedCategory)
-        );
+            (meal) => String(meal.categoryId) === String(selectedCategory)
+          );
 
     const mapped = filtered.map((meal) => ({
       ...meal,
@@ -266,7 +276,7 @@ const DashboardPage = () => {
             ))}
           {!isLoading && mealsByRemainingAsc.length === 0 && (
             <div className='u-empty-state'>
-              <p>Kritik porsiyon durumu bulunmuyor</p>
+              <p>Henüz yemek eklemediniz</p>
             </div>
           )}
         </div>
