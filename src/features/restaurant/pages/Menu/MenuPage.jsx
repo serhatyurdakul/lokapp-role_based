@@ -114,6 +114,7 @@ const MenuPage = () => {
   const { menuMeals, menuCategoryOptions } = useSelector(
     selectMenuMealsAndCategories
   );
+  const hasAnyMeals = Array.isArray(menuMeals) && menuMeals.length > 0;
 
   // Reset filter to ALL if selected category is removed
   useEffect(() => {
@@ -296,7 +297,7 @@ const MenuPage = () => {
                     <div className='menu-page__meal-portion'>
                       <div className='menu-page__meal-portion-details'>
                         <PortionBadge
-                        remaining={meal.remainingQuantity}
+                          remaining={meal.remainingQuantity}
                           sold={meal.orderCount}
                         />
                       </div>
@@ -381,29 +382,29 @@ const MenuPage = () => {
         </button>
       </div>
 
-      <div className='menu-page__filters'>
-        {/** Category dropdown */}
-        <CustomDropdown
-          options={[
-            { value: ALL_FILTER, label: "Tüm Kategoriler" },
-            ...menuCategoryOptions.map((c) => ({
-              value: String(c.id),
-              label: c.name,
-            })),
-          ]}
-          selectedValue={selectedCategory}
-          onSelect={handleCategoryChange}
-          placeholder='Kategori seçiniz'
-        />
+      {hasAnyMeals && (
+        <div className='menu-page__filters'>
+          <CustomDropdown
+            options={[
+              { value: ALL_FILTER, label: "Tüm Kategoriler" },
+              ...menuCategoryOptions.map((c) => ({
+                value: String(c.id),
+                label: c.name,
+              })),
+            ]}
+            selectedValue={selectedCategory}
+            onSelect={handleCategoryChange}
+            placeholder='Kategori seçiniz'
+          />
 
-        {/** Search input */}
-        <SearchBar
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onClear={() => setSearchQuery("")}
-          placeholder='Yemek Ara...'
-        />
-      </div>
+          <SearchBar
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onClear={() => setSearchQuery("")}
+            placeholder='Yemek Ara...'
+          />
+        </div>
+      )}
       {showBanner && error && (
         <NoticeBanner
           message={error}

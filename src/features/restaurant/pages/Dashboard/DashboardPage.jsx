@@ -35,6 +35,7 @@ const DashboardPage = () => {
   const { menuMeals, menuCategoryOptions } = useSelector(
     selectMenuMealsAndCategories
   );
+  const hasAnyMeals = Array.isArray(menuMeals) && menuMeals.length > 0;
   const restaurantId = user?.restaurantId;
   const orderCutoffTime =
     restaurantInfo?.orderCutoffTime ||
@@ -76,8 +77,8 @@ const DashboardPage = () => {
       selectedCategory === ALL_FILTER
         ? baseMeals
         : baseMeals.filter(
-            (meal) => String(meal.categoryId) === String(selectedCategory)
-          );
+          (meal) => String(meal.categoryId) === String(selectedCategory)
+        );
 
     const mapped = filtered.map((meal) => ({
       ...meal,
@@ -231,20 +232,22 @@ const DashboardPage = () => {
         </div>
 
         {/* Kategori filtresi — bölüm başlığının hemen altında */}
-        <div className='dashboard-filters'>
-          <CustomDropdown
-            options={[
-              { value: ALL_FILTER, label: "Tüm Kategoriler" },
-              ...menuCategoryOptions.map((c) => ({
-                value: String(c.id),
-                label: c.name,
-              })),
-            ]}
-            selectedValue={selectedCategory}
-            onSelect={setSelectedCategory}
-            placeholder='Kategori seçiniz'
-          />
-        </div>
+        {hasAnyMeals && (
+          <div className='dashboard-filters'>
+            <CustomDropdown
+              options={[
+                { value: ALL_FILTER, label: "Tüm Kategoriler" },
+                ...menuCategoryOptions.map((c) => ({
+                  value: String(c.id),
+                  label: c.name,
+                })),
+              ]}
+              selectedValue={selectedCategory}
+              onSelect={setSelectedCategory}
+              placeholder='Kategori seçiniz'
+            />
+          </div>
+        )}
 
         <div className='portion-cards'>
           {isLoading && mealsByRemainingAsc.length === 0 && (

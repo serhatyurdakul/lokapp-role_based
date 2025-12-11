@@ -28,9 +28,3 @@
     color: var(--error-color);
   }
 }
-
-// Reduce the vertical gap before action buttons only in this modal,
-// to avoid excessive whitespace once the tertiary link has 44px height.
-.modal-content:has(.update-meal-modal__tertiary) > .form-actions {
-  margin-top: $spacing-12;
-}

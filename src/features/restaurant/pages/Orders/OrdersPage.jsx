@@ -51,6 +51,7 @@ const Orders = () => {
     selectGrouped(state, searchQuery, selectedValue)
   );
   const allOrders = useSelector(selectAllOrders);
+  const hasAnyOrders = Array.isArray(allOrders) && allOrders.length > 0;
 
   // Map region categories to dropdown options (without adding "Tümü" to options)
   const regionFilterOptions = useMemo(() => {
@@ -167,20 +168,22 @@ const Orders = () => {
     <div className='orders-content'>
       <PageHeader title='Siparişler' />
 
-      <div className='order-filters'>
-        <CustomDropdown
-          options={regionFilterOptions}
-          selectedValue={selectedValue}
-          onSelect={setSelectedValue}
-          placeholder='Sanayi sitesi seçiniz'
-        />
-        <SearchBar
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onClear={() => setSearchQuery("")}
-          placeholder='Firma Ara...'
-        />
-      </div>
+      {hasAnyOrders && (
+        <div className='order-filters'>
+          <CustomDropdown
+            options={regionFilterOptions}
+            selectedValue={selectedValue}
+            onSelect={setSelectedValue}
+            placeholder='Sanayi sitesi seçiniz'
+          />
+          <SearchBar
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onClear={() => setSearchQuery("")}
+            placeholder='Firma Ara...'
+          />
+        </div>
+      )}
 
       {showBanner && error && (
         <NoticeBanner
