@@ -5,6 +5,7 @@ import {
   loginUser,
   verifyUserToken,
 } from "@/utils/api";
+import { getLastOrdersStorageKeyPrefixForUser } from "@/utils/storageKeys";
 
 export const register = createAsyncThunk(
   "auth/register",
@@ -232,14 +233,17 @@ export const logout = createAsyncThunk(
       const userId = state?.auth?.user?.id;
       if (userId) {
         try {
-          const keysToRemove = [];
-          for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key && key.startsWith(`lokapp:lastOrders:${userId}:`)) {
-              keysToRemove.push(key);
+          const prefix = getLastOrdersStorageKeyPrefixForUser(userId);
+          if (prefix) {
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i);
+              if (key && key.startsWith(prefix)) {
+                keysToRemove.push(key);
+              }
             }
+            keysToRemove.forEach((k) => localStorage.removeItem(k));
           }
-          keysToRemove.forEach((k) => localStorage.removeItem(k));
         } catch (_e) {}
       }
     } finally {

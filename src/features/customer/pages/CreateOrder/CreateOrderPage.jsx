@@ -280,16 +280,16 @@ const CreateOrderPage = () => {
               Vazgeç
             </Button>
           </div>
-        ) : (
-          <Button
-            className='order-button fixed-cta'
+          ) : (
+            <Button
+            className='fixed-cta'
             onClick={handleOrder}
             disabled={isOrderDisabled || isOrderLoading}
             loading={isOrderLoading}
           >
             Siparişi Onayla
-          </Button>
-        )}
+            </Button>
+          )}
       </div>
     );
   };

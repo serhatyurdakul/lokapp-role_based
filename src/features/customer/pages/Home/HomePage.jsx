@@ -8,20 +8,17 @@ import MealCard from "../../components/MealCard/MealCard.jsx";
 import OrderActionsModal from "../../components/OrderActionsModal/OrderActionsModal.jsx";
 import DeadlineNotice from "@/common/components/DeadlineNotice/DeadlineNotice.jsx";
 import { fetchUserOrderHistoryByDate } from "@/utils/api";
+import { getLastOrdersStorageKey } from "@/utils/storageKeys";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
 
-  // Build storage key identical to CreateOrderPage for consistency, with user scoping
   const isCompanyEmp = Number(user?.isCompanyEmployee) === 1;
   const restaurantId = user ? (isCompanyEmp ? user?.contractedRestaurantId : user?.restaurantId) : null;
   const companyId = user ? user.companyId : null;
   const userId = user ? user.id : null;
-  const storageKey =
-    userId && restaurantId && companyId
-      ? `lokapp:lastOrders:${userId}:${restaurantId}:${companyId}`
-      : null;
+  const storageKey = getLastOrdersStorageKey({ userId, restaurantId, companyId });
 
   const restaurantName =
     user?.restaurantName || user?.restaurant?.name || user?.contractedRestaurantName;
@@ -50,11 +47,22 @@ const HomePage = () => {
       const list = Array.isArray(parsed) ? parsed : [];
 
       const todayStr = new Date().toLocaleDateString("tr-TR");
-      const hasDineinToday = list.some((x) => {
+      let didChange = false;
+
+      const normalizedList = list.map((item) => {
+        if (!item || typeof item !== "object") return item;
+        if (typeof item.date !== "string" || item.date.length === 0) return item;
+        if (typeof item.id === "string" && item.id.length > 0) return item;
+        didChange = true;
+        return { ...item, id: item.date };
+      });
+
+      const hasDineinToday = normalizedList.some((x) => {
         try {
           return (
             x &&
             x.type === "Restoranda" &&
+            typeof x.date === "string" &&
             new Date(x.date).toLocaleDateString("tr-TR") === todayStr
           );
         } catch (_e) {
@@ -62,24 +70,29 @@ const HomePage = () => {
         }
       });
 
-      let base = list;
+      let base = normalizedList;
       if (!hasDineinToday && restaurantName) {
         const now = new Date();
+        const date = now.toISOString();
         const time = now.toLocaleTimeString("tr-TR", {
           hour: "2-digit",
           minute: "2-digit",
           hour12: false,
         });
         const mock = {
-          date: now.toISOString(),
+          id: date,
+          date,
           type: "Restoranda",
           restaurant: restaurantName,
           time,
           items: [],
         };
-        const next = [mock, ...list];
-        localStorage.setItem(storageKey, JSON.stringify(next));
-        base = next;
+        base = [mock, ...base];
+        didChange = true;
+      }
+
+      if (didChange) {
+        localStorage.setItem(storageKey, JSON.stringify(base));
       }
 
       const dineInForToday = base.filter((m) => {
@@ -87,6 +100,7 @@ const HomePage = () => {
           return (
             m &&
             m.type === "Restoranda" &&
+            typeof m.date === "string" &&
             new Date(m.date).toLocaleDateString("tr-TR") === todayStr
           );
         } catch (_e) {
@@ -120,7 +134,7 @@ const HomePage = () => {
       }
       const mapped = list
         .map((o) => {
-          if (!o || !o.createdAt) return null;
+          if (!o || !o.createdAt || o.id == null) return null;
           const dateIso = new Date(String(o.createdAt).replace(" ", "T")).toISOString();
           const selectedPairs = {};
           if (Array.isArray(o.orderMealList)) {
@@ -134,6 +148,7 @@ const HomePage = () => {
             ? o.orderMealList.map((it) => it?.mealName).filter(Boolean)
             : [];
           return {
+            id: String(o.id),
             date: dateIso,
             type: "Sipariş",
             restaurant: o.restaurantName || "",
@@ -184,9 +199,9 @@ const HomePage = () => {
                   Siparişlerinizi {orderCutoffTime}’e kadar düzenleyebilir veya iptal edebilirsiniz.
                 </DeadlineNotice>
                 <div className='u-card-group__list'>
-                  {orders.map((m, idx) => (
+                  {orders.map((m) => (
                     <MealCard
-                      key={`o-${idx}`}
+                      key={m.id}
                       meal={m}
                       onClick={() => {
                         setSelectedOrder(m);
@@ -202,8 +217,8 @@ const HomePage = () => {
               <section>
                 <h2 className='u-card-group__title'>Restoranda ({dinein.length})</h2>
                 <div className='u-card-group__list'>
-                  {dinein.map((m, idx) => (
-                    <MealCard key={`q-${idx}`} meal={m} />
+                  {dinein.map((m) => (
+                    <MealCard key={m.id} meal={m} />
                   ))}
                 </div>
               </section>

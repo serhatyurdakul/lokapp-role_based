@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PageHeader from "@/common/components/PageHeader/PageHeader";
 import { ReactComponent as QrIcon } from "@/assets/icons/qr-outline.svg";
+import { getLastOrdersStorageKey } from "@/utils/storageKeys";
 import "./QRPage.scss";
 
 const QRPage = () => {
@@ -14,10 +15,7 @@ const QRPage = () => {
   const restaurantId = user ? (isCompanyEmp ? user?.contractedRestaurantId : user?.restaurantId) : null;
   const companyId = user ? user.companyId : null;
   const userId = user ? user.id : null;
-  const storageKey =
-    userId && restaurantId && companyId
-      ? `lokapp:lastOrders:${userId}:${restaurantId}:${companyId}`
-      : null;
+  const storageKey = getLastOrdersStorageKey({ userId, restaurantId, companyId });
 
   const restaurantName =
     user?.restaurantName || user?.restaurant?.name || user?.contractedRestaurantName;
@@ -29,16 +27,19 @@ const QRPage = () => {
     try {
       if (storageKey && restaurantName) {
         const now = new Date();
+        const date = now.toISOString();
         const time = now.toLocaleTimeString("tr-TR", {
           hour: "2-digit",
           minute: "2-digit",
           hour12: false,
         });
         const newCard = {
-          date: now.toISOString(),
+          id: date,
+          date,
           type: "Restoranda",
           restaurant: restaurantName,
           time,
+          items: [],
         };
         const raw = localStorage.getItem(storageKey);
         const parsed = raw ? JSON.parse(raw) : [];
