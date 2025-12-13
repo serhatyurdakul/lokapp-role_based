@@ -1,31 +1,29 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
-  fetchMeals,
-  createOrder,
   clearOrderStatus,
   clearSelections,
+  createOrder,
+  fetchMeals,
+  hydrateSelections,
 } from "../../store/customerMenuSlice.js";
 import CategoryRow from "../../components/CategoryRow/CategoryRow.jsx";
 import GenericModal from "@/common/components/GenericModal/GenericModal.jsx";
 import Loading from "@/common/components/Loading/Loading.jsx";
 import EmptyState from "@/common/components/StateMessage/EmptyState";
-
 import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
 import Button from "@/common/components/Button/Button";
 import PageHeader from "@/common/components/PageHeader/PageHeader";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
 import Toast from "@/common/components/Toast/Toast.jsx";
 import DeadlineNotice from "@/common/components/DeadlineNotice/DeadlineNotice.jsx";
-// Removed Home-specific card rendering; CreateOrderPage only handles menu/ordering
-import "./CreateOrderPage.scss";
-import { useNavigate, useLocation } from "react-router-dom";
-import { hydrateSelections } from "../../store/customerMenuSlice.js";
+import "./OrderScreen.scss";
 
-const CreateOrderPage = () => {
+const OrderScreen = ({ mode, selectedPairs }) => {
+  const isEditMode = mode === "edit";
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const {
     categories,
     isLoading,
@@ -50,12 +48,9 @@ const CreateOrderPage = () => {
 
   const [showBanner, setShowBanner] = useState(true);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  // CreateOrderPage no longer shows order cards or view toggles
   const [toastMessage, setToastMessage] = useState("");
-
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [shouldClearOnUnmount, setShouldClearOnUnmount] = useState(true);
-  const isEditMode = location.pathname === "/orders/edit";
   const [showDiscardModal, setShowDiscardModal] = useState(false);
   const initialSelectionsRef = useRef(null);
 
@@ -69,10 +64,9 @@ const CreateOrderPage = () => {
     setShowBanner(Boolean(error));
   }, [error]);
 
-  // Hydrate selections when entering edit mode
   useEffect(() => {
     if (!isEditMode) return;
-    const pairsFromState = location?.state?.selectedPairs;
+    const pairsFromState = selectedPairs;
     if (pairsFromState && typeof pairsFromState === "object") {
       dispatch(hydrateSelections(pairsFromState));
       initialSelectionsRef.current = { ...pairsFromState };
@@ -82,23 +76,16 @@ const CreateOrderPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditMode]);
 
-  // No local order-cards view; only persist after success
-
-  // Persist will be done right after success
-
-  // On successful order, show toast, clear status, and navigate Home
   useEffect(() => {
     if (!orderSuccessMessage) return;
     setToastMessage(orderSuccessMessage);
     dispatch(clearOrderStatus());
     try {
-      setShouldClearOnUnmount(false); // order fulfilled clears selections in slice
+      setShouldClearOnUnmount(false);
       navigate("/", { state: { toast: orderSuccessMessage }, replace: true });
     } catch (_e) {}
   }, [orderSuccessMessage, dispatch, navigate]);
 
-  // Clear temporary selections when leaving the page (Back = Vazgeç)
-  // No ref needed; cleanup runs only on unmount
   useEffect(() => {
     return () => {
       if (shouldClearOnUnmount) {
@@ -142,7 +129,11 @@ const CreateOrderPage = () => {
           (it) => String(it.id) === String(selId)
         );
         if (found && found.name)
-          items.push({ categoryTitle: cat.title, name: found.name });
+          items.push({
+            categoryId: String(cat.id),
+            categoryTitle: cat.title,
+            name: found.name,
+          });
       }
     });
     return items;
@@ -155,8 +146,27 @@ const CreateOrderPage = () => {
 
   const hasMenu = Array.isArray(categories) && categories.length > 0;
 
+  const isDirtyComparedToInitial = () => {
+    const initial = initialSelectionsRef.current || {};
+    const keysA = Object.keys(initial);
+    const keysB = Object.keys(selectedItems);
+    const equal =
+      keysA.length === keysB.length &&
+      keysA.every((k) => String(initial[k]) === String(selectedItems[k]));
+    return !equal;
+  };
+
+  const handleRequestExit = () => {
+    if (isEditMode && isDirtyComparedToInitial()) {
+      setShowDiscardModal(true);
+      return;
+    }
+    try {
+      navigate("/");
+    } catch (_e) {}
+  };
+
   const renderBody = () => {
-    // Show full-screen spinner while initial data is loading
     if (isLoading && (!categories || categories.length === 0)) {
       return <Loading text='Yemekler yükleniyor...' />;
     }
@@ -170,7 +180,6 @@ const CreateOrderPage = () => {
       );
     }
 
-    // Menu view only
     return (
       <div className='has-fixed-bottom-cta'>
         <div className='menu-content'>
@@ -194,12 +203,12 @@ const CreateOrderPage = () => {
             secondaryButtonText='Seçimlere Dön'
           >
             <p>Aşağıdaki kategorilerden seçim yapmadınız:</p>
-            <ul className='create-order__items-list'>
+            <ul className='p-customer-order__items-list'>
               {categories
                 .filter((cat) => !selectedItems[cat.id])
                 .map((cat) => cat.title)
                 .map((item) => (
-                  <li key={item} className='create-order__items-list-item'>
+                  <li key={item} className='p-customer-order__items-list-item'>
                     {item}
                   </li>
                 ))}
@@ -217,13 +226,16 @@ const CreateOrderPage = () => {
             onPrimaryAction={handleSubmitOrder}
             secondaryButtonText='Vazgeç'
           >
-            <ul className='create-order__items-list'>
-              {buildSelectedItemsList().map((x, idx) => (
-                <li key={idx} className='create-order__items-list-item'>
-                  <span className='create-order__item-label'>
+            <ul className='p-customer-order__items-list'>
+              {buildSelectedItemsList().map((x) => (
+                <li
+                  key={x.categoryId}
+                  className='p-customer-order__items-list-item'
+                >
+                  <span className='p-customer-order__item-label'>
                     {x.categoryTitle}
                   </span>
-                  <span className='create-order__item-value'>{x.name}</span>
+                  <span className='p-customer-order__item-value'>{x.name}</span>
                 </li>
               ))}
             </ul>
@@ -246,7 +258,7 @@ const CreateOrderPage = () => {
         )}
 
         {isEditMode ? (
-          <div className='create-order__cta fixed-cta'>
+          <div className='p-customer-order__cta fixed-cta'>
             <Button
               type='button'
               onClick={handleOrder}
@@ -258,44 +270,28 @@ const CreateOrderPage = () => {
             <Button
               type='button'
               variant='secondary'
-              onClick={() => {
-                const initial = initialSelectionsRef.current || {};
-                const keysA = Object.keys(initial);
-                const keysB = Object.keys(selectedItems);
-                const equal =
-                  keysA.length === keysB.length &&
-                  keysA.every(
-                    (k) => String(initial[k]) === String(selectedItems[k])
-                  );
-                if (!equal) {
-                  setShowDiscardModal(true);
-                } else {
-                  try {
-                    navigate("/");
-                  } catch (_e) {}
-                }
-              }}
+              onClick={handleRequestExit}
               disabled={isOrderLoading}
             >
               Vazgeç
             </Button>
           </div>
-          ) : (
-            <Button
+        ) : (
+          <Button
             className='fixed-cta'
             onClick={handleOrder}
             disabled={isOrderDisabled || isOrderLoading}
             loading={isOrderLoading}
           >
             Siparişi Onayla
-            </Button>
-          )}
+          </Button>
+        )}
       </div>
     );
   };
 
   return (
-    <div className='create-order has-fixed-bottom-cta'>
+    <div className='p-customer-order has-fixed-bottom-cta'>
       {showBanner && error && (
         <NoticeBanner
           message={error}
@@ -304,28 +300,10 @@ const CreateOrderPage = () => {
           onClose={() => setShowBanner(false)}
         />
       )}
+
       {isEditMode ? (
         <>
-          <DetailPageHeader
-            title='Siparişi Düzenle'
-            onBack={() => {
-              const initial = initialSelectionsRef.current || {};
-              const keysA = Object.keys(initial);
-              const keysB = Object.keys(selectedItems);
-              const equal =
-                keysA.length === keysB.length &&
-                keysA.every(
-                  (k) => String(initial[k]) === String(selectedItems[k])
-                );
-              if (!equal) {
-                setShowDiscardModal(true);
-              } else {
-                try {
-                  navigate("/");
-                } catch (_e) {}
-              }
-            }}
-          />
+          <DetailPageHeader title='Siparişi Düzenle' onBack={handleRequestExit} />
           {!isLoading && hasMenu && (
             <DeadlineNotice className='deadline-notice--spaced'>
               Siparişlerinizi {orderCutoffTime}’e kadar düzenleyebilirsiniz.
@@ -342,7 +320,9 @@ const CreateOrderPage = () => {
           )}
         </>
       )}
+
       {renderBody()}
+
       {showDiscardModal && (
         <GenericModal
           isOpen={showDiscardModal}
@@ -369,4 +349,4 @@ const CreateOrderPage = () => {
   );
 };
 
-export default CreateOrderPage;
+export default OrderScreen;

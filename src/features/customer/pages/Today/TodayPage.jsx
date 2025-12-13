@@ -240,8 +240,9 @@ const TodayPage = () => {
         onRequestEdit={() => {
           try {
             const pairs = selectedOrder?.selectedPairs || null;
+            const orderId = selectedOrder?.id || null;
             navigate("/orders/edit", {
-              state: { selectedPairs: pairs },
+              state: { selectedPairs: pairs, orderId },
               replace: false,
             });
           } catch (_e) {}

@@ -1,7 +1,6 @@
 @use "@/styles/variables" as *;
 
-.create-order {
-  // Positioning and offsets are handled by the global `.fixed-cta` utility.
+.p-customer-order {
   .has-fixed-bottom-cta .menu-content > .category-row:last-child {
     margin-bottom: 0;
   }
@@ -36,7 +35,6 @@
     color: var(--text-color);
   }
 
-  // Edit-mode CTA container: keep within same width rules as restaurant task page
   &__cta {
     display: flex;
     flex-direction: row-reverse;
@@ -49,6 +47,6 @@
   }
 }
 
-.modal-body .create-order__items-list + p {
+.modal-body .p-customer-order__items-list + p {
   margin-top: $spacing-12;
 }

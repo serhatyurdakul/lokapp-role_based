@@ -10,7 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import AuthLoginPage from "./features/auth/pages/Login/LoginPage.jsx";
 import AuthRegisterPage from "./features/auth/pages/Register/RegisterPage.jsx";
 import CustomerTodayPage from "./features/customer/pages/Today/TodayPage.jsx";
-import CreateOrderPage from "./features/customer/pages/CreateOrder/CreateOrderPage.jsx";
+import OrderCreatePage from "./features/customer/pages/Ordering/OrderCreatePage.jsx";
+import OrderEditPage from "./features/customer/pages/Ordering/OrderEditPage.jsx";
 import CustomerProfilePage from "./features/customer/pages/Profile/CustomerProfilePage.jsx";
 import CustomerQRPage from "./features/customer/pages/QR/QRPage.jsx";
 import RestaurantTodayPage from "./features/restaurant/pages/Today/TodayPage.jsx";
@@ -141,7 +142,7 @@ function App() {
             path='/orders/edit'
             element={
               <RoleRenderer
-                customerComponent={<CreateOrderPage />}
+                customerComponent={<OrderEditPage />}
                 restaurantComponent={<Navigate to='/' replace />}
               />
             }
@@ -150,7 +151,7 @@ function App() {
             path='/orders/new'
             element={
               <RoleRenderer
-                customerComponent={<CreateOrderPage />}
+                customerComponent={<OrderCreatePage />}
                 restaurantComponent={<Navigate to='/' replace />}
               />
             }
