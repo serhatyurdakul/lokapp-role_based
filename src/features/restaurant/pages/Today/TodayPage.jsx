@@ -148,15 +148,15 @@ const TodayPage = () => {
   const qrScansToday = 0;
 
   return (
-    <div className='today-page'>
+    <div className='p-restaurant-today'>
       <PageHeader title='Bugün' />
-      <div className='today-page__cutoff'>
-        <span className='today-page__cutoff-text'>
+      <div className='p-restaurant-today__cutoff'>
+        <span className='p-restaurant-today__cutoff-text'>
           Sipariş alımı {orderCutoffTime}’da kapanır.
         </span>
         <button
           type='button'
-          className='today-page__cutoff-link'
+          className='p-restaurant-today__cutoff-link'
           onClick={() => navigate("/settings/order-cutoff")}
         >
           Saati ayarla
@@ -171,7 +171,7 @@ const TodayPage = () => {
         />
       )}
 
-      <div className='today-page__action-cards'>
+      <div className='p-restaurant-today__action-cards'>
         <ActionCard
           variant='pending'
           title='Bekleyen Siparişler'
@@ -188,7 +188,7 @@ const TodayPage = () => {
       </div>
 
       {/* Daily summary cards */}
-      <div className='today-page__summary'>
+      <div className='p-restaurant-today__summary'>
         <p className='u-section-label'>Günün Özeti</p>
         <StatsGrid>
           <StatCard
@@ -214,14 +214,14 @@ const TodayPage = () => {
         </StatsGrid>
       </div>
 
-      <div className='today-page__portion-section'>
-        <div className='today-page__section-header'>
+      <div className='p-restaurant-today__portion-section'>
+        <div className='p-restaurant-today__section-header'>
           <h2>Kalan Porsiyonlar</h2>
         </div>
 
         {/* Kategori filtresi — bölüm başlığının hemen altında */}
         {hasAnyMeals && (
-          <div className='today-page__filters'>
+          <div className='p-restaurant-today__filters'>
             <CustomDropdown
               options={[
                 { value: ALL_FILTER, label: "Tüm Kategoriler" },
@@ -237,7 +237,7 @@ const TodayPage = () => {
           </div>
         )}
 
-        <div className='today-page__portion-list'>
+        <div className='p-restaurant-today__portion-list'>
           {isLoading && mealsByRemainingAsc.length === 0 && (
             <Loading text='Kalan porsiyonlar yükleniyor...' />
           )}

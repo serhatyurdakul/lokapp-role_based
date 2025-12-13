@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import AuthLoginPage from "./features/auth/pages/Login/LoginPage.jsx";
 import AuthRegisterPage from "./features/auth/pages/Register/RegisterPage.jsx";
-import CustomerHomePage from "./features/customer/pages/Home/HomePage.jsx";
+import CustomerTodayPage from "./features/customer/pages/Today/TodayPage.jsx";
 import CreateOrderPage from "./features/customer/pages/CreateOrder/CreateOrderPage.jsx";
 import CustomerProfilePage from "./features/customer/pages/Profile/CustomerProfilePage.jsx";
 import CustomerQRPage from "./features/customer/pages/QR/QRPage.jsx";
@@ -132,7 +132,7 @@ function App() {
             path='/'
             element={
               <RoleRenderer
-                customerComponent={<CustomerHomePage />}
+                customerComponent={<CustomerTodayPage />}
                 restaurantComponent={<RestaurantTodayPage />}
               />
             }

@@ -10,7 +10,7 @@ import DeadlineNotice from "@/common/components/DeadlineNotice/DeadlineNotice.js
 import { fetchUserOrderHistoryByDate } from "@/utils/api";
 import { getLastOrdersStorageKey } from "@/utils/storageKeys";
 
-const HomePage = () => {
+const TodayPage = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
 
@@ -184,7 +184,7 @@ const HomePage = () => {
   const hasAny = orders.length + dinein.length > 0;
 
   return (
-    <div>
+    <div className='p-customer-today'>
       <PageHeader title='Bugün' />
 
       {hasAny ? (
@@ -257,4 +257,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default TodayPage;
