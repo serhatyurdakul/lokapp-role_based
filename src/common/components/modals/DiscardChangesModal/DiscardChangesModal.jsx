@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import GenericModal from "@/common/components/GenericModal/GenericModal.jsx";
+import GenericModal from "../GenericModal/GenericModal.jsx";
 
 const DiscardChangesModal = ({
   isOpen,
@@ -14,12 +14,13 @@ const DiscardChangesModal = ({
     <GenericModal
       isOpen={isOpen}
       onClose={onClose}
+      closeOnOverlayClick={false}
       title={title}
       secondaryButtonText={exitText}
       secondaryButtonVariant='destructive-outline'
       onSecondaryAction={onExit}
       primaryButtonText={stayText}
-      primaryButtonVariant='primary'
+      primaryButtonVariant='secondary'
       onPrimaryAction={onClose}
       dialogRole='alertdialog'
     >
@@ -39,4 +40,3 @@ DiscardChangesModal.propTypes = {
 };
 
 export default DiscardChangesModal;
-

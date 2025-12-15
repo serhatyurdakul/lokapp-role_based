@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import GenericModal from "@/common/components/GenericModal/GenericModal";
+import GenericModal from "@/common/components/modals/GenericModal/GenericModal";
 import FormInput from "@/common/components/forms/FormInput/FormInput";
 import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
 import useUpdateMeal from "../../hooks/useUpdateMeal";
@@ -91,6 +91,7 @@ const UpdateMealModal = ({
     <GenericModal
       isOpen={isOpen}
       onClose={onClose}
+      closeOnOverlayClick={false}
       title='Porsiyon Güncelle'
       primaryButtonText={
         isPendingMode

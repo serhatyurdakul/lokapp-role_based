@@ -8,7 +8,7 @@ import FormInput from "@/common/components/forms/FormInput/FormInput";
 	import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
 	import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
 	import Toast from "@/common/components/Toast/Toast.jsx";
-	import DiscardChangesModal from "@/common/components/DiscardChangesModal/DiscardChangesModal";
+	import DiscardChangesModal from "@/common/components/modals/DiscardChangesModal/DiscardChangesModal";
 	import Badge from "@/common/components/Badge/Badge";
 	import { addRestaurantMeal } from "@/utils/api";
 import {

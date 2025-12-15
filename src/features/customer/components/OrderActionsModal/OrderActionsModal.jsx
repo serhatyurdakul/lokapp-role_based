@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import GenericModal from "@/common/components/GenericModal/GenericModal.jsx";
+import GenericModal from "@/common/components/modals/GenericModal/GenericModal.jsx";
 import "./OrderActionsModal.scss";
 
 const OrderActionsModal = ({
@@ -24,25 +24,29 @@ const OrderActionsModal = ({
   };
 
   const title = showCancelConfirm ? "Siparişi İptal Et" : "Siparişi Düzenle";
-  const primaryButtonText = showCancelConfirm ? "İptal Et" : "Düzenle";
-  const secondaryButtonText = showCancelConfirm ? "Vazgeç" : "Kapat";
+  const dialogRole = showCancelConfirm ? "alertdialog" : "dialog";
+
+  const primaryButtonText = showCancelConfirm ? "Vazgeç" : "Düzenle";
+  const secondaryButtonText = showCancelConfirm ? "İptal Et" : "Kapat";
+
   const onPrimaryAction = showCancelConfirm
-    ? handleConfirmCancel
+    ? () => setShowCancelConfirm(false)
     : onRequestEdit;
-	  const onSecondaryAction = showCancelConfirm
-	    ? () => setShowCancelConfirm(false)
-	    : onClose;
-	  const primaryButtonVariant = showCancelConfirm ? "destructive" : "primary";
-	  const dialogRole = showCancelConfirm ? "alertdialog" : "dialog";
+  const onSecondaryAction = showCancelConfirm ? handleConfirmCancel : onClose;
+
+  const primaryButtonVariant = showCancelConfirm ? "secondary" : "primary";
+  const secondaryButtonVariant = showCancelConfirm ? "destructive" : "secondary";
 
 	  return (
 	    <GenericModal
 	      isOpen={isOpen}
 	      onClose={onClose}
+	      closeOnOverlayClick={!showCancelConfirm}
 	      title={title}
 	      primaryButtonVariant={primaryButtonVariant}
 	      primaryButtonText={primaryButtonText}
 	      onPrimaryAction={onPrimaryAction}
+	      secondaryButtonVariant={secondaryButtonVariant}
 	      secondaryButtonText={secondaryButtonText}
 	      onSecondaryAction={onSecondaryAction}
 	      dialogRole={dialogRole}

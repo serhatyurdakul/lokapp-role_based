@@ -16,7 +16,7 @@ import { ReactComponent as MoreIcon } from "@/assets/icons/more.svg";
 import { ReactComponent as EditIcon } from "@/assets/icons/edit.svg";
 import { ReactComponent as DeleteIcon } from "@/assets/icons/delete.svg";
 import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
-import ConfirmModal from "@/common/components/ConfirmModal/ConfirmModal.jsx";
+import ConfirmModal from "@/common/components/modals/ConfirmModal/ConfirmModal.jsx";
 import useDeleteMeal from "../../hooks/useDeleteMeal";
 import {
   fetchRestaurantCategories,

@@ -29,21 +29,21 @@ const Button = ({
   );
 };
 
-	Button.propTypes = {
-	  children: PropTypes.node.isRequired,
-	  onClick: PropTypes.func,
-	  type: PropTypes.oneOf(["button", "submit", "reset"]),
-	  variant: PropTypes.oneOf([
-	    "primary",
-	    "secondary",
-	    "outline-primary",
-	    "destructive",
-	    "destructive-outline",
-	  ]),
-	  disabled: PropTypes.bool,
-	  className: PropTypes.string,
-	  loading: PropTypes.bool,
-	  loadingText: PropTypes.string,
-	};
+Button.propTypes = {
+  children: PropTypes.node.isRequired,
+  onClick: PropTypes.func,
+  type: PropTypes.oneOf(["button", "submit", "reset"]),
+  variant: PropTypes.oneOf([
+    "primary",
+    "secondary",
+    "outline-primary",
+    "destructive",
+    "destructive-outline",
+  ]),
+  disabled: PropTypes.bool,
+  className: PropTypes.string,
+  loading: PropTypes.bool,
+  loadingText: PropTypes.string,
+};
 
 export default Button;

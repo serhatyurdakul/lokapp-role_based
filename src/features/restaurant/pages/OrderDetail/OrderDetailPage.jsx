@@ -7,7 +7,7 @@ import CompanyHeader from "../../components/CompanyHeader/CompanyHeader";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
 import Loading from "@/common/components/Loading/Loading.jsx";
 import ErrorState from "@/common/components/StateMessage/ErrorState";
-import GenericModal from "@/common/components/GenericModal/GenericModal";
+import GenericModal from "@/common/components/modals/GenericModal/GenericModal";
 import { ReactComponent as CheckIcon } from "@/assets/icons/check.svg";
 import { ReactComponent as ClockIcon } from "@/assets/icons/clock.svg";
 import Button from "@/common/components/Button/Button";
@@ -192,7 +192,9 @@ const OrderDetailPage = () => {
         <GenericModal
           isOpen={showStatusModal}
           onClose={() => setShowStatusModal(false)}
+          closeOnOverlayClick={false}
           title='Sipariş Durumu'
+          dialogRole='alertdialog'
           primaryButtonText={
             order.summary.status === "pending" ? "Tamamla" : "Beklemeye Al"
           }

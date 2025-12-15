@@ -8,12 +8,12 @@ import {
   fetchMeals,
   hydrateSelections,
 } from "../../store/customerMenuSlice.js";
-	import CategoryRow from "../../components/CategoryRow/CategoryRow.jsx";
-	import GenericModal from "@/common/components/GenericModal/GenericModal.jsx";
-	import DiscardChangesModal from "@/common/components/DiscardChangesModal/DiscardChangesModal";
-	import Loading from "@/common/components/Loading/Loading.jsx";
-	import EmptyState from "@/common/components/StateMessage/EmptyState";
-	import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
+import CategoryRow from "../../components/CategoryRow/CategoryRow.jsx";
+import GenericModal from "@/common/components/modals/GenericModal/GenericModal.jsx";
+import DiscardChangesModal from "@/common/components/modals/DiscardChangesModal/DiscardChangesModal";
+import Loading from "@/common/components/Loading/Loading.jsx";
+import EmptyState from "@/common/components/StateMessage/EmptyState";
+import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
 import Button from "@/common/components/Button/Button";
 import PageHeader from "@/common/components/PageHeader/PageHeader";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
@@ -198,7 +198,9 @@ const OrderScreen = ({ mode, selectedPairs }) => {
           <GenericModal
             isOpen={showWarningModal}
             onClose={() => setShowWarningModal(false)}
+            closeOnOverlayClick={false}
             title='Eksik Seçimler'
+            dialogRole='alertdialog'
             primaryButtonText='Devam Et'
             onPrimaryAction={handleConfirmOrder}
             secondaryButtonText='Seçimlere Dön'
@@ -222,7 +224,9 @@ const OrderScreen = ({ mode, selectedPairs }) => {
           <GenericModal
             isOpen={showConfirmModal}
             onClose={() => setShowConfirmModal(false)}
+            closeOnOverlayClick={false}
             title={isEditMode ? "Siparişi Güncelle" : "Siparişi Onayla"}
+            dialogRole='dialog'
             primaryButtonText='Onayla'
             onPrimaryAction={handleSubmitOrder}
             secondaryButtonText='Vazgeç'
@@ -304,7 +308,10 @@ const OrderScreen = ({ mode, selectedPairs }) => {
 
       {isEditMode ? (
         <>
-          <DetailPageHeader title='Siparişi Düzenle' onBack={handleRequestExit} />
+          <DetailPageHeader
+            title='Siparişi Düzenle'
+            onBack={handleRequestExit}
+          />
           {!isLoading && hasMenu && (
             <DeadlineNotice className='deadline-notice--spaced'>
               Siparişlerinizi {orderCutoffTime}’e kadar düzenleyebilirsiniz.
@@ -324,20 +331,20 @@ const OrderScreen = ({ mode, selectedPairs }) => {
 
       {renderBody()}
 
-	      {showDiscardModal && (
-	        <DiscardChangesModal
-	          isOpen={showDiscardModal}
-	          onClose={() => setShowDiscardModal(false)}
-	          title='İşlemi Sonlandır'
-	          message='Kaydedilmemiş değişiklikleriniz silinecek. Devam etmek istiyor musunuz?'
-	          onExit={() => {
-	            setShowDiscardModal(false);
-	            try {
-	              navigate("/", { replace: true });
-	            } catch (_e) {}
-	          }}
-	        />
-	      )}
+      {showDiscardModal && (
+        <DiscardChangesModal
+          isOpen={showDiscardModal}
+          onClose={() => setShowDiscardModal(false)}
+          title='İşlemi Sonlandır'
+          message='Kaydedilmemiş değişiklikleriniz silinecek. Devam etmek istiyor musunuz?'
+          onExit={() => {
+            setShowDiscardModal(false);
+            try {
+              navigate("/", { replace: true });
+            } catch (_e) {}
+          }}
+        />
+      )}
 
       <Toast message={toastMessage} onClose={() => setToastMessage("")} />
     </div>

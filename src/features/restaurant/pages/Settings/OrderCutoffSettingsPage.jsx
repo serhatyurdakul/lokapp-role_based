@@ -5,7 +5,7 @@ import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHea
 	import FormInput from "@/common/components/forms/FormInput/FormInput";
 	import Button from "@/common/components/Button/Button";
 	import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
-	import DiscardChangesModal from "@/common/components/DiscardChangesModal/DiscardChangesModal";
+	import DiscardChangesModal from "@/common/components/modals/DiscardChangesModal/DiscardChangesModal";
 	import { setOrderCutoffTime } from "@/features/restaurant/store/restaurantInfoSlice";
 	import "./OrderCutoffSettingsPage.scss";
 
