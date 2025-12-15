@@ -34,6 +34,10 @@
     &:hover {
       background: var(--overlay-hover);
     }
+
+    &:active {
+      background: var(--overlay-pressed);
+    }
   }
 
   &__item-content {

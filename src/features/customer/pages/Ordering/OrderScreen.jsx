@@ -8,11 +8,12 @@ import {
   fetchMeals,
   hydrateSelections,
 } from "../../store/customerMenuSlice.js";
-import CategoryRow from "../../components/CategoryRow/CategoryRow.jsx";
-import GenericModal from "@/common/components/GenericModal/GenericModal.jsx";
-import Loading from "@/common/components/Loading/Loading.jsx";
-import EmptyState from "@/common/components/StateMessage/EmptyState";
-import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
+	import CategoryRow from "../../components/CategoryRow/CategoryRow.jsx";
+	import GenericModal from "@/common/components/GenericModal/GenericModal.jsx";
+	import DiscardChangesModal from "@/common/components/DiscardChangesModal/DiscardChangesModal";
+	import Loading from "@/common/components/Loading/Loading.jsx";
+	import EmptyState from "@/common/components/StateMessage/EmptyState";
+	import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
 import Button from "@/common/components/Button/Button";
 import PageHeader from "@/common/components/PageHeader/PageHeader";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
@@ -323,26 +324,20 @@ const OrderScreen = ({ mode, selectedPairs }) => {
 
       {renderBody()}
 
-      {showDiscardModal && (
-        <GenericModal
-          isOpen={showDiscardModal}
-          onClose={() => setShowDiscardModal(false)}
-          title='İşlemi Sonlandır'
-          primaryButtonText='Vazgeç ve çık'
-          onPrimaryAction={() => {
-            setShowDiscardModal(false);
-            try {
-              navigate("/", { replace: true });
-            } catch (_e) {}
-          }}
-          secondaryButtonText='Geri dön'
-        >
-          <p>
-            Kaydedilmemiş değişiklikleriniz silinecek. Devam etmek istiyor
-            musunuz?
-          </p>
-        </GenericModal>
-      )}
+	      {showDiscardModal && (
+	        <DiscardChangesModal
+	          isOpen={showDiscardModal}
+	          onClose={() => setShowDiscardModal(false)}
+	          title='İşlemi Sonlandır'
+	          message='Kaydedilmemiş değişiklikleriniz silinecek. Devam etmek istiyor musunuz?'
+	          onExit={() => {
+	            setShowDiscardModal(false);
+	            try {
+	              navigate("/", { replace: true });
+	            } catch (_e) {}
+	          }}
+	        />
+	      )}
 
       <Toast message={toastMessage} onClose={() => setToastMessage("")} />
     </div>

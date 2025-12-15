@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
-import FormInput from "@/common/components/forms/FormInput/FormInput";
-import Button from "@/common/components/Button/Button";
-import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
-import GenericModal from "@/common/components/GenericModal/GenericModal";
-import { setOrderCutoffTime } from "@/features/restaurant/store/restaurantInfoSlice";
-import "./OrderCutoffSettingsPage.scss";
+	import FormInput from "@/common/components/forms/FormInput/FormInput";
+	import Button from "@/common/components/Button/Button";
+	import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
+	import DiscardChangesModal from "@/common/components/DiscardChangesModal/DiscardChangesModal";
+	import { setOrderCutoffTime } from "@/features/restaurant/store/restaurantInfoSlice";
+	import "./OrderCutoffSettingsPage.scss";
 
 const DEFAULT_CUTOFF = "11:00";
 
@@ -122,22 +122,18 @@ const OrderCutoffSettingsPage = () => {
         </Button>
       </div>
 
-      {showDiscardModal && (
-        <GenericModal
-          isOpen={showDiscardModal}
-          onClose={() => setShowDiscardModal(false)}
-          title='Değişiklikler kaydedilmedi'
-          primaryButtonText='Çık'
-          onPrimaryAction={() => navigate(-1)}
-          secondaryButtonText='Geri dön'
-          onSecondaryAction={() => setShowDiscardModal(false)}
-        >
-          <p>Kaydedilmemiş değişiklikleriniz silinecek. Devam etmek istiyor musunuz?</p>
-        </GenericModal>
-      )}
+	      {showDiscardModal && (
+	        <DiscardChangesModal
+	          isOpen={showDiscardModal}
+	          onClose={() => setShowDiscardModal(false)}
+	          title='Değişiklikler kaydedilmedi'
+	          message='Kaydedilmemiş değişiklikleriniz silinecek. Devam etmek istiyor musunuz?'
+	          onExit={() => navigate(-1)}
+	        />
+	      )}
 
-    </div>
-  );
-};
+	    </div>
+	  );
+	};
 
 export default OrderCutoffSettingsPage;

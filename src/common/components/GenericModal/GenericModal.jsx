@@ -9,8 +9,10 @@ const GenericModal = ({
   onClose,
   title,
   children,
+  primaryButtonVariant = "primary",
   primaryButtonText = "",
   onPrimaryAction = () => {},
+  secondaryButtonVariant = "secondary",
   secondaryButtonText = "",
   onSecondaryAction = null,
   primaryButtonClassName = "",
@@ -69,7 +71,7 @@ const GenericModal = ({
           <div className='form-actions'>
             {secondaryButtonText && (
               <Button
-                variant='secondary'
+                variant={secondaryButtonVariant}
                 onClick={effectiveOnSecondaryAction}
                 className={secondaryButtonClassName}
                 type='button'
@@ -79,7 +81,7 @@ const GenericModal = ({
             )}
             {primaryButtonText && (
               <Button
-                variant='primary'
+                variant={primaryButtonVariant}
                 onClick={onPrimaryAction}
                 className={primaryButtonClassName}
                 type='button'
@@ -103,8 +105,22 @@ GenericModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string,
   children: PropTypes.node.isRequired,
+  primaryButtonVariant: PropTypes.oneOf([
+    "primary",
+    "secondary",
+    "outline-primary",
+    "destructive",
+    "destructive-outline",
+  ]),
   primaryButtonText: PropTypes.string,
   onPrimaryAction: PropTypes.func,
+  secondaryButtonVariant: PropTypes.oneOf([
+    "primary",
+    "secondary",
+    "outline-primary",
+    "destructive",
+    "destructive-outline",
+  ]),
   secondaryButtonText: PropTypes.string,
   onSecondaryAction: PropTypes.func,
   primaryButtonClassName: PropTypes.string,

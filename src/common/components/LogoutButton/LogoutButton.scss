@@ -25,4 +25,8 @@
   &:focus-visible {
     background-color: var(--overlay-hover);
   }
+
+  &:active {
+    background-color: var(--overlay-pressed);
+  }
 }

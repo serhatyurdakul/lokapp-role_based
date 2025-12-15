@@ -25,6 +25,11 @@
     border-color: var(--surface-tertiary);
   }
 
+  &:active {
+    background: var(--overlay-pressed);
+    border-color: var(--surface-tertiary);
+  }
+
   .profile-initial {
     color: var(--text-color);
     font-size: 14px;

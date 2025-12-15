@@ -84,6 +84,18 @@
   color: white;
 }
 
+.btn-destructive-outline {
+  background-color: var(--background-primary);
+  border: 1px solid var(--error-color);
+  color: var(--error-color);
+
+  &:hover,
+  &:active {
+    background-color: var(--overlay-error-bg);
+    opacity: 1;
+  }
+}
+
 // Status color helpers for restaurant CTA
 .btn-status-completed {
   background-color: var(--order-completed-color);

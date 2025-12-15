@@ -15,12 +15,12 @@ const ConfirmModal = ({
   isConfirmDisabled = false,
   confirmLoading = false,
   errorMessage = "",
-}) => {
-  const primaryClass = variant === "destructive" ? "btn-destructive" : "";
-  const bodyContent = message ? (
-    typeof message === "string" ? (
-      <p>{message}</p>
-    ) : (
+	}) => {
+	  const primaryButtonVariant = variant === "destructive" ? "destructive" : "primary";
+	  const bodyContent = message ? (
+	    typeof message === "string" ? (
+	      <p>{message}</p>
+	    ) : (
       message
     )
   ) : null;
@@ -28,15 +28,15 @@ const ConfirmModal = ({
   return (
     <GenericModal
       isOpen={isOpen}
-      onClose={onClose}
-      title={title}
-      primaryButtonText={confirmText}
-      onPrimaryAction={onConfirm}
-      primaryButtonClassName={primaryClass}
-      secondaryButtonText={cancelText}
-      onSecondaryAction={onCancel || onClose}
-      dialogRole={variant === "destructive" ? "alertdialog" : "dialog"}
-      isPrimaryButtonDisabled={isConfirmDisabled}
+	      onClose={onClose}
+	      title={title}
+	      primaryButtonVariant={primaryButtonVariant}
+	      primaryButtonText={confirmText}
+	      onPrimaryAction={onConfirm}
+	      secondaryButtonText={cancelText}
+	      onSecondaryAction={onCancel || onClose}
+	      dialogRole={variant === "destructive" ? "alertdialog" : "dialog"}
+	      isPrimaryButtonDisabled={isConfirmDisabled}
       primaryButtonLoading={confirmLoading}
     >
       <ErrorMessage message={errorMessage} />

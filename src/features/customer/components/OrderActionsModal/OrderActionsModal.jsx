@@ -29,26 +29,26 @@ const OrderActionsModal = ({
   const onPrimaryAction = showCancelConfirm
     ? handleConfirmCancel
     : onRequestEdit;
-  const onSecondaryAction = showCancelConfirm
-    ? () => setShowCancelConfirm(false)
-    : onClose;
-  const primaryButtonClassName = showCancelConfirm ? "btn-destructive" : "";
-  const dialogRole = showCancelConfirm ? "alertdialog" : "dialog";
+	  const onSecondaryAction = showCancelConfirm
+	    ? () => setShowCancelConfirm(false)
+	    : onClose;
+	  const primaryButtonVariant = showCancelConfirm ? "destructive" : "primary";
+	  const dialogRole = showCancelConfirm ? "alertdialog" : "dialog";
 
-  return (
-    <GenericModal
-      isOpen={isOpen}
-      onClose={onClose}
-      title={title}
-      primaryButtonText={primaryButtonText}
-      onPrimaryAction={onPrimaryAction}
-      secondaryButtonText={secondaryButtonText}
-      onSecondaryAction={onSecondaryAction}
-      primaryButtonClassName={primaryButtonClassName}
-      dialogRole={dialogRole}
-    >
-      {showCancelConfirm ? (
-        <div className='order-actions__content'>
+	  return (
+	    <GenericModal
+	      isOpen={isOpen}
+	      onClose={onClose}
+	      title={title}
+	      primaryButtonVariant={primaryButtonVariant}
+	      primaryButtonText={primaryButtonText}
+	      onPrimaryAction={onPrimaryAction}
+	      secondaryButtonText={secondaryButtonText}
+	      onSecondaryAction={onSecondaryAction}
+	      dialogRole={dialogRole}
+	    >
+	      {showCancelConfirm ? (
+	        <div className='order-actions__content'>
           <p className='order-actions__note'>
             Bu siparişi iptal etmek istediğinize emin misiniz?
           </p>

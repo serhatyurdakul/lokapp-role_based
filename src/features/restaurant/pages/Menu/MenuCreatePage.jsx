@@ -5,12 +5,12 @@ import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHea
 import Button from "@/common/components/Button/Button";
 import FormSelect from "@/common/components/forms/FormSelect/FormSelect";
 import FormInput from "@/common/components/forms/FormInput/FormInput";
-import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
-import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
-import Toast from "@/common/components/Toast/Toast.jsx";
-import GenericModal from "@/common/components/GenericModal/GenericModal";
-import Badge from "@/common/components/Badge/Badge";
-import { addRestaurantMeal } from "@/utils/api";
+	import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
+	import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
+	import Toast from "@/common/components/Toast/Toast.jsx";
+	import DiscardChangesModal from "@/common/components/DiscardChangesModal/DiscardChangesModal";
+	import Badge from "@/common/components/Badge/Badge";
+	import { addRestaurantMeal } from "@/utils/api";
 import {
   fetchRestaurantCategories,
   fetchRestaurantMenuData,
@@ -613,21 +613,17 @@ const MenuCreatePage = () => {
         onPendingRemove={handlePendingMealRemoved}
       />
 
-      {showDiscardModal && (
-        <GenericModal
-          isOpen={showDiscardModal}
-          onClose={() => setShowDiscardModal(false)}
-          title='İşlemi Sonlandır'
-          primaryButtonText='Vazgeç ve çık'
-          onPrimaryAction={handleDiscardConfirmed}
-          secondaryButtonText='Geri dön'
-          onSecondaryAction={() => setShowDiscardModal(false)}
-        >
-          <p>Kaydedilmemiş eklemeler silinecek. Devam etmek istiyor musunuz?</p>
-        </GenericModal>
-      )}
-    </div>
-  );
-};
+	      {showDiscardModal && (
+	        <DiscardChangesModal
+	          isOpen={showDiscardModal}
+	          onClose={() => setShowDiscardModal(false)}
+	          title='İşlemi Sonlandır'
+	          message='Kaydedilmemiş eklemeler silinecek. Devam etmek istiyor musunuz?'
+	          onExit={handleDiscardConfirmed}
+	        />
+	      )}
+	    </div>
+	  );
+	};
 
 export default MenuCreatePage;
