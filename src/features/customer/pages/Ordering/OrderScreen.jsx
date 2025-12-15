@@ -227,7 +227,7 @@ const OrderScreen = ({ mode, selectedPairs }) => {
             closeOnOverlayClick={false}
             title={isEditMode ? "Siparişi Güncelle" : "Siparişi Onayla"}
             dialogRole='dialog'
-            primaryButtonText='Onayla'
+            primaryButtonText={isEditMode ? "Güncelle" : "Sipariş ver"}
             onPrimaryAction={handleSubmitOrder}
             secondaryButtonText='Vazgeç'
           >
@@ -336,7 +336,7 @@ const OrderScreen = ({ mode, selectedPairs }) => {
           isOpen={showDiscardModal}
           onClose={() => setShowDiscardModal(false)}
           title='İşlemi Sonlandır'
-          message='Kaydedilmemiş değişiklikleriniz silinecek. Devam etmek istiyor musunuz?'
+          message='Kaydedilmemiş değişiklikleriniz silinecek. Çıkmak istiyor musunuz?'
           onExit={() => {
             setShowDiscardModal(false);
             try {

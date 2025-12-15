@@ -127,7 +127,7 @@ const OrderCutoffSettingsPage = () => {
 	          isOpen={showDiscardModal}
 	          onClose={() => setShowDiscardModal(false)}
 	          title='Değişiklikler kaydedilmedi'
-	          message='Kaydedilmemiş değişiklikleriniz silinecek. Devam etmek istiyor musunuz?'
+	          message='Kaydedilmemiş değişiklikleriniz silinecek. Çıkmak istiyor musunuz?'
 	          onExit={() => navigate(-1)}
 	        />
 	      )}

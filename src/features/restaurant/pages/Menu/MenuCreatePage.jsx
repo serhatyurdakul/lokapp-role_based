@@ -618,7 +618,7 @@ const MenuCreatePage = () => {
 	          isOpen={showDiscardModal}
 	          onClose={() => setShowDiscardModal(false)}
 	          title='İşlemi Sonlandır'
-	          message='Kaydedilmemiş eklemeler silinecek. Devam etmek istiyor musunuz?'
+	          message='Kaydedilmemiş eklemeler silinecek. Çıkmak istiyor musunuz?'
 	          onExit={handleDiscardConfirmed}
 	        />
 	      )}

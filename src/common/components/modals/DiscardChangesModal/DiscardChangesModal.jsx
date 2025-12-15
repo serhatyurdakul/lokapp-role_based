@@ -6,7 +6,7 @@ const DiscardChangesModal = ({
   onClose,
   onExit,
   title = "İşlemi Sonlandır",
-  message = "Kaydedilmemiş değişiklikleriniz silinecek. Devam etmek istiyor musunuz?",
+  message = "Kaydedilmemiş değişiklikleriniz silinecek. Çıkmak istiyor musunuz?",
   exitText = "Çık",
   stayText = "Geri dön",
 }) => {
