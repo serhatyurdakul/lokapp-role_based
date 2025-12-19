@@ -34,17 +34,14 @@ const ConfirmModal = ({
       closeOnOverlayClick={!isDestructive}
       title={title}
       dialogRole={isDestructive ? "alertdialog" : "dialog"}
-      primaryButtonVariant={isDestructive ? "secondary" : "primary"}
-      primaryButtonText={isDestructive ? cancelText : confirmText}
-      onPrimaryAction={isDestructive ? safeAction : onConfirm}
-      secondaryButtonVariant={isDestructive ? "destructive" : "secondary"}
-      secondaryButtonText={isDestructive ? confirmText : cancelText}
-      onSecondaryAction={isDestructive ? onConfirm : safeAction}
-      isSecondaryButtonDisabled={isDestructive ? isConfirmDisabled : false}
-      secondaryButtonLoading={isDestructive ? confirmLoading : false}
-      secondaryButtonLoadingText={isDestructive ? confirmText : ""}
-      isPrimaryButtonDisabled={!isDestructive ? isConfirmDisabled : false}
-      primaryButtonLoading={!isDestructive ? confirmLoading : false}
+      primaryButtonVariant={isDestructive ? "destructive" : "primary"}
+      primaryButtonText={confirmText}
+      onPrimaryAction={onConfirm}
+      secondaryButtonVariant='secondary'
+      secondaryButtonText={cancelText}
+      onSecondaryAction={safeAction}
+      isPrimaryButtonDisabled={isConfirmDisabled}
+      primaryButtonLoading={confirmLoading}
     >
       <ErrorMessage message={errorMessage} />
       {bodyContent}

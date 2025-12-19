@@ -26,16 +26,16 @@ const OrderActionsModal = ({
   const title = showCancelConfirm ? "Siparişi İptal Et" : "Siparişi Düzenle";
   const dialogRole = showCancelConfirm ? "alertdialog" : "dialog";
 
-  const primaryButtonText = showCancelConfirm ? "Vazgeç" : "Düzenle";
-  const secondaryButtonText = showCancelConfirm ? "İptal Et" : "Kapat";
+  const primaryButtonText = showCancelConfirm ? "İptal Et" : "Düzenle";
+  const secondaryButtonText = showCancelConfirm ? "Vazgeç" : "Kapat";
 
-  const onPrimaryAction = showCancelConfirm
+  const onPrimaryAction = showCancelConfirm ? handleConfirmCancel : onRequestEdit;
+  const onSecondaryAction = showCancelConfirm
     ? () => setShowCancelConfirm(false)
-    : onRequestEdit;
-  const onSecondaryAction = showCancelConfirm ? handleConfirmCancel : onClose;
+    : onClose;
 
-  const primaryButtonVariant = showCancelConfirm ? "secondary" : "primary";
-  const secondaryButtonVariant = showCancelConfirm ? "destructive" : "secondary";
+  const primaryButtonVariant = showCancelConfirm ? "destructive" : "primary";
+  const secondaryButtonVariant = "secondary";
 
 	  return (
 	    <GenericModal

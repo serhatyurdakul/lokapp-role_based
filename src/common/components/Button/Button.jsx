@@ -38,7 +38,6 @@ Button.propTypes = {
     "secondary",
     "outline-primary",
     "destructive",
-    "destructive-outline",
   ]),
   disabled: PropTypes.bool,
   className: PropTypes.string,

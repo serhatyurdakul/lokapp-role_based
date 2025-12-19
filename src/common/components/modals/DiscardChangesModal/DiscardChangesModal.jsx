@@ -16,12 +16,12 @@ const DiscardChangesModal = ({
       onClose={onClose}
       closeOnOverlayClick={false}
       title={title}
-      secondaryButtonText={exitText}
-      secondaryButtonVariant='destructive-outline'
-      onSecondaryAction={onExit}
-      primaryButtonText={stayText}
-      primaryButtonVariant='secondary'
-      onPrimaryAction={onClose}
+      secondaryButtonText={stayText}
+      secondaryButtonVariant='secondary'
+      onSecondaryAction={onClose}
+      primaryButtonText={exitText}
+      primaryButtonVariant='destructive'
+      onPrimaryAction={onExit}
       dialogRole='alertdialog'
     >
       <p>{message}</p>
