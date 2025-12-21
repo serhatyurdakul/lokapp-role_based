@@ -1,6 +1,9 @@
 @use "@/styles/variables" as *;
 
 .portion-card {
+  display: block;
+  width: 100%;
+  text-align: left;
   background-color: var(--background-primary);
   padding: $spacing-12 10px;
   border-radius: $border-radius;

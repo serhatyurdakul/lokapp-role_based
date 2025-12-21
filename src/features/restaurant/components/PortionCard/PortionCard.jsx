@@ -13,7 +13,6 @@ const PortionCard = ({
   variant = "status",
   added,
 }) => {
-  const isInteractive = typeof onClick === "function";
   const resolvedStatus =
     variant === "status" ? status ?? getPortionStatus(remaining ?? 0) : "";
   const statusClass =
@@ -23,19 +22,7 @@ const PortionCard = ({
   const cardClassName = ["portion-card", statusClass].filter(Boolean).join(" ");
 
   return (
-    <div
-      className={cardClassName}
-      onClick={onClick}
-      role={isInteractive ? "button" : undefined}
-      tabIndex={isInteractive ? 0 : undefined}
-      onKeyDown={(event) => {
-        if (!isInteractive) return;
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          onClick();
-        }
-      }}
-    >
+    <button type='button' className={cardClassName} onClick={onClick}>
       <div className='portion-card__header'>
         <h4 className='portion-card__title'>{title}</h4>
         {variant === "status" ? (
@@ -44,7 +31,7 @@ const PortionCard = ({
           <Badge tone='delivery'>Eklenecek {Number(added) || 0}</Badge>
         ) : null}
       </div>
-    </div>
+    </button>
   );
 };
 
