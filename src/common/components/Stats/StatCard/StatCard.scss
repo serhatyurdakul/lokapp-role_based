@@ -9,7 +9,7 @@
   flex-direction: column;
   gap: $spacing-4;
   border: 1px solid var(--border-subtle);
-  box-shadow: var(--shadow-subtle);
+  box-shadow: none;
   max-width: 100%;
 
   .value {
