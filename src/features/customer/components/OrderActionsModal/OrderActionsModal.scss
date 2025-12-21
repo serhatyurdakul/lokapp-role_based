@@ -16,6 +16,7 @@
   &__link {
     display: inline-flex;
     align-items: center;
+    color: var(--primary-color);
     background: none;
     border: none;
     cursor: pointer;
@@ -23,6 +24,8 @@
     min-height: 36px;
     border-radius: $border-radius-small;
     align-self: flex-start;
+    font-size: 0.9375rem;
+    font-weight: 500;
 
     &:active {
       background: var(--overlay-pressed);
