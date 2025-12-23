@@ -40,8 +40,7 @@ $z-index-bottom-nav: 900;
   --surface-tertiary: #e7e7e7;
   --text-color: #1c1c1e;
   --text-secondary: #6e6e73;
-  --border-color: #c6c6c8;
-  --border-subtle: rgba(60, 60, 67, 0.12);
+  --border-color: #e5e5e5;
   --error-color: #ff3b30;
   --warning-color: #ff9f0a;
   --success-color: #34c759;
@@ -76,8 +75,7 @@ $z-index-bottom-nav: 900;
   --toast-bg: rgba(60, 60, 67, 0.85);
 
   // Shadows
-  --shadow-subtle: 0 2px 8px rgba(28, 28, 30, 0.08);
-  --shadow-card: 0 4px 12px rgba(28, 28, 30, 0.1);
+  --shadow-card: 0 2px 8px rgba(28, 28, 30, 0.08);
   --shadow-elevated: 0 8px 20px rgba(28, 28, 30, 0.14);
   --shadow-modal: 0 16px 40px rgba(28, 28, 30, 0.18);
   --shadow-selection-ring: 0 0 0 2px var(--primary-color);
