@@ -210,7 +210,7 @@ const RestaurantReportsPage = () => {
               />
             </div>
           </div>
-          <p className='u-context-meta'>{summaryContext}</p>
+          <p className='reports__summary-context'>{summaryContext}</p>
           <div className='u-stats-block'>
             <StatsGrid>
               <StatCard

@@ -2,7 +2,6 @@
 @use "@/styles/utilities/card-group";
 @use "@/styles/utilities/empty-state";
 @use "@/styles/utilities/stats-block";
-@use "@/styles/utilities/context-meta";
 
 .reports {
   display: flex;
@@ -19,6 +18,13 @@
   flex-direction: column;
   gap: $spacing-8;
   margin-bottom: $spacing-12;
+}
+
+.reports__summary-context {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0 0 $spacing-6 0;
 }
 
 .reports__periods {

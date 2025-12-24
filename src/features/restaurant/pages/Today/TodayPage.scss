@@ -1,5 +1,4 @@
 @use "@/styles/variables" as *;
-@use "@/styles/utilities/section-label";
 @use "@/styles/utilities/empty-state";
 
 .p-restaurant-today {
@@ -42,6 +41,13 @@
 
   &__summary {
     margin-bottom: $spacing-24;
+  }
+
+  &__summary-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: $spacing-6;
   }
 
   &__section-header {
