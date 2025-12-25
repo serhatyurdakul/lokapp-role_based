@@ -110,7 +110,7 @@
     justify-content: space-between;
     align-items: center;
     padding: $spacing-8 0;
-    border-bottom: 1px solid var(--surface-tertiary);
+    border-bottom: 1px solid var(--border-color);
 
     &:last-child {
       border-bottom: none;
@@ -181,7 +181,7 @@
     color: var(--text-color);
     font-size: 1rem;
     border: none;
-    border-bottom: 1px solid var(--surface-tertiary);
+    border-bottom: 1px solid var(--border-color);
     text-align: left;
     cursor: pointer;
     transition: background-color 0.2s ease;
