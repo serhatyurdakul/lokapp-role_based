@@ -10,6 +10,10 @@
     cursor: pointer;
     box-shadow: var(--shadow-card);
 
+    &:hover {
+      background: var(--surface-hover);
+    }
+
     &:active {
       background: var(--overlay-pressed);
     }

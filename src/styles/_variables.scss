@@ -69,6 +69,11 @@ $z-index-bottom-nav: 900;
 
   // Overlays & feedback
   --overlay-hover: rgba(28, 28, 30, 0.04);
+
+  // Surface hover (white card/list backgrounds): ActionCard, Companies item,
+  // Profile settings item, CustomDropdown, Menu meal action item,
+  // Menu search item.
+  --surface-hover: #f6f6f6;
   --overlay-pressed: rgba(28, 28, 30, 0.06);
   --overlay-modal: rgba(28, 28, 30, 0.4);
   --overlay-selection-primary: rgba(0, 122, 255, 0.12);

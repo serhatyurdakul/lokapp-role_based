@@ -20,7 +20,7 @@
     cursor: pointer;
 
     &:hover {
-      background-color: var(--overlay-hover);
+      background-color: var(--surface-hover);
     }
 
     &:active {
@@ -63,7 +63,7 @@
     align-items: center;
 
     &:hover {
-      background-color: var(--overlay-hover);
+      background-color: var(--surface-hover);
     }
 
     &:active {

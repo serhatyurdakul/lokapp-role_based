@@ -65,7 +65,8 @@
   }
 
   &:active {
-    background-color: var(--overlay-pressed);
+    background-color: var(--primary-color);
+    color: #fff;
   }
 }
 

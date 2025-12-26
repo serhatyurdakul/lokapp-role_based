@@ -16,7 +16,7 @@
   overflow: hidden;
 
   &:hover {
-    background: var(--overlay-hover);
+    background: var(--surface-hover);
   }
 
   &:active {
@@ -69,7 +69,7 @@
 
   &__unit {
     font-size: 0.875rem;
-    font-weight: 400;
+    font-weight: 500;
     color: var(--text-secondary);
   }
 

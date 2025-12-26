@@ -109,6 +109,10 @@
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-card);
 
+    &:hover {
+      background: var(--surface-hover);
+    }
+
     &:active {
       background: var(--overlay-pressed);
     }
@@ -243,7 +247,7 @@
     }
 
     &:hover {
-      background: var(--overlay-hover);
+      background: var(--surface-hover);
     }
 
     &--delete {

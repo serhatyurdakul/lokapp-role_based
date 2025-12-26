@@ -190,9 +190,9 @@
       border-bottom: none;
     }
 
-    &:hover {
-      background: var(--overlay-hover);
-    }
+	    &:hover {
+	      background: var(--surface-hover);
+	    }
 
     &:active {
       background: var(--overlay-pressed);

@@ -17,6 +17,10 @@
     background: var(--overlay-pressed);
   }
 
+  &:hover {
+    background: var(--surface-hover);
+  }
+
   .card-header {
     display: flex;
     justify-content: space-between;
