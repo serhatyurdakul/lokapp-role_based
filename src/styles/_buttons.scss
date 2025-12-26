@@ -39,6 +39,10 @@
   &:hover {
     background-color: var(--background-secondary);
   }
+
+  &:active {
+    background-color: var(--overlay-pressed);
+  }
 }
 
 .btn-with-icon {
@@ -58,6 +62,10 @@
   &:hover {
     background-color: var(--primary-color);
     color: #fff;
+  }
+
+  &:active {
+    background-color: var(--overlay-pressed);
   }
 }
 

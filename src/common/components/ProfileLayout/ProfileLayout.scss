@@ -171,10 +171,10 @@
     flex-direction: column;
   }
 
-	  &__settings-item {
-	    display: flex;
-	    justify-content: space-between;
-	    align-items: center;
+  &__settings-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
     padding: $spacing-8 0;
     background: none;
@@ -190,14 +190,14 @@
       border-bottom: none;
     }
 
-	    &:hover {
-	      background: var(--overlay-hover);
-	    }
+    &:hover {
+      background: var(--overlay-hover);
+    }
 
-	    &:active {
-	      background: var(--overlay-pressed);
-	    }
-	  }
+    &:active {
+      background: var(--overlay-pressed);
+    }
+  }
 
   &__settings-label {
     display: flex;
@@ -220,5 +220,4 @@
       height: 16px;
     }
   }
-
 }
