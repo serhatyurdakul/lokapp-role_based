@@ -120,6 +120,10 @@
         background-color: var(--surface-hover);
       }
 
+      &:active {
+        background-color: var(--overlay-pressed);
+      }
+
       &:last-child {
         border-bottom: none;
       }

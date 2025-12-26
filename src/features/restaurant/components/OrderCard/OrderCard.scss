@@ -9,14 +9,14 @@
   cursor: pointer;
   position: relative;
   overflow: hidden;
-
-  &:active {
-    background: var(--overlay-pressed);
-  }
-
+  
   &:hover {
     background: var(--surface-hover);
   }
+  
+    &:active {
+      background: var(--overlay-pressed);
+    }
 
   &--completed::before,
   &--pending::before {

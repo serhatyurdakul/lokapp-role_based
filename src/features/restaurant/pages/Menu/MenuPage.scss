@@ -250,6 +250,10 @@
       background: var(--surface-hover);
     }
 
+    &:active {
+      background: var(--overlay-pressed);
+    }
+
     &--delete {
       color: var(--error-color);
     }

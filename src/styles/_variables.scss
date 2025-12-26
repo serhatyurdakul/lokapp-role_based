@@ -68,11 +68,11 @@ $z-index-bottom-nav: 900;
   --badge-outofstock-text: var(--text-color);
 
   // Overlays & feedback
-  --overlay-hover: rgba(28, 28, 30, 0.04);
+  // Tinted hover (controls on gray/white surfaces): ProfileButton, LogoutButton,
+  // CategoryRow nav.
+  --tinted-hover: rgba(28, 28, 30, 0.04);
 
-  // Surface hover (white card/list backgrounds): ActionCard, Companies item,
-  // Profile settings item, CustomDropdown, Menu meal action item,
-  // Menu search item.
+  // Surface hover (white surfaces: cards/lists, dropdowns).
   --surface-hover: #f6f6f6;
   --overlay-pressed: rgba(28, 28, 30, 0.06);
   --overlay-modal: rgba(28, 28, 30, 0.4);
