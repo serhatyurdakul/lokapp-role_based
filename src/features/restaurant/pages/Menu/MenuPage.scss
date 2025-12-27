@@ -124,6 +124,10 @@
       background: var(--background-primary);
     }
 
+    &:has(.menu-page__meal-action-dropdown) {
+      background: var(--background-primary);
+    }
+
     & + & {
       margin-top: 0;
     }
