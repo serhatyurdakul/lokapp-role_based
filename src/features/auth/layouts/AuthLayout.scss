@@ -43,6 +43,7 @@
   .auth-layout {
     align-items: center;
     background-color: var(--background-color);
+    padding: $spacing-16;
 
     &__box {
       padding: $spacing-16;
