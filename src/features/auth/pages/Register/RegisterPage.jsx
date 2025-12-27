@@ -7,7 +7,6 @@ import FormSelect from "@/common/components/forms/FormSelect/FormSelect";
 import Button from "@/common/components/Button/Button";
 import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
 import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
-import PageHeader from "@/common/components/PageHeader/PageHeader";
 
 import { register, clearError } from "../../store/authSlice";
 import AuthLayout from "../../layouts/AuthLayout.jsx";
@@ -448,12 +447,12 @@ const RegistrationWizard = () => {
       restaurantId,
       selectedRestaurant: selected
         ? {
-            ...selected,
-            cityId: selected.cityId || selected.city_id || selected.cityID,
-            cityName: selected.cityName || selected.city_name,
-            districtId: selected.districtId || selected.district_id || selected.districtID,
-            districtName: selected.districtName || selected.district_name,
-          }
+          ...selected,
+          cityId: selected.cityId || selected.city_id || selected.cityID,
+          cityName: selected.cityName || selected.city_name,
+          districtId: selected.districtId || selected.district_id || selected.districtID,
+          districtName: selected.districtName || selected.district_name,
+        }
         : null,
     }));
   };
@@ -1139,16 +1138,18 @@ const RegistrationWizard = () => {
   }, [hasUnsavedChanges]);
 
   return (
-    <div className='registration-wizard'>
-      <PageHeader title='Kayıt Ol' />
-      <header className='registration-progress'>
-        <StepIndicator steps={stepSequence} currentIndex={currentStepIndex} />
-        <span className='registration-progress__meta'>
-          Adım {currentStepIndex + 1} / {stepSequence.length}
-        </span>
-      </header>
-      {renderStepContent()}
-    </div>
+    <>
+      <h1>Kayıt Ol</h1>
+      <div className='registration-wizard'>
+        <header className='registration-progress'>
+          <StepIndicator steps={stepSequence} currentIndex={currentStepIndex} />
+          <span className='registration-progress__meta'>
+            Adım {currentStepIndex + 1} / {stepSequence.length}
+          </span>
+        </header>
+        {renderStepContent()}
+      </div>
+    </>
   );
 };
 
