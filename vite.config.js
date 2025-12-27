@@ -11,6 +11,8 @@ const __dirname = path.dirname(__filename);
 export default defineConfig({
   server: {
     port: 5185,
+    host: true,
+    allowedHosts: [".trycloudflare.com"],
   },
   plugins: [
     react(),
