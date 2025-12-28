@@ -73,7 +73,6 @@ const GenericModal = ({
                 variant={secondaryButtonVariant}
                 onClick={effectiveOnSecondaryAction}
                 type='button'
-                loadingText={secondaryButtonText}
               >
                 {secondaryButtonText}
               </Button>
