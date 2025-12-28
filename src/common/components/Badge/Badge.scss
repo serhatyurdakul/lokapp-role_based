@@ -90,5 +90,7 @@
   &--tone-out-of-stock {
     background-color: var(--badge-outofstock-bg);
     color: var(--badge-outofstock-text);
+    font-weight: 600;
+    border: 1px solid var(--border-color);
   }
 }
