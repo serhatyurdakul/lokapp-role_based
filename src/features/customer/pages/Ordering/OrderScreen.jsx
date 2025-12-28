@@ -10,7 +10,7 @@ import {
 } from "../../store/customerMenuSlice.js";
 import CategoryRow from "../../components/CategoryRow/CategoryRow.jsx";
 import GenericModal from "@/common/components/modals/GenericModal/GenericModal.jsx";
-import DiscardChangesModal from "@/common/components/modals/DiscardChangesModal/DiscardChangesModal";
+import ConfirmModal from "@/common/components/modals/ConfirmModal/ConfirmModal.jsx";
 import Loading from "@/common/components/Loading/Loading.jsx";
 import EmptyState from "@/common/components/StateMessage/EmptyState";
 import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
@@ -332,12 +332,14 @@ const OrderScreen = ({ mode, selectedPairs }) => {
       {renderBody()}
 
       {showDiscardModal && (
-        <DiscardChangesModal
+        <ConfirmModal
           isOpen={showDiscardModal}
           onClose={() => setShowDiscardModal(false)}
           title='İşlemi Sonlandır'
           message='Kaydedilmemiş değişiklikleriniz silinecek. Çıkmak istiyor musunuz?'
-          onExit={() => {
+          confirmText='Çık'
+          cancelText='Geri dön'
+          onConfirm={() => {
             setShowDiscardModal(false);
             try {
               navigate("/", { replace: true });

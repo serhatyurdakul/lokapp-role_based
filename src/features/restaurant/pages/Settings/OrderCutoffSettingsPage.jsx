@@ -5,7 +5,7 @@ import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHea
 	import FormInput from "@/common/components/forms/FormInput/FormInput";
 	import Button from "@/common/components/Button/Button";
 	import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
-	import DiscardChangesModal from "@/common/components/modals/DiscardChangesModal/DiscardChangesModal";
+import ConfirmModal from "@/common/components/modals/ConfirmModal/ConfirmModal.jsx";
 	import { setOrderCutoffTime } from "@/features/restaurant/store/restaurantInfoSlice";
 	import "./OrderCutoffSettingsPage.scss";
 
@@ -123,12 +123,14 @@ const OrderCutoffSettingsPage = () => {
       </div>
 
 	      {showDiscardModal && (
-	        <DiscardChangesModal
+	        <ConfirmModal
 	          isOpen={showDiscardModal}
 	          onClose={() => setShowDiscardModal(false)}
 	          title='Değişiklikler kaydedilmedi'
 	          message='Kaydedilmemiş değişiklikleriniz silinecek. Çıkmak istiyor musunuz?'
-	          onExit={() => navigate(-1)}
+	          confirmText='Çık'
+	          cancelText='Geri dön'
+	          onConfirm={() => navigate(-1)}
 	        />
 	      )}
 

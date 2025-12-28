@@ -16,13 +16,8 @@ const GenericModal = ({
   secondaryButtonVariant = "secondary",
   secondaryButtonText = "",
   onSecondaryAction = null,
-  primaryButtonClassName = "",
-  secondaryButtonClassName = "",
   isPrimaryButtonDisabled = false,
   primaryButtonLoading = false,
-  isSecondaryButtonDisabled = false,
-  secondaryButtonLoading = false,
-  secondaryButtonLoadingText = "",
   dialogRole = "dialog",
 }) => {
   useEffect(() => {
@@ -77,22 +72,16 @@ const GenericModal = ({
               <Button
                 variant={secondaryButtonVariant}
                 onClick={effectiveOnSecondaryAction}
-                className={secondaryButtonClassName}
                 type='button'
-                disabled={isSecondaryButtonDisabled}
-                loading={secondaryButtonLoading}
-                loadingText={secondaryButtonLoadingText || secondaryButtonText}
+                loadingText={secondaryButtonText}
               >
-                {secondaryButtonLoading
-                  ? secondaryButtonLoadingText || secondaryButtonText
-                  : secondaryButtonText}
+                {secondaryButtonText}
               </Button>
             )}
             {primaryButtonText && (
               <Button
                 variant={primaryButtonVariant}
                 onClick={onPrimaryAction}
-                className={primaryButtonClassName}
                 type='button'
                 disabled={isPrimaryButtonDisabled}
                 loading={primaryButtonLoading}
@@ -131,13 +120,8 @@ GenericModal.propTypes = {
   ]),
   secondaryButtonText: PropTypes.string,
   onSecondaryAction: PropTypes.func,
-  primaryButtonClassName: PropTypes.string,
-  secondaryButtonClassName: PropTypes.string,
   isPrimaryButtonDisabled: PropTypes.bool,
   primaryButtonLoading: PropTypes.bool,
-  isSecondaryButtonDisabled: PropTypes.bool,
-  secondaryButtonLoading: PropTypes.bool,
-  secondaryButtonLoadingText: PropTypes.string,
   dialogRole: PropTypes.oneOf(["dialog", "alertdialog"]),
 };
 

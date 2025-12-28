@@ -5,10 +5,12 @@ import PageHeader from "@/common/components/PageHeader/PageHeader";
 import EmptyState from "@/common/components/StateMessage/EmptyState";
 import Toast from "@/common/components/Toast/Toast.jsx";
 import MealCard from "../../components/MealCard/MealCard.jsx";
-import OrderActionsModal from "../../components/OrderActionsModal/OrderActionsModal.jsx";
+import GenericModal from "@/common/components/modals/GenericModal/GenericModal.jsx";
+import ConfirmModal from "@/common/components/modals/ConfirmModal/ConfirmModal.jsx";
 import DeadlineNotice from "@/common/components/DeadlineNotice/DeadlineNotice.jsx";
 import { fetchUserOrderHistoryByDate } from "@/utils/api";
 import { getLastOrdersStorageKey } from "@/utils/storageKeys";
+import "./TodayPage.scss";
 
 const TodayPage = () => {
   const navigate = useNavigate();
@@ -29,6 +31,7 @@ const TodayPage = () => {
   const location = useLocation();
 
   const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(false);
+  const [isCancelConfirmOpen, setIsCancelConfirmOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const orderCutoffTime =
     user?.restaurant?.orderCutoffTime ||
@@ -205,6 +208,7 @@ const TodayPage = () => {
                       meal={m}
                       onClick={() => {
                         setSelectedOrder(m);
+                        setIsCancelConfirmOpen(false);
                         setIsQuickActionsOpen(true);
                       }}
                     />
@@ -231,13 +235,17 @@ const TodayPage = () => {
         </div>
       )}
 
-      <OrderActionsModal
+      <GenericModal
         isOpen={isQuickActionsOpen}
         onClose={() => {
           setIsQuickActionsOpen(false);
           setSelectedOrder(null);
         }}
-        onRequestEdit={() => {
+        closeOnOverlayClick={true}
+        title='Siparişi Düzenle'
+        primaryButtonVariant='primary'
+        primaryButtonText='Düzenle'
+        onPrimaryAction={() => {
           try {
             const pairs = selectedOrder?.selectedPairs || null;
             const orderId = selectedOrder?.id || null;
@@ -247,10 +255,46 @@ const TodayPage = () => {
             });
           } catch (_e) {}
         }}
-        onRequestCancel={() => {
-          /* iptal akışı backend hazır olunca bağlanacak */
+        secondaryButtonVariant='secondary'
+        secondaryButtonText='Kapat'
+        onSecondaryAction={() => {
+          setIsQuickActionsOpen(false);
+          setSelectedOrder(null);
         }}
-        cutoffTime={orderCutoffTime}
+        dialogRole='dialog'
+      >
+        <div className='order-actions__content'>
+          <p className='order-actions__note'>
+            Siparişlerinizi {orderCutoffTime}’e kadar düzenleyebilir veya iptal edebilirsiniz.
+          </p>
+          <button
+            type='button'
+            className='order-actions__link order-actions__link--destructive'
+            onClick={() => {
+              setIsQuickActionsOpen(false);
+              setIsCancelConfirmOpen(true);
+            }}
+          >
+            Siparişi İptal Et
+          </button>
+        </div>
+      </GenericModal>
+
+      <ConfirmModal
+        isOpen={isCancelConfirmOpen}
+        onClose={() => {
+          setIsCancelConfirmOpen(false);
+          setSelectedOrder(null);
+        }}
+        title='Siparişi İptal Et'
+        message='Bu siparişi iptal etmek istediğinize emin misiniz?'
+        confirmText='İptal Et'
+        cancelText='Vazgeç'
+        onConfirm={() => {
+          /* iptal akışı backend hazır olunca bağlanacak */
+          setIsCancelConfirmOpen(false);
+          setSelectedOrder(null);
+        }}
       />
 
       <Toast message={toastMessage} onClose={() => setToastMessage("")} />

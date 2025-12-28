@@ -442,7 +442,6 @@ const MenuPage = () => {
         confirmText='Sil'
         cancelText='Vazgeç'
         onConfirm={handleDeleteMeal}
-        variant='destructive'
         isConfirmDisabled={isSubmitDisabled}
         confirmLoading={isDeleting}
         errorMessage={deleteError}
