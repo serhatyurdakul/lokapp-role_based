@@ -11,7 +11,8 @@
 
     &-item {
       font-size: 1rem;
-      margin-bottom: $spacing-12;
+      font-weight: 500;
+      margin-bottom: $spacing-8;
 
       &:last-child {
         margin-bottom: 0;
@@ -48,4 +49,8 @@
 
 .modal-body .p-customer-order__items-list + p {
   margin-top: $spacing-12;
+}
+
+.modal-body p + .p-customer-order__items-list {
+  margin-top: $spacing-4;
 }
