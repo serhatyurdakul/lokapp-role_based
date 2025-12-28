@@ -267,7 +267,11 @@ const OrderScreen = ({ mode, selectedPairs }) => {
             <Button
               type='button'
               onClick={handleOrder}
-              disabled={isOrderDisabled || isOrderLoading}
+              disabled={
+                isOrderDisabled ||
+                isOrderLoading ||
+                (isEditMode && !isDirtyComparedToInitial())
+              }
               loading={isOrderLoading}
             >
               Siparişi Güncelle
