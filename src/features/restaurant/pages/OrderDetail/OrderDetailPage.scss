@@ -27,7 +27,7 @@
   align-items: center;
   justify-content: space-between;
   min-height: 36px;
-  margin-bottom: $spacing-8;
+  margin-bottom: $spacing-12;
 }
 
 .order-detail .summary-content .summary-header .tab-title {
@@ -58,7 +58,7 @@
 .order-detail .summary-content .categories-list {
   display: flex;
   flex-direction: column;
-  gap: $spacing-16;
+  gap: $spacing-24;
 }
 .order-detail .summary-content .category-group .category-title {
   display: flex;
@@ -73,19 +73,20 @@
 }
 .order-detail .summary-content .category-group .category-title .category-total {
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  font-weight: 500;
+  color: var(--text-color);
 }
 .order-detail .summary-content .category-group .items-list {
   display: flex;
   flex-direction: column;
-  gap: $spacing-8;
+  gap: $spacing-12;
 }
 .order-detail .summary-content .category-group .items-list .detail-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: $spacing-8;
-  background-color: var(--background-secondary);
+  padding: $spacing-12;
+  background-color: var(--background-color);
   border-radius: $border-radius-small;
   border: 1px solid var(--border-color);
 }
@@ -105,5 +106,6 @@
   .detail-item
   .item-quantity {
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  font-weight: 500;
+  color: var(--text-color);
 }
