@@ -2,9 +2,9 @@
 
 .toast {
   position: fixed;
-  top: calc(env(safe-area-inset-top, 0px) + 64px + 0.75rem);
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   padding: $spacing-12 $spacing-16;
   background: var(--toast-bg);
   color: #fff;
@@ -13,7 +13,7 @@
   z-index: $z-index-modal;
   pointer-events: none;
   opacity: 0;
-  animation: fade-in-out 2s forwards;
+  animation: fade-in-out 2.5s forwards;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   max-width: min(520px, 92vw);
@@ -24,10 +24,10 @@
   0% {
     opacity: 0;
   }
-  10% {
+  8% {
     opacity: 1;
   }
-  80% {
+  92% {
     opacity: 1;
   }
   100% {

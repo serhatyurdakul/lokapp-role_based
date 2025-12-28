@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import "./Toast.scss";
 
-const Toast = ({ message, onClose, className = "", duration = 2000 }) => {
+const Toast = ({ message, onClose, className = "" }) => {
   useEffect(() => {
     if (!message) return;
     const timer = setTimeout(() => {
       onClose?.();
-    }, duration);
+    }, 2500);
     return () => clearTimeout(timer);
-  }, [message, onClose, duration]);
+  }, [message, onClose]);
 
   if (!message) return null;
 

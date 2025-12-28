@@ -189,7 +189,7 @@ const TodayPage = () => {
 
       {/* Daily summary cards */}
       <div className='p-restaurant-today__summary'>
-        <p className='p-restaurant-today__summary-label'>Günün özeti</p>
+        <p className='p-restaurant-today__summary-label'>Günün Özeti</p>
         <StatsGrid>
           <StatCard
             value={summaryStats.totalMealsToday}

@@ -601,7 +601,6 @@ const MenuCreatePage = () => {
       <Toast
         message={toastMessage}
         onClose={() => setToastMessage("")}
-        duration={3000}
       />
 
       <UpdateMealModal
