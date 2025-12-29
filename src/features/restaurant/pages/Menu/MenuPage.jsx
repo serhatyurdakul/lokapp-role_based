@@ -19,7 +19,6 @@ import UpdateMealModal from "../../components/UpdateMealModal/UpdateMealModal";
 import ConfirmModal from "@/common/components/modals/ConfirmModal/ConfirmModal.jsx";
 import useDeleteMeal from "../../hooks/useDeleteMeal";
 import {
-  fetchRestaurantCategories,
   fetchRestaurantMenuData,
   selectMenuMealsAndCategories,
 } from "../../store/restaurantMenuSlice";
@@ -53,7 +52,10 @@ const MenuPage = () => {
 
   const { user } = useSelector((state) => state.auth);
   const { info: restaurantInfo } = useSelector((state) => state.restaurantInfo);
-  const { isLoading, error } = useSelector((state) => state.restaurantMenu);
+  const { menuLoading, menuError } = useSelector(
+    (state) => state.restaurantMenu
+  );
+  const error = menuError;
   const restaurantId = user?.restaurantId;
   const orderCutoffTime =
     restaurantInfo?.orderCutoffTime ||
@@ -72,16 +74,15 @@ const MenuPage = () => {
   const [toastMessage, setToastMessage] = useState("");
   const [pendingFocusMealId, setPendingFocusMealId] = useState(null);
 
-  const loadAllRestaurantData = useCallback(() => {
-    dispatch(fetchRestaurantCategories());
+  const loadRestaurantMenu = useCallback(() => {
     if (restaurantId) {
       dispatch(fetchRestaurantMenuData(restaurantId));
     }
   }, [dispatch, restaurantId]);
 
   useEffect(() => {
-    loadAllRestaurantData();
-  }, [loadAllRestaurantData]);
+    loadRestaurantMenu();
+  }, [loadRestaurantMenu]);
 
   useEffect(() => {
     setShowBanner(Boolean(error));
@@ -156,13 +157,6 @@ const MenuPage = () => {
     setIsDeleteConfirmOpen(false);
     setSelectedMealForDelete(null);
   };
-
-  // Helper to refetch menu data
-  const loadRestaurantMenu = useCallback(() => {
-    if (restaurantId) {
-      dispatch(fetchRestaurantMenuData(restaurantId));
-    }
-  }, [dispatch, restaurantId]);
 
   const handleMealDeleted = () => {
     loadRestaurantMenu();
@@ -256,7 +250,7 @@ const MenuPage = () => {
   // Render body based on data state
   const renderBody = () => {
     // Full-screen spinner while menu data is loading
-    if (isLoading && menuMeals.length === 0) {
+    if (menuLoading && menuMeals.length === 0) {
       return <Loading text='Menü yükleniyor...' />;
     }
 
@@ -409,7 +403,7 @@ const MenuPage = () => {
         <NoticeBanner
           message={error}
           actionText='Yenile'
-          onAction={loadAllRestaurantData}
+          onAction={loadRestaurantMenu}
           onClose={() => setShowBanner(false)}
         />
       )}

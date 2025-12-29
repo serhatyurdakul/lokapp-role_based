@@ -31,7 +31,10 @@ const TodayPage = () => {
   const { orders: restaurantOrders = [] } = useSelector(
     (state) => state.restaurantOrders || {}
   );
-  const { isLoading, error } = useSelector((state) => state.restaurantMenu);
+  const { menuLoading, menuError } = useSelector(
+    (state) => state.restaurantMenu
+  );
+  const error = menuError;
   const { menuMeals, menuCategoryOptions } = useSelector(
     selectMenuMealsAndCategories
   );
@@ -238,7 +241,7 @@ const TodayPage = () => {
         )}
 
         <div className='p-restaurant-today__portion-list'>
-          {isLoading && mealsByRemainingAsc.length === 0 && (
+          {menuLoading && mealsByRemainingAsc.length === 0 && (
             <Loading text='Kalan porsiyonlar yükleniyor...' />
           )}
           {mealsByRemainingAsc.length > 0 &&
@@ -252,7 +255,7 @@ const TodayPage = () => {
                 onClick={() => handleOpenUpdateModal(meal)}
               />
             ))}
-          {!isLoading && mealsByRemainingAsc.length === 0 && (
+          {!menuLoading && mealsByRemainingAsc.length === 0 && (
             <div className='u-empty-state'>
               <p>Henüz yemek eklemediniz.</p>
               <p>Menü sayfasından yemek ekleyebilirsiniz.</p>

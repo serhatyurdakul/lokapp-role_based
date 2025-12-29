@@ -533,7 +533,30 @@ export const fetchMealCategories = async () => {
 
     const categories = handleApiResponse(response, "categoryList");
     if (Array.isArray(categories)) {
-      return categories.filter((category) => category.isActive === "1");
+      const activeCategories = categories.filter(
+        (category) => category.isActive === "1"
+      );
+      if (activeCategories.length === 0) {
+        logger.error("No active categories returned from getCategories.");
+        throw new Error("Kategoriler yüklenemedi. Lütfen tekrar deneyin.");
+      }
+      return activeCategories.map((category) => {
+        const normalizedId =
+          typeof category.id === "number"
+            ? category.id
+            : parseInt(category.id, 10);
+        if (!Number.isFinite(normalizedId)) {
+          logger.error("Invalid category id in getCategories response:", {
+            id: category.id,
+            category,
+          });
+          throw new Error("Kategoriler yüklenemedi. Lütfen tekrar deneyin.");
+        }
+        return {
+          ...category,
+          id: normalizedId,
+        };
+      });
     }
     return [];
   } catch (error) {

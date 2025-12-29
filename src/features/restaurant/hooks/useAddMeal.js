@@ -1,9 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import {
-  fetchMealOptionsByCategory,
-  addRestaurantMeal,
-} from "@/utils/api";
+import { fetchMealOptionsByCategory } from "@/utils/api";
 import { setLastAddedCategory } from "@/features/restaurant/store/restaurantMenuSlice";
 
 const STATUS_PRIORITY = {
@@ -16,14 +13,9 @@ const useAddMeal = (
   restaurantId,
   categories,
   initialCategoryId,
-  onMealAdded,
-  onClose,
-  isOpen,
   options = {}
 ) => {
   const {
-    autoCloseOnSuccess = true,
-    enableOutsideClickClose = true,
     submitHandler,
     isMealAlreadyAdded,
     isMealInMenu,
@@ -49,20 +41,18 @@ const useAddMeal = (
   const mealInMenuChecker =
     typeof isMealInMenu === "function" ? isMealInMenu : () => false;
 
-  // Initialize selected category when the modal opens
+  // Initialize selected category when dependencies change
   useEffect(() => {
-    if (isOpen) {
-      resetFormStates();
+    resetFormStates();
 
-      if (initialCategoryId && typeof initialCategoryId === "number") {
-        setSelectedCategoryInModal(initialCategoryId);
-      } else if (categories.length > 0 && categories[0]?.id) {
-        setSelectedCategoryInModal(categories[0].id);
-      } else {
-        setSelectedCategoryInModal("");
-      }
+    if (initialCategoryId && typeof initialCategoryId === "number") {
+      setSelectedCategoryInModal(initialCategoryId);
+    } else if (categories.length > 0 && categories[0]?.id) {
+      setSelectedCategoryInModal(categories[0].id);
+    } else {
+      setSelectedCategoryInModal("");
     }
-  }, [isOpen, initialCategoryId, categories]);
+  }, [initialCategoryId, categories]);
 
   // Fetch meal templates whenever the selected category changes
   useEffect(() => {
@@ -89,33 +79,6 @@ const useAddMeal = (
       setIsLoadingMealOptions(false);
     }
   }, [selectedCategoryInModal]);
-
-  // Hide search results when clicking outside the list (active only when modal is open)
-  useEffect(() => {
-    if (!isOpen || !enableOutsideClickClose) return;
-
-    const handleClickOutside = (event) => {
-      const clickedInsideResults =
-        searchResultsRef.current &&
-        searchResultsRef.current.contains(event.target);
-
-      // Keep results open while interacting within the search input section
-      // (e.g., the input itself or its clear button). This area uses the
-      // 'menu-create-page__search' class on MenuCreatePage.
-      const clickedInsideSearchContainer = event.target.closest(
-        ".menu-create-page__search"
-      );
-
-      if (!clickedInsideResults && !clickedInsideSearchContainer) {
-        setShowSearchResults(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen, enableOutsideClickClose]);
 
   // Reset all form-related state
   const resetFormStates = () => {
@@ -277,15 +240,6 @@ const useAddMeal = (
 
         return result ?? null;
       }
-
-      const response = await addRestaurantMeal(mealToAdd);
-      dispatch(setLastAddedCategory(selectedCategoryInModal));
-      onMealAdded && onMealAdded(response);
-      resetFormStates();
-      if (autoCloseOnSuccess) {
-        onClose?.();
-      }
-      return response;
     } catch (error) {
       const message = error?.message || "Bir hata oluştu";
       setMealExistsError(message);

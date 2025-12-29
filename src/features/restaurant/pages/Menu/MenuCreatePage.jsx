@@ -36,11 +36,13 @@ const MenuCreatePage = () => {
 
   const {
     categories: apiCategories,
-    isLoading,
-    error,
+    categoriesLoading,
+    categoriesError,
+    menuError,
     lastAddedCategoryId,
   } = useSelector((state) => state.restaurantMenu);
   const { menuMeals } = useSelector(selectMenuMealsAndCategories);
+  const error = categoriesError || menuError;
 
   const [showBanner, setShowBanner] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -172,12 +174,7 @@ const MenuCreatePage = () => {
     restaurantId,
     apiCategories,
     lastAddedCategoryId,
-    () => {},
-    () => {},
-    true,
     {
-      autoCloseOnSuccess: false,
-      enableOutsideClickClose: false,
       submitHandler: handlePendingSubmit,
       isMealAlreadyAdded: isMealAlreadyQueued,
       isMealInMenu: isMealAlreadyInMenu,
@@ -273,18 +270,15 @@ const MenuCreatePage = () => {
     return Array.from(byCategory.values());
   }, [pendingMeals]);
 
-  const navigateBackDefault = useCallback(() => {
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      navigate("/menu");
-    }
-  }, [navigate]);
-
-  // Deterministic navigation to Menu page for discard/cancel actions on this screen
-  const goToMenu = useCallback(() => {
-    navigate("/menu", { replace: true });
-  }, [navigate]);
+  const goToMenu = useCallback(
+    (toastMessage) => {
+      navigate("/menu", {
+        replace: true,
+        state: toastMessage ? { toast: toastMessage } : undefined,
+      });
+    },
+    [navigate]
+  );
 
   const handleDiscardConfirmed = useCallback(() => {
     setPendingMeals([]);
@@ -306,7 +300,7 @@ const MenuCreatePage = () => {
     if (hasPendingMeals) {
       setShowDiscardModal(true);
     } else {
-      navigateBackDefault();
+      goToMenu();
     }
   };
 
@@ -336,10 +330,7 @@ const MenuCreatePage = () => {
       setPendingMeals([]);
       await loadRestaurantMenu();
       setIsSaving(false);
-      navigate("/menu", {
-        replace: true,
-        state: { toast: `${mealsToSave.length} yemek menüye eklendi` },
-      });
+      goToMenu(`${mealsToSave.length} yemek menüye eklendi`);
       return;
     }
 
@@ -411,9 +402,11 @@ const MenuCreatePage = () => {
             id: category.id,
             name: category.name,
           }))}
-          defaultOptionText={isLoading ? "Kategoriler Yükleniyor..." : null}
+          defaultOptionText={
+            categoriesLoading ? "Kategoriler Yükleniyor..." : null
+          }
           required
-          disabled={isLoading}
+          disabled={categoriesLoading}
         />
 
         <div className='menu-create-page__search' onKeyDown={handleKeyDown}>
@@ -425,7 +418,9 @@ const MenuCreatePage = () => {
             value={searchQuery}
             onChange={handleSearchChange}
             placeholder={
-              isLoadingMealOptions
+              categoriesLoading
+                ? "Kategoriler yükleniyor..."
+                : isLoadingMealOptions
                 ? "Yemekler yükleniyor..."
                 : "Yemek adı arayın"
             }
@@ -433,8 +428,8 @@ const MenuCreatePage = () => {
             isClearable={true}
             onClear={handleSearchClear}
             isSearchable={true}
-            disabled={isLoadingMealOptions}
-            aria-busy={isLoadingMealOptions}
+            disabled={categoriesLoading || isLoadingMealOptions}
+            aria-busy={categoriesLoading || isLoadingMealOptions}
           />
 
           <div
@@ -442,9 +437,13 @@ const MenuCreatePage = () => {
             ref={searchResultsRef}
             style={{
               display:
-                !isLoadingMealOptions && showSearchResults ? "block" : "none",
+                !categoriesLoading && !isLoadingMealOptions && showSearchResults
+                  ? "block"
+                  : "none",
             }}
-            aria-hidden={!(!isLoadingMealOptions && showSearchResults)}
+            aria-hidden={
+              !(!categoriesLoading && !isLoadingMealOptions && showSearchResults)
+            }
           >
             {filteredMealOptions.length > 0 ? (
               filteredMealOptions.map((mealOption, index) => {

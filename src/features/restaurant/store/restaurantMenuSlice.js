@@ -34,8 +34,10 @@ export const fetchRestaurantMenuData = createAsyncThunk(
 const initialState = {
   categories: [],
   menuData: [],
-  isLoading: false,
-  error: null,
+  categoriesLoading: false,
+  menuLoading: false,
+  categoriesError: null,
+  menuError: null,
   lastAddedCategoryId: null,
 };
 
@@ -51,32 +53,32 @@ const restaurantMenuSlice = createSlice({
     builder
       // Fetch categories
       .addCase(fetchRestaurantCategories.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+        state.categoriesLoading = true;
+        state.categoriesError = null;
       })
       .addCase(fetchRestaurantCategories.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.categoriesLoading = false;
         state.categories = action.payload || [];
-        state.error = null;
+        state.categoriesError = null;
       })
       .addCase(fetchRestaurantCategories.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
+        state.categoriesLoading = false;
+        state.categoriesError = action.payload;
       })
 
       // Fetch menu data
       .addCase(fetchRestaurantMenuData.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+        state.menuLoading = true;
+        state.menuError = null;
       })
       .addCase(fetchRestaurantMenuData.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.menuLoading = false;
         state.menuData = action.payload || [];
-        state.error = null;
+        state.menuError = null;
       })
       .addCase(fetchRestaurantMenuData.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
+        state.menuLoading = false;
+        state.menuError = action.payload;
       });
   },
 });
