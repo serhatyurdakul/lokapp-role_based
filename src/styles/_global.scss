@@ -20,13 +20,9 @@ body {
 
 html {
   background-color: var(--background-color);
-  color: var(--text-color);
 
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 
   scroll-behavior: smooth;
 }
@@ -44,14 +40,6 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
-}
-
-input,
-textarea,
-button,
-select,
-a {
-  -webkit-tap-highlight-color: transparent;
 }
 
 input {
