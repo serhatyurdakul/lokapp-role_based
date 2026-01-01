@@ -70,6 +70,10 @@
     margin-bottom: $spacing-12;
   }
 
+  &__portion-section {
+    min-height: 310px; // Ensures dropdown has room when content is short
+  }
+
   &__portion-list {
     display: grid;
     grid-template-columns: 1fr;
