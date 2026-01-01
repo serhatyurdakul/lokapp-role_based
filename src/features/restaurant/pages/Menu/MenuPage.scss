@@ -33,7 +33,7 @@
     padding: $spacing-8 $spacing-12;
     background-color: var(--primary-color);
     color: #fff;
-    border-radius: $border-radius;
+    border-radius: $radius-control;
     font-size: 1rem;
     font-weight: 500;
     display: flex;
@@ -73,7 +73,7 @@
 
   &__category {
     background-color: var(--background-primary);
-    border-radius: $border-radius-large;
+    border-radius: $radius-container;
     padding: $spacing-16;
 
     &-title {
@@ -103,7 +103,7 @@
 
   &__meal-card {
     background-color: var(--background-primary);
-    border-radius: $border-radius;
+    border-radius: $radius-card;
     overflow: visible;
     cursor: pointer;
     border: 1px solid var(--border-color);
@@ -134,8 +134,8 @@
   }
 
   &__meal-image {
-    border-top-left-radius: $border-radius;
-    border-top-right-radius: $border-radius;
+    border-top-left-radius: $radius-card;
+    border-top-right-radius: $radius-card;
     width: 100%;
     aspect-ratio: 1;
     height: auto;
@@ -206,7 +206,7 @@
     justify-content: center;
     width: 44px;
     height: 44px;
-    border-radius: $border-radius;
+    border-radius: $radius-control;
     background: transparent;
     color: var(--text-color);
     cursor: pointer;
@@ -228,7 +228,7 @@
     margin-top: 0;
     background: var(--background-primary);
     border: 1px solid var(--border-color);
-    border-radius: $border-radius;
+    border-radius: $radius-control;
     box-shadow: var(--shadow-elevated);
     z-index: 1000;
     max-height: 240px;

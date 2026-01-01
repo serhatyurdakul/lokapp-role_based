@@ -3,7 +3,7 @@
 .profile-btn {
   width: 32px;
   height: 32px;
-  border-radius: 50%;
+  border-radius: $radius-round;
   background: var(--surface-tertiary);
   display: flex;
   align-items: center;

@@ -17,7 +17,7 @@
     gap: $spacing-16;
     background: var(--background-primary);
     padding: $spacing-16;
-    border-radius: $border-radius-large;
+    border-radius: $radius-container;
     width: 100%;
   }
 
@@ -30,7 +30,7 @@
   &__step-number {
     width: 28px;
     height: 28px;
-    border-radius: 50%;
+    border-radius: $radius-round;
     background: var(--primary-color);
     color: #fff;
     display: flex;
@@ -67,7 +67,7 @@
     max-width: 300px;
     aspect-ratio: 1;
     background: var(--background-primary);
-    border-radius: $border-radius-large;
+    border-radius: $radius-container;
     overflow: hidden;
     position: relative;
     border: 2px solid transparent;

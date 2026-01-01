@@ -23,8 +23,7 @@
   font-weight: 500;
 }
 
-form,
-.menu-form {
+form {
   display: flex;
   flex-direction: column;
   gap: $spacing-16;

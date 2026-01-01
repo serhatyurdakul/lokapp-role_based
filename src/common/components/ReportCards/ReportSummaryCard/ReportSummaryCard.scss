@@ -6,7 +6,7 @@
   gap: $spacing-12;
   padding: $spacing-12;
   background-color: var(--background-primary);
-  border-radius: $border-radius;
+  border-radius: $radius-card;
   width: 100%;
   text-align: left;
   cursor: pointer;
@@ -53,11 +53,5 @@
 
   .card-site-badge {
     align-self: flex-start;
-  }
-
-  .card-last-order {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    font-weight: 500;
   }
 }

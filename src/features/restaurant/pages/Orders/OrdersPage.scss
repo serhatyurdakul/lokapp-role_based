@@ -37,7 +37,7 @@
   display: inline-block;
   width: 8px;
   height: 8px;
-  border-radius: 50%;
+  border-radius: $radius-round;
   margin-right: $spacing-8;
   align-self: center;
 }
@@ -57,7 +57,7 @@
   grid-column: 1/-1;
   background-color: var(--background-primary);
   border: none;
-  border-radius: $border-radius-large;
+  border-radius: $radius-container;
   padding: $spacing-16;
 }
 .orders-by-region .region-title {

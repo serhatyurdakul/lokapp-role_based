@@ -3,7 +3,7 @@
 .order-card {
   background-color: var(--background-primary);
   border: 1px solid var(--border-color);
-  border-radius: $border-radius;
+  border-radius: $radius-card;
   padding: $spacing-12;
   box-shadow: var(--shadow-card);
   cursor: pointer;

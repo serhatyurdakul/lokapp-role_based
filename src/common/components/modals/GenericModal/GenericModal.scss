@@ -16,7 +16,7 @@
 .modal-content {
   background-color: var(--background-primary);
   border: 1px solid var(--border-color);
-  border-radius: 20px;
+  border-radius: $radius-modal;
   box-shadow: var(--shadow-modal);
   padding: $spacing-16;
   width: 90%;

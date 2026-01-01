@@ -11,14 +11,14 @@
     align-items: center;
     padding: $spacing-16;
     background: var(--background-primary);
-    border-radius: $border-radius-large;
+    border-radius: $radius-container;
     text-align: left;
   }
 
   &__avatar {
     width: 56px;
     height: 56px;
-    border-radius: 50%;
+    border-radius: $radius-round;
     background: var(--primary-color);
     display: flex;
     align-items: center;
@@ -63,7 +63,7 @@
 
   &__section {
     background: var(--background-primary);
-    border-radius: $border-radius-large;
+    border-radius: $radius-container;
     padding: $spacing-16;
   }
 

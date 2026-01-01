@@ -42,7 +42,7 @@
   input {
     width: 100%;
     padding: $spacing-8 $spacing-32 $spacing-8 $spacing-32; // left icon + right clear area
-    border-radius: $border-radius;
+    border-radius: $radius-control;
     font-size: 1rem;
     min-height: 40px;
     background: var(--background-primary);

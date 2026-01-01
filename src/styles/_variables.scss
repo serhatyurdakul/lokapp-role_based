@@ -19,6 +19,16 @@ $border-radius-small: 4px;
 $border-radius-medium: 8px;
 $border-radius: 12px;
 $border-radius-large: 16px;
+$border-radius-xlarge: 20px;
+$border-radius-circle: 50%;
+
+// Semantic radius aliases
+$radius-round: $border-radius-circle;
+$radius-control: $border-radius;
+$radius-badge: $border-radius-medium;
+$radius-card: $border-radius;
+$radius-container: $border-radius-large;
+$radius-modal: $border-radius-xlarge;
 
 // Transitions
 $transition: all 0.3s ease;

@@ -6,7 +6,7 @@
   flex-direction: column;
   gap: 1.5rem;
   background-color: var(--background-primary);
-  border-radius: $border-radius-large;
+  border-radius: $radius-container;
 }
 
 .registration-progress {
@@ -70,7 +70,7 @@
     justify-content: center;
     width: 1.75rem;
     height: 1.75rem;
-    border-radius: 50%;
+    border-radius: $radius-round;
     background: var(--background-secondary);
     border: 1px solid var(--border-color);
     font-size: 0.85rem;
@@ -113,7 +113,7 @@
   align-items: flex-start;
   gap: 0.75rem;
   padding: 1rem;
-  border-radius: $border-radius-medium;
+  border-radius: $radius-badge;
   background: var(--background-secondary);
   border: 1px solid var(--border-color);
   transition: all 0.3s ease;
@@ -207,7 +207,7 @@
 
 .registration-summary-card {
   background: var(--background-secondary);
-  border-radius: $border-radius-medium;
+  border-radius: $radius-badge;
   border: 1px solid var(--border-color);
   padding: 1rem;
   display: flex;
@@ -238,7 +238,7 @@
   flex-direction: column;
   gap: 0.75rem;
   background: var(--overlay-error-bg);
-  border-radius: $border-radius-medium;
+  border-radius: $radius-badge;
   border: 1px solid var(--border-color);
   padding: 1rem;
 

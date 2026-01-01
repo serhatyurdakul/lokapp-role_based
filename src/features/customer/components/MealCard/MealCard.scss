@@ -3,7 +3,7 @@
 .meal-card {
   padding: $spacing-12;
   background: var(--background-primary);
-  border-radius: $border-radius;
+  border-radius: $radius-card;
   border: 1px solid var(--border-color);
 
   &--clickable {
