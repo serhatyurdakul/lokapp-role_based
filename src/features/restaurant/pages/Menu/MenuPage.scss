@@ -230,7 +230,7 @@
     border: 1px solid var(--border-color);
     border-radius: $radius-control;
     box-shadow: var(--shadow-elevated);
-    z-index: 1000;
+    z-index: 950;
     max-height: 240px;
     overflow: auto;
   }
