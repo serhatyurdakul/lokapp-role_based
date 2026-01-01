@@ -38,7 +38,7 @@
     font-weight: 500;
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: $spacing-4;
     transition: $transition;
     white-space: nowrap;
 
@@ -84,7 +84,7 @@
 
     &-grid {
       display: grid;
-      gap: 1rem;
+      gap: $spacing-16;
       grid-template-columns: repeat(2, minmax(120px, 1fr));
 
       @media screen and (min-width: 576px) {
@@ -224,7 +224,7 @@
   &__meal-action-dropdown {
     position: absolute;
     top: 0;
-    right: calc(44px + 0.25rem);
+    right: calc(44px + #{$spacing-4});
     margin-top: 0;
     background: var(--background-primary);
     border: 1px solid var(--border-color);

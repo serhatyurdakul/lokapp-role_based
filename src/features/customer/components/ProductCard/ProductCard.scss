@@ -65,8 +65,8 @@
 
   &__status {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: $spacing-8;
+    right: $spacing-8;
     pointer-events: none;
     z-index: 1;
   }
@@ -78,8 +78,8 @@
 
   &__selected-indicator {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: $spacing-8;
+    right: $spacing-8;
     width: 24px;
     height: 24px;
     border-radius: $radius-round;
