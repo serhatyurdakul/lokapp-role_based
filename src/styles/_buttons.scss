@@ -15,10 +15,6 @@
   border: 1px solid transparent;
   transition: $transition;
 
-  &:hover {
-    opacity: 0.9;
-  }
-
   &:disabled,
   &.disabled {
     opacity: 0.7;
@@ -29,6 +25,14 @@
 .btn-primary {
   background-color: var(--primary-color);
   color: #fff;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:active {
+    opacity: 0.85;
+  }
 }
 
 .btn-secondary {
@@ -91,6 +95,14 @@
 .btn-destructive {
   background-color: var(--error-color);
   color: white;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:active {
+    opacity: 0.85;
+  }
 }
 
 // Status color helpers for restaurant CTA
