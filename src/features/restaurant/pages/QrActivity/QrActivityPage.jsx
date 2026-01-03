@@ -139,13 +139,13 @@ const QrActivityPage = () => {
     <div className='qr-activity-page'>
       <DetailPageHeader title='QR Okutanlar' />
 
-      <div className='qr-activity-meta'>
-        <span className='qr-activity-count'>
+      <div className='qr-activity-page__meta'>
+        <span className='qr-activity-page__count'>
           Bugün {orderedScans.length} kişi QR okuttu.
         </span>
       </div>
 
-      <div className='qr-activity-search'>
+      <div className='qr-activity-page__search'>
         <SearchBar
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
@@ -157,7 +157,7 @@ const QrActivityPage = () => {
       {!hasScans ? (
         <EmptyState message='Henüz kimse QR okutmadı.' />
       ) : hasResults ? (
-        <div className='qr-activity-list'>
+        <div className='qr-activity-page__list'>
           {filteredScans.map((scan) => (
             <EmployeeMealCard
               key={scan.id}

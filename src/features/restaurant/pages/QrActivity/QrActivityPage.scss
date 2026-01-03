@@ -3,27 +3,26 @@
 .qr-activity-page {
   display: flex;
   flex-direction: column;
-}
 
-.qr-activity-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--text-color);
-  font-size: 0.9375rem;
-  font-weight: 500;
-  margin-bottom: $spacing-8;
-}
+  &__meta {
+    display: flex;
+    align-items: center;
+    color: var(--text-color);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    margin-bottom: $spacing-8;
+  }
 
-.qr-activity-search {
-  display: flex;
-  flex-direction: column;
-  gap:  $spacing-8;
-  margin-bottom: $spacing-12;
-}
+  &__search {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-8;
+    margin-bottom: $spacing-12;
+  }
 
-.qr-activity-list {
-  display: flex;
-  flex-direction: column;
-  gap:  $spacing-12;
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-12;
+  }
 }
