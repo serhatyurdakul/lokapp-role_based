@@ -8,7 +8,7 @@ import ReportSectionHeader from "@/common/components/ReportSectionHeader/ReportS
 import "./CompanyDailyReportPage.scss";
 
 const CompanyDailyReportPage = () => {
-  const { companyId, year, month, day } = useParams();
+  const { year, month, day } = useParams();
   const { state } = useLocation();
   const companyName = state?.companyName || "Firma";
 
@@ -59,12 +59,12 @@ const CompanyDailyReportPage = () => {
   );
 
   return (
-    <div>
+    <div className="company-daily-report-page">
       <DetailPageHeader title="Günlük Rapor" />
 
       <ReportSectionHeader title={`${companyName} · ${formattedDate}`} align="start" />
 
-      <div className="company-daily-report__stats">
+      <div className="company-daily-report-page__stats">
         <StatsGrid>
           <StatCard value={totalMeals} label="Toplam Tabldot" variant="total" />
           <StatCard value={delivery} label="Siparişle Tabldot" variant="delivery" />

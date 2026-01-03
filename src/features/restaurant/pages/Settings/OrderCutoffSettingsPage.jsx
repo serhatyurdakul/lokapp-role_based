@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
-	import FormInput from "@/common/components/forms/FormInput/FormInput";
-	import Button from "@/common/components/Button/Button";
-	import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
+import FormInput from "@/common/components/forms/FormInput/FormInput";
+import Button from "@/common/components/Button/Button";
+import ErrorMessage from "@/common/components/forms/ErrorMessage/ErrorMessage";
 import ConfirmModal from "@/common/components/modals/ConfirmModal/ConfirmModal.jsx";
-	import { setOrderCutoffTime } from "@/features/restaurant/store/restaurantInfoSlice";
-	import "./OrderCutoffSettingsPage.scss";
+import { setOrderCutoffTime } from "@/features/restaurant/store/restaurantInfoSlice";
+import "./OrderCutoffSettingsPage.scss";
 
 const DEFAULT_CUTOFF = "11:00";
 
@@ -77,7 +77,11 @@ const OrderCutoffSettingsPage = () => {
 
   return (
     <div className='order-cutoff-page has-fixed-bottom-cta'>
-      <DetailPageHeader title='Sipariş Kapanış Saati' backPath='/profile' onBack={handleBack} />
+      <DetailPageHeader
+        title='Sipariş Kapanış Saati'
+        backPath='/profile'
+        onBack={handleBack}
+      />
 
       <section className='order-cutoff-page__content'>
         <p className='order-cutoff-page__lead'>
@@ -122,20 +126,19 @@ const OrderCutoffSettingsPage = () => {
         </Button>
       </div>
 
-	      {showDiscardModal && (
-	        <ConfirmModal
-	          isOpen={showDiscardModal}
-	          onClose={() => setShowDiscardModal(false)}
-	          title='Değişiklikler kaydedilmedi'
-	          message='Kaydedilmemiş değişiklikleriniz silinecek. Çıkmak istiyor musunuz?'
-	          confirmText='Çık'
-	          cancelText='Geri dön'
-	          onConfirm={() => navigate(-1)}
-	        />
-	      )}
-
-	    </div>
-	  );
-	};
+      {showDiscardModal && (
+        <ConfirmModal
+          isOpen={showDiscardModal}
+          onClose={() => setShowDiscardModal(false)}
+          title='Değişiklikler kaydedilmedi'
+          message='Kaydedilmemiş değişiklikleriniz silinecek. Çıkmak istiyor musunuz?'
+          confirmText='Çık'
+          cancelText='Geri dön'
+          onConfirm={() => navigate(-1)}
+        />
+      )}
+    </div>
+  );
+};
 
 export default OrderCutoffSettingsPage;

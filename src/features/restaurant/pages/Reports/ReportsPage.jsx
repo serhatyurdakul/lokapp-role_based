@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
 import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
@@ -219,16 +219,16 @@ const RestaurantReportsPage = () => {
                 label='Toplam Tabldot'
                 variant='total'
               />
-            <StatCard
-              value={monthlySummary.delivery}
-              label='Siparişle Tabldot'
-              variant='delivery'
-            />
-            <StatCard
-              value={monthlySummary.dineIn}
-              label='Restoranda Tabldot'
-              variant='dine-in'
-            />
+              <StatCard
+                value={monthlySummary.delivery}
+                label='Siparişle Tabldot'
+                variant='delivery'
+              />
+              <StatCard
+                value={monthlySummary.dineIn}
+                label='Restoranda Tabldot'
+                variant='dine-in'
+              />
               <StatCard
                 value={monthlySummary.companyCount}
                 label='Firma'
