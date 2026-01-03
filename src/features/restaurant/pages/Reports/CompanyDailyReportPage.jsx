@@ -64,7 +64,7 @@ const CompanyDailyReportPage = () => {
 
       <ReportSectionHeader title={`${companyName} · ${formattedDate}`} align="start" />
 
-      <div className="u-stats-block">
+      <div className="company-daily-report__stats">
         <StatsGrid>
           <StatCard value={totalMeals} label="Toplam Tabldot" variant="total" />
           <StatCard value={delivery} label="Siparişle Tabldot" variant="delivery" />

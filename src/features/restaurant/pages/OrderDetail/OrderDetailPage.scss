@@ -3,109 +3,105 @@
 .order-detail {
   background-color: var(--background-color);
   position: relative;
-}
-.order-detail .status-toggle-button {
-  gap: $spacing-8;
-  white-space: nowrap;
-}
 
-.order-detail .status-toggle-button svg {
-  flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-}
+  &__status-button {
+    gap: $spacing-8;
+    white-space: nowrap;
 
-.order-detail .summary-content {
-  background-color: var(--background-primary);
-  border: 1px solid var(--border-color);
-  border-radius: $radius-container;
-  padding: $spacing-16;
-}
+    svg {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+    }
+  }
 
-.order-detail .summary-content .summary-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 36px;
-  margin-bottom: $spacing-12;
-}
+  &__summary {
+    background-color: var(--background-primary);
+    border: 1px solid var(--border-color);
+    border-radius: $radius-container;
+    padding: $spacing-16;
+  }
 
-.order-detail .summary-content .summary-header .tab-title {
-  font-size: 1.0625rem;
-  font-weight: 600;
-  color: var(--text-color);
-  margin: 0;
-}
+  &__summary-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 36px;
+    margin-bottom: $spacing-12;
+  }
 
-.order-detail .summary-content .summary-header .summary-action-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
-  padding: 0;
-  min-height: 36px;
-  background: transparent;
-  border: none;
-  color: var(--primary-color);
-  font-size: 0.9375rem;
-  font-weight: 500;
-  border-radius: $border-radius-small;
-}
+  &__summary-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+  }
 
-.order-detail .summary-content .summary-header .summary-action-link:hover {
-  opacity: 0.65;
-}
+  &__summary-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    min-height: 36px;
+    background: transparent;
+    border: none;
+    color: var(--primary-color);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    border-radius: $border-radius-small;
 
-.order-detail .summary-content .categories-list {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-24;
-}
-.order-detail .summary-content .category-group .category-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--text-color);
-  margin-bottom: $spacing-8;
-  padding-bottom: $spacing-8;
-  border-bottom: 1px solid var(--border-color);
-}
-.order-detail .summary-content .category-group .category-title .category-total {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-color);
-}
-.order-detail .summary-content .category-group .items-list {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-12;
-}
-.order-detail .summary-content .category-group .items-list .detail-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: $spacing-12;
-  background-color: var(--background-color);
-  border-radius: $border-radius-small;
-  border: 1px solid var(--border-color);
-}
-.order-detail
-  .summary-content
-  .category-group
-  .items-list
-  .detail-item
-  .item-name {
-  font-size: 0.875rem;
-  color: var(--text-color);
-}
-.order-detail
-  .summary-content
-  .category-group
-  .items-list
-  .detail-item
-  .item-quantity {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-color);
+    &:hover {
+      opacity: 0.65;
+    }
+  }
+
+  &__categories {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-24;
+  }
+
+  &__category-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: $spacing-8;
+    padding-bottom: $spacing-8;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  &__category-total {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-12;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $spacing-12;
+    background-color: var(--background-color);
+    border-radius: $border-radius-small;
+    border: 1px solid var(--border-color);
+  }
+
+  &__item-name {
+    font-size: 0.875rem;
+    color: var(--text-color);
+  }
+
+  &__item-quantity {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
 }

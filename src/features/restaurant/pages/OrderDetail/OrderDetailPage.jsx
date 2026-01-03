@@ -77,13 +77,6 @@ const OrderDetailPage = () => {
     setShowStatusModal(false);
   };
 
-  // Navigate back to list on error
-  useEffect(() => {
-    if (detailsError) {
-      navigate("/orders");
-    }
-  }, [detailsError, navigate]);
-
   // Full-screen spinner while order data is loading
   if (isDetailsLoading && !order) {
     return <Loading text='Sipariş detayları yükleniyor...' />;
@@ -125,11 +118,11 @@ const OrderDetailPage = () => {
         status={order.summary.status}
       />
 
-      <div className='summary-content'>
-        <div className='summary-header'>
-          <h3 className='tab-title'>Sipariş Özeti</h3>
+      <div className='order-detail__summary'>
+        <div className='order-detail__summary-header'>
+          <h3 className='order-detail__summary-title'>Sipariş Özeti</h3>
           <button
-            className='summary-action-link'
+            className='order-detail__summary-link'
             type='button'
             onClick={() =>
               navigate(`/orders/${companyId}/by-employee`, {
@@ -144,20 +137,24 @@ const OrderDetailPage = () => {
             {`Sipariş verenler`}
           </button>
         </div>
-        <div className='categories-list'>
+        <div className='order-detail__categories'>
           {order.groupedItems.map((category) => (
-            <div key={category.categoryId} className='category-group'>
-              <h4 className='category-title'>
+            <div key={category.categoryId}>
+              <h4 className='order-detail__category-title'>
                 {category.categoryName}
-                <span className='category-total'>
+                <span className='order-detail__category-total'>
                   {category.totalQuantity} adet
                 </span>
               </h4>
-              <div className='items-list'>
+              <div className='order-detail__items'>
                 {category.items.map((meal) => (
-                  <div key={meal.id} className='detail-item'>
-                    <span className='item-name'>{meal.mealName}</span>
-                    <span className='item-quantity'>{meal.quantity} adet</span>
+                  <div key={meal.id} className='order-detail__item'>
+                    <span className='order-detail__item-name'>
+                      {meal.mealName}
+                    </span>
+                    <span className='order-detail__item-quantity'>
+                      {meal.quantity} adet
+                    </span>
                   </div>
                 ))}
               </div>
@@ -167,7 +164,7 @@ const OrderDetailPage = () => {
       </div>
 
       <Button
-        className={`status-toggle-button fixed-cta ${
+        className={`order-detail__status-button fixed-cta ${
           order?.summary.status === "pending"
             ? "btn-status-completed"
             : "btn-status-pending"

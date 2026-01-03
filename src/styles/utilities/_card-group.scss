@@ -1,7 +1,7 @@
 @use "@/styles/variables" as *;
 
 .u-card-group__title {
-  margin: 0 0 $spacing-8 0;
+  margin-bottom: $spacing-8;
   font-size: 1.0625rem;
   font-weight: 600;
   color: var(--text-color);

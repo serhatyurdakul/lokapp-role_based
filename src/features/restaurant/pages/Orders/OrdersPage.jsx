@@ -8,6 +8,7 @@ import SearchBar from "@/common/components/SearchBar/SearchBar";
 import PageHeader from "@/common/components/PageHeader/PageHeader";
 import Loading from "@/common/components/Loading/Loading.jsx";
 import EmptyState from "@/common/components/StateMessage/EmptyState";
+import InlineEmptyState from "@/common/components/StateMessage/InlineEmptyState";
 import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
 import {
   fetchRestaurantOrders,
@@ -91,9 +92,9 @@ const Orders = () => {
     if (pendingCount === 0 && completedCount === 0) {
       if (hasAnyOrders && isFilterActive) {
         return (
-          <div className='u-empty-state'>
+          <InlineEmptyState>
             Arama sonucuna uygun sipariş bulunamadı.
-          </div>
+          </InlineEmptyState>
         );
       }
       return (

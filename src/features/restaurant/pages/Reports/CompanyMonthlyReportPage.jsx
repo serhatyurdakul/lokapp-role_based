@@ -52,7 +52,7 @@ const CompanyMonthlyReportPage = () => {
       <ReportSectionHeader title={`${companyName} · ${monthName} ${year}`} align="start" />
 
       {/* Aylık İstatistikler */}
-      <div className="u-stats-block">
+      <div className="company-monthly-report__stats">
         <StatsGrid>
           <StatCard value={monthSummary.total} label="Toplam Tabldot" variant="total" />
           <StatCard value={monthSummary.delivery} label="Siparişle Tabldot" variant="delivery" />

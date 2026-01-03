@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import PageHeader from "@/common/components/PageHeader/PageHeader";
 import Loading from "@/common/components/Loading/Loading.jsx";
 import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
+import InlineEmptyState from "@/common/components/StateMessage/InlineEmptyState";
 import {
   fetchRestaurantMenuData,
   selectMenuMealsAndCategories,
@@ -256,10 +257,10 @@ const TodayPage = () => {
               />
             ))}
           {!menuLoading && mealsByRemainingAsc.length === 0 && (
-            <div className='u-empty-state'>
+            <InlineEmptyState>
               <p>Henüz yemek eklemediniz.</p>
               <p>Menü sayfasından yemek ekleyebilirsiniz.</p>
-            </div>
+            </InlineEmptyState>
           )}
         </div>
       </div>

@@ -9,12 +9,12 @@
   @include respond-to("small") {
     grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
   }
-}
 
-.stats-grid--two-column {
-  --mobile-columns: 2;
-}
+  &--two-column {
+    --mobile-columns: 2;
+  }
 
-.stats-grid--has-odd-last > *:last-child {
-  grid-column: 1 / -1;
+  &--has-odd-last > *:last-child {
+    grid-column: 1 / -1;
+  }
 }

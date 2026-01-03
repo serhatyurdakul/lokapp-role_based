@@ -77,7 +77,7 @@ const MonthlyReportPage = () => {
       </ReportSectionHeader>
 
       {/* Period Summary */}
-      <div className='u-stats-block'>
+      <div className='monthly-report__stats'>
         <StatsGrid>
           <StatCard value={23} label='Toplam Tabldot' variant='total' />
           <StatCard value={15} label='Siparişle Tabldot' variant='delivery' />

@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
 import SearchBar from "@/common/components/SearchBar/SearchBar";
 import EmptyState from "@/common/components/StateMessage/EmptyState";
+import InlineEmptyState from "@/common/components/StateMessage/InlineEmptyState";
 import EmployeeMealCard from "@/common/components/ReportCards/EmployeeMealCard/EmployeeMealCard";
 import "./QrActivityPage.scss";
 
@@ -171,7 +172,9 @@ const QrActivityPage = () => {
           ))}
         </div>
       ) : (
-        <div className='u-empty-state'>Aramanıza uygun kişi veya firma kaydı bulunamadı.</div>
+        <InlineEmptyState>
+          Aramanıza uygun kişi veya firma kaydı bulunamadı.
+        </InlineEmptyState>
       )}
     </div>
   );

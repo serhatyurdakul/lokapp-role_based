@@ -86,7 +86,7 @@ const CompanyYearlyReportPage = () => {
       </ReportSectionHeader>
 
       {/* Yıllık Özet Kartları */}
-      <div className="u-stats-block">
+      <div className="company-yearly-report__stats">
         <StatsGrid>
           <StatCard
             value={yearlySummary.total}

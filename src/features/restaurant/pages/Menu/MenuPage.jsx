@@ -7,6 +7,7 @@ import SearchBar from "@/common/components/SearchBar/SearchBar";
 import PageHeader from "@/common/components/PageHeader/PageHeader";
 import Loading from "@/common/components/Loading/Loading.jsx";
 import EmptyState from "@/common/components/StateMessage/EmptyState";
+import InlineEmptyState from "@/common/components/StateMessage/InlineEmptyState";
 import NoticeBanner from "@/common/components/NoticeBanner/NoticeBanner";
 import Toast from "@/common/components/Toast/Toast.jsx";
 // Local sentinel value to indicate no category filter applied
@@ -261,9 +262,9 @@ const MenuPage = () => {
 
     if (hasSearch && searchedMeals.length === 0) {
       return (
-        <div className='u-empty-state'>
+        <InlineEmptyState>
           Arama sonucuna uygun yemek bulunamadı.
-        </div>
+        </InlineEmptyState>
       );
     }
 

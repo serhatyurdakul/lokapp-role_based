@@ -1,2 +1,6 @@
-@use "@/styles/utilities/stats-block";
+@use "@/styles/variables" as *;
 @use "@/styles/utilities/card-group";
+
+.monthly-report__stats {
+  margin-bottom: $spacing-12;
+}

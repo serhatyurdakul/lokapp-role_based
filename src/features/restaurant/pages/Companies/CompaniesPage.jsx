@@ -4,6 +4,7 @@ import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHea
 import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
 import SearchBar from "@/common/components/SearchBar/SearchBar";
 import Badge from "@/common/components/Badge/Badge";
+import InlineEmptyState from "@/common/components/StateMessage/InlineEmptyState";
 import { ReactComponent as ChevronRightIcon } from "@/assets/icons/chevron-right.svg";
 import "./CompaniesPage.scss";
 
@@ -120,9 +121,9 @@ const CompaniesPage = () => {
           ))}
 
           {filtered.length === 0 && (
-            <div className='u-empty-state'>
+            <InlineEmptyState>
               Arama sonucuna uygun firma bulunamadı.
-            </div>
+            </InlineEmptyState>
           )}
         </div>
       </div>

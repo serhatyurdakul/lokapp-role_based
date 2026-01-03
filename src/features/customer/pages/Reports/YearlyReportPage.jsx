@@ -62,7 +62,7 @@ const YearlyReportPage = () => {
       </ReportSectionHeader>
 
       {/* 2. Yearly Summary Cards */}
-      <div className='u-stats-block'>
+      <div className='yearly-report__stats'>
         <StatsGrid>
           <StatCard value={yearlySummary.total} label='Toplam Tabldot' variant='total' />
           <StatCard value={yearlySummary.delivery} label='Siparişle Tabldot' variant='delivery' />

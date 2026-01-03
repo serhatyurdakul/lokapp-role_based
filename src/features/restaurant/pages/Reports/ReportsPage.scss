@@ -1,7 +1,5 @@
 @use "@/styles/variables" as *;
 @use "@/styles/utilities/card-group";
-@use "@/styles/utilities/empty-state";
-@use "@/styles/utilities/stats-block";
 
 .reports {
   display: flex;
@@ -24,7 +22,11 @@
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-secondary);
-  margin: 0 0 $spacing-6 0;
+  margin-bottom: $spacing-6;
+}
+
+.reports__stats {
+  margin-bottom: $spacing-12;
 }
 
 .reports__periods {

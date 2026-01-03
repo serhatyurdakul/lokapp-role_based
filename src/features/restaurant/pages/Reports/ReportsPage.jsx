@@ -4,6 +4,7 @@ import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHea
 import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
 import SearchBar from "@/common/components/SearchBar/SearchBar";
 import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard/ReportSummaryCard";
+import InlineEmptyState from "@/common/components/StateMessage/InlineEmptyState";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import "./ReportsPage.scss";
@@ -211,7 +212,7 @@ const RestaurantReportsPage = () => {
             </div>
           </div>
           <p className='reports__summary-context'>{summaryContext}</p>
-          <div className='u-stats-block'>
+          <div className='reports__stats'>
             <StatsGrid>
               <StatCard
                 value={monthlySummary.totalMeals}
@@ -267,7 +268,9 @@ const RestaurantReportsPage = () => {
               ))}
             </>
           ) : (
-            <div className='u-empty-state'>Arama sonucuna uygun firma bulunamadı.</div>
+            <InlineEmptyState>
+              Arama sonucuna uygun firma bulunamadı.
+            </InlineEmptyState>
           )}
         </div>
       </div>
