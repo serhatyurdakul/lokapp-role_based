@@ -45,11 +45,19 @@ const ProfileSettingsList = ({ children }) => (
   <div className='profile__settings-list'>{children}</div>
 );
 
-const ProfileSettingsItem = ({ label, secondary, icon, children, ...props }) => (
+const ProfileSettingsItem = ({
+  label,
+  secondary,
+  icon,
+  children,
+  ...props
+}) => (
   <button className='profile__settings-item' type='button' {...props}>
     <span className='profile__settings-label'>
       {label}
-      {secondary && <span className='profile__settings-secondary'>{secondary}</span>}
+      {secondary && (
+        <span className='profile__settings-secondary'>{secondary}</span>
+      )}
     </span>
     {(icon || children) && (
       <span className='profile__settings-icon'>{icon || children}</span>

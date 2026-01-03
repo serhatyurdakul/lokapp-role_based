@@ -85,7 +85,6 @@ const Orders = () => {
       return <Loading text='Siparişler yükleniyor...' />;
     }
 
-    const hasAnyOrders = Array.isArray(allOrders) && allOrders.length > 0;
     const isFilterActive =
       searchQuery.trim().length > 0 || selectedValue !== ALL_FILTER;
 
@@ -109,23 +108,25 @@ const Orders = () => {
     }
 
     return (
-      <div className='orders-layout'>
+      <div className='orders-page__layout'>
         {pendingCount > 0 && (
-          <div className='orders-section'>
-            <h2 className='section-title'>
+          <div className='orders-page__section'>
+            <h2 className='orders-page__section-title'>
               Bekleyen Siparişler
-              <span className='section-meta'>({pendingCount} firma)</span>
+              <span className='orders-page__section-meta'>
+                ({pendingCount} firma)
+              </span>
             </h2>
-            <div className='orders-grid'>
+            <div className='orders-page__section-grid'>
               {Object.entries(pendingGrouped).map(([region, regionOrders]) => (
-                <div key={region} className='orders-by-region'>
-                  <h3 className='region-title'>{region}</h3>
-                  <div className='orders-region-grid'>
+                <div key={region} className='orders-page__region'>
+                  <h3 className='orders-page__region-title'>{region}</h3>
+                  <div className='orders-page__region-grid'>
                     {regionOrders.map((order) => (
                       <OrderCard
                         key={order.id}
                         order={order}
-                        onClick={() => handleOrderClick(order.companyId)}
+                        onClick={handleOrderClick}
                       />
                     ))}
                   </div>
@@ -136,22 +137,24 @@ const Orders = () => {
         )}
 
         {completedCount > 0 && (
-          <div className='orders-section completed-section'>
-            <h2 className='section-title'>
+          <div className='orders-page__section orders-page__section--completed'>
+            <h2 className='orders-page__section-title'>
               Tamamlanan Siparişler
-              <span className='section-meta'>({completedCount} firma)</span>
+              <span className='orders-page__section-meta'>
+                ({completedCount} firma)
+              </span>
             </h2>
-            <div className='orders-grid'>
+            <div className='orders-page__section-grid'>
               {Object.entries(completedGrouped).map(
                 ([region, regionOrders]) => (
-                  <div key={region} className='orders-by-region'>
-                    <h3 className='region-title'>{region}</h3>
-                    <div className='orders-region-grid'>
+                  <div key={region} className='orders-page__region'>
+                    <h3 className='orders-page__region-title'>{region}</h3>
+                    <div className='orders-page__region-grid'>
                       {regionOrders.map((order) => (
                         <OrderCard
                           key={order.id}
                           order={order}
-                          onClick={() => handleOrderClick(order.companyId)}
+                          onClick={handleOrderClick}
                         />
                       ))}
                     </div>
@@ -166,24 +169,24 @@ const Orders = () => {
   };
 
   return (
-    <div className='orders-content'>
+    <div className='orders-page'>
       <PageHeader title='Siparişler' />
 
       {hasAnyOrders && (
-      <div className='order-filters'>
-        <CustomDropdown
-          options={regionFilterOptions}
-          selectedValue={selectedValue}
-          onSelect={setSelectedValue}
-          placeholder='Sanayi sitesi seçiniz'
-        />
-        <SearchBar
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onClear={() => setSearchQuery("")}
-          placeholder='Firma Ara...'
-        />
-      </div>
+        <div className='orders-page__filters'>
+          <CustomDropdown
+            options={regionFilterOptions}
+            selectedValue={selectedValue}
+            onSelect={setSelectedValue}
+            placeholder='Sanayi sitesi seçiniz'
+          />
+          <SearchBar
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onClear={() => setSearchQuery("")}
+            placeholder='Firma Ara...'
+          />
+        </div>
       )}
 
       {showBanner && error && (
