@@ -73,7 +73,7 @@ const CompanyYearlyReportPage = () => {
   };
 
   return (
-    <>
+    <div className="company-yearly-report-page">
       <DetailPageHeader title="Raporlar" />
 
       {/* Başlık + Yıl seçici */}
@@ -86,7 +86,7 @@ const CompanyYearlyReportPage = () => {
       </ReportSectionHeader>
 
       {/* Yıllık Özet Kartları */}
-      <div className="company-yearly-report__stats">
+      <div className="company-yearly-report-page__stats">
         <StatsGrid>
           <StatCard
             value={yearlySummary.total}
@@ -124,7 +124,7 @@ const CompanyYearlyReportPage = () => {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

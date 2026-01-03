@@ -45,14 +45,14 @@ const CompanyMonthlyReportPage = () => {
   );
 
   return (
-    <>
+    <div className="company-monthly-report-page">
       <DetailPageHeader title="Aylık Rapor" />
 
       {/* Period Navigation */}
       <ReportSectionHeader title={`${companyName} · ${monthName} ${year}`} align="start" />
 
       {/* Aylık İstatistikler */}
-      <div className="company-monthly-report__stats">
+      <div className="company-monthly-report-page__stats">
         <StatsGrid>
           <StatCard value={monthSummary.total} label="Toplam Tabldot" variant="total" />
           <StatCard value={monthSummary.delivery} label="Siparişle Tabldot" variant="delivery" />
@@ -78,7 +78,7 @@ const CompanyMonthlyReportPage = () => {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

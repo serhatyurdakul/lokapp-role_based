@@ -1,6 +1,8 @@
 @use "@/styles/variables" as *;
 @use "@/styles/utilities/card-group";
 
-.company-monthly-report__stats {
-  margin-bottom: $spacing-12;
+.company-monthly-report-page {
+  &__stats {
+    margin-bottom: $spacing-12;
+  }
 }
