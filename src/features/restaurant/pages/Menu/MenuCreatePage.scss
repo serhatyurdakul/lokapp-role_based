@@ -8,10 +8,6 @@
     display: flex;
     flex-direction: column;
     gap: $spacing-12;
-
-    .form-group label {
-      margin-bottom: $spacing-6;
-    }
   }
 
   &__actions {
@@ -165,7 +161,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
       }
-
     }
   }
 }
