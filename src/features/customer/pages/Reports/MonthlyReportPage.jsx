@@ -1,18 +1,25 @@
 import { useNavigate, useParams } from "react-router-dom";
 import DetailPageHeader from "@/common/components/DetailPageHeader/DetailPageHeader";
+import CustomDropdown from "@/common/components/CustomDropdown/CustomDropdown";
 import MealCard from "@/features/customer/components/MealCard/MealCard";
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
-import Button from "@/common/components/Button/Button";
-import ReportSectionHeader from "@/common/components/ReportSectionHeader/ReportSectionHeader";
-import { ReactComponent as ArrowRightIcon } from "@/assets/icons/arrow-right.svg";
 import "./MonthlyReportPage.scss";
 
 const MonthlyReportPage = () => {
   const navigate = useNavigate();
-  const { year, month } = useParams();
+  const { year: yearParam, month: monthParam } = useParams();
 
-  // Mock data - Bu kısım artık `useParams`'tan gelen aya göre filtrelenmeli.
+  const currentDate = new Date();
+  const currentYearStr = currentDate.getFullYear().toString();
+  const currentMonthStr = (currentDate.getMonth() + 1)
+    .toString()
+    .padStart(2, "0");
+
+  const selectedYear = yearParam || currentYearStr;
+  const selectedMonth = monthParam || currentMonthStr;
+
+  // Mock data - Bu kısım selectedMonth/selectedYear değerlerine göre filtrelenmeli.
   // Şimdilik temsili olarak bırakıyorum.
   const dailyMealHistory = [
     {
@@ -55,26 +62,51 @@ const MonthlyReportPage = () => {
     },
   ];
 
-  const currentMonthName = new Date(`${year}-${month}-01`).toLocaleDateString(
-    "tr-TR",
-    { month: "long" }
-  );
+  const monthOptions = [
+    { value: "01", label: "Ocak" },
+    { value: "02", label: "Şubat" },
+    { value: "03", label: "Mart" },
+    { value: "04", label: "Nisan" },
+    { value: "05", label: "Mayıs" },
+    { value: "06", label: "Haziran" },
+    { value: "07", label: "Temmuz" },
+    { value: "08", label: "Ağustos" },
+    { value: "09", label: "Eylül" },
+    { value: "10", label: "Ekim" },
+    { value: "11", label: "Kasım" },
+    { value: "12", label: "Aralık" },
+  ];
+
+  const yearOptions = [
+    { value: "2026", label: "2026" },
+    { value: "2025", label: "2025" },
+  ];
+
+  const handleMonthChange = (value) => {
+    navigate(`/reports/${selectedYear}/${value}`);
+  };
+
+  const handleYearChange = (value) => {
+    navigate(`/reports/${value}/${selectedMonth}`);
+  };
 
   return (
     <>
       <DetailPageHeader title='Yemek Geçmişi' />
-
-      {/* Period Navigation */}
-      <ReportSectionHeader title={`${currentMonthName} ${year}`}>
-        <Button
-          variant='outline-primary'
-          className='btn-with-icon'
-          onClick={() => navigate(`/reports/${year}`)}
-        >
-          Tüm Aylar
-          <ArrowRightIcon aria-hidden='true' />
-        </Button>
-      </ReportSectionHeader>
+      <div className='monthly-report__controls'>
+        <div className='monthly-report__periods'>
+          <CustomDropdown
+            options={monthOptions}
+            selectedValue={selectedMonth}
+            onSelect={handleMonthChange}
+          />
+          <CustomDropdown
+            options={yearOptions}
+            selectedValue={selectedYear}
+            onSelect={handleYearChange}
+          />
+        </div>
+      </div>
 
       {/* Period Summary */}
       <div className='monthly-report__stats'>

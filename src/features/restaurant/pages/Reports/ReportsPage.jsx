@@ -76,10 +76,10 @@ const mockCompanies = [
   },
 ];
 
-// Ters kronolojik yıl seçenekleri (2025-2020)
+// Ters kronolojik yıl seçenekleri (2026-2025)
 const yearOptions = [
+  { value: "2026", label: "2026" },
   { value: "2025", label: "2025" },
-  { value: "2024", label: "2024" },
 ];
 
 // Ters kronolojik ay seçenekleri

@@ -4,6 +4,7 @@ import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import ReportSectionHeader from "@/common/components/ReportSectionHeader/ReportSectionHeader";
+import { companyNameById } from "@/features/restaurant/utils/mockCompanyData";
 import "./CompanyMonthlyReportPage.scss";
 
 /**
@@ -14,7 +15,8 @@ const CompanyMonthlyReportPage = () => {
   const { companyId, year, month } = useParams();
   const navigate = useNavigate();
   const { state } = useLocation();
-  const companyName = state?.companyName || "Firma";
+  const companyName =
+    state?.companyName || companyNameById[String(companyId)] || "Firma";
 
   // ---- Mock veriler ---- //
   // Aylık özet (örnek)

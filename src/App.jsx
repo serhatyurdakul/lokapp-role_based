@@ -22,7 +22,6 @@ import RestaurantOrderDetailPage from "./features/restaurant/pages/OrderDetail/O
 import OrderEmployeeListPage from "./features/restaurant/pages/OrderDetail/OrderEmployeeListPage.jsx";
 import MenuCreatePage from "./features/restaurant/pages/Menu/MenuCreatePage.jsx";
 import ReportsRedirectPage from "./features/customer/pages/Reports/ReportsRedirectPage.jsx";
-import YearlyReportPage from "./features/customer/pages/Reports/YearlyReportPage.jsx";
 import MonthlyReportPage from "./features/customer/pages/Reports/MonthlyReportPage.jsx";
 import RestaurantReportsPage from "./features/restaurant/pages/Reports/ReportsPage.jsx";
 import CompaniesPage from "./features/restaurant/pages/Companies/CompaniesPage.jsx";
@@ -200,7 +199,7 @@ function App() {
             path='/reports/:year'
             element={
               <RoleRenderer
-                customerComponent={<YearlyReportPage />}
+                customerComponent={<ReportsRedirectPage />}
                 restaurantComponent={<RestaurantReportsPage />}
               />
             }

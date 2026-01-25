@@ -159,7 +159,12 @@ const CustomerProfilePage = () => {
           action={
             <button
               className='profile__view-all-button'
-              onClick={() => navigate("/reports")}
+              onClick={() => {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, "0");
+                navigate(`/reports/${year}/${month}`);
+              }}
             >
               Tümünü Gör
             </button>

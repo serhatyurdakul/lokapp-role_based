@@ -5,12 +5,14 @@ import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import EmployeeMealCard from "@/common/components/ReportCards/EmployeeMealCard/EmployeeMealCard";
 import ReportSectionHeader from "@/common/components/ReportSectionHeader/ReportSectionHeader";
+import { companyNameById } from "@/features/restaurant/utils/mockCompanyData";
 import "./CompanyDailyReportPage.scss";
 
 const CompanyDailyReportPage = () => {
-  const { year, month, day } = useParams();
+  const { companyId, year, month, day } = useParams();
   const { state } = useLocation();
-  const companyName = state?.companyName || "Firma";
+  const companyName =
+    state?.companyName || companyNameById[String(companyId)] || "Firma";
 
   const dateObj = new Date(`${year}-${month}-${day}`);
   const formattedDate = dateObj.toLocaleDateString("tr-TR", {

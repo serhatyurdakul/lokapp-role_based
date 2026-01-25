@@ -23,6 +23,19 @@
     }
   }
 
+  &__quantity-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__helper {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-top: $spacing-4;
+  }
+
   &__pending {
     display: flex;
     flex-direction: column;
@@ -95,9 +108,10 @@
       background-color: var(--background-primary);
       border: 1px solid var(--border-color);
       border-radius: $radius-control;
+      box-shadow: var(--shadow-elevated);
       max-height: 200px;
       overflow-y: auto;
-      z-index: 1000;
+      z-index: $z-index-popover;
       margin-top: $spacing-4;
     }
 

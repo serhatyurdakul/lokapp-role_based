@@ -5,12 +5,13 @@ import ReportSummaryCard from "@/common/components/ReportCards/ReportSummaryCard
 import StatCard from "@/common/components/Stats/StatCard/StatCard";
 import StatsGrid from "@/common/components/Stats/StatsGrid/StatsGrid";
 import ReportSectionHeader from "@/common/components/ReportSectionHeader/ReportSectionHeader";
+import { companyNameById } from "@/features/restaurant/utils/mockCompanyData";
 import "./CompanyYearlyReportPage.scss";
 
 /**
  * Restoran tarafı – Firma bazlı yıllık rapor sayfası
  * Firma kartına tıklanınca açılır. Yalnızca aylık özetleri gösterir.
- * Müşteri YearlyReportPage yapısını yeniden kullanır; sınıf isimleri aynıdır,
+ * Müşteri rapor sayfası yapısını yeniden kullanır; sınıf isimleri aynıdır,
  * dolayısıyla mevcut SCSS kopyalanarak uyarlanmıştır.
  *
  * Şu an için mock veri kullanır. Gerçek API entegrasyonu yapılırken
@@ -21,8 +22,9 @@ const CompanyYearlyReportPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Firma adı navigasyon state'inden gelir; yoksa yedek metin kullanılır.
-  const companyName = location.state?.companyName || "Firma";
+  // Firma adı navigasyon state'inden gelir; yoksa mock map kullanılır.
+  const companyName =
+    location.state?.companyName || companyNameById[String(companyId)] || "Firma";
 
   // --- Mock veriler --- //
   // Yıllık özet (toplam / delivery / dine-in)
@@ -59,11 +61,10 @@ const CompanyYearlyReportPage = () => {
     })
     .reverse(); // ters kronolojik
 
-  // Yıl seçenekleri – sabit 2025 & 2024
-  const availableYears = [
-    { value: "2025", label: "2025" },
-    { value: "2024", label: "2024" },
-  ];
+  const baseYears = ["2026", "2025"];
+  const yearOptions = Array.from(new Set([year, ...baseYears].filter(Boolean)))
+    .sort((a, b) => Number(b) - Number(a))
+    .map((value) => ({ value, label: value }));
 
   const handleYearChange = (selectedYear) => {
     navigate(`/restaurant/reports/${companyId}/${selectedYear}`, {
@@ -79,7 +80,7 @@ const CompanyYearlyReportPage = () => {
       {/* Başlık + Yıl seçici */}
       <ReportSectionHeader title={companyName}>
         <CustomDropdown
-          options={availableYears}
+          options={yearOptions}
           selectedValue={year}
           onSelect={handleYearChange}
         />

@@ -49,15 +49,6 @@
   }
 }
 
-.btn-with-icon {
-  gap: $spacing-4;
-
-  svg {
-    width: 18px;
-    height: 18px;
-  }
-}
-
 .btn-outline-primary {
   background-color: var(--background-primary);
   border: 1px solid var(--primary-color);

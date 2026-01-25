@@ -504,26 +504,32 @@ const MenuCreatePage = () => {
                 className='menu-create-page__search-item menu-create-page__search-item--empty'
                 aria-disabled='true'
               >
-                "{searchQuery}" için arama sonucu bulunamadı.
+                "{searchQuery}" için sonuç bulunamadı.
               </div>
             )}
           </div>
         </div>
 
-        <FormInput
-          label='Porsiyon Sayısı'
-          id='menu-create-quantity-input'
-          name='quantity'
-          type='number'
-          value={quantityInput}
-          onChange={handleQuantityInputChange}
-          placeholder='Örneğin: 50'
-          min='0'
-          inputMode='numeric'
-          required
-          isClearable={true}
-          onClear={() => setQuantityInput("")}
-        />
+        <div className='menu-create-page__quantity-group'>
+          <FormInput
+            label='Porsiyon Sayısı'
+            id='menu-create-quantity-input'
+            name='quantity'
+            type='number'
+            value={quantityInput}
+            onChange={handleQuantityInputChange}
+            placeholder='Örneğin: 50'
+            min='0'
+            inputMode='numeric'
+            required
+            isClearable={true}
+            onClear={() => setQuantityInput("")}
+            disabled={!selectedMeal}
+          />
+          {!selectedMeal && (
+            <p className='menu-create-page__helper'>Önce yemek seçin.</p>
+          )}
+        </div>
 
         <div className='menu-create-page__actions'>
           <Button

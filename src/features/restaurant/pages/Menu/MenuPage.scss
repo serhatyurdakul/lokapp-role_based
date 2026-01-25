@@ -229,7 +229,7 @@
     border: 1px solid var(--border-color);
     border-radius: $radius-control;
     box-shadow: var(--shadow-elevated);
-    z-index: 850;
+    z-index: $z-index-popover;
     max-height: 240px;
     overflow: auto;
   }
@@ -276,7 +276,7 @@
     position: fixed;
     inset: 0;
     background: transparent;
-    z-index: 999;
+    z-index: $z-index-popover-backdrop;
   }
 
   &__delete-warning {

@@ -44,11 +44,7 @@ const FormInput = ({
   };
 
   return (
-    <div
-      className={`form-group ${
-        isClearable ? "form-group-clearable" : ""
-      }`.trim()}
-    >
+    <div className='form-group'>
       <label htmlFor={id}>
         {label}
         {labelAdornment ? (
